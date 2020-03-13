@@ -42,12 +42,6 @@ export default {
 
   external: ['./routify/index.js', '@sveltech/routify'],
 
-  // external: [
-  //   './components/State.svelte',
-  //   './components/Group.svelte',
-  //   ...builtins,
-  // ],
-
   watch: {
     clearScreen: false,
   },
@@ -59,39 +53,17 @@ export default {
 
     json(),
 
-    svelte({
-      // Enable run-time checks when not in production
-      // dev: !production,
-      // We'll extract any component CSS out into a separate file — better for
-      // performance
-      // NOTE extracting CSS doesn't work with HMR, so we're inlining when hot
-      // ...(!hot && {
-      //   css: css => {
-      //     css.write('public/build/bundle.css')
-      //   },
-      // }),
-      customElement: true,
-      css: true,
-      // tag: null,
-    }),
+    svelte(),
 
-    // If you have external dependencies installed from
-    // npm, you'll most likely need these plugins. In
-    // some cases you'll need additional configuration —
-    // consult the documentation for details:
-    // https://github.com/rollup/rollup-plugin-commonjs
     resolve({
       // routify uses svelte
       mainFields: ['svelte', 'module', 'main'],
       browser: true,
       dedupe: ['svelte'],
       // preferBuiltins: true,
-      // rollup-plugin-svelte-hot automatically resolves & dedup svelte
     }),
     commonjs(),
 
-    // If we're building for production (npm run build
-    // instead of npm run dev), minify
     production && terser(),
   ],
 }
