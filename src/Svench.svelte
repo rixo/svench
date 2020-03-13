@@ -2,11 +2,13 @@
   import { Router } from '@sveltech/routify'
 
   import Register from './Register.svelte'
+  import RootLayout from './RootLayout.svelte'
   import Menu from './app/Menu.svelte'
   import { pages, tree } from './Svench.state.js'
   import { setContext } from './util.js'
 
-  export let routes
+  let userRoutes
+  export { userRoutes as routes }
 
   export let fixed = true
 
@@ -27,6 +29,21 @@
     $pages = trimmed
     return leaves
   }
+
+  const rootLayout = {
+    component: () => RootLayout,
+    path: '...',
+  }
+
+  const augmentRoutes = routes =>
+    routes.map(({ layouts, ...route }) => {
+      return {
+        ...route,
+        layouts: [rootLayout, ...layouts],
+      }
+    })
+
+  $: routes = augmentRoutes(userRoutes)
 
   $: _routes = routes.filter(isPage)
 

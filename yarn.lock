@@ -3095,6 +3095,10 @@ svelte-hmr@^0.5.0:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.5.1.tgz#4f19a8c2635c6b71014784afcc5a6ae90f818caa"
 
+svelte-key@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/svelte-key/-/svelte-key-1.0.0.tgz#8c570667d52b58423a0b0d543cc5323b3db356e8"
+
 svelte@^3.19.2:
   version "3.19.2"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.19.2.tgz#4b0169ee33b37399f08eb92163593a0a46c242c7"

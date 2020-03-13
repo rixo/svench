@@ -13,7 +13,8 @@
     "rollup": "^2.0.5",
     "rollup-plugin-hot": "^0.0.14",
     "rollup-plugin-svelte-hot": "^0.4.0",
-    "svelte": "^3.19.2"
+    "svelte": "^3.19.2",
+    "svelte-key": "^1.0.0"
   },
   "scripts": {
     "dev": "rollup -c -w",
