@@ -1,6 +1,7 @@
 {
   "name": "svench",
   "version": "0.0.0",
+  "main": "src/index.js",
   "module": "dist/index.esm.js",
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
