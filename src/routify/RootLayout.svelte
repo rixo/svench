@@ -1,7 +1,7 @@
 <script>
   import { route } from '@sveltech/routify'
   import Key from 'svelte-key'
-  import Render from './Render.svelte'
+  import Render from '../Render.svelte'
 
   const getView = () => new URLSearchParams(window.location.search).get('view')
 
