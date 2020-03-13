@@ -19,7 +19,7 @@ const addDefaultIndex = routes => {
     (r.isIndex && r.path === '/index') || r.shortPath === ''
   const userIndexIndex = routes.findIndex(isUserIndex)
   if (userIndexIndex < 0) {
-    routes.push({
+    const defaultIndex = {
       component: () => DefaultIndex,
       isIndex: true,
       path: '/index',
@@ -29,7 +29,8 @@ const addDefaultIndex = routes => {
       name: "/index",
       ranking: "C",
       params: {}
-    })
+    }
+    return [...routes, defaultIndex]
   }
   return routes
 }
