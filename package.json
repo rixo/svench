@@ -1,18 +1,26 @@
 {
   "name": "svench",
   "version": "0.0.0",
-  "main": "index.js",
-  "module": "index.js",
-  "author": "rixo rixo@rixo.fr",
+  "module": "dist/index.esm.js",
+  "svelte": "src/index.js",
+  "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "dependencies": {
+    "@sveltech/routify": "sveltech/routify#master"
+  },
   "devDependencies": {
     "@rixo/eslint-config-svelte": "^0.8.1",
     "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-json": "^4.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
-    "@sveltech/routify": "^1.0.6",
     "rollup": "^2.0.5",
-    "rollup-plugin-hot": "^0.0.14",
-    "rollup-plugin-svelte-hot": "^0.4.0",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-svelte-hot": "^0.4.1",
+    "rollup-plugin-terser": "^5.3.0",
     "svelte": "^3.19.2",
     "svelte-key": "^1.0.0"
   },
