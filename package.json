@@ -6,10 +6,7 @@
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
-  "files": [
-    "src",
-    "dist"
-  ],
+  "files": [ "src" ],
   "dependencies": {
     "@sveltech/routify": "sveltech/routify#master"
   },
