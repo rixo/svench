@@ -1,0 +1,22 @@
+{
+  "name": "svench",
+  "version": "0.0.0",
+  "main": "index.js",
+  "module": "index.js",
+  "author": "rixo rixo@rixo.fr",
+  "license": "ISC",
+  "devDependencies": {
+    "@rixo/eslint-config-svelte": "^0.8.1",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@sveltech/routify": "^1.0.6",
+    "rollup": "^2.0.5",
+    "rollup-plugin-hot": "^0.0.14",
+    "rollup-plugin-svelte-hot": "^0.4.0",
+    "svelte": "^3.19.2"
+  },
+  "scripts": {
+    "dev": "rollup -c -w",
+    "test": "echo TODO"
+  }
+}
