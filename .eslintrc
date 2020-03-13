@@ -6,8 +6,8 @@ overrides:
     env:
       node: true
 
-settings:
-# svelte3/compiler-options:
+# settings:
+#   svelte3/compiler-options:
 #   customElement: true
 #   svelte3/enabled: true
 #   svelte3/ignore-warnings: false
