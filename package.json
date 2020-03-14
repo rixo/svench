@@ -1,12 +1,14 @@
 {
   "name": "svench",
-  "version": "0.0.0",
+  "version": "0.0.1-0",
   "main": "src/index.js",
   "module": "dist/index.esm.js",
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
-  "files": [ "src" ],
+  "files": [
+    "src"
+  ],
   "dependencies": {
     "@sveltech/routify": "sveltech/routify#master"
   },
