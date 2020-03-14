@@ -9,31 +9,24 @@
   const isPage = ({ isFallback }) => !isFallback
 
   const trimPages = _routes => {
-    const leaves = []
     const trimmed = {}
     for (const route of _routes) {
-      const { path, isIndex } = route
-      trimmed[path] = $pages[path]
-      if (isIndex) {
-        trimmed[path] = route
-      } else {
-        leaves.push(route)
-      }
+      const { path } = route
+      trimmed[path] = []
     }
     $pages = trimmed
-    return leaves
   }
 
-  $: _routes = augmentRoutes($inputRoutes)
+  $: augmented = augmentRoutes($inputRoutes)
 
-  $: _routes = _routes.filter(isPage)
+  $: pageRoutes = augmented.filter(isPage)
 
   // ensure removed pages are reflected (on HMR update)
-  $: trimPages(_routes)
+  $: trimPages(pageRoutes)
 
-  $: routes.set(_routes)
+  $: routes.set(augmented)
 </script>
 
-{#each _routes as route (route.path)}
+{#each pageRoutes as route (route.path)}
   <Register {route} {pages} />
 {/each}
