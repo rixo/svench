@@ -1,6 +1,14 @@
 <script>
+  import { slide } from 'svelte/transition'
+
   export let items = []
   export let nested = false
+
+  const collapsed = {}
+
+  const toggle = item => {
+    collapsed[item.id] = !collapsed[item.id]
+  }
 </script>
 
 <ul class="pages" class:nested>
@@ -8,25 +16,36 @@
     <li
       class:index={it.isIndex}
       class:directory={it.isDirectory}
+      class:collapsed={collapsed[it.id]}
       class:page={!it.isDirectory}>
       {#if it.isDirectory}
-        <span class="icon folder-collapse-handle">⌄</span>
-        <span class="icon">📁</span>
+        <span class="icon folder-collapse handle" on:click={toggle(it)}>⌄</span>
+        <span class="icon handle" on:click={toggle(it)}>📁</span>
         {#if it.isIndex}
           <a class="text" href={it.shortPath}>{it.segment}</a>
         {:else}
           <span class="text">{it.segment}</span>
         {/if}
-        <svelte:self items={it.children} nested />
+        {#if !collapsed[it.id]}
+          <svelte:self items={it.children} nested />
+        {/if}
       {:else}
         {#if it.views}
-          <span class="icon folder-collapse-handle">⌄</span>
+          <span
+            class="icon folder-collapse handle"
+            on:click={() => (collapsed[it.id] = !collapsed[it.id])}>
+            ⌄
+          </span>
         {/if}
-        <span class="icon">⚙️</span>
+        <span
+          class="icon handle"
+          on:click={() => (collapsed[it.id] = !collapsed[it.id])}>
+          ⚙️
+        </span>
         <a class="text" href={it.path}>{it.segment}</a>
       {/if}
-      {#if it.views}
-        <ul class="nested">
+      {#if it.views && !collapsed[it.id]}
+        <ul class="nested" transition:slide>
           {#each it.views as name}
             <li class="svench menu view">
               <span class="icon">🗈</span>
@@ -63,9 +82,16 @@
     text-align: center;
     font-size: 16px;
   }
-  li > .folder-collapse-handle {
+  .folder-collapse.handle {
     top: 0.4em;
     margin-left: -40px;
+    cursor: pointer;
+  }
+  .collapsed > .folder-collapse.handle {
+    top: 0.5em;
+    transition: transform 120ms;
+    transform-origin: center;
+    transform: rotate(-90deg);
   }
   li.directory > .text {
     font-weight: 100;
@@ -79,16 +105,15 @@
   }
   /* colors */
   li > .text:not(a) {
-    color: mediumpurple;
     color: #aaa;
-    opacity: 0.5;
+    opacity: 0.75;
   }
   li > a.text {
     color: var(--light-1, skyblue);
   }
-  li .icon {
+  li > .icon {
     color: #aaa;
-    opacity: 0.5;
+    opacity: 0.75;
   }
   li > a {
     display: inline-block;
@@ -96,5 +121,8 @@
   }
   li > a:hover {
     color: var(--primary);
+  }
+  .handle {
+    cursor: pointer;
   }
 </style>
