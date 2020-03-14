@@ -1,0 +1,16 @@
+<script>
+  import { View } from 'svench'
+  import Sub from './Sub.svelte'
+</script>
+
+<View name="default">
+  <Sub />
+</View>
+
+<View name="big">
+  <Sub big />
+</View>
+
+<View name="small">
+  <Sub big />
+</View>

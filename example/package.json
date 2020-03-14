@@ -1,0 +1,34 @@
+{
+  "name": "svelte-app",
+  "version": "1.0.0",
+  "devDependencies": {
+    "@rixo/eslint-config-svelte": "^0.8.1",
+    "@rollup/plugin-commonjs": "^11.0.0",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@sveltech/routify": "sveltech/routify#master",
+    "cross-env": "^6.0.3",
+    "mdsvex": "^0.4.0",
+    "nollup": "^0.10.6",
+    "rollup": "^1.31.1",
+    "rollup-plugin-hot": "^0.0.14",
+    "rollup-plugin-livereload": "^1.0.0",
+    "rollup-plugin-svelte-hot": "^0.4.2",
+    "rollup-plugin-terser": "^5.1.2",
+    "svelte": "~3.19.0"
+  },
+  "dependencies": {
+    "sirv-cli": "^0.4.4"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "svench": "routify --extensions svench,svench.svx --pages src --child-process='svench:start'",
+    "svench:livereload": "routify --extensions svench,svench.svx --pages src --child-process='svench:start:livereload'",
+    "svench:start": "SVENCH=1 rollup -c -w",
+    "svench:start:livereload": "SVENCH=1 LIVERELOAD=1 rollup -c -w",
+    "dev:rollup": "rollup -c -w",
+    "dev:livereload": "cross-env LIVERELOAD=1 rollup -c -w",
+    "dev:nollup": "cross-env NOLLUP=1 nollup -c --hot --port 5000 --content-base ./public",
+    "dev": "npm run dev:rollup",
+    "start": "sirv public"
+  }
+}

@@ -1,0 +1,16 @@
+# Sub sub
+
+We're using Routify behind the scene, so you can add random pages to your style guide.
+
+Add Mdsvex for extra fun!
+
+~~~js exec
+import { Render } from 'svench'
+import Sub from './Sub.svench'
+~~~
+
+We can render from .svench files:
+
+<Render src={Sub} view="big" />
+
+<Render src="./Sub.svench" view="small" />

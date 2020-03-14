@@ -1,0 +1,15 @@
+```js exec
+import Child from './Child.svelte'
+debugger
+```
+
+# I am Page :D
+
+<Child />
+
+```js exec
+console.trace()
+debugger
+```
+
+<Child name="rixo" />
