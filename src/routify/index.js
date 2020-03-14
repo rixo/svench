@@ -17,7 +17,6 @@ const addRootLayout = routes =>
 const addDefaultIndex = routes => {
   const isUserIndex = r =>
     (r.isIndex && r.path === '/index') || r.shortPath === ''
-    debugger
   const userIndexIndex = routes.findIndex(isUserIndex)
   if (userIndexIndex < 0) {
     const defaultIndex = {
