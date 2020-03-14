@@ -29,7 +29,8 @@
     "dev:rollup": "rollup -c -w",
     "dev:livereload": "cross-env LIVERELOAD=1 rollup -c -w",
     "dev:nollup": "cross-env NOLLUP=1 nollup -c --hot --port 5000 --content-base ./public",
-    "dev": "npm run dev:rollup",
+    "dev": "echo; echo '(!) You probably want to run yarn svench (run yarn dev:yes, if really...)'; echo",
+    "dev:yes": "npm run dev:rollup",
     "start": "sirv public"
   }
 }
