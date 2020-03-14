@@ -10,3 +10,8 @@
 <View name="other">
   <Child name="other" />
 </View>
+
+<View name="yet another">
+  <h3>You can put anything you want in there!</h3>
+  <Child name="yes, another!" />
+</View>
