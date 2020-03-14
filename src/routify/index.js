@@ -1,5 +1,8 @@
+import { pipe } from '../util'
+
 import RootLayout from './RootLayout.svelte'
 import DefaultIndex from './DefaultIndex.svelte'
+import DefaultFallback from './DefaultFallback.svelte'
 
 const rootLayout = {
   component: () => RootLayout,
@@ -14,12 +17,20 @@ const addRootLayout = routes =>
     }
   })
 
-const addDefaultIndex = routes => {
+const addDefaultIndexAndFallback = routes => {
   const isUserIndex = r =>
     (r.isIndex && r.path === '/index') || r.shortPath === ''
-  const userIndexIndex = routes.findIndex(isUserIndex)
-  if (userIndexIndex < 0) {
-    const defaultIndex = {
+  const isUserFallback = r => r.isFallback && r.path === '/_fallback'
+  let hasUserIndex = false
+  let hasUserFallback = false
+  for (const route of routes) {
+    if (!hasUserIndex && isUserIndex(route)) hasUserIndex = true
+    if (!hasUserFallback && isUserFallback(route)) hasUserFallback = true
+    if (hasUserIndex && hasUserFallback) break
+  }
+  const extraRoutes = []
+  if (!hasUserIndex ) {
+    extraRoutes.push({
       component: () => DefaultIndex,
       isIndex: true,
       path: '/index',
@@ -29,12 +40,31 @@ const addDefaultIndex = routes => {
       name: "/index",
       ranking: "C",
       params: {}
-    }
-    return [...routes, defaultIndex]
+    })
+  }
+  if (!hasUserFallback) {
+    extraRoutes.push({
+      component: () => DefaultFallback,
+      isFallback: true,
+      path: '/_fallback',
+      shortPath: '',
+      layouts: [],
+      name: '/_fallback',
+      ranking: 'A',
+      params: {}
+    })
+  }
+  if (extraRoutes.length) {
+    return [...routes, ...extraRoutes]
   }
   return routes
 }
 
-export const augmentRoutes = routes => {
-  return addRootLayout(addDefaultIndex(routes))
-}
+// NOTE default index and fallback don't use user's _layout because it's
+// technically difficult (layouts are processed at compile time by Routify),
+// and it's not high value (even possibly better -- default index and fallback
+// can be thought as being one level bellow root)
+export const augmentRoutes = pipe(
+  addDefaultIndexAndFallback,
+  addRootLayout,
+)
