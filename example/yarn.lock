@@ -3294,6 +3294,12 @@ svelte@~3.19.0:
   version "3.19.2"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.19.2.tgz#4b0169ee33b37399f08eb92163593a0a46c242c7"
 
+svench@^0.0.1-0:
+  version "0.0.1-0"
+  resolved "https://registry.yarnpkg.com/svench/-/svench-0.0.1-0.tgz#5b0d668c35cbfaf6dbafaef007a9cf8956205a9b"
+  dependencies:
+    "@sveltech/routify" sveltech/routify#master
+
 symbol-tree@^3.2.4:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
