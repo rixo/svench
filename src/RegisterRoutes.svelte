@@ -3,8 +3,8 @@
   import { augmentRoutes } from './routify/index.js'
 
   export let pages
-  export let routes = []
-  export let routesStore
+  export let inputRoutes
+  export let routes
 
   const isPage = ({ isFallback }) => !isFallback
 
@@ -24,14 +24,14 @@
     return leaves
   }
 
-  $: _routes = augmentRoutes(routes)
+  $: _routes = augmentRoutes($inputRoutes)
 
   $: _routes = _routes.filter(isPage)
 
   // ensure removed pages are reflected (on HMR update)
   $: trimPages(_routes)
 
-  $: routesStore.set(_routes)
+  $: routes.set(_routes)
 </script>
 
 {#each _routes as route (route.path)}

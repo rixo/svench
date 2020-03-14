@@ -6,16 +6,17 @@
   import Menu from './app/Menu.svelte'
   import { Router } from '@sveltech/routify'
 
-  export let routes = []
+  let inputRoutes
+  export { inputRoutes as routes }
 
   export let fixed = true
 
-  const { pages, tree, routes: rs } = createStores()
+  const { pages, tree, routes } = createStores()
 
-  setContext({ render: false, routes: rs })
+  setContext({ render: false, routes })
 </script>
 
-<RegisterRoutes {pages} {routes} routesStore={rs}></RegisterRoutes>
+<RegisterRoutes {pages} {inputRoutes} {routes}></RegisterRoutes>
 
 <div class="svench svench" class:fixed>
   <section class="menu">
@@ -23,7 +24,7 @@
   </section>
 
   <main>
-    <Router routes={$rs} />
+    <Router routes={$routes} />
   </main>
 </div>
 

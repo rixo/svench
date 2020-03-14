@@ -1,6 +1,6 @@
 import {Svench} from 'svench'
 
-import { routes } from '@sveltech/routify/tmp/routes'
+import { routes } from './routes.js'
 
 const app = new Svench({
   target: document.body,
