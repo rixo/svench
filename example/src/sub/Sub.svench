@@ -12,5 +12,5 @@
 </View>
 
 <View name="small">
-  <Sub big />
+  <Sub small />
 </View>

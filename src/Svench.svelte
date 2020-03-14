@@ -12,7 +12,7 @@
 
   const { pages, tree, routes: rs } = createStores()
 
-  setContext({ render: false })
+  setContext({ render: false, routes: rs })
 </script>
 
 <RegisterRoutes {pages} {routes} routesStore={rs}></RegisterRoutes>

@@ -9,8 +9,14 @@ import { Render } from 'svench'
 import Sub from './Sub.svench'
 ~~~
 
-We can render from .svench files:
+We can render from `.svench` files by passing a ref to a Svench component:
+
+    <Render src={Sub} view="big" />
 
 <Render src={Sub} view="big" />
 
-<Render src="./Sub.svench" view="small" />
+... or by path:
+
+    <Render src="../Sub" view="small" />
+
+<Render src="../Sub" view="small" />
