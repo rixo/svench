@@ -35,9 +35,11 @@
     --light-2: rgba(238, 244, 237, 1);
     --light-2-r: #242e36;
 
-    --primary: rgba(19, 64, 116, 1);
+    --primary: rgba(19, 64, 116, .8);
+    --primary-strong: rgba(19, 64, 116, 1);
     --primary-r: var(--light-1);
     --secondary: rgba(19, 49, 92, 1);
+    --secondary: var(--light-1);
     --secondary-r: #fff;
     --tertiary: rgba(11, 37, 69, 1);
     --tertiary-r: var(--light-1);

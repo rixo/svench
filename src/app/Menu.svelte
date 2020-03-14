@@ -105,14 +105,14 @@
   }
   /* colors */
   li > .text:not(a) {
-    color: #aaa;
+    color: #999;
     opacity: 0.75;
   }
   li > a.text {
-    color: var(--light-1, skyblue);
+    color: var(--primary, skyblue);
   }
   li > .icon {
-    color: #aaa;
+    color: #999;
     opacity: 0.75;
   }
   li > a {
@@ -120,7 +120,7 @@
     text-decoration: none;
   }
   li > a:hover {
-    color: var(--primary);
+    color: var(--primary-strong);
   }
   .handle {
     cursor: pointer;
