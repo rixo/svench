@@ -1,48 +1,21 @@
 <script>
+  import RegisterRoutes from './RegisterRoutes.svelte'
+  import { setContext } from './util.js'
+  import { createStores } from './stores.js'
+
+  import Menu from './app/Menu.svelte'
   import { Router } from '@sveltech/routify'
 
-  import { augmentRoutes } from './routify'
-  import Register from './Register.svelte'
-  import Menu from './app/Menu.svelte'
-  import { pages, tree } from './Svench.state.js'
-  import { setContext } from './util.js'
-
-  let userRoutes
-  export { userRoutes as routes }
+  export let routes = []
 
   export let fixed = true
 
-  const isPage = ({ isFallback }) => !isFallback
+  const { pages, tree, routes: rs } = createStores()
 
-  const trimPages = _routes => {
-    const leaves = []
-    const trimmed = {}
-    for (const route of _routes) {
-      const { path, isIndex } = route
-      trimmed[path] = $pages[path]
-      if (isIndex) {
-        trimmed[path] = route
-      } else {
-        leaves.push(route)
-      }
-    }
-    $pages = trimmed
-    return leaves
-  }
-
-  $: routes = augmentRoutes(userRoutes)
-
-  $: _routes = routes.filter(isPage)
-
-  // ensure removed pages are reflected (on HMR update)
-  $: trimPages(_routes)
-
-  setContext({})
+  setContext({ render: false })
 </script>
 
-{#each _routes as route (route.path)}
-  <Register {route} {pages} />
-{/each}
+<RegisterRoutes {pages} {routes} routesStore={rs}></RegisterRoutes>
 
 <div class="svench svench" class:fixed>
   <section class="menu">
@@ -50,12 +23,12 @@
   </section>
 
   <main>
-    <Router {routes} />
+    <Router routes={$rs} />
   </main>
 </div>
 
 <style>
-  :root {
+  div {
     --light-1: rgba(141, 169, 196, 1);
     --light-1-r: white;
     --light-2: rgba(238, 244, 237, 1);
@@ -64,7 +37,7 @@
     --primary: rgba(19, 64, 116, 1);
     --primary-r: var(--light-1);
     --secondary: rgba(19, 49, 92, 1);
-    --secondary-r: var(--light-1);
+    --secondary-r: #fff;
     --tertiary: rgba(11, 37, 69, 1);
     --tertiary-r: var(--light-1);
 
@@ -77,7 +50,8 @@
     margin: 0;
     padding: 8px;
     box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+      Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   }
 
   .svench.fixed {

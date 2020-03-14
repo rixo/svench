@@ -66,12 +66,18 @@ const buffer = (delay, callback) => {
   }
 }
 
-export const pages = writable({})
+export const createStores = () => {
+  const routes = writable([])
 
-export const tree = readable([], set =>
-  pages.subscribe(
-    buffer(20, p => {
-      set(toTree(p))
-    })
+  const pages = writable({})
+
+  const tree = readable([], set =>
+    pages.subscribe(
+      buffer(20, p => {
+        set(toTree(p))
+      })
+    )
   )
-)
+
+  return { routes, pages, tree }
+}

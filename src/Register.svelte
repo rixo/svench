@@ -6,12 +6,13 @@
 
   export let pages
 
-  let loader = route.component
-  let path = route.path
   let _views = []
 
-  let timeout
+  let path
+  let loader
+  let component
 
+  let timeout
   const schedule = callback => {
     clearTimeout(timeout)
     timeout = setTimeout(callback, 100)
@@ -21,7 +22,36 @@
     clearTimeout(timeout)
   })
 
-  $: ({ path, component: loader } = route)
+  const mapRoute = ({ path, shortPath, isIndex, component }) => ({
+    id: path,
+    isIndex,
+    path,
+    shortPath,
+    loader: component,
+  })
+
+  const registerRoute = route => {
+    component = null
+    path = route.path
+    loader = route.component
+
+    $pages[path] = {
+      ...mapRoute(route),
+      views: [],
+    }
+
+    Promise.resolve()
+      .then(loader)
+      .then(cmp => {
+        _views = []
+        component = cmp
+      })
+      .catch(error => {
+        $pages[path].error = error
+      })
+  }
+
+  $: if (route) registerRoute(route)
 
   let resetNext = false
 
@@ -42,31 +72,8 @@
     })
   }
 
-  const mapRoute = ({ path, shortPath, isIndex }) => ({
-    id: path,
-    isIndex,
-    path,
-    shortPath,
-  })
-
-  $pages[path] = {
-    ...mapRoute(route),
-    views: [],
-  }
-
   setContext({ register })
 
-  let component
-
-  Promise.resolve()
-    .then(loader)
-    .then(cmp => {
-      _views = []
-      component = cmp
-    })
-    .catch(error => {
-      $pages[path].error = error
-    })
 </script>
 
 {#if component && !route.isIndex}
