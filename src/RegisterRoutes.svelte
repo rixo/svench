@@ -1,10 +1,8 @@
 <script>
   import Register from './Register.svelte'
-  import { augmentRoutes } from './routify/index.js'
 
-  export let pages
-  export let inputRoutes
   export let routes
+  export let pages
 
   const isPage = ({ isFallback }) => !isFallback
 
@@ -17,14 +15,10 @@
     $pages = trimmed
   }
 
-  $: augmented = augmentRoutes($inputRoutes)
-
-  $: pageRoutes = augmented.filter(isPage)
+  $: pageRoutes = routes.filter(isPage)
 
   // ensure removed pages are reflected (on HMR update)
   $: trimPages(pageRoutes)
-
-  $: routes.set(augmented)
 </script>
 
 {#each pageRoutes as route (route.path)}

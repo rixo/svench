@@ -1,19 +1,25 @@
 import { pipe } from '../util'
 
-import RootLayout from './RootLayout.svelte'
+import RenderLayout from './RenderLayout.svelte'
+import App from '../app/App.svelte'
 import DefaultIndex from './DefaultIndex.svelte'
 import DefaultFallback from './DefaultFallback.svelte'
 
-const rootLayout = {
-  component: () => RootLayout,
-  path: '...',
+const renderLayout = {
+  component: () => RenderLayout,
+  path: '../../_layout',
 }
 
-const addRootLayout = routes =>
+const defaultLayout = {
+  component: () => App,
+  path: '../_layout',
+}
+
+const addSvenchLayouts = routes =>
   routes.map(({ layouts, ...route }) => {
     return {
       ...route,
-      layouts: [rootLayout, ...layouts],
+      layouts: [defaultLayout, renderLayout, ...layouts],
     }
   })
 
@@ -29,17 +35,17 @@ const addDefaultIndexAndFallback = routes => {
     if (hasUserIndex && hasUserFallback) break
   }
   const extraRoutes = []
-  if (!hasUserIndex ) {
+  if (!hasUserIndex) {
     extraRoutes.push({
       component: () => DefaultIndex,
       isIndex: true,
       path: '/index',
       shortPath: '',
       layouts: [],
-      regex: "^(/index)?/?$",
-      name: "/index",
-      ranking: "C",
-      params: {}
+      regex: '^(/index)?/?$',
+      name: '/index',
+      ranking: 'C',
+      params: {},
     })
   }
   if (!hasUserFallback) {
@@ -51,7 +57,7 @@ const addDefaultIndexAndFallback = routes => {
       layouts: [],
       name: '/_fallback',
       ranking: 'A',
-      params: {}
+      params: {},
     })
   }
   if (extraRoutes.length) {
@@ -64,7 +70,4 @@ const addDefaultIndexAndFallback = routes => {
 // technically difficult (layouts are processed at compile time by Routify),
 // and it's not high value (even possibly better -- default index and fallback
 // can be thought as being one level bellow root)
-export const augmentRoutes = pipe(
-  addDefaultIndexAndFallback,
-  addRootLayout,
-)
+export const augmentRoutes = pipe(addDefaultIndexAndFallback, addSvenchLayouts)

@@ -2,7 +2,7 @@
   import { slide } from 'svelte/transition'
 
   export let items = []
-  export let nested = false
+  export let indent = 0
 
   const collapsed = {}
 
@@ -11,9 +11,10 @@
   }
 </script>
 
-<ul class="pages" class:nested>
+<ul class="pages" class:nested={indent > 0}>
   {#each items as it (it.id)}
     <li
+      style={`padding-left: ${indent * 24}px`}
       class:index={it.isIndex}
       class:directory={it.isDirectory}
       class:collapsed={collapsed[it.id]}
