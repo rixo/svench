@@ -3,7 +3,6 @@
   import { setContext } from './util'
 
   export let route
-
   export let pages
 
   let _views = []
@@ -73,7 +72,6 @@
   }
 
   setContext({ register })
-
 </script>
 
 {#if component && !route.isIndex}
