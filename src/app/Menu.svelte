@@ -14,7 +14,6 @@
 <ul class="pages" class:nested={indent > 0}>
   {#each items as it (it.id)}
     <li
-      style={`padding-left: ${indent * 24}px`}
       class:index={it.isIndex}
       class:directory={it.isDirectory}
       class:collapsed={collapsed[it.id]}
@@ -28,7 +27,7 @@
           <span class="text">{it.segment}</span>
         {/if}
         {#if !collapsed[it.id]}
-          <svelte:self items={it.children} nested />
+          <svelte:self items={it.children} indent={indent + 1} />
         {/if}
       {:else}
         {#if it.views}
