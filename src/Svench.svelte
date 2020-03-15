@@ -13,7 +13,13 @@
 
   const { options, pages, tree, routes } = createStores()
 
-  $: $options = { fixed }
+  $: $options = {
+    fixed,
+    defaultViewName: index => `view ${index}`,
+    // time before which view index is reset (for HMR)
+    registerTimeout: 100,
+    renderTimeout: 100,
+  }
 
   $: augmented = augmentRoutes($inputRoutes)
 

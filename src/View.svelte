@@ -9,20 +9,19 @@
 
   export let name
 
-  const {
-    register,
-    render = !register,
-    ui = true,
-  } = getContext() || {}
+  const { register, render = !register, getRenderName, ui = true } =
+    getContext() || {}
 
   if (register) {
     register(name)
   }
+
+  const actualName = render && getRenderName(name)
 </script>
 
-{#if render === true || name === render}
+{#if render === true || (render && actualName === render)}
   {#if ui}
-    <ViewBox {name}>
+    <ViewBox name={actualName}>
       <slot />
     </ViewBox>
   {:else}

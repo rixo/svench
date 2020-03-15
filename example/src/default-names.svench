@@ -1,0 +1,6 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<View>First</View>
+<View>Second</View>

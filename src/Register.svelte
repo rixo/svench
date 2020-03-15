@@ -1,6 +1,8 @@
 <script>
   import { onDestroy } from 'svelte'
-  import { setContext } from './util'
+  import { getContext, setContext } from './util'
+
+  const { options } = getContext()
 
   export let route
   export let pages
@@ -14,7 +16,7 @@
   let timeout
   const schedule = callback => {
     clearTimeout(timeout)
-    timeout = setTimeout(callback, 100)
+    timeout = setTimeout(callback, $options.registerTimeout)
   }
 
   onDestroy(() => {
@@ -61,7 +63,7 @@
       resetNext = false
     }
 
-    _views.push(name)
+    _views.push(name || $options.defaultViewName(_views.length + 1))
 
     $pages[path].views = _views
 

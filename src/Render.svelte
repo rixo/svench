@@ -8,9 +8,7 @@
   let error = null
 
   const ctx = getContext()
-  const { routes } = ctx
-
-  setContext({ ...ctx, render: view })
+  const { routes, options } = ctx
 
   const matchPath = path => ({ path: x }) => x === path
 
@@ -36,6 +34,21 @@
     !src ? null : typeof src === 'string' ? loadSrc(src) : src
 
   $: cmp = resolveSrc(src)
+
+  let index = 0
+
+  let timeout
+  const reset = () => {
+    index = 0
+  }
+
+  const getRenderName = name => {
+    clearTimeout(timeout)
+    timeout = setTimeout(reset, $options.renderTimeout)
+    return name == null ? $options.defaultViewName(++index) : name
+  }
+
+  setContext({ ...ctx, render: view, getRenderName })
 </script>
 
 {#if error}
