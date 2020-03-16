@@ -36,7 +36,11 @@ const toTreeArray = (tree, base = '') =>
 const toTree = pages => {
   const tree = {}
   for (const page of Object.values(pages).filter(Boolean)) {
-    const steps = page.shortPath.split('/').filter(Boolean)
+    const steps = page.shortPath
+      .replace('_', ' ')
+      .replace('.', '/')
+      .split('/')
+      .filter(Boolean)
     const last = steps.pop()
     if (!last) continue
     let cursor = tree

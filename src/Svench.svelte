@@ -19,6 +19,9 @@
     // time before which view index is reset (for HMR)
     registerTimeout: 100,
     renderTimeout: 100,
+    // ui
+    centered: false,
+    outline: false,
   }
 
   $: augmented = augmentRoutes($inputRoutes)

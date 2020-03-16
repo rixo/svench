@@ -1,6 +1,7 @@
 <script>
   import { getContext } from '../util'
   import Menu from './Menu.svelte'
+  import Toolbar from './Toolbar.svelte'
 
   const { options, tree } = getContext()
 
@@ -8,13 +9,12 @@
 </script>
 
 <div class="svench svench" class:fixed>
-  <h2>Default layout</h2>
-
   <section class="menu">
     <Menu items={$tree} />
   </section>
 
   <main>
+    <Toolbar />
     <slot />
   </main>
 </div>

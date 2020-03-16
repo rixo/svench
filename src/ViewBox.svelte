@@ -1,11 +1,20 @@
 <script>
+  import { getContext } from './util.js'
+
+  const { options } = getContext()
+
+  $: ({ outline, centered, padding } = $options)
+  // const outline = true
+
   export let name
 </script>
 
-<div class="svench view box">
+<div class="svench view box" class:outline class:centered class:padding>
   <h3 class="svench view">{name}</h3>
   <div class="svench view canvas">
-    <slot />
+    <div class="svench view outline">
+      <slot />
+    </div>
   </div>
 </div>
 
@@ -19,9 +28,27 @@
   .box {
     background-color: #fff;
   }
-  .canvas {
-    /* box-shadow: inset 0 2px 5px 2px rgba(128, 128, 128, 0.15),
-      inset 0 1px 0 2px rgba(128, 128, 128, 0.05); */
-    overflow: auto;
+  .box.centered .canvas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .box.padding .canvas {
+    padding: 1rem;
+  }
+  .box.outline .outline {
+    display: inline-block;
+    overflow: visible;
+    position: relative;
+  }
+  .box.outline .outline:before {
+    content: ' ';
+    display: block;
+    border: 2px solid magenta;
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    top: -2px;
+    bottom: -2px;
   }
 </style>
