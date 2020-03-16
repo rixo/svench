@@ -1,4 +1,5 @@
 <script>
+  import { get } from 'svelte/store'
   import { setContext, getContext } from './util'
   import { url } from '@sveltech/routify'
 
@@ -8,7 +9,7 @@
   let error = null
 
   const ctx = getContext()
-  const { routes, options } = ctx
+  const { register, routes, options } = ctx
 
   const matchPath = path => ({ path: x }) => x === path
 
@@ -22,7 +23,11 @@
   }
 
   const loadSrc = src => {
-    const route = $routes.find(matchPath($url(src)))
+    // can't use $url: we are not in Routify context during register
+    const route = $routes.find(matchPath(get(url)(src)))
+    if (!route) {
+      setError(new Error(`route not found: ${src}`))
+    }
     if (route && route.component) {
       Promise.resolve(route.component())
         .then(setCmp)
@@ -33,7 +38,7 @@
   const resolveSrc = src =>
     !src ? null : typeof src === 'string' ? loadSrc(src) : src
 
-  $: cmp = resolveSrc(src)
+  $: cmp = !register && resolveSrc(src)
 
   let index = 0
 
