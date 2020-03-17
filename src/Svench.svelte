@@ -11,6 +11,8 @@
 
   export let fixed = true
 
+  export let defaults
+
   const { options, pages, tree, routes } = createStores()
 
   $: $options = {
@@ -22,6 +24,8 @@
     // ui
     centered: false,
     outline: false,
+    padding: false,
+    ...defaults,
   }
 
   $: augmented = augmentRoutes($inputRoutes)
