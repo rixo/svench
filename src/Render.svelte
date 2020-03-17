@@ -11,11 +11,21 @@
   const ctx = getContext()
   const { register, routes, options } = ctx
 
-  const matchPath = path => ({ path: x }) => x === path
+  const matchPath = src => {
+    const _url = get(url)
+    const srcPath = _url(src)
+    // TODO real glob / wildcard support...
+    if (srcPath.slice(-1) === '*') {
+      const srcPrefix = srcPath.slice(0, -1)
+      const { length: l } = srcPrefix
+      return ({ path }) => path.slice(0, l) === srcPrefix
+    }
+    return ({ path }) => path === srcPath
+  }
 
-  const setCmp = x => {
+  const setComponents = x => {
     error = null
-    cmp = x
+    components = x
   }
 
   const setError = err => {
@@ -24,21 +34,23 @@
 
   const loadSrc = src => {
     // can't use $url: we are not in Routify context during register
-    const route = $routes.find(matchPath(get(url)(src)))
-    if (!route) {
+    const matchedRoutes = $routes.filter(matchPath(src))
+    if (!matchedRoutes) {
       setError(new Error(`route not found: ${src}`))
     }
-    if (route && route.component) {
-      Promise.resolve(route.component())
-        .then(setCmp)
-        .catch(setError)
-    }
+    Promise.all(
+      matchedRoutes
+        .filter(r => r.component)
+        .map(route => Promise.resolve(route.component()))
+    )
+      .then(setComponents)
+      .catch(setError)
   }
 
   const resolveSrc = src =>
     !src ? null : typeof src === 'string' ? loadSrc(src) : src
 
-  $: cmp = !register && resolveSrc(src)
+  $: components = !register && resolveSrc(src)
 
   let index = 0
 
@@ -63,8 +75,10 @@
   </div>
 {:else}
   {#if src}
-    {#if cmp}
-      <svelte:component this={cmp} />
+    {#if components}
+      {#each components as cmp}
+        <svelte:component this={cmp} />
+      {/each}
     {:else}
       <h2>Not found: {src}</h2>
     {/if}
