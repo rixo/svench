@@ -1,51 +1,77 @@
 <script>
   import { getContext } from '../util'
   import Menu from './Menu.svelte'
+  import MenuResizeHandle from './MenuResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
+  import ThemeOranges from './ThemeOranges.svelte'
 
-  const { options, tree } = getContext()
+  const { options, tree, focus } = getContext()
 
-  $: ({ fixed } = $options)
+  $: ({ fixed, fullscreen } = $options)
+
+  const onKeydown = e => {
+    if (e.key === 'Escape') {
+      $options.fullscreen = false
+    }
+  }
 </script>
 
-<div class="svench svench" class:fixed>
-  <section class="menu">
-    <Menu items={$tree} />
-  </section>
+<svelte:window on:keydown={onKeydown} />
 
-  <main>
-    <Toolbar />
-    <slot />
-  </main>
-</div>
+<ThemeOranges>
+  <div
+    class="svench svench"
+    class:fixed
+    class:fullscreen
+    style="grid-template-columns: {$options.menuWidth}px auto;">
+    <section class="ui menu">
+      <h1>
+        <a href="/">
+          <span class="icon">🔧</span>
+          Svench
+        </a>
+      </h1>
+      <Menu items={$tree} />
+      <MenuResizeHandle bind:width={$options.menuWidth} />
+    </section>
+
+    <section class="ui toolbar">
+      <Toolbar />
+    </section>
+
+    <div class="canvas" class:focus={$focus} data-routify="scroll-lock">
+      <slot />
+    </div>
+  </div>
+</ThemeOranges>
 
 <style>
-  div {
-    --light-1: rgba(141, 169, 196, 1);
-    --light-1-r: white;
-    --light-2: rgba(238, 244, 237, 1);
-    --light-2-r: #242e36;
-
-    --primary: rgba(19, 64, 116, 0.8);
-    --primary-strong: rgba(19, 64, 116, 1);
-    --primary-r: var(--light-1);
-    --secondary: rgba(19, 49, 92, 1);
-    --secondary: var(--light-1);
-    --secondary-r: #fff;
-    --tertiary: rgba(11, 37, 69, 1);
-    --tertiary-r: var(--light-1);
-
-    --gray: #aaa;
-    --gray-light: #eee;
+  h1 {
+    margin: 0.5rem 1rem;
+    padding: 0;
+    white-space: nowrap;
+  }
+  h1 a {
+    text-decoration: none;
+    color: #79889a;
+  }
+  h1 .icon {
+    opacity: 0.5;
+    display: inline-block;
+    transform: rotateY(180deg);
   }
 
-  :global(body) {
-    color: #333;
-    margin: 0;
-    padding: 8px;
+  .svench {
+    display: grid;
+    grid-template-columns: 200px auto;
+    grid-template-rows: 3rem auto;
+    /* color: #333; */
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
       Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  }
+  .canvas {
+    grid-column-start: 2;
   }
 
   .svench.fixed {
@@ -56,21 +82,43 @@
     bottom: 0;
   }
 
+  .svench.fullscreen {
+    display: flex;
+  }
+  .svench.fullscreen .ui {
+    display: none;
+  }
+  .svench.fullscreen .canvas {
+    flex: 1;
+  }
+
   .menu {
     box-sizing: border-box;
     float: left;
-    min-width: 200px;
-    max-width: 240px;
-    padding: 16px;
+    /* min-width: 200px;
+    max-width: 240px; */
+    /* padding: 16px; */
     margin: 0;
-    height: 100%;
+    height: 100vh;
     overflow: auto;
     background-color: var(--light-2);
     box-shadow: inset -16px 0 12px -16px rgba(0, 0, 0, 0.2);
+    position: relative; /* for MenuResizeHandle */
   }
 
-  main {
-    height: 100%;
+  .toolbar {
+    border-bottom: 1px solid var(--gray-light);
+  }
+
+  .canvas {
     overflow: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .canvas.focus :global(> *) {
+    display: none;
+  }
+  .canvas.focus :global(> .svench.view) {
+    display: inherit;
   }
 </style>

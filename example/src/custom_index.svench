@@ -1,0 +1,7 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<View name="foo">Foo</View>
+
+<View name="bar">Bar</View>

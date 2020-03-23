@@ -7,14 +7,14 @@
 import { writable } from 'svelte/store'
 import { routes as source } from '@sveltech/routify/tmp/routes'
 
-const hotData = import.meta.hot && import.meta.hot.data || {}
+const hotData = (import.meta.hot && import.meta.hot.data) || {}
 
 export const routes = hotData.routes || writable([])
 
 routes.set(source)
 
 if (import.meta.hot) {
-  import.meta.hot.dispose((data) => {
+  import.meta.hot.dispose(data => {
     data.routes = routes
   })
   // stop the update bubble before it reaches main.js

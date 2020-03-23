@@ -12,3 +12,6 @@ overrides:
 #   svelte3/enabled: true
 #   svelte3/ignore-warnings: false
 #   svelte3/lint-template: false
+
+rules:
+  no-unused-expressions: warn

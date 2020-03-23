@@ -23,11 +23,13 @@
     clearTimeout(timeout)
   })
 
-  const mapRoute = ({ path, shortPath, isIndex, component }) => ({
+  const mapRoute = ({ path, shortPath, isIndex, component, meta }) => ({
     id: path,
     isIndex,
     path,
     shortPath,
+    title:
+      meta && meta['svench:title'] && meta['svench:title'].replace(/_/g, ' '),
     loader: component,
   })
 

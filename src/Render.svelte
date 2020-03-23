@@ -1,26 +1,46 @@
 <script>
-  import { get } from 'svelte/store'
-  import { setContext, getContext } from './util'
-  import { url } from '@sveltech/routify'
+  import { get, readable } from 'svelte/store'
+  import { updateContext, getContext, false$ } from './util'
+  import { url, route as routifyRoute } from '@sveltech/routify'
+  import RenderContext from './RenderContext.svelte'
+  import RenderBox from './RenderBox.svelte'
 
-  export let view
+  export let view = true
   export let src = null
 
   let error = null
 
   const ctx = getContext()
-  const { register, routes, options } = ctx
+  const { routes, route: ctxRoute } = ctx
+
+  // we must consider context's route in priority, because this Render might
+  // be nested under another Render (e.g. fallback rendering all children)
+  $: route = ctxRoute === undefined ? $routifyRoute : ctxRoute
 
   const matchPath = src => {
+    // can't use $url: we are not in Routify context during register
     const _url = get(url)
-    const srcPath = _url(src)
+    const relativeSrc = src.startsWith('.')
+      ? src
+          .replace(/^.\//, '../'.repeat(route.extraNesting + 1))
+          .replace(/(?<!\.)\.(?!\.)/g, '/')
+      : src
+    const srcPath = _url(relativeSrc)
     // TODO real glob / wildcard support...
-    if (srcPath.slice(-1) === '*') {
+    if (srcPath.slice(-2) === '**') {
+      const srcPrefix = srcPath.slice(0, -2)
+      const { length: l } = srcPrefix
+      return route =>
+        route.path.slice(0, l) === srcPrefix ? [srcPrefix, route] : false
+    } else if (srcPath.slice(-1) === '*') {
       const srcPrefix = srcPath.slice(0, -1)
       const { length: l } = srcPrefix
-      return ({ path }) => path.slice(0, l) === srcPrefix
+      return r =>
+        r.path.slice(0, l) === srcPrefix && !r.path.slice(l).includes('/')
+          ? [srcPrefix, r]
+          : false
     }
-    return ({ path }) => path === srcPath
+    return route => (route.path === srcPath ? [false, route] : false)
   }
 
   const setComponents = x => {
@@ -32,40 +52,42 @@
     error = err
   }
 
+  const formatTitle = (route, prefix) =>
+    prefix === false
+      ? null
+      : {
+          title: route.path.slice(prefix.length),
+          href: route.path,
+        }
+
   const loadSrc = src => {
-    // can't use $url: we are not in Routify context during register
-    const matchedRoutes = $routes.filter(matchPath(src))
-    if (!matchedRoutes) {
-      setError(new Error(`route not found: ${src}`))
-    }
+    const matchedRoutes = $routes.map(matchPath(src)).filter(Boolean)
     Promise.all(
       matchedRoutes
-        .filter(r => r.component)
-        .map(route => Promise.resolve(route.component()))
+        .filter(([, route]) => route.component)
+        .map(([prefix, route]) =>
+          Promise.resolve(route.component()).then(Component => ({
+            Component,
+            route,
+            ...formatTitle(route, prefix),
+          }))
+        )
     )
       .then(setComponents)
       .catch(setError)
   }
 
   const resolveSrc = src =>
-    !src ? null : typeof src === 'string' ? loadSrc(src) : src
+    !src ? null : typeof src === 'string' ? loadSrc(src) : [src].flat()
 
-  $: components = !register && resolveSrc(src)
+  $: components = resolveSrc(src)
 
-  let index = 0
+  $: focus = view !== true
 
-  let timeout
-  const reset = () => {
-    index = 0
-  }
-
-  const getRenderName = name => {
-    clearTimeout(timeout)
-    timeout = setTimeout(reset, $options.renderTimeout)
-    return name == null ? $options.defaultViewName(++index) : name
-  }
-
-  setContext({ ...ctx, render: view, getRenderName })
+  updateContext({
+    render: readable(view),
+    register: false,
+  })
 </script>
 
 {#if error}
@@ -73,16 +95,14 @@
     <h2>Error!</h2>
     <pre>{error.stack || error}</pre>
   </div>
+{:else if components}
+  {#each components as { Component, route, title, href } (Component)}
+    <RenderContext {route}>
+      <RenderBox {route} {title} {focus}>
+        <svelte:component this={Component} />
+      </RenderBox>
+    </RenderContext>
+  {/each}
 {:else}
-  {#if src}
-    {#if components}
-      {#each components as cmp}
-        <svelte:component this={cmp} />
-      {/each}
-    {:else}
-      <h2>Not found: {src}</h2>
-    {/if}
-  {:else}
-    <slot />
-  {/if}
+  <h2>Not found: {src}</h2>
 {/if}

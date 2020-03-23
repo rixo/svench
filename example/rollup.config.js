@@ -5,6 +5,7 @@ import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 import hmr, { autoCreate } from 'rollup-plugin-hot'
 import { mdsvex } from 'mdsvex'
+import { routify } from '@sveltech/routify'
 
 // NOTE The NOLLUP env variable is picked by various HMR plugins to switch
 // in compat mode. You should not change its name (and set the env variable
@@ -30,6 +31,34 @@ export default {
     file: 'public/build/bundle.js',
   },
   plugins: [
+    svench &&
+      routify({
+        pages: './src',
+        // TODO routify should accept '.svench'
+        extensions: ['svench', 'svench.svx'],
+        // watch delay is needed to prevent race:
+        //
+        // - user rename/delete page file
+        // - rollup picks file change
+        // - rollup triggers build
+        // - rollup-plugin-hot/autocreate sees deleted file in routes.js
+        // - autocreate recreates just deleted file <--- HERE BE BUG
+        // - routify picks file change
+        // - routify recreates routes.js
+        // - ... but too late, user has extraneous deleted file recreated
+        // - rollup picks the change in routes.js...
+        //
+        // this delay is intented to give some time to routify to pick the
+        // change first (and so rollup plugin will block start of rollup build
+        // until routes.js has been generated)
+        //
+        // we can't be too greedy, because this delay will be paid for _any_
+        // file change when user is working, even when unneeded (and in this
+        // case the delay will be consumed in full -- nominal case is worst
+        // case) :-/
+        //
+        watchDelay: 20,
+      }),
     svelte({
       // Enable run-time checks when not in production
       dev: !production,
@@ -41,7 +70,7 @@ export default {
           css.write('public/build/bundle.css')
         },
       }),
-      extensions: ['.svx', '.svelte', '.svench', '.svench.svx'],
+      extensions: ['.svelte', '.svench', '.svx'],
       preprocess: [
         mdsvex({
           extension: '.svx',
@@ -125,7 +154,7 @@ function serve() {
           flags.push('--single')
         }
         if (svench) {
-          flags.push('--port 6006')
+          flags.push('--port 4242')
         }
         require('child_process').spawn('npm', flags, {
           stdio: ['ignore', 'inherit', 'inherit'],

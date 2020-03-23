@@ -1,0 +1,9 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<View>First anonymous View</View>
+
+<View>Second anonymous View</View>
+
+<View>Third anonymous View</View>

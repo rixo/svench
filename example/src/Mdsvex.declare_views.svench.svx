@@ -1,0 +1,41 @@
+# Declaring views from Mdsvex
+
+```js exec
+import { url } from 'svench'
+```
+
+You can [use](<{$url('./Mdsvex.use_views')}>) bla bla
+
+````md
+```js exec
+import { View } from 'svench'
+
+View.defaults({
+  hide: true,
+})
+```
+````
+
+```js exec
+import { View } from 'svench'
+```
+
+<View name="default">
+  I am a View.
+</View>
+
+Views can be hidden from docs page:
+
+```html
+<View name="hidden" hide>
+  I am an unlisted view.
+</View>
+```
+
+<View name="hidden" hide>
+  I am an unlisted view.
+</View>
+
+<View>
+  I am another View.
+</View>

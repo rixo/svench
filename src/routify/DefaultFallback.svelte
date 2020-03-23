@@ -1,3 +1,6 @@
-<h1>Not found</h1>
+<script>
+  import { leftover } from '@sveltech/routify'
+  import Render from '../Render.svelte'
+</script>
 
-<a href="/">Home</a>
+<Render src={$leftover + '/**'} />

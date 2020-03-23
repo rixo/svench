@@ -10,18 +10,25 @@ const renderLayout = {
   path: '../../_layout',
 }
 
-const defaultLayout = {
+const appLayout = {
   component: () => App,
   path: '../_layout',
 }
 
-const addSvenchLayouts = routes =>
-  routes.map(({ layouts, ...route }) => {
-    return {
-      ...route,
-      layouts: [defaultLayout, renderLayout, ...layouts],
-    }
-  })
+// Child.sub.svench <=> Child/sub.svench
+const transformDotDelemiters = routes =>
+  routes.map(({ path, shortPath, ...route }) => ({
+    ...route,
+    extraNesting: path.split('.').length - 1,
+    path: path.replace(/\./g, '/'),
+    shortPath: shortPath.replace(/\./g, '/'),
+  }))
+
+const prependLayouts = (...layouts) => routes =>
+  routes.map(({ layouts: currentLayouts, ...route }) => ({
+    ...route,
+    layouts: [...layouts, ...currentLayouts],
+  }))
 
 const addDefaultIndexAndFallback = routes => {
   const isUserIndex = r =>
@@ -70,4 +77,8 @@ const addDefaultIndexAndFallback = routes => {
 // technically difficult (layouts are processed at compile time by Routify),
 // and it's not high value (even possibly better -- default index and fallback
 // can be thought as being one level bellow root)
-export const augmentRoutes = pipe(addDefaultIndexAndFallback, addSvenchLayouts)
+export const augmentRoutes = pipe(
+  transformDotDelemiters,
+  addDefaultIndexAndFallback,
+  prependLayouts(renderLayout, appLayout)
+)

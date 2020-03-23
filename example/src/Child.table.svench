@@ -1,5 +1,5 @@
 <script>
-  import { View } from 'svench'
+  import { View, onRender } from 'svench'
   import Child from './Child.svelte'
 </script>
 
@@ -15,5 +15,3 @@
   <h3>You can put anything you want in there!</h3>
   <Child name="yes, another!" />
 </View>
-
-<View>Anonymous view</View>

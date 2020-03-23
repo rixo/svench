@@ -2,6 +2,10 @@
   import { getContext } from '../util.js'
 
   const { options } = getContext()
+
+  const toggleFullscreen = () => {
+    $options.fullscreen = !$options.fullscreen
+  }
 </script>
 
 <div class="wrapper">
@@ -17,6 +21,13 @@
     <input type="checkbox" bind:checked={$options.outline} />
     Outline
   </label>
+  <div class="spacer" />
+  <button
+    aria-label="fullscreen"
+    on:click={toggleFullscreen}
+    title="Toggle fullscreen (press ESC to escape)">
+    ⛶
+  </button>
 </div>
 
 <style>
@@ -25,5 +36,12 @@
   }
   div > :not(:first-child) {
     margin-left: 1rem;
+  }
+  .wrapper {
+    display: flex;
+    align-items: center;
+  }
+  .spacer {
+    flex-grow: 100;
   }
 </style>

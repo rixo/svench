@@ -1,0 +1,13 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<View name="default">
+  <div>Default view</div>
+</View>
+
+<style>
+  div {
+    height: 200px;
+  }
+</style>

@@ -1,0 +1,44 @@
+<script>
+  import { View } from 'svench'
+  import { writable } from 'svelte/store'
+
+  // View.init = () => ({ name: 'parent', prop: 42 })
+
+  export const init = () => {
+    return { name: 'initialized!', prop: 41 }
+  }
+
+  const initFoo = () => ({ name: 'Foo' })
+
+  const initBar = () => () => ({ name: 'Bar' })
+</script>
+
+<View name="View.init" let:data={{ name }}>Hello {name}!</View>
+
+<View name="init" init={initFoo} let:data={{ name, prop }}>
+  Hello {name}! ({prop})
+</View>
+
+<View
+  name="init error"
+  init={() => {
+    throw new Error('I am an error')
+  }}>
+  <p>Should not be show</p>
+</View>
+
+<View
+  name="delayed"
+  init={async () => {
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    return { name: 'delayed', prop: 1000 }
+  }}
+  let:data={{ name, prop }}>
+  Hello {name}! ({prop})
+</View>
+
+<!-- <View name="dynamic data" init={
+() => writable(42)
+} let:data={{data}}>
+ data = {$data}
+</View> -->

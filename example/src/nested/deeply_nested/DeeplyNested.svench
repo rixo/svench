@@ -1,0 +1,15 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<View>
+  <div>First view (in the mix)</div>
+</View>
+
+<View>Second</View>
+
+<style>
+  div {
+    color: lightskyblue;
+  }
+</style>

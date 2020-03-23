@@ -1,128 +1,135 @@
 <script>
+  import { route, leftover, isActive } from '@sveltech/routify'
   import { slide } from 'svelte/transition'
+  import MenuViewsList from './MenuViewsList.svelte'
+  import { getContext } from '../util'
+
+  const { render } = getContext()
 
   export let items = []
   export let indent = 0
 
-  const collapsed = {}
+  const indentWidth = 1.2
+
+  const expanded = {}
 
   const toggle = item => {
-    collapsed[item.id] = !collapsed[item.id]
+    expanded[item.id] = !expanded[item.id]
   }
+
+  const expandFolders = items =>
+    items.forEach(({ id, isPage }) => {
+      if (expanded[id] == null) {
+        expanded[id] = !isPage
+      }
+    })
+
+  // $: expandFolders(items)
+
+  $: isActiveItem = item =>
+    $render === true && ($route.path === item.path || $leftover === item.path)
+
+  $: isExpanded = item =>
+    $isActive(item.path) ||
+    $leftover === item.path ||
+    $leftover.startsWith(item.path + '/')
 </script>
 
-<ul class="pages" class:nested={indent > 0}>
-  {#each items as it (it.id)}
-    <li
-      class:index={it.isIndex}
-      class:directory={it.isDirectory}
-      class:collapsed={collapsed[it.id]}
-      class:page={!it.isDirectory}>
-      {#if it.isDirectory}
-        <span class="icon folder-collapse handle" on:click={toggle(it)}>⌄</span>
-        <span class="icon handle" on:click={toggle(it)}>📁</span>
-        {#if it.isIndex}
-          <a class="text" href={it.shortPath}>{it.segment}</a>
-        {:else}
-          <span class="text">{it.segment}</span>
-        {/if}
-        {#if !collapsed[it.id]}
-          <svelte:self items={it.children} indent={indent + 1} />
-        {/if}
-      {:else}
-        {#if it.views}
-          <span
-            class="icon folder-collapse handle"
-            on:click={() => (collapsed[it.id] = !collapsed[it.id])}>
-            ⌄
-          </span>
-        {/if}
-        <span
-          class="icon handle"
-          on:click={() => (collapsed[it.id] = !collapsed[it.id])}>
-          ⚙️
+<ul class:nested={indent > 0}>
+  {#each items as item (item.id)}
+    <li class:active={isActiveItem(item)} class:expanded={isExpanded(item)}>
+      <!-- <pre>{JSON.stringify(item, false, 2)}</pre> -->
+      <a
+        class="text"
+        style={`padding-left: ${indent * indentWidth}rem`}
+        href={item.path}>
+        <span class="icon" class:expand={item.isDirectory}>
+          <!-- {#if item.isDirectory}◆{:else}❖{/if} -->
+          {#if item.isDirectory}▶{:else}❖{/if}
         </span>
-        <a class="text" href={it.path}>{it.segment}</a>
+        {item.title}
+      </a>
+      <!-- {#if $route.path === item.path} -->
+      {#if isExpanded(item)}
+        <!-- {#if $isActive(item.path) || item.isDirectory} -->
+        <!-- {#if $isActive(item.path) || (item.isDirectory && expanded[item.id])} -->
+        {#if item.views}
+          <MenuViewsList
+            {item}
+            views={item.views}
+            active={$route.path === item.path && $render}
+            indent={indent + 1}
+            {indentWidth} />
+        {/if}
+        {#if item.children}
+          <svelte:self items={item.children} indent={indent + 1} />
+        {/if}
       {/if}
-      {#if it.views && !collapsed[it.id]}
-        <ul class="nested" transition:slide>
-          {#each it.views as name}
-            <li class="svench menu view">
-              <span class="icon">🗈</span>
-              <a class="text" href={it.path + `?view=${name}`}>{name}</a>
-            </li>
-          {/each}
-        </ul>
-      {/if}
+      <!-- <span class="text">{item.title}</span> -->
+      <!-- <pre>{$isActive(item.path)} -- {item.path}</pre> -->
+      <!-- {#if item.children}
+        <svelte:self items={item.children} indent={indent + 1} />
+      {/if} -->
     </li>
   {/each}
 </ul>
 
 <style>
-  ul:not(.nested) {
-    padding-left: 24px;
+  ul :global(*) {
+    color: var(--light-2-r);
+  }
+  ul,
+  li {
+    margin: 0;
+    padding: 0;
   }
   ul {
     list-style: none;
-    margin: 0;
-    padding-left: 24px;
   }
-  li {
-    padding: 0;
-    margin: 0.33em 0;
+  ul:not(.nested) {
+    padding: 0.5rem;
+  }
+  /* ul:not(.nested) > :global(li .text) {
+    padding-right: 8px;
+    padding-left: 8px;
+  } */
+  ul :global(li .text) {
     position: relative;
+    display: block;
+    padding: 2px;
+    white-space: nowrap;
   }
-  li > .icon {
-    color: #999;
-    line-height: 0;
+  ul :global(li.active > .text:before) {
+    content: ' ';
+    display: block;
     position: absolute;
-    width: 24px;
-    top: 0.5em;
-    margin-left: -24px;
-    text-align: center;
-    font-size: 16px;
+    left: -0.5rem;
+    right: -0.5rem;
+    top: 0;
+    bottom: 0;
+    background-color: var(--gray);
+    opacity: 0.3;
   }
-  .folder-collapse.handle {
-    top: 0.4em;
-    margin-left: -40px;
-    cursor: pointer;
-  }
-  .collapsed > .folder-collapse.handle {
-    top: 0.5em;
-    transition: transform 120ms;
-    transform-origin: center;
-    transform: rotate(-90deg);
-  }
-  li.directory > .text {
-    font-weight: 100;
-  }
-  li.page > .text {
-    font-weight: 500;
-  }
-  li.view > .text {
-    font-weight: normal;
-    font-style: italic;
-  }
-  /* colors */
-  li > .text:not(a) {
-    color: #999;
-    opacity: 0.75;
-  }
-  li > a.text {
-    color: var(--primary, skyblue);
-  }
-  li > .icon {
-    color: #999;
-    opacity: 0.75;
-  }
-  li > a {
-    display: inline-block;
+  ul :global(a) {
     text-decoration: none;
+    opacity: 0.8;
   }
-  li > a:hover {
-    color: var(--primary-strong);
+  ul :global(a:hover) {
+    opacity: 1;
   }
-  .handle {
-    cursor: pointer;
+
+  ul :global(li .icon) {
+    display: inline-block;
+    text-align: center;
+    width: 18px;
+    height: 18px;
   }
+
+  /* li > .text > .expand.icon {
+    display: inline-block;
+    transform-origin: center;
+  }
+  li.expanded > .text > .expand.icon {
+    transform: rotate(90deg);
+  } */
 </style>

@@ -5,7 +5,7 @@
     "@rixo/eslint-config-svelte": "^0.8.1",
     "@rollup/plugin-commonjs": "^11.0.0",
     "@rollup/plugin-node-resolve": "^7.1.1",
-    "@sveltech/routify": "sveltech/routify#master",
+    "@sveltech/routify": "^1.0.6",
     "cross-env": "^6.0.3",
     "mdsvex": "^0.4.0",
     "nollup": "^0.10.6",
@@ -22,7 +22,8 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "svench": "routify --extensions svench,svench.svx --pages src --child-process='svench:start'",
+    "svench:old": "routify --extensions svench,svench.svx --pages src --child-process='svench:start'",
+    "svench": "SVENCH=1 rollup -c -w",
     "svench:livereload": "routify --extensions svench,svench.svx --pages src --child-process='svench:start:livereload'",
     "svench:start": "SVENCH=1 rollup -c -w",
     "svench:start:livereload": "SVENCH=1 LIVERELOAD=1 rollup -c -w",
