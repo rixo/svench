@@ -1,5 +1,5 @@
 <script>
-  import { View, onRender } from 'svench'
+  import { View } from 'svench'
   import Child from './Child.svelte'
 </script>
 
