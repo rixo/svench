@@ -1,31 +1,27 @@
 <script>
   import { get, readable } from 'svelte/store'
-  import { updateContext, getContext, false$ } from './util'
-  import { url, route as routifyRoute } from '@sveltech/routify'
+  import { updateContext, getContext } from './util.js'
   import RenderContext from './RenderContext.svelte'
   import RenderBox from './RenderBox.svelte'
+  import { urlResolver } from './helpers/url.js'
 
   export let view = true
   export let src = null
 
+  $: focus = view !== true
+
   let error = null
 
   const ctx = getContext()
-  const { routes, route: ctxRoute } = ctx
+  // route$ can come from Routify, Register, or a parent Render
+  const { routes, route$ } = ctx
 
-  // we must consider context's route in priority, because this Render might
-  // be nested under another Render (e.g. fallback rendering all children)
-  $: route = ctxRoute === undefined ? $routifyRoute : ctxRoute
+  $: route = $route$
+
+  $: _url = urlResolver($routes, $route$)
 
   const matchPath = src => {
-    // can't use $url: we are not in Routify context during register
-    const _url = get(url)
-    const relativeSrc = src.startsWith('.')
-      ? src
-          .replace(/^.\//, '../'.repeat(route.extraNesting + 1))
-          .replace(/(?<!\.)\.(?!\.)/g, '/')
-      : src
-    const srcPath = _url(relativeSrc)
+    const srcPath = _url(src)
     // TODO real glob / wildcard support...
     if (srcPath.slice(-2) === '**') {
       const srcPrefix = srcPath.slice(0, -2)
@@ -80,9 +76,7 @@
   const resolveSrc = src =>
     !src ? null : typeof src === 'string' ? loadSrc(src) : [src].flat()
 
-  $: components = resolveSrc(src)
-
-  $: focus = view !== true
+  $: components = $route$ && resolveSrc(src)
 
   updateContext({
     render: readable(view),

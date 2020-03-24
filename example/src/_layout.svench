@@ -1,1 +1,16 @@
-<slot />
+<script>
+  import { route } from '@sveltech/routify'
+
+  $: ({ ext } = $route)
+  $: markdown = /(?:^|\.)(?:svx|md)/.test(ext)
+</script>
+
+<div class="focus" class:markdown>
+  <slot />
+</div>
+
+<style>
+  .markdown {
+    padding: 1.3rem;
+  }
+</style>

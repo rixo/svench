@@ -21,6 +21,8 @@
     --gray: #aaa;
     --gray-light: #eee; */
 
+    --white: white;
+
     --light-1: rgba(141, 169, 196, 1);
     --light-1-r: white;
     --light-2: #e3e8ee;

@@ -20,13 +20,8 @@ const isPage = ({ isFallback }) => !isFallback
 //   return trimmed
 // }
 
-const mapRoute = ({ viewRegisters, options, routes }) => ({
-  path,
-  shortPath,
-  isIndex,
-  component,
-  meta,
-}) => {
+const mapRoute = ({ viewRegisters, options, routes }) => route => {
+  const { path, shortPath, isIndex, component, meta } = route
   const error = writable(null)
 
   // const views = isIndex ? null : writable([])
@@ -43,12 +38,15 @@ const mapRoute = ({ viewRegisters, options, routes }) => ({
           return noop
         }
 
+        return noop
+
         const target = document.createElement('div')
 
         const cmp = new Register({
           target,
           props: {
             options,
+            route,
             routes,
             loader: component,
             // register: name => register(name, path),
@@ -63,7 +61,7 @@ const mapRoute = ({ viewRegisters, options, routes }) => ({
         return () => cmp.$destroy()
       })
 
-  const route = {
+  const page = {
     id: path,
     isIndex,
     path,
@@ -95,7 +93,7 @@ const mapRoute = ({ viewRegisters, options, routes }) => ({
 
   // title
   if (meta && meta['svench:title'] != null) {
-    route.title = meta['svench:title'].replace(/_/g, ' ')
+    page.title = meta['svench:title'].replace(/_/g, ' ')
   }
 
   if (views) {
@@ -127,7 +125,7 @@ const mapRoute = ({ viewRegisters, options, routes }) => ({
   //   })
   // }
 
-  return route
+  return page
 }
 
 const pipedDerived = (...fns) => source => derived(source, pipe(...fns))

@@ -1,9 +1,10 @@
 <script>
   import { onDestroy } from 'svelte'
-  import { setContext, noop } from './util.js'
+  import { setContext, noop, constStore } from './util.js'
 
   export let loader
   export let options
+  export let route
   export let routes
 
   export let callback
@@ -71,7 +72,14 @@
     }
   })()
 
-  setContext({ options, routes, register, render, getRenderName })
+  setContext({
+    options,
+    routes,
+    route$: constStore(route),
+    register,
+    render,
+    getRenderName,
+  })
 </script>
 
 {#if component}

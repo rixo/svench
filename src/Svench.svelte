@@ -86,9 +86,7 @@
 
   // --- augmented routes ---
 
-  $: augmented = augmentRoutes($inputRoutes)
-
-  $: $routes = augmented
+  $: $routes = augmentRoutes($inputRoutes)
 
   // --- getRenderName ---
 
@@ -99,6 +97,7 @@
     index = 0
   }
 
+  // TODO dedup (in RegisterRoute)
   const getRenderName = name => {
     clearTimeout(timeout)
     timeout = setTimeout(reset, $options.renderTimeout)
@@ -116,11 +115,25 @@
   $: $view = getView($route) || true
   $: $focus = $view !== true
 
+  // --- route ---
+
+  const route$ = writable()
+
+  const routeFinder = routes => route => {
+    const result = routes.find(x => x.path === route.path)
+    // if (!result) debugger
+    return result
+  }
+
+  $: findRoute = routeFinder($routes)
+  $: $route$ = findRoute($route)
+
   // --- context ---
 
   setContext({
     options,
     routes,
+    route$,
     tree,
     register,
     getRenderName,
@@ -133,4 +146,6 @@
 
 <!-- <pre>{JSON.stringify($tree, false, 2)}</pre> -->
 
-<Router routes={$routes} />
+{#if $routes.length > 0}
+  <Router routes={$routes} />
+{/if}

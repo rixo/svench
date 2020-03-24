@@ -17,12 +17,12 @@
 </div>
 
 <style>
-  .focus :global(> *) {
+  /* .focus :global(> *) {
     display: none;
   }
   .focus :global(> .svench.view) {
     display: inherit;
-  }
+  } */
 
   h2 {
     margin: 0;

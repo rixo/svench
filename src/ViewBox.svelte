@@ -1,15 +1,15 @@
 <script>
-  import { route as routifyRoute } from '@sveltech/routify'
   import { getContext } from './util.js'
 
-  const { options, route: ctxRoute } = getContext()
+  const { options, route$ } = getContext()
 
   $: ({ outline, centered, padding } = $options)
+
+  $: route = $route$
 
   export let ui = true
   export let name
 
-  $: route = ctxRoute === undefined ? $routifyRoute : ctxRoute
   $: href =
     route && route.path ? `${route.path}?view=${name}` : route ? '' : null
 </script>
@@ -78,7 +78,7 @@
   .box.outline .outline:before {
     content: ' ';
     display: block;
-    border: 2px solid cyan;
+    border: 2px solid magenta;
     position: absolute;
     z-index: 1;
     left: -2px;

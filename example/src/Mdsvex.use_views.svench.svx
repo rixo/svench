@@ -36,7 +36,7 @@ import Sub from './sub/Sub.svench'
 import Sub from './sub/Sub.svench'
 ```
 
-<Render src={Sub} view="big" />
+    <Render src={Sub} view="big" />
 
 ## ... or by path:
 

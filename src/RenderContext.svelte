@@ -1,5 +1,5 @@
 <script>
-  import { getContext, updateContext } from './util'
+  import { getContext, updateContext, constStore } from './util'
 
   const { options } = getContext()
 
@@ -21,7 +21,7 @@
     return name == null ? $options.defaultViewName(index) : name
   }
 
-  updateContext({ getRenderName, route })
+  updateContext({ getRenderName, route$: constStore(route) })
 </script>
 
 <slot />

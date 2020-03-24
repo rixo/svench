@@ -53,6 +53,7 @@ const addDefaultIndexAndFallback = routes => {
       name: '/index',
       ranking: 'C',
       params: {},
+      meta: {},
     })
   }
   if (!hasUserFallback) {
@@ -65,6 +66,7 @@ const addDefaultIndexAndFallback = routes => {
       name: '/_fallback',
       ranking: 'A',
       params: {},
+      meta: {},
     })
   }
   if (extraRoutes.length) {
@@ -80,5 +82,5 @@ const addDefaultIndexAndFallback = routes => {
 export const augmentRoutes = pipe(
   transformDotDelemiters,
   addDefaultIndexAndFallback,
-  prependLayouts(renderLayout, appLayout)
+  prependLayouts(appLayout)
 )

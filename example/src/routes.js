@@ -12,6 +12,13 @@ const hotData = (import.meta.hot && import.meta.hot.data) || {}
 export const routes = hotData.routes || writable([])
 
 routes.set(source)
+// console.log(
+//   JSON.stringify(
+//     source.map(x => x.meta),
+//     false,
+//     2
+//   )
+// )
 
 if (import.meta.hot) {
   import.meta.hot.dispose(data => {
