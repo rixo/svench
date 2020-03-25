@@ -137,9 +137,9 @@
   dependencies:
     estree-walker "^1.0.1"
 
-"@sveltech/routify@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@sveltech/routify/-/routify-1.0.6.tgz#6e8460a15fba6481b3bd79e6e801a62e7ff0ba80"
+"@sveltech/routify@^1.5.0-beta.13":
+  version "1.5.0-beta.13"
+  resolved "https://registry.yarnpkg.com/@sveltech/routify/-/routify-1.5.0-beta.13.tgz#111ae74accc11267843b24920941cadba4b3cc24"
   dependencies:
     "@sveltech/ssr" "^0.0.9"
     cheap-watch "^1.0.2"
