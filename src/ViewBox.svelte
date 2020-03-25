@@ -1,7 +1,7 @@
 <script>
   import { getContext } from './util.js'
 
-  const { options, route$ } = getContext()
+  const { options, route$, emitViewBox } = getContext()
 
   $: ({ outline, centered, padding } = $options)
 
@@ -12,9 +12,14 @@
 
   $: href =
     route && route.path ? `${route.path}?view=${name}` : route ? '' : null
+
+  let el
+
+  $: el && emitViewBox(el)
 </script>
 
 <div
+  bind:this={el}
   class="svench view box"
   class:flex={!ui}
   class:outline

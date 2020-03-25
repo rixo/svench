@@ -134,6 +134,7 @@
     options,
     routes,
     route$,
+    findRoute: ({ path }) => $routes.find(x => x.path === path),
     tree,
     register,
     getRenderName,

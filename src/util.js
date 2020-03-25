@@ -20,12 +20,12 @@ export const pipe = (...fns) => x => fns.reduce((f, g) => g(f), x)
 
 export const noop = () => {}
 
-// export const false$ = {
-//   subscribe: listener => {
-//     listener(false)
-//     return noop
-//   },
-// }
+export const false$ = {
+  subscribe: listener => {
+    listener(false)
+    return noop
+  },
+}
 
 export const constStore = value => ({
   subscribe: listener => {

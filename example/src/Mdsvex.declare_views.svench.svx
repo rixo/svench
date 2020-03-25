@@ -1,6 +1,6 @@
 # Declaring views from Mdsvex
 
-<!-- routify:options svench:wrapper="rixo boss" -->
+<!-- routify:options svench:docs=true -->
 
 ```js exec
 import { url } from 'svench'

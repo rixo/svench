@@ -23,6 +23,7 @@ const toTreeArray = (tree, base = '') => {
     return undefined
   }
   return entries
+    .filter(([segment]) => segment !== 'index')
     .map(([segment, childrenTree]) => {
       // const segment = encodeURIComponent(seg)
       const id = base + '/' + segment

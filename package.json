@@ -1,14 +1,15 @@
 {
   "name": "svench",
   "version": "0.0.1",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "module": "dist/index.esm.js",
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
-  "files": [
-    "src"
-  ],
+  "files": ["src", "lib"],
+  "peerDependencies": {
+    "svelte": "^3.0.0"
+  },
   "dependencies": {
     "@sveltech/routify": "sveltech/routify#master",
     "minimatch": "^3.0.4",
@@ -19,12 +20,15 @@
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-json": "^4.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
+    "dedent": "^0.7.0",
     "picomatch": "^2.2.1",
     "rollup": "^2.0.5",
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-svelte-hot": "^0.4.1",
     "rollup-plugin-terser": "^5.3.0",
-    "svelte": "^3.19.2"
+    "svelte": "^3.0.0",
+    "zoar": "^0.0.3",
+    "zorax": "^0.0.8"
   },
   "scripts": {
     "dev": "rollup -c -w",

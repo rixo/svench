@@ -11,7 +11,7 @@ export const urlResolver = ($routes, route) => {
   )
   return (path, params, strict) => {
     const relative = path.startsWith('.')
-      ? path.replace(/^.\//, '../'.repeat(1 + route.extraNesting))
+      ? path.replace(/^\.\//, '../'.repeat(1 + route.extraNesting))
       : path
     const virtual = relative.replace(/(?<!\.)\.(?!\.)/g, '/')
     return $url(virtual, params, strict)

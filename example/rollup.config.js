@@ -6,6 +6,7 @@ import { terser } from 'rollup-plugin-terser'
 import hmr, { autoCreate } from 'rollup-plugin-hot'
 import { mdsvex } from 'mdsvex'
 import { routify } from '@sveltech/routify'
+import Svench from 'svench'
 
 // NOTE The NOLLUP env variable is picked by various HMR plugins to switch
 // in compat mode. You should not change its name (and set the env variable
@@ -74,6 +75,9 @@ export default {
       preprocess: [
         mdsvex({
           extension: '.svx',
+        }),
+        Svench({
+          extensions: ['.svench', '.svench.svx'],
         }),
       ],
       hot: hot && {

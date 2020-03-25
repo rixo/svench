@@ -1,4 +1,6 @@
 <script>
+  import RenderOffscreen from './RenderOffscreen.svelte'
+
   export let route
   export let title
   export let focus
@@ -12,8 +14,10 @@
   </h2>
 {/if}
 
-<div class="svench render-context" class:focus>
-  <slot />
+<div>
+  <RenderOffscreen {focus}>
+    <slot />
+  </RenderOffscreen>
 </div>
 
 <style>

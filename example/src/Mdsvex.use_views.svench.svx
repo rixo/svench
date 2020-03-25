@@ -46,9 +46,9 @@ import Sub from './sub/Sub.svench'
 
 ### Render all views from a source:
 
-    <Render src="./Child" />
+    <Render src="./Child" all />
 
-<Render src="./Child" />
+<Render src="./Child" all />
 
 ### Basic "globbing"
 
@@ -58,9 +58,9 @@ Only trailing `/*` and `/**` are supported.
 
 <Render src="./other_dir/*" />
 
-    <Render src="./nested/**" />
+    <Render src="./nested/**" all />
 
-<Render src="./nested/**" />
+<Render src="./nested/**" all />
 
 ### Sanity checks
 

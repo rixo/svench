@@ -1,6 +1,6 @@
 <script>
   import { onDestroy } from 'svelte'
-  import { setContext, noop, constStore } from './util.js'
+  import { setContext, noop, constStore, false$ } from './util.js'
 
   export let loader
   export let options
@@ -48,13 +48,6 @@
     })
   }
 
-  const render = {
-    subscribe(listener) {
-      listener(false)
-      return { unsubscribe: noop }
-    },
-  }
-
   // --- getRenderName ---
   const getRenderName = (() => {
     let index = 0
@@ -77,7 +70,7 @@
     routes,
     route$: constStore(route),
     register,
-    render,
+    render: false$,
     getRenderName,
   })
 </script>

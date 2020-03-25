@@ -2,9 +2,12 @@ extends:
   - '@rixo/svelte'
 
 overrides:
-  - files: ["rollup.config.js"]
+  - files: ["rollup.config.js", "lib/**"]
     env:
       node: true
+  - files: ["**/*.svelte", "**/*.svench"]
+    rules:
+      no-unused-expressions: off
 
 # settings:
 #   svelte3/compiler-options:

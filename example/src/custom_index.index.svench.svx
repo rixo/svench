@@ -1,0 +1,39 @@
+# Custom index
+
+```js exec
+import { Render } from 'svench'
+```
+
+## Here be foo
+
+    <Render src="./custom_index" view="foo" />
+
+<Render src="./custom_index" view="foo" />
+
+## Here be bar
+
+The `src` of `<Render>` defaults to the current Svench.
+
+    <Render view="bar" />
+
+<Render view="bar" />
+
+## Here be listing
+
+    <Render all />
+
+<Render all />
+
+## Here be magic
+
+`<Render>` can be nested into itself to change the default `src`!
+
+    <Render src="./Child">
+      <Render view="default" />
+      <Render view="other" />
+    </Render>
+
+<Render src="./Child">
+  <Render view="default" />
+  <Render view="other" />
+</Render>

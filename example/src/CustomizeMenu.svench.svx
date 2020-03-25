@@ -1,0 +1,11 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+Pages can customize their title with `svench:title`:
+
+```html
+<!-- routify:options svench:title="custom page title" -->
+```
+
+See: the title (in the menu) of this page is different from its path!

@@ -21,7 +21,9 @@
     return name == null ? $options.defaultViewName(index) : name
   }
 
-  updateContext({ getRenderName, route$: constStore(route) })
+  const route$ = constStore(route)
+
+  updateContext({ getRenderName, route$, defaultRenderSrc: route$ })
 </script>
 
 <slot />

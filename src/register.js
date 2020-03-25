@@ -1,9 +1,7 @@
 import { derived, readable, writable } from 'svelte/store'
-import { pipe } from './util'
+import { pipe, noop } from './util'
 import Register from './RegisterRoute.svelte'
 import { route } from '@sveltech/routify'
-
-const noop = () => {}
 
 const filter = predicate => x => x.filter(predicate)
 
@@ -26,19 +24,13 @@ const mapRoute = ({ viewRegisters, options, routes }) => route => {
 
   // const views = isIndex ? null : writable([])
 
-  let _views
+  let _views = []
+  let setViews
 
   const views = isIndex
     ? null
-    : readable([], set => {
-        views.set = set
-
-        if (_views) {
-          set(_views)
-          return noop
-        }
-
-        return noop
+    : readable(_views, set => {
+        // setViews = set
 
         const target = document.createElement('div')
 
@@ -103,8 +95,8 @@ const mapRoute = ({ viewRegisters, options, routes }) => route => {
     viewRegisters[path] = name => {
       __views.push(name)
       _views = __views
-      if (views.set) {
-        views.set(_views)
+      if (setViews) {
+        setViews(_views)
       }
       clearTimeout(timeout)
       timeout = setTimeout(() => {

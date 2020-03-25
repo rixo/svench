@@ -16,4 +16,8 @@
   <Child name="yes, another!" />
 </View>
 
-<View>Anonymous view</View>
+<View name="view 5">
+  <h3>Ah, ah!</h3>
+</View>
+
+<View>He stole my name!</View>

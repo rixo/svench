@@ -82,5 +82,5 @@ const addDefaultIndexAndFallback = routes => {
 export const augmentRoutes = pipe(
   transformDotDelemiters,
   addDefaultIndexAndFallback,
-  prependLayouts(appLayout)
+  prependLayouts(appLayout, renderLayout)
 )

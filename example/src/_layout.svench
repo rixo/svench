@@ -5,9 +5,11 @@
   $: markdown = /(?:^|\.)(?:svx|md)/.test(ext)
 </script>
 
-<div class="focus" class:markdown>
+<slot />
+
+<!-- <div class="focus" class:markdown>
   <slot />
-</div>
+</div> -->
 
 <style>
   .markdown {

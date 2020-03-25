@@ -1,27 +1,35 @@
 <script>
-  import { get, readable } from 'svelte/store'
-  import { updateContext, getContext } from './util.js'
+  import { get } from 'svelte/store'
+  import { updateContext, getContext, constStore } from './util.js'
   import RenderContext from './RenderContext.svelte'
   import RenderBox from './RenderBox.svelte'
   import { urlResolver } from './helpers/url.js'
 
-  export let view = true
+  import _Render from './Render.svelte'
+
+  const ctx = getContext()
+  // route$ can come from Routify, Register, or a parent Render
+  const { routes, route$, defaultRenderSrc } = ctx
+
   export let src = null
+
+  let _view = false
+  export { _view as view }
+  export let all = false
+
+  let view = all ? true : _view
+  $: view = all ? true : _view
 
   $: focus = view !== true
 
   let error = null
-
-  const ctx = getContext()
-  // route$ can come from Routify, Register, or a parent Render
-  const { routes, route$ } = ctx
 
   $: route = $route$
 
   $: _url = urlResolver($routes, $route$)
 
   const matchPath = src => {
-    const srcPath = _url(src)
+    const srcPath = _url(src, {}, true)
     // TODO real glob / wildcard support...
     if (srcPath.slice(-2) === '**') {
       const srcPrefix = srcPath.slice(0, -2)
@@ -38,6 +46,8 @@
     }
     return route => (route.path === srcPath ? [false, route] : false)
   }
+
+  let components = []
 
   const setComponents = x => {
     error = null
@@ -73,13 +83,29 @@
       .catch(setError)
   }
 
-  const resolveSrc = src =>
-    !src ? null : typeof src === 'string' ? loadSrc(src) : [src].flat()
+  const loadSrcRoute = async route => {
+    try {
+      const loader = route.component || route.loader
+      const Component = await loader()
+      setComponents([{ Component, route, ...formatTitle(route, false) }])
+    } catch (err) {
+      setError(err)
+    }
+  }
 
-  $: components = $route$ && resolveSrc(src)
+  const resolveSrc = src =>
+    !src
+      ? null
+      : typeof src === 'string'
+      ? loadSrc(src)
+      : typeof src === 'function'
+      ? [src].flat()
+      : loadSrcRoute(src)
+
+  $: $route$ && resolveSrc(src || (defaultRenderSrc && $defaultRenderSrc))
 
   updateContext({
-    render: readable(view),
+    render: constStore(view),
     register: false,
   })
 </script>
@@ -92,6 +118,9 @@
 {:else if components}
   {#each components as { Component, route, title, href } (Component)}
     <RenderContext {route}>
+      <!-- slot for nested <Render> -->
+      <slot />
+
       <RenderBox {route} {title} {focus}>
         <svelte:component this={Component} />
       </RenderBox>
