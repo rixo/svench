@@ -1,5 +1,5 @@
 <script>
-  import { updateContext, getContext, constStore } from './util.js'
+  import { updateContext, getContext, constStore, get } from './util.js'
   import RenderContext from './RenderContext.svelte'
   import RenderBox from './RenderBox.svelte'
   import { urlResolver } from './helpers/url.js'
@@ -73,31 +73,39 @@
     prefix === false
       ? null
       : {
-          title: route.path.slice(prefix.length),
+          title: route.svench.title || route.path.slice(prefix.length),
           href: route.path,
         }
 
   const notSelf = ([, { path }]) =>
     path !== ($indexRoute ? $indexRoute.path : route.path)
 
-  const loadSrc = src => {
-    const matchedRoutes = $routes
-      .map(matchPath(src))
-      .filter(Boolean)
-      .filter(notSelf)
-    Promise.all(
-      matchedRoutes
-        .filter(([, route]) => route.component)
-        .map(([prefix, route]) =>
-          Promise.resolve(route.component()).then(Component => ({
-            Component,
-            route,
-            ...formatTitle(route, prefix),
-          }))
+  const loadSrc = async src => {
+    try {
+      const matchedRoutes = $routes
+        .map(matchPath(src))
+        .filter(Boolean)
+        .filter(notSelf)
+      const _components = await Promise.all(
+        matchedRoutes
+          .filter(([, route]) => route.component)
+          .map(([prefix, route]) =>
+            Promise.resolve(route.component()).then(Component => ({
+              Component,
+              route,
+              ...formatTitle(route, prefix),
+            }))
+          )
+      )
+      _components.sort(({ route: a, prefix: ap }, { route: b, prefix: bp }) =>
+        (a.svench.sortKey || a.path.slice(ap.length)).localeCompare(
+          b.svench.sortKey || b.path.slice(bp.length)
         )
-    )
-      .then(setComponents)
-      .catch(setError)
+      )
+      setComponents(_components)
+    } catch (err) {
+      setError(err)
+    }
   }
 
   const loadSrcRoute = async route => {

@@ -1,5 +1,0 @@
-<script>
-  import { Render } from 'svench'
-</script>
-
-<Render src="*" />

@@ -95,6 +95,21 @@ const rewireComponentIndexes = routes => {
   return routes
 }
 
+const addSvenchNode = routes => {
+  for (const route of routes) {
+    route.svench = {
+      get title() {
+        return this.node && this.node.title
+      },
+      get sortKey() {
+        const key = (this.node && this.node.sortKey) || route.segment
+        return key
+      },
+    }
+  }
+  return routes
+}
+
 // NOTE default index and fallback don't use user's _layout because it's
 // technically difficult (layouts are processed at compile time by Routify),
 // and it's not high value (even possibly better -- default index and fallback
@@ -102,7 +117,8 @@ const rewireComponentIndexes = routes => {
 export const augmentRoutes = pipe(
   transformDotDelemiters,
   addDefaultIndexAndFallback,
+  addSvenchNode,
   rewireComponentIndexes,
-  // prependLayouts(appLayout, renderLayout),
-  prependLayouts(appLayout)
+  prependLayouts(appLayout, renderLayout)
+  // prependLayouts(appLayout)
 )

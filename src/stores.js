@@ -1,11 +1,10 @@
-import { writable, readable } from 'svelte/store'
+import { writable, readable, get } from 'svelte/store'
 import { registerRoutes } from './register.js'
 
 const PAGE = Symbol('Svench.PAGE')
 const INDEX = Symbol('Svench.INDEX')
 
-const sorter = (a, b) =>
-  (a.sortKey || a.segment).localeCompare(b.sortKey || b.segment)
+export const sorter = (a, b) => a.sortKey.localeCompare(b.sortKey)
 
 const toTreeArray = (tree, base = '') => {
   const entries = Object.entries(tree)
@@ -18,9 +17,9 @@ const toTreeArray = (tree, base = '') => {
       const id = base + '/' + segment
       const children = toTreeArray(childrenTree, id)
       const isPage = !!childrenTree[PAGE]
-      const sortKey = segment.replace(/_/g, ' ')
+      const sortKey = segment
       const node = {
-        title: sortKey.replace(/^[\d-]+ /, ''),
+        title: sortKey.replace(/_/g, ' ').replace(/^[\d-]+ /, ''),
         sortKey,
         path: id,
         ...(childrenTree[INDEX] || childrenTree[PAGE]),
@@ -33,6 +32,11 @@ const toTreeArray = (tree, base = '') => {
       if (childrenTree[INDEX] && childrenTree[PAGE]) {
         node.registerTarget = childrenTree[PAGE]
       }
+      ;[childrenTree[INDEX], childrenTree[PAGE]]
+        .filter(Boolean)
+        .forEach(page => {
+          page.route.svench.node = node
+        })
       return node
     })
     .sort(sorter)
@@ -81,7 +85,7 @@ export const createStores = () => {
   const { pages, register, destroy } = registerRoutes(routes, options)
 
   // debounced derived
-  const tree = readable([], set =>
+  const tree = readable(null, set =>
     pages.subscribe(
       buffer(20, p => {
         set(toTree(p))

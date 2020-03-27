@@ -15,7 +15,7 @@
 
   export let defaults
 
-  const { options, tree, routes, register, destroy } = createStores()
+  const { options, pages, tree, routes, register, destroy } = createStores()
 
   // --- options ---
 
@@ -129,6 +129,7 @@
 
   setContext({
     options,
+    pages,
     routes,
     route$,
     meta,
@@ -143,6 +144,6 @@
   onDestroy(destroy)
 </script>
 
-{#if $routes.length > 0}
+{#if $routes.length > 0 && $tree}
   <Router routes={$routes} />
 {/if}

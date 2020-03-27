@@ -6,8 +6,6 @@
   let value = 0
 </script>
 
-<!-- routify:options svench:order="{first}" -->
-
 # `<View>` scope isolation
 
 Views are isolated by default.

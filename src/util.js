@@ -20,6 +20,9 @@ export const pipe = (...fns) => x => fns.reduce((f, g) => g(f), x)
 
 export const noop = () => {}
 
+export const get = steps => route =>
+  steps.split('.').reduce((cur, step) => cur && cur[step], route)
+
 export const false$ = {
   subscribe: listener => {
     listener(false)

@@ -7,7 +7,7 @@ const filter = predicate => x => x.filter(predicate)
 
 const map = mapper => x => x.map(mapper)
 
-const isPage = ({ isFallback }) => !isFallback
+const notFallback = ({ isFallback }) => !isFallback
 
 // const trimPages = _routes => {
 //   const trimmed = {}
@@ -56,7 +56,10 @@ const mapRoute = ({ viewRegisters, options, routes }) => route => {
     shortPath,
     loader: component,
     views$,
+    route,
   }
+
+  route.svench.page = page
 
   // title
   if (meta && meta['svench:title'] != null) {
@@ -97,7 +100,7 @@ export const registerRoutes = (routes, options) => {
   const register = (name, path = _route.path) => viewRegisters[path](name)
 
   const pages = pipedDerived(
-    filter(isPage),
+    filter(notFallback),
     map(mapRoute({ viewRegisters, options, routes }))
   )(routes)
 
