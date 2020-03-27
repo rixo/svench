@@ -1,5 +1,7 @@
 <script>
-  import { onMount } from 'svelte'
+  // TODO cleanup
+
+  // import { onMount } from 'svelte'
   import { updateContext } from './util.js'
 
   export let focus = false
@@ -24,7 +26,7 @@
 </script>
 
 {#if focus}
-  <div bind:this={offscreen} class="offscreen">
+  <div bind:this={offscreen}>
     <slot />
   </div>
 {:else}
@@ -32,7 +34,7 @@
 {/if}
 
 <style>
-  .offscreen {
+  div {
     display: none;
     border: 15px solid orange; /* NOTE you should never see that */
   }

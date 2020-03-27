@@ -1,24 +1,35 @@
 <script>
-  import { get } from 'svelte/store'
   import { updateContext, getContext, constStore } from './util.js'
   import RenderContext from './RenderContext.svelte'
   import RenderBox from './RenderBox.svelte'
   import { urlResolver } from './helpers/url.js'
-
-  import _Render from './Render.svelte'
+  import RenderOffscreen from './RenderOffscreen.svelte'
 
   const ctx = getContext()
   // route$ can come from Routify, Register, or a parent Render
-  const { routes, route$, defaultRenderSrc } = ctx
+  const { routes, route$, indexRoute, defaultRenderSrc } = ctx
 
-  export let src = null
+  // prop: with
+  //
+  // <Render with="./Source">
+  //   <Render view="foo" />
+  //   <Render view="bar" />
+  // </Render>
+  //
+  // NOTE we're using with because the following causes a crash in Svelte:
+  //
+  // <slot>
+  //   <RenderBox {route} {title} {focus}>
+  //     <svelte:component this={Component} />
+  //   </RenderBox>
+  // </slot>
+  //
+  let _with = null
+  export { _with as with }
 
-  let _view = false
-  export { _view as view }
-  export let all = false
+  export let src = _with === true ? null : _with
 
-  let view = all ? true : _view
-  $: view = all ? true : _view
+  export let view = true
 
   $: focus = view !== true
 
@@ -26,7 +37,7 @@
 
   $: route = $route$
 
-  $: _url = urlResolver($routes, $route$)
+  $: _url = urlResolver($routes, route)
 
   const matchPath = src => {
     const srcPath = _url(src, {}, true)
@@ -66,8 +77,14 @@
           href: route.path,
         }
 
+  const notSelf = ([, { path }]) =>
+    path !== ($indexRoute ? $indexRoute.path : route.path)
+
   const loadSrc = src => {
-    const matchedRoutes = $routes.map(matchPath(src)).filter(Boolean)
+    const matchedRoutes = $routes
+      .map(matchPath(src))
+      .filter(Boolean)
+      .filter(notSelf)
     Promise.all(
       matchedRoutes
         .filter(([, route]) => route.component)
@@ -102,28 +119,34 @@
       ? [src].flat()
       : loadSrcRoute(src)
 
-  $: $route$ && resolveSrc(src || (defaultRenderSrc && $defaultRenderSrc))
+  $: route && resolveSrc(src || route.registerTarget || defaultRenderSrc)
+
+  $: if (!src && !_with) {
+    error = 'Missing prop: src or with'
+  }
 
   updateContext({
+    breakIsolate: true,
     render: constStore(view),
     register: false,
   })
 </script>
 
 {#if error}
-  <div>
-    <h2>Error!</h2>
-    <pre>{error.stack || error}</pre>
-  </div>
+  <RenderBox {error} />
 {:else if components}
   {#each components as { Component, route, title, href } (Component)}
     <RenderContext {route}>
       <!-- slot for nested <Render> -->
       <slot />
 
-      <RenderBox {route} {title} {focus}>
-        <svelte:component this={Component} />
-      </RenderBox>
+      {#if _with == null}
+        <RenderBox {title} {href}>
+          <RenderOffscreen {focus}>
+            <svelte:component this={Component} />
+          </RenderOffscreen>
+        </RenderBox>
+      {/if}
     </RenderContext>
   {/each}
 {:else}

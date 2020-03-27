@@ -7,7 +7,7 @@
     "@rollup/plugin-node-resolve": "^7.1.1",
     "@sveltech/routify": "^1.5.0-beta.13",
     "cross-env": "^6.0.3",
-    "mdsvex": "^0.4.0",
+    "mdsvex": "^0.5.1-beta.3",
     "nollup": "^0.10.6",
     "rollup": "^1.31.1",
     "rollup-plugin-hot": "^0.0.14",
@@ -15,7 +15,8 @@
     "rollup-plugin-svelte-hot": "^0.4.2",
     "rollup-plugin-terser": "^5.1.2",
     "svelte": "~3.19.0",
-    "svench": "rixo/svench#wip"
+    "svench": "rixo/svench#wip",
+    "zorax": "^0.0.8"
   },
   "dependencies": {
     "sirv-cli": "^0.4.4"

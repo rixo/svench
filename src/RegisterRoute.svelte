@@ -1,8 +1,7 @@
 <script>
   import { onDestroy } from 'svelte'
-  import { setContext, noop, constStore, false$ } from './util.js'
+  import { setContext, constStore, false$, makeNamer } from './util.js'
 
-  export let loader
   export let options
   export let route
   export let routes
@@ -36,7 +35,13 @@
       })
   }
 
-  $: if (loader) loadComponent(loader)
+  const _route = $routes.find(({ path }) => path === route.path)
+
+  const loader =
+    _route &&
+    (_route.registerTarget ? _route.registerTarget.component : _route.component)
+
+  if (loader) loadComponent(loader)
 
   export const register = name => {
     views.push(name || $options.defaultViewName(views.length + 1))
@@ -48,27 +53,13 @@
     })
   }
 
-  // --- getRenderName ---
-  const getRenderName = (() => {
-    let index = 0
-
-    let timeout
-    const reset = () => {
-      index = 0
-    }
-
-    return name => {
-      clearTimeout(timeout)
-      timeout = setTimeout(reset, $options.renderTimeout)
-      index++
-      return name == null ? $options.defaultViewName(index) : name
-    }
-  })()
+  const getRenderName = makeNamer(() => $options)
 
   setContext({
     options,
     routes,
-    route$: constStore(route),
+    route$: constStore(_route),
+    registerOnly: true,
     register,
     render: false$,
     getRenderName,

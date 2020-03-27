@@ -1,8 +1,7 @@
 {
   "name": "svench",
   "version": "0.0.1",
-  "main": "lib/index.js",
-  "module": "dist/index.esm.js",
+  "main": "src/index.js",
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",

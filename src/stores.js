@@ -4,18 +4,8 @@ import { registerRoutes } from './register.js'
 const PAGE = Symbol('Svench.PAGE')
 const INDEX = Symbol('Svench.INDEX')
 
-const compare = (a, b) => (a === b ? 0 : a < b ? -1 : 1)
-
-// const sorter = (a, b) =>
-//   a.isDirectory && b.isDirectory
-//     ? compare(a, b)
-//     : a.isDirectory
-//     ? -1
-//     : b.isDirectory
-//     ? 1
-//     : compare(a, b)
 const sorter = (a, b) =>
-  (a.title || a.segment).localeCompare(b.title || b.segment)
+  (a.sortKey || a.segment).localeCompare(b.sortKey || b.segment)
 
 const toTreeArray = (tree, base = '') => {
   const entries = Object.entries(tree)
@@ -25,33 +15,25 @@ const toTreeArray = (tree, base = '') => {
   return entries
     .filter(([segment]) => segment !== 'index')
     .map(([segment, childrenTree]) => {
-      // const segment = encodeURIComponent(seg)
       const id = base + '/' + segment
       const children = toTreeArray(childrenTree, id)
       const isPage = !!childrenTree[PAGE]
-      return {
-        title: segment.replace(/_/g, ' '),
+      const sortKey = segment.replace(/_/g, ' ')
+      const node = {
+        title: sortKey.replace(/^[\d-]+ /, ''),
+        sortKey,
         path: id,
-        ...(childrenTree[PAGE] || childrenTree[INDEX]),
+        ...(childrenTree[INDEX] || childrenTree[PAGE]),
         id,
         isDirectory: !(childrenTree[PAGE] || childrenTree[INDEX]),
         isPage,
         segment,
-        // segment: encodeURIComponent(segment),
         children,
       }
-      // if (children[PAGE]) {
-      //   return children[PAGE]
-      // } else {
-      //   const id = base + '/' + segment
-      //   return {
-      //     ...children[INDEX],
-      //     id,
-      //     isDirectory: true,
-      //     segment,
-      //     children: toTreeArray(children, id),
-      //   }
-      // }
+      if (childrenTree[INDEX] && childrenTree[PAGE]) {
+        node.registerTarget = childrenTree[PAGE]
+      }
+      return node
     })
     .sort(sorter)
 }
@@ -59,12 +41,13 @@ const toTreeArray = (tree, base = '') => {
 const toTree = pages => {
   const tree = {}
   for (const page of Object.values(pages).filter(Boolean)) {
-    const steps = page.shortPath
-      // .replace('_', ' ')
-      // .replace('.', '/')
-      .split('/')
-      .filter(Boolean)
-    const last = steps.pop()
+    const steps = page.shortPath.split('/').filter(Boolean)
+    let last = steps.pop()
+    let isComponentIndex = false
+    if (last === 'index' && steps.length > 0) {
+      isComponentIndex = true
+      last = steps.pop()
+    }
     if (!last) continue
     let cursor = tree
     for (const step of steps) {
@@ -73,12 +56,9 @@ const toTree = pages => {
       }
       cursor = cursor[step]
     }
-    const target = page.isIndex ? INDEX : PAGE
-    // cursor[last] = { ...cursor[last], [target]: { ...page, segment: last } }
+    const target = isComponentIndex || page.isIndex ? INDEX : PAGE
     cursor[last] = {
       ...cursor[last],
-      // page: !page.isIndex,
-      // index: !!page.isIndex,
       [target]: page,
     }
   }

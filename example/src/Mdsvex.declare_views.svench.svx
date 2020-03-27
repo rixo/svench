@@ -2,25 +2,17 @@
 
 <!-- routify:options svench:docs=true -->
 
-```js exec
-import { url } from 'svench'
+```md
+<script>
+  import { url, View } from 'svench'
+</script>
 ```
+
+<script>
+  import { url, View } from 'svench'
+</script>
 
 You can [use](<{$url('./Mdsvex.use_views')}>) bla bla bli
-
-````md
-```js exec
-import { View } from 'svench'
-
-View.defaults({
-  hide: true,
-})
-```
-````
-
-```js exec
-import { View } from 'svench'
-```
 
 <View name="default">
   I am a View.

@@ -1,24 +1,24 @@
 <script>
-  import RenderOffscreen from './RenderOffscreen.svelte'
+  export let error = null
 
-  export let route
-  export let title
-  export let focus
-
-  $: href = route ? route.path : null
+  export let title = null
+  export let href = null
 </script>
 
-{#if title != null}
-  <h2>
-    <a {href}>{title}</a>
-  </h2>
-{/if}
+{#if error}
+  <h2 class="error">Error!</h2>
+  <pre>{error.stack || error}</pre>
+{:else}
+  {#if title != null}
+    <h2>
+      <a {href}>{title}</a>
+    </h2>
+  {/if}
 
-<div>
-  <RenderOffscreen {focus}>
+  <div>
     <slot />
-  </RenderOffscreen>
-</div>
+  </div>
+{/if}
 
 <style>
   /* .focus :global(> *) {
@@ -32,14 +32,17 @@
     margin: 0;
     padding: 0;
   }
+  h2.error,
   h2 a {
     font-size: 1.2em;
     display: block;
     padding: 0.5rem 1rem;
     background-color: var(--tertiary);
     color: var(--tertiary-r);
-    text-decoration: none;
     opacity: 0.95;
+  }
+  h2 a {
+    text-decoration: none;
   }
   h2 a:hover {
     opacity: 1;

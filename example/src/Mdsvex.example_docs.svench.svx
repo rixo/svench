@@ -1,0 +1,19 @@
+# Example
+
+By combining Svench and Mdsvex, you can write illustrated documentation pages, all while developping your components in isolation. This is some kind of [literate](https://en.wikipedia.org/wiki/Literate_programming) [programming](https://github.com/Rich-Harris/lit-node) workbench.
+
+Start by importing a bit of svench, and a little bit of what you need to illustrate. And maybe some little bit of helpers... but we don't need any presently.
+
+```html
+<script>
+  import { View } from 'svench'
+  import Child from './Child.svelte'
+</script>
+```
+
+<script>
+  import { View, Render } from 'svench'
+  import Child from './Child.svelte'
+</script>
+
+<Render src="declare_views" />

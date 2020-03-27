@@ -1,11 +1,14 @@
 <script>
   import { getContext } from './util.js'
+  import ViewRenderError from './ViewRenderError.svelte'
 
   const { options, route$, emitViewBox } = getContext()
 
   $: ({ outline, centered, padding } = $options)
 
   $: route = $route$
+
+  export let error = null
 
   export let ui = true
   export let name
@@ -16,11 +19,16 @@
   let el
 
   $: el && emitViewBox(el)
+
+  let canvasEl = null
+  let outlineEl = null
+  export { canvasEl as canvas, outlineEl as outline }
 </script>
 
 <div
   bind:this={el}
   class="svench view box"
+  class:ui
   class:flex={!ui}
   class:outline
   class:centered
@@ -30,9 +38,13 @@
       <a {href}>{name}</a>
     </h3>
   {/if}
-  <div class="svench view canvas">
-    <div class="svench view outline">
-      <slot />
+  <div bind:this={canvasEl} class="svench view canvas">
+    <div bind:this={outlineEl} class="svench view outline">
+      {#if error}
+        <ViewRenderError {error} />
+      {:else}
+        <slot />
+      {/if}
     </div>
   </div>
 </div>
@@ -53,6 +65,11 @@
   }
   h3 a[href]:hover {
     opacity: 1;
+  }
+
+  .box.ui {
+    border-bottom: 1px solid var(--secondary);
+    /* margin-bottom: -1px; */
   }
 
   .box.flex {
@@ -90,5 +107,6 @@
     right: -2px;
     top: -2px;
     bottom: -2px;
+    pointer-events: none;
   }
 </style>

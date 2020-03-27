@@ -1,5 +1,5 @@
 import { derived, readable, writable } from 'svelte/store'
-import { pipe, noop } from './util'
+import { pipe } from './util'
 import Register from './RegisterRoute.svelte'
 import { route } from '@sveltech/routify'
 
@@ -22,12 +22,10 @@ const mapRoute = ({ viewRegisters, options, routes }) => route => {
   const { path, shortPath, isIndex, component, meta } = route
   const error = writable(null)
 
-  // const views = isIndex ? null : writable([])
-
   let _views = []
   let setViews
 
-  const views = isIndex
+  const views$ = isIndex
     ? null
     : readable(_views, set => {
         // setViews = set
@@ -40,8 +38,6 @@ const mapRoute = ({ viewRegisters, options, routes }) => route => {
             options,
             route,
             routes,
-            loader: component,
-            // register: name => register(name, path),
             callback(err, views) {
               if (err) error.set(err)
               _views = views
@@ -58,29 +54,8 @@ const mapRoute = ({ viewRegisters, options, routes }) => route => {
     isIndex,
     path,
     shortPath,
-
     loader: component,
-
-    views,
-
-    // views: isIndex
-    //   ? null
-    //   : readable([], set => {
-    //       const target = document.createElement('div')
-    //
-    //       const cmp = new Register({
-    //         target,
-    //         props: {
-    //           loader: component,
-    //           callback(err, views) {
-    //             if (err) error.set(err)
-    //             set(views)
-    //           },
-    //         },
-    //       })
-    //
-    //       return () => cmp.$destroy()
-    //     }),
+    views$,
   }
 
   // title
@@ -88,7 +63,7 @@ const mapRoute = ({ viewRegisters, options, routes }) => route => {
     page.title = meta['svench:title'].replace(/_/g, ' ')
   }
 
-  if (views) {
+  if (views$) {
     let __views = []
     let timeout
 
@@ -107,28 +82,10 @@ const mapRoute = ({ viewRegisters, options, routes }) => route => {
     viewRegisters[path].path = path
   }
 
-  // registers[path] = name => {
-  //   _views.push(name || $options.defaultViewName(_views.length + 1))
-  //
-  //   views.set(_views)
-  //
-  //   schedule(() => {
-  //     _views = []
-  //   })
-  // }
-
   return page
 }
 
 const pipedDerived = (...fns) => source => derived(source, pipe(...fns))
-
-// returns $pages
-// export const registerRoutes = routes =>
-//   derived(routes, pipe(filter(isPage), map(mapRoute)))
-
-// export const registerRoutes = pipedDerived(filter(isPage), map(mapRoute))
-
-// export const registerRoutes = pipedDerived(filter(isPage), map(mapRoute))
 
 export const registerRoutes = (routes, options) => {
   const viewRegisters = {}

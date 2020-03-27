@@ -2,11 +2,7 @@
   import { Render } from 'svench'
 </script>
 
-# Custom index
-
-You can provide a custom index to your Svench pages.
-
-Without an index, the default index just renders your Svench source component with all its views visible.
+# `<Render />`
 
 ## `src` are resolved relative to FS (conceptually)
 
@@ -27,27 +23,3 @@ The `src` of `<Render>` defaults to the Svench file of which this file is the in
 ```
 
 <Render view="bar" />
-
-## Here be listing
-
-```html
-<Render />
-```
-
-<Render />
-
-## Here be magic
-
-`<Render>` can be nested into itself to change the default `src`!
-
-```html
-<Render with="./Child">
-  <Render view="default" />
-  <Render view="other" />
-</Render>
-```
-
-<Render with="./Child">
-  <Render view="default" />
-  <Render view="other" />
-</Render>

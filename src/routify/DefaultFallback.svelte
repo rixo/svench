@@ -3,4 +3,4 @@
   import Render from '../Render.svelte'
 </script>
 
-<Render src={$leftover + '/**'} all />
+<Render src={$leftover + '/*'} />

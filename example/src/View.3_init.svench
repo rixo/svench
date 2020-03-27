@@ -1,6 +1,6 @@
 <script>
   import { View } from 'svench'
-  import { writable } from 'svelte/store'
+  import { readable, writable } from 'svelte/store'
 
   // View.init = () => ({ name: 'parent', prop: 42 })
 
@@ -25,6 +25,40 @@
     throw new Error('I am an error')
   }}>
   <p>Should not be show</p>
+</View>
+
+<View
+  name="data store"
+  init={() => {
+    const name = '$data'
+    let prop = 0
+    return readable({ name, prop }, set => {
+      const interval = setInterval(() => {
+        prop++
+        set({ name, prop })
+      }, 1000)
+      return () => clearInterval(interval)
+    })
+  }}
+  let:data>
+  <p>Hello {data.name}! ({data.prop})</p>
+  <pre>{JSON.stringify(data, false, 2)}</pre>
+</View>
+
+<View
+  name="data back"
+  init={() => writable({ clicks: 0 })}
+  let:data={{ clicks }}
+  let:proxy={data}>
+  <p>Data back</p>
+
+  <button
+    on:click={() => {
+      data.clicks++
+    }}>
+    Click
+  </button>
+  ({data.clicks})
 </View>
 
 <View

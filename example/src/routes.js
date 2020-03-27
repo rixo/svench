@@ -5,13 +5,14 @@
  */
 
 import { writable } from 'svelte/store'
-import { routes as source } from '@sveltech/routify/tmp/routes'
+import { routes as source, _tree } from '@sveltech/routify/tmp/routes'
 
 const hotData = (import.meta.hot && import.meta.hot.data) || {}
 
 export const routes = hotData.routes || writable([])
 
 routes.set(source)
+
 // console.log(
 //   JSON.stringify(
 //     source.map(x => x.meta),

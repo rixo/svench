@@ -1,9 +1,10 @@
 <script>
   import { onDestroy } from 'svelte'
   import { writable } from 'svelte/store'
-  import { setContext, noop } from './util.js'
+  import { setContext, makeNamer, noop } from './util.js'
   import { createStores } from './stores.js'
   import { augmentRoutes } from './routify/index.js'
+  // import test from './test.js'
 
   import { Router, route } from '@sveltech/routify'
 
@@ -81,7 +82,6 @@
         }
       : noop
 
-  // eslint-disable-next-line no-unused-expressions
   $: $route, updateState($options)
 
   // --- augmented routes ---
@@ -90,20 +90,7 @@
 
   // --- getRenderName ---
 
-  let index = 0
-
-  let timeout
-  const reset = () => {
-    index = 0
-  }
-
-  // TODO dedup (in RegisterRoute)
-  const getRenderName = name => {
-    clearTimeout(timeout)
-    timeout = setTimeout(reset, $options.renderTimeout)
-    index++
-    return name == null ? $options.defaultViewName(index) : name
-  }
+  const getRenderName = makeNamer(() => $options)
 
   // --- view ---
 
@@ -128,12 +115,23 @@
   $: findRoute = routeFinder($routes)
   $: $route$ = findRoute($route)
 
+  // --- meta ---
+
+  const meta = writable()
+
+  $: $meta = $route$ && $route$.meta
+
+  // --- test ---
+
+  // $: test($pages)
+
   // --- context ---
 
   setContext({
     options,
     routes,
     route$,
+    meta,
     findRoute: ({ path }) => $routes.find(x => x.path === path),
     tree,
     register,
@@ -144,8 +142,6 @@
 
   onDestroy(destroy)
 </script>
-
-<!-- <pre>{JSON.stringify($tree, false, 2)}</pre> -->
 
 {#if $routes.length > 0}
   <Router routes={$routes} />

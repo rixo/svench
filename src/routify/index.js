@@ -1,7 +1,10 @@
+import { route as currentRoute } from '@sveltech/routify'
+import { get } from 'svelte/store'
+
 import { pipe } from '../util'
+import App from '../app/App.svelte'
 
 import RenderLayout from './RenderLayout.svelte'
-import App from '../app/App.svelte'
 import DefaultIndex from './DefaultIndex.svelte'
 import DefaultFallback from './DefaultFallback.svelte'
 
@@ -17,12 +20,15 @@ const appLayout = {
 
 // Child.sub.svench <=> Child/sub.svench
 const transformDotDelemiters = routes =>
-  routes.map(({ path, shortPath, ...route }) => ({
-    ...route,
-    extraNesting: path.split('.').length - 1,
-    path: path.replace(/\./g, '/'),
-    shortPath: shortPath.replace(/\./g, '/'),
-  }))
+  routes.map(route => {
+    const { path, shortPath } = route
+    return Object.assign(route, {
+      ...route,
+      extraNesting: path.split('.').length - 1,
+      path: path.replace(/\./g, '/'),
+      shortPath: shortPath.replace(/\./g, '/'),
+    })
+  })
 
 const prependLayouts = (...layouts) => routes =>
   routes.map(({ layouts: currentLayouts, ...route }) => ({
@@ -75,6 +81,20 @@ const addDefaultIndexAndFallback = routes => {
   return routes
 }
 
+const rewireComponentIndexes = routes => {
+  // NOTE excluding isIndex because we only want to catch files with `.index`
+  // suffix, not real `/index.svench` files
+  const indexes = routes.filter(x => !x.isIndex && x.path.endsWith('/index'))
+  for (const route of routes) {
+    for (const index of indexes) {
+      if (route.path + '/index' === index.path) {
+        index.registerTarget = route
+      }
+    }
+  }
+  return routes
+}
+
 // NOTE default index and fallback don't use user's _layout because it's
 // technically difficult (layouts are processed at compile time by Routify),
 // and it's not high value (even possibly better -- default index and fallback
@@ -82,5 +102,7 @@ const addDefaultIndexAndFallback = routes => {
 export const augmentRoutes = pipe(
   transformDotDelemiters,
   addDefaultIndexAndFallback,
-  prependLayouts(appLayout, renderLayout)
+  rewireComponentIndexes,
+  // prependLayouts(appLayout, renderLayout),
+  prependLayouts(appLayout)
 )

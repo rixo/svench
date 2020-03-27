@@ -1,0 +1,8 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<View name="default">
+  <p>whatever</p>
+  <p>content</p>
+</View>

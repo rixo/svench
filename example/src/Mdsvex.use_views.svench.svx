@@ -1,3 +1,15 @@
+```md
+<script>
+  import { Render } from 'svench'
+  import Sub from './sub/Sub.svench'
+</script>
+```
+
+<script>
+  import { Render } from 'svench'
+  import Sub from './sub/Sub.svench'
+</script>
+
 # Using other views from Mdsvex
 
 We're using Routify behind the scene, so you can add random pages to your style guide.
@@ -10,64 +22,54 @@ You can compose documentation (or style guide) oriented pages by including indiv
 
 You need Svench's `Render` component to render other views.
 
-````md
-```js exec
-import { Render } from 'svench'
-```
-````
-
-```js exec
-import { Render } from 'svench'
-```
-
 ## Render from a component reference
 
 We can render from `.svench` files by passing a ref to a Svench component:
 
-````md
-```js exec
-import Sub from './sub/Sub.svench'
+```html
+<Render src="{Sub}" view="big" />
 ```
 
 <Render src={Sub} view="big" />
-````
-
-```js exec
-import Sub from './sub/Sub.svench'
-```
-
-    <Render src={Sub} view="big" />
 
 ## ... or by path:
 
-    <Render src="../Sub" view="small" />
+```html
+<Render src="../Sub" view="small" />
+```
 
 <Render src="./sub/Sub" view="small" />
 
 ### Render all views from a source:
 
-    <Render src="./Child" all />
+```html
+<Render src="./Child" />
+```
 
-<Render src="./Child" all />
+<Render src="./Child" />
 
 ### Basic "globbing"
 
 Only trailing `/*` and `/**` are supported.
 
-    <Render src="./other_dir/*" />
+```html
+<Render src="./other_dir/*" />
+```
 
 <Render src="./other_dir/*" />
 
-    <Render src="./nested/**" all />
+```html
+<Render src="./nested/**" />
+```
 
-<Render src="./nested/**" all />
+<Render src="./nested/**" />
 
 ### Sanity checks
 
 #### Works with "virtual" folders
 
-<Render src="./Mdsvex.declare_views" view="default" />
+<Render src="declare_views" view="default" />
 
 #### Works with default names:
 
-<Render src="./default_names" view="view 2" />
+<Render src="./default_names" view="view 3" />

@@ -6,6 +6,8 @@
   export let indent
   export let indentWidth
   export let active
+
+  $: path = (item.registerTarget || item).path
 </script>
 
 {#each $views as name}
@@ -13,7 +15,7 @@
     <a
       class="text"
       style={`padding-left: ${indent * indentWidth}rem`}
-      href={item.path + `?view=${name}`}>
+      href={path + `?view=${name}`}>
       <span class="icon">◇</span>
       {name}
     </a>

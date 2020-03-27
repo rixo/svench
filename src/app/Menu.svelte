@@ -27,10 +27,14 @@
   // $: expandFolders(items)
 
   $: isActiveItem = item =>
-    $render === true && ($route.path === item.path || $leftover === item.path)
+    $render === true &&
+    ($route.path === item.path ||
+      (item.registerTarget && item.registerTarget.path === $route.path) ||
+      $leftover === item.path)
 
   $: isExpanded = item =>
     $isActive(item.path) ||
+    (item.registerTarget && $isActive(item.registerTarget.path)) ||
     $leftover === item.path ||
     $leftover.startsWith(item.path + '/')
 </script>
@@ -53,11 +57,11 @@
       {#if isExpanded(item)}
         <!-- {#if $isActive(item.path) || item.isDirectory} -->
         <!-- {#if $isActive(item.path) || (item.isDirectory && expanded[item.id])} -->
-        {#if item.views}
+        {#if item.views$}
           <MenuViewsList
             {item}
-            views={item.views}
-            active={$route.path === item.path && $render}
+            views={item.views$}
+            active={$route.path === (item.registerTarget || item).path && $render}
             indent={indent + 1}
             {indentWidth} />
         {/if}

@@ -99,6 +99,9 @@
   .svench.fullscreen .ui {
     display: none;
   }
+  .svench.fullscreen .canvas {
+    top: 0;
+  }
 
   .menu {
     margin: 0;
