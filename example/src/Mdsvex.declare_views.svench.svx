@@ -12,7 +12,7 @@
   import { url, View } from 'svench'
 </script>
 
-You can [use](<{$url('./Mdsvex.use_views')}>) bla bla bli
+You can [use](<{$url('use_views')}>) bla bla bli
 
 <View name="default">
   I am a View.

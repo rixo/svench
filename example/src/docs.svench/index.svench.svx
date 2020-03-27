@@ -1,0 +1,10 @@
+<script>
+  import { Render } from 'svench'
+</script>
+
+```bash
+./src/docs.svench/
+./src/docs.svench/index.svench.svx
+```
+
+<Render src="*" />

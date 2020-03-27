@@ -32,11 +32,26 @@
       (item.registerTarget && item.registerTarget.path === $route.path) ||
       $leftover === item.path)
 
-  $: isExpanded = item =>
-    $isActive(item.path) ||
-    (item.registerTarget && $isActive(item.registerTarget.path)) ||
-    $leftover === item.path ||
-    $leftover.startsWith(item.path + '/')
+  const _isActive = item => {
+    return (
+      $isActive(item.path, false) ||
+      (item.registerTarget && $isActive(item.registerTarget.path, false))
+    )
+  }
+
+  let isExpanded
+  $: {
+    $route,
+      (isExpanded = item =>
+        _isActive(item) ||
+        $leftover === item.path ||
+        $leftover.startsWith(item.path + '/') ||
+        // for:
+        //     /nested/index.svench
+        //     /nested/default_index/Foo.svench
+        $leftover === item.path.replace(/\/index(?:\/|$)/, '') ||
+        $leftover.startsWith(item.path.replace(/\/index(?:\/|$)/, '') + '/'))
+  }
 </script>
 
 <ul class:nested={indent > 0}>

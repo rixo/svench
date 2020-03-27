@@ -1,6 +1,3 @@
-import { route as currentRoute } from '@sveltech/routify'
-import { get } from 'svelte/store'
-
 import { pipe } from '../util'
 import App from '../app/App.svelte'
 

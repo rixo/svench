@@ -1,0 +1,32 @@
+<script>
+  import { Render, url } from 'svench'
+</script>
+
+# Nesting
+
+```
+/nesting/
+```
+
+Use directories and sub directories to create a hierarchical menu.
+
+For isolation development oriented usage (as opposed to documentation usage), you'll probably want to colocate your Svench files beside the component you're documenting. This way, your menu structure in Svench will reflect your source directory structure. At least, that what I'd do...
+
+But you can have some dedicated Svench folders, too! Works well for docs oriented section, for example. You can also have both, 'cause you can probably use both development in isolation, AND some docs!
+
+## Index
+
+```
+/nesting/index.svhx
+```
+
+You can provide `index.svench` (or `index.svench.svx` -- or `index.svhx`, depending on your configuration) to display a custom index for the directory node in the menu. (Same as Routify, essentially.)
+
+```
+/nesting/default_index/Foo.svhx
+/nesting/default_index/Bar.svhx
+```
+
+If no index is provided, then a default listing page will be generated.
+
+Example: [`/nesting/default_index/`](<{$url('./default_index')}>)

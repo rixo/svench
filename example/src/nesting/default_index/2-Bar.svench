@@ -2,5 +2,4 @@
   import { View } from 'svench'
 </script>
 
-<View>First</View>
-<View>Second</View>
+<View name="default">I am Bar.</View>

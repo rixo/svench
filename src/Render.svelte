@@ -1,5 +1,5 @@
 <script>
-  import { updateContext, getContext, constStore, get } from './util.js'
+  import { updateContext, getContext, constStore } from './util.js'
   import RenderContext from './RenderContext.svelte'
   import RenderBox from './RenderBox.svelte'
   import { urlResolver } from './helpers/url.js'
@@ -37,10 +37,12 @@
 
   $: route = $route$
 
-  $: _url = urlResolver($routes, route)
+  $: _url = urlResolver(route)
 
   const matchPath = src => {
-    const srcPath = _url(src, {}, true)
+    const match = /^(.*?)(\/\*+)?$/.exec(src)
+    const [, prefix = '', suffix = ''] = match
+    const srcPath = _url(prefix, {}, false) + suffix
     // TODO real glob / wildcard support...
     if (srcPath.slice(-2) === '**') {
       const srcPrefix = srcPath.slice(0, -2)
@@ -55,7 +57,11 @@
           ? [srcPrefix, r]
           : false
     }
-    return route => (route.path === srcPath ? [false, route] : false)
+    return route => {
+      return route.path.replace(/(?<=^|\/)[\d-]+/g, '') === srcPath
+        ? [false, route]
+        : false
+    }
   }
 
   let components = []
@@ -66,6 +72,8 @@
   }
 
   const setError = err => {
+    // eslint-disable-next-line no-console
+    console.error(err)
     error = err
   }
 

@@ -36,7 +36,7 @@ export default {
       routify({
         pages: './src',
         // TODO routify should accept '.svench'
-        extensions: ['svench', 'svench.svx'],
+        extensions: ['svench', 'svench.svx', 'svhx'],
         // watch delay is needed to prevent race:
         //
         // - user rename/delete page file
@@ -59,6 +59,9 @@ export default {
         // case) :-/
         //
         watchDelay: 20,
+        // remove .svench suffix from directories
+        filepathToUrl: (file, prev) =>
+          prev(file).replace(/\.svench(?=\/|$)/g, ''),
       }),
     svelte({
       // Enable run-time checks when not in production
@@ -71,10 +74,13 @@ export default {
           css.write('public/build/bundle.css')
         },
       }),
-      extensions: ['.svelte', '.svench', '.svx'],
+      extensions: ['.svelte', '.svench', '.svx', '.svhx'],
       preprocess: [
         mdsvex({
           extension: '.svx',
+        }),
+        mdsvex({
+          extension: '.svhx',
         }),
         // Svench({
         //   extensions: ['.svench', '.svench.svx'],

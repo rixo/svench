@@ -1,12 +1,5 @@
-```md
 <script>
-  import { Render } from 'svench'
-  import Sub from './sub/Sub.svench'
-</script>
-```
-
-<script>
-  import { Render } from 'svench'
+  import { Render, url } from 'svench'
   import Sub from './sub/Sub.svench'
 </script>
 
@@ -26,19 +19,19 @@ You need Svench's `Render` component to render other views.
 
 We can render from `.svench` files by passing a ref to a Svench component:
 
-```html
+<!-- ```html
 <Render src="{Sub}" view="big" />
 ```
 
-<Render src={Sub} view="big" />
+<Render src={Sub} view="big" /> -->
 
 ## ... or by path:
 
 ```html
-<Render src="../Sub" view="small" />
+<Render src="./Sub" view="small" />
 ```
 
-<Render src="./sub/Sub" view="small" />
+<Render src="./Sub" view="small" />
 
 ### Render all views from a source:
 
@@ -72,4 +65,16 @@ Only trailing `/*` and `/**` are supported.
 
 #### Works with default names:
 
-<Render src="./default_names" view="view 3" />
+<Render src="./View.default_names" view="view 3" />
+
+Side note: we're rendering the above with:
+
+```html
+<Render src="./View.default_names" view="view 3" />
+```
+
+The actual file name is `View.1-default_names.svench`, but `1-` is an order prefix and can is ignored when matching file (as it is ignored when generating page titles).
+
+This lets you to reorder your pages without going through all your pages to update the links.
+
+See [ordering](<{$url('./docs/ordering')}>) for more details.

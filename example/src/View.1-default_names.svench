@@ -1,0 +1,15 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<p>Views without a given name have a default one generated form them.</p>
+
+<View>First anonymous View</View>
+
+<View name="custom">
+  If a view has a given
+  <code>name</code>
+  , then its index is still skipped.
+</View>
+
+<View>Third anonymous View</View>

@@ -1,4 +1,4 @@
-import { writable, readable, get } from 'svelte/store'
+import { writable, readable } from 'svelte/store'
 import { registerRoutes } from './register.js'
 
 const PAGE = Symbol('Svench.PAGE')
@@ -19,7 +19,10 @@ const toTreeArray = (tree, base = '') => {
       const isPage = !!childrenTree[PAGE]
       const sortKey = segment
       const node = {
-        title: sortKey.replace(/_/g, ' ').replace(/^[\d-]+ /, ''),
+        title: segment
+          .replace(/^[\d-]+/, '')
+          .replace(/_/g, ' ')
+          .trim(),
         sortKey,
         path: id,
         ...(childrenTree[INDEX] || childrenTree[PAGE]),
