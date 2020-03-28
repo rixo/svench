@@ -7,7 +7,7 @@
   import { getContext } from './util.js'
   import ViewBox from './ViewBox.svelte'
   import ViewData from './ViewData.svelte'
-  import Render from './Render.svelte'
+  import Render from './Render'
 
   export let jailbreak = null
   let _isolate = null

@@ -5,6 +5,8 @@
   import { urlResolver } from './helpers/url.js'
   import RenderOffscreen from './RenderOffscreen.svelte'
 
+  import { matchPath } from './Render.js'
+
   const ctx = getContext()
   // route$ can come from Routify, Register, or a parent Render
   const { routes, route$, indexRoute, defaultRenderSrc } = ctx
@@ -37,32 +39,7 @@
 
   $: route = $route$
 
-  $: _url = urlResolver(route)
-
-  const matchPath = src => {
-    const match = /^(.*?)(\/\*+)?$/.exec(src)
-    const [, prefix = '', suffix = ''] = match
-    const srcPath = _url(prefix, {}, false) + suffix
-    // TODO real glob / wildcard support...
-    if (srcPath.slice(-2) === '**') {
-      const srcPrefix = srcPath.slice(0, -2)
-      const { length: l } = srcPrefix
-      return route =>
-        route.path.slice(0, l) === srcPrefix ? [srcPrefix, route] : false
-    } else if (srcPath.slice(-1) === '*') {
-      const srcPrefix = srcPath.slice(0, -1)
-      const { length: l } = srcPrefix
-      return r =>
-        r.path.slice(0, l) === srcPrefix && !r.path.slice(l).includes('/')
-          ? [srcPrefix, r]
-          : false
-    }
-    return route => {
-      return route.path.replace(/(?<=^|\/)[\d-]+/g, '') === srcPath
-        ? [false, route]
-        : false
-    }
-  }
+  $: resolveUrl = urlResolver(route)
 
   let components = []
 
@@ -91,7 +68,7 @@
   const loadSrc = async src => {
     try {
       const matchedRoutes = $routes
-        .map(matchPath(src))
+        .map(matchPath(resolveUrl, src))
         .filter(Boolean)
         .filter(notSelf)
       const _components = await Promise.all(
@@ -101,6 +78,7 @@
             Promise.resolve(route.component()).then(Component => ({
               Component,
               route,
+              prefix,
               ...formatTitle(route, prefix),
             }))
           )
