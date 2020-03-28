@@ -8,7 +8,12 @@ const dirname = x => (x.endsWith('/') ? x : x.replace(/[^/]*$/, ''))
 
 const join = (...args) => trimDoubles(args.join('/'))
 
-const resolve = (from, path) => {
+const clean = path => path.replace(/\/\.\/|\/{2,}/g, '/')
+
+const resolve = (from, _path) => {
+  // foo/./bar => foo/bar
+  // foo//bar => foo/bar
+  const path = clean(_path)
   const match = backRe.exec(path)
   if (!match) {
     return join(from, path) || '/'
