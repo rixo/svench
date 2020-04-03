@@ -11,7 +11,7 @@
 {:else}
   {#if title != null}
     <h2>
-      <a {href}>{title}</a>
+      <a {href}><span class="icon">❖</span> {title}</a>
     </h2>
   {/if}
 
@@ -37,10 +37,23 @@
     font-size: 1.2em;
     display: block;
     padding: 0.5rem 1rem;
+    padding-left: 0.5rem;
     background-color: var(--tertiary);
-    color: var(--tertiary-r);
     opacity: 0.95;
   }
+
+  h2 a,
+  h2 a * {
+    color: var(--tertiary-r);
+  }
+
+  h2 a .icon {
+    display: inline-block;
+    width: 1.5rem;
+    text-align: center;
+    font-weight: 100;
+  }
+
   h2 a {
     text-decoration: none;
   }

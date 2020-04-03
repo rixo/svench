@@ -5,7 +5,10 @@
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
-  "files": ["src", "lib"],
+  "files": [
+    "src",
+    "lib"
+  ],
   "peerDependencies": {
     "svelte": "^3.0.0"
   },
@@ -15,7 +18,7 @@
     "svelte-key": "^1.0.0"
   },
   "devDependencies": {
-    "@rixo/eslint-config-svelte": "^0.8.1",
+    "@rixo/eslint-config-svelte": "^0.9.0-alpha.2",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-json": "^4.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",

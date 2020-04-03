@@ -4,9 +4,9 @@
    *      .svench file can rendered as is. That is, without some context wrapper
    *      to pass options down to views.
    */
-  import { getContext } from './util.js'
+  import { getContext } from './util'
   import ViewBox from './ViewBox.svelte'
-  import ViewData from './ViewData.svelte'
+  import { VIEW_INIT } from './constants'
   import Render from './Render'
 
   export let jailbreak = null
@@ -26,6 +26,7 @@
     meta: ctxMeta,
     route$,
     breakIsolate,
+    [VIEW_INIT]: mainInit,
   } = getContext() || {}
 
   $: ui = !$focus
@@ -67,30 +68,25 @@
     // breakIsolate comes from <Render> -- means we're the inner, isolated view
     !breakIsolate
 
-  let willRender
-  $: willRender =
+  let shouldRender
+  $: shouldRender =
     !registerOnly &&
-    !isolate &&
     (($render === true && !hide) || ($render && actualName === $render))
 
-  let data = {}
+  $: willRender = shouldRender && !isolate
+
   let error = null
   let resolved = false
 
-  const prepare = () => {
-    // if (onRender) data = await onRender(data)
-    if (init) {
-      Promise.resolve()
-        .then(init)
-        .then(_data => {
-          data = _data
-          resolved = true
-        })
-        .catch(err => {
-          error = err
-        })
-    } else {
+  const prepare = async () => {
+    try {
+      if (mainInit) await mainInit()
+      if (init) await init()
       resolved = true
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err)
+      error = err
     }
   }
 
@@ -100,30 +96,17 @@
   $: if (canvas && outline) {
     // console.log('go', canvas, outline)
   }
-
-  const isStore = x => x && typeof x.subscribe === 'function'
 </script>
 
-{#if willRender}
-  <ViewBox {error} {ui} name={actualName} bind:canvas bind:outline>
-    {#if !error && resolved}
-      <ViewData
-        store={(isStore(data) && data) || null}
-        {data}
-        let:data
-        let:proxy>
-        <slot id={actualName} {data} {proxy} />
-      </ViewData>
-      <!-- {#if data && typeof data.subscribe === 'function'}
-        <Subscribe store={data} let:data let:proxy>
-          <slot {data} {proxy} />
-        </Subscribe>
-      {:else}
-        <slot {data} />
-      {/if} -->
-      <!-- <pre>{JSON.stringify(meta, false, 2)}</pre> -->
-    {/if}
-  </ViewBox>
-{:else if isolate && !($render === true && hide)}
-  <Render src={$route$} view={actualName} />
+{#if shouldRender}
+  {#if isolate}
+    <Render src={$route$} view={actualName} breakIsolate />
+  {:else}
+    <ViewBox {error} {ui} name={actualName} bind:canvas bind:outline>
+      {#if !error && resolved}
+        <slot id={actualName} />
+        <!-- <pre>{JSON.stringify(meta, false, 2)}</pre> -->
+      {/if}
+    </ViewBox>
+  {/if}
 {/if}

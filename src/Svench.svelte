@@ -8,24 +8,22 @@
 
   import { Router, route } from '@sveltech/routify'
 
+  export let localStorageKey = 'Svench'
+
   let inputRoutes
-  export { inputRoutes as routes }
+  export { inputRoutes as routes$ }
 
   export let fixed = true
 
   export let defaults
 
-  const { options, pages, tree, routes, register, destroy } = createStores()
+  const { options, tree, routes, register, destroy } = createStores()
 
   // --- options ---
 
-  const stateOptions = [
-    'fullscreen',
-    'centered',
-    'outline',
-    'padding',
-    'menuWidth',
-  ]
+  const stateOptions = ['fullscreen', 'centered', 'outline', 'padding']
+
+  const localOptions = ['menuWidth']
 
   const readParamsOptions = () => {
     const q = new URLSearchParams(window.location.search)
@@ -40,7 +38,13 @@
     return opts
   }
 
-  const queryOptions = readParamsOptions()
+  const readStoredOptions =
+    localStorageKey && window.localStorage
+      ? () => {
+          const stored = localStorage.getItem(localStorageKey)
+          return (stored && JSON.parse(stored)) || {}
+        }
+      : noop
 
   $: $options = {
     fixed,
@@ -55,38 +59,44 @@
     padding: false,
     fullscreen: false,
     ...defaults,
-    ...queryOptions,
+    ...readStoredOptions(),
+    ...readParamsOptions(),
   }
 
-  const updateState =
-    window.history && history.replaceState
-      ? opts => {
-          const q = new URLSearchParams(window.location.search)
-          stateOptions.forEach(name => {
-            const value = opts[name]
-            if (value === false || value == null) {
-              q.delete(name)
-            } else {
-              q.set(name, value)
-            }
-          })
-          let url = location.pathname
-          const qs = q.toString()
-          if (qs.length > 0) {
-            url += '?' + qs.replace(/=true(?=&|$)/g, '')
-          }
-          const currentUrl = location.pathname + location.search
-          if (url !== currentUrl) {
-            history.replaceState({}, '', url)
-          }
+  const updateState = opts => {
+    if (localStorageKey && window.localStorage) {
+      const values = Object.fromEntries(
+        localOptions.map(name => [name, opts[name]])
+      )
+      localStorage.setItem(localStorageKey, JSON.stringify(values))
+    }
+    if (window.history && history.replaceState) {
+      const q = new URLSearchParams(window.location.search)
+      stateOptions.forEach(name => {
+        const value = opts[name]
+        if (value === false || value == null) {
+          q.delete(name)
+        } else {
+          q.set(name, value)
         }
-      : noop
+      })
+      let url = location.pathname
+      const qs = q.toString()
+      if (qs.length > 0) {
+        url += '?' + qs.replace(/=true(?=&|$)/g, '')
+      }
+      const currentUrl = location.pathname + location.search
+      if (url !== currentUrl) {
+        history.replaceState({}, '', url)
+      }
+    }
+  }
 
   $: $route, updateState($options)
 
   // --- augmented routes ---
 
-  $: $routes = augmentRoutes($inputRoutes)
+  $: $routes = augmentRoutes($inputRoutes.routes)
 
   // --- getRenderName ---
 
@@ -113,7 +123,12 @@
   }
 
   $: findRoute = routeFinder($routes)
-  $: $route$ = findRoute($route)
+  $: {
+    const r = findRoute($route)
+    if ($route$ !== r) {
+      $route$ = r
+    }
+  }
 
   // --- meta ---
 
@@ -129,7 +144,6 @@
 
   setContext({
     options,
-    pages,
     routes,
     route$,
     meta,

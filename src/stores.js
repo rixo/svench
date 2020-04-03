@@ -20,7 +20,6 @@ const toTreeArray = (tree, base = '') => {
       const sortKey = segment
       const node = {
         title: segment
-          .replace(/^[\d-]+/, '')
           .replace(/_/g, ' ')
           .trim(),
         sortKey,

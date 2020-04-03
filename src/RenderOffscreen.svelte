@@ -26,7 +26,7 @@
 </script>
 
 {#if focus}
-  <div bind:this={offscreen}>
+  <div bind:this={offscreen} class="svench offscreen" id={$$props.id}>
     <slot />
   </div>
 {:else}

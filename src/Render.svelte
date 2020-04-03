@@ -33,6 +33,8 @@
 
   export let view = true
 
+  export let breakIsolate = false
+
   $: focus = view !== true
 
   let error = null
@@ -113,14 +115,15 @@
       ? [src].flat()
       : loadSrcRoute(src)
 
-  $: route && resolveSrc(src || route.registerTarget || defaultRenderSrc)
+  $: route && resolveSrc(src || defaultRenderSrc)
 
   $: if (!src && !_with) {
     error = 'Missing prop: src or with'
   }
 
   updateContext({
-    breakIsolate: true,
+    '<Render>': true,
+    breakIsolate,
     render: constStore(view),
     register: false,
   })
@@ -136,7 +139,7 @@
 
       {#if _with == null}
         <RenderBox {title} {href}>
-          <RenderOffscreen {focus}>
+          <RenderOffscreen focus={breakIsolate} id="{view}-{breakIsolate}">
             <svelte:component this={Component} />
           </RenderOffscreen>
         </RenderBox>

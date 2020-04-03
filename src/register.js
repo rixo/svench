@@ -28,6 +28,7 @@ const mapRoute = ({ viewRegisters, options, routes }) => route => {
   const views$ = isIndex
     ? null
     : readable(_views, set => {
+        // return () => {}
         // setViews = set
 
         const target = document.createElement('div')

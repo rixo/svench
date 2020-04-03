@@ -1,4 +1,4 @@
-export { default as View } from './View.svelte'
+export { default as View } from './View.js'
 
 export { default as Render } from './Render.js'
 export { default as Register } from './Register.svelte'

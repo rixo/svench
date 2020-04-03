@@ -10,7 +10,11 @@
 
   $: focus = $focus$
 
-  $: ({ fixed, fullscreen, menuWidth } = $options)
+  $: ({ fixed, fullscreen } = $options)
+
+  let menuWidth = $options.menuWidth
+
+  $: $options.menuWidth = menuWidth
 
   const onKeydown = e => {
     if (e.key === 'Escape') {
@@ -29,10 +33,7 @@
     style={fullscreen ? null : `padding-left: ${menuWidth}px`}>
     <section class="ui menu" style="width: {menuWidth}px">
       <h1>
-        <a href="/">
-          <span class="icon">🔧</span>
-          Svench
-        </a>
+        <a href="/"><span class="icon">🔧</span> Svench</a>
       </h1>
       <Menu items={$tree} />
       <MenuResizeHandle bind:width={menuWidth} />
@@ -114,6 +115,11 @@
     border-bottom: 1px solid var(--gray-light);
   }
 
+  .canvas {
+    /* NOTE we want the canvas to fill available space, or it is hard to pick
+       in dev tools (which end users might want to do to find missing cmp) */
+    min-height: calc(100% - var(--toolbar-height));
+  }
   .canvas.focus {
     position: fixed;
     overflow: auto;

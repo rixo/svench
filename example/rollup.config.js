@@ -23,6 +23,19 @@ const svench = !!process.env.SVENCH
 
 const spa = false || svench
 
+const updateChildrenPath = (file, oldPath) => {
+  if (file.filepath === oldPath) return
+  if (!file.dir) return
+  for (const child of file.dir) {
+    const { filepath } = child
+    child.filepath = file.filepath + filepath.slice(oldPath.length)
+    updateChildrenPath(child, filepath)
+  }
+}
+
+const isMagic = route =>
+  route.isIndex || route.isLayout || route.isReset || route.isFallback
+
 export default {
   input: 'src/main.js',
   output: {
@@ -60,8 +73,83 @@ export default {
         //
         watchDelay: 20,
         // remove .svench suffix from directories
-        filepathToUrl: (file, prev) =>
-          prev(file).replace(/\.svench(?=\/|$)/g, ''),
+        // filepathToUrl: (file, prev) =>
+        //   prev(file).replace(/\.svench(?=\/|$)/g, ''),
+        hooks: {
+          readTree(file) {
+            file.svench = {}
+
+            const { filepath: oldFilepath } = file
+
+            if (file.dir) {
+              const dropSvench = x => x.replace(/\.svench$/g, '')
+              file.name = dropSvench(file.name)
+              file.filepath = dropSvench(file.filepath)
+              if (file.ext) {
+                file.ext = file.ext.replace(/^svench$/g, '')
+              }
+            }
+
+            // . => /
+            // name is basename without extension
+            {
+              const prevName = file.name
+
+              // const segs = file.name.split('.')
+              const segs = file.name.split(/\.(?!index\b)/g)
+              file.name = segs.join('/')
+              file.svench.extraNesting = segs.length - 1
+
+              if (file.svench.extraNesting > 0) {
+                // filepath is full relative path, including extension
+                const segs = file.filepath.split('/')
+                const base = segs.pop()
+                // replace just name in path (keep extensions!)
+                if (base.startsWith(prevName)) {
+                  file.filepath = [
+                    ...segs,
+                    file.name + base.slice(prevName.length),
+                  ].join('/')
+                }
+              }
+            }
+
+            updateChildrenPath(file, oldFilepath)
+          },
+          decorate: (file, parent) => {
+            const svench = file.svench
+
+            let basename = file.path.split('/').pop()
+
+            if (!isMagic(file)) {
+              const match = /^[\d-]+(.*)$/.exec(basename)
+              if (match) {
+                basename = match[1]
+              }
+            }
+
+            svench.sortKey = basename
+
+            if (parent.path) {
+              file.path = parent.path + '/' + basename
+            } else {
+              file.path = '/' + basename
+            }
+
+            // name: foo/bar/baz
+            // path: /bat => /foo/bar/bat (filename baz ignored)
+            const segs = file.name.split('/')
+            segs.pop()
+            if (segs.length > 0) {
+              file.path = '/' + [segs.join('/'), file.path].join('')
+            }
+
+            // if (file.file === 'View.3-init.index.svench.svx') {
+            //   console.log('>>>', file)
+            //   process.exit()
+            // }
+          },
+        },
       }),
     svelte({
       // Enable run-time checks when not in production
@@ -129,13 +217,13 @@ export default {
     // Automatically create missing imported files. This helps keeping
     // the HMR server alive, because Rollup watch tends to crash and
     // hang indefinitely after you've tried to import a missing file.
-    hot &&
-      autoCreate({
-        include: 'src/**/*',
-        // Set false to prevent recreating a file that has just been
-        // deleted (Rollup watch will crash when you do that though).
-        recreate: true,
-      }),
+    // hot &&
+    //   autoCreate({
+    //     include: 'src/**/*',
+    //     // Set false to prevent recreating a file that has just been
+    //     // deleted (Rollup watch will crash when you do that though).
+    //     recreate: true,
+    //   }),
 
     hmr({
       public: 'public',

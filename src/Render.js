@@ -21,8 +21,6 @@ export const matchPath = (resolveUrl, src) => {
         : false
   }
   return route => {
-    return route.path.replace(/(?<=^|\/)[\d-]+/g, '') === srcPath
-      ? [false, route]
-      : false
+    return route.path === srcPath ? [false, route] : false
   }
 }

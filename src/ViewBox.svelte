@@ -35,7 +35,7 @@
   class:padding>
   {#if ui}
     <h3 class="svench view">
-      <a {href}>{name}</a>
+      <a {href}><span class="icon">◇</span> {name}</a>
     </h3>
   {/if}
   <div bind:this={canvasEl} class="svench view canvas">
@@ -57,14 +57,23 @@
   h3 a {
     display: block;
     padding: 0.33rem 1rem;
-    padding-left: 2rem;
+    padding-left: 0.5rem;
     text-decoration: none;
-    background: var(--secondary, #aaa);
-    color: var(--secondary-r, #fff);
     opacity: 0.95;
   }
   h3 a[href]:hover {
     opacity: 1;
+  }
+  h3 a,
+  h3 a * {
+    background: var(--secondary, #aaa);
+    color: var(--secondary-r, #fff);
+  }
+
+  h3 a .icon {
+    display: inline-block;
+    width: 1.5rem;
+    text-align: center;
   }
 
   .box.ui {

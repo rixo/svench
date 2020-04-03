@@ -5,8 +5,8 @@ import { resolveUrl, trimIndex } from './url.impl.js'
 const repeat = (x, n) => Array.from({ length: n }).map(() => x)
 
 const relativeTo = (route, path) => {
-  const segments = trimIndex(route.path).split('/')
-  const nesting = route.extraNesting
+  const segments = route.shortPath.split('/')
+  const nesting = route.svench.extraNesting
   const parts = [
     ...repeat('..', nesting),
     ...(nesting > 0 ? segments.slice(1, -nesting) : segments.slice(1)),
@@ -18,22 +18,21 @@ const relativeTo = (route, path) => {
 }
 
 export const urlResolver = route => (path, ...args) => {
-  const { path: from } = route
+  const { shortPath: from } = route
   const relative = path.startsWith('/') // /absolute
     ? path
     : path.startsWith('.') // ./relative/fs
-    ? path.replace(/^\.\//, '../'.repeat(route.extraNesting))
+    ? path.replace(
+        /^\.\//,
+        '../'.repeat(
+          Math.max(
+            0,
+            route.svench.extraNesting - (route.path.endsWith('/index') ? 1 : 0)
+          )
+        ) || './'
+      )
     : relativeTo(route, path) // relative/virtual
   const virtual = relative.replace(/(?<!\.|^|\/)\.(?!\.)/g, '/')
-  // {
-  //   const { extraNesting, isIndex } = route
-  //   console.log(
-  //     'urlResolver',
-  //     { path: route.path, extraNesting, isIndex },
-  //     path,
-  //     ...args
-  //   )
-  // }
   return resolveUrl(from, virtual, ...args)
 }
 

@@ -1,11 +1,11 @@
 import { Svench } from 'svench'
 
-import { routes } from './routes.js'
+import { routes$ } from './routes.js'
 
 const app = new Svench({
   target: document.body,
   props: {
-    routes,
+    routes$,
     defaults: {
       padding: true,
     },

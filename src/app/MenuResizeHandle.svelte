@@ -1,7 +1,10 @@
 <script>
+  import { onDestroy } from 'svelte'
+
   export let width
 
   let dragStart = null
+  let raf = null
 
   const mousedown = ({ pageX: x }) => {
     dragStart = { width, x }
@@ -10,7 +13,10 @@
   }
 
   const mousemove = ({ pageX: x }) => {
-    requestAnimationFrame(() => {
+    if (raf !== null) return
+    raf = requestAnimationFrame(() => {
+      raf = null
+      if (!dragStart) return
       width = dragStart.width + x - dragStart.x
     })
   }
@@ -20,6 +26,12 @@
     document.removeEventListener('mousemove', mousemove)
     dragStart = null
   }
+
+  onDestroy(() => {
+    if (raf !== null) {
+      cancelAnimationFrame(raf)
+    }
+  })
 </script>
 
 <div on:mousedown={mousedown} />

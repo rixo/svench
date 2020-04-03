@@ -1,78 +1,40 @@
 <script>
   import { View } from 'svench'
-  import { readable, writable } from 'svelte/store'
 
-  // View.init = () => ({ name: 'parent', prop: 42 })
+  let name = '...loading'
+  let prop = 41
 
-  export const init = () => {
-    return { name: 'initialized!', prop: 41 }
+  View.init = () => {
+    name = 'initialized!'
+    prop = 42
   }
 
-  const initFoo = () => ({ name: 'Foo' })
-
-  const initBar = () => () => ({ name: 'Bar' })
+  const initFoo = () => {
+    name = 'Foo'
+    prop = 43
+  }
 </script>
 
-<View name="View.init" let:data={{ name }}>Hello {name}!</View>
-
-<View name="init" init={initFoo} let:data={{ name, prop }}>
-  Hello {name}! ({prop})
+<View name="View.init">
+  Hello {name}! (<code>{prop}</code>)
 </View>
+
+<View name="init" init={initFoo}>Hello {name}! ({prop})</View>
 
 <View
   name="init error"
   init={() => {
-    throw new Error('I am an error')
+    throw new Error('I am an error (expected in the demo)')
   }}>
-  <p>Should not be show</p>
-</View>
-
-<View
-  name="data store"
-  init={() => {
-    const name = '$data'
-    let prop = 0
-    return readable({ name, prop }, set => {
-      const interval = setInterval(() => {
-        prop++
-        set({ name, prop })
-      }, 1000)
-      return () => clearInterval(interval)
-    })
-  }}
-  let:data>
-  <p>Hello {data.name}! ({data.prop})</p>
-  <pre>{JSON.stringify(data, false, 2)}</pre>
-</View>
-
-<View
-  name="data back"
-  init={() => writable({ clicks: 0 })}
-  let:data={{ clicks }}
-  let:proxy={data}>
-  <p>Data back</p>
-
-  <button
-    on:click={() => {
-      data.clicks++
-    }}>
-    Click
-  </button>
-  ({data.clicks})
+  <p>Should not be shown</p>
 </View>
 
 <View
   name="delayed"
   init={async () => {
     await new Promise(resolve => setTimeout(resolve, 1000))
-    return { name: 'delayed', prop: 1000 }
-  }}
-  let:data={{ name, prop }}>
+    name = 'delayed'
+    prop = 1000
+  }}>
   Hello {name}! ({prop})
 </View>
-
-<!-- <View name="dynamic data" init={
-() => writable(42)
-} let:data={{data}}>
- data = {$data}
-</View> -->
