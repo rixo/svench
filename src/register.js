@@ -19,13 +19,13 @@ const notFallback = ({ isFallback }) => !isFallback
 // }
 
 const mapRoute = ({ viewRegisters, options, routes }) => route => {
-  const { path, shortPath, isIndex, component, meta } = route
+  const { path, shortPath, isIndex, component, meta, registerTarget } = route
   const error = writable(null)
 
   let _views = []
   let setViews
 
-  const views$ = isIndex
+  const views$ = isIndex && !registerTarget
     ? null
     : readable(_views, set => {
         // return () => {}

@@ -1,0 +1,7 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<View name="default">
+  I am the default view
+</View>

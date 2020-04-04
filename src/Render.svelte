@@ -115,7 +115,7 @@
       ? [src].flat()
       : loadSrcRoute(src)
 
-  $: route && resolveSrc(src || defaultRenderSrc)
+  $: route && resolveSrc(src || route.registerTarget || defaultRenderSrc)
 
   $: if (!src && !_with) {
     error = 'Missing prop: src or with'

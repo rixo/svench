@@ -28,10 +28,15 @@ We can render from `.svench` files by passing a ref to a Svench component:
 ## ... or by path:
 
 ```html
-<Render src="./Sub" view="small" />
+<Render src="./sub/Sub" view="small" />
 ```
 
-<Render src="./Sub" view="small" />
+<!-- TODO view not found -->
+<Render src="./sub/Sub" view="large" />
+
+<Render src="./sub/Sub" view="small" />
+
+<Render src="./sub/Sub" view="big" />
 
 ### Render all views from a source:
 

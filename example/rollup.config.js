@@ -36,6 +36,69 @@ const updateChildrenPath = (file, oldPath) => {
 const isMagic = route =>
   route.isIndex || route.isLayout || route.isReset || route.isFallback
 
+const relocateVirtualFiles = (file, parent) => {
+  const { segments: segs } = file
+
+  if (segs) {
+    delete file.segments
+    file.name = segs.pop()
+    file.file = file.name + (file.ext ? `.${file.ext}` : '')
+    file.svench.extraNesting = segs.length
+    file.svench.isVirtualIndex = true
+
+    if (!parent.dir) {
+      throw new Error('unexpected hierarchy')
+    }
+
+    parent.dir = parent.dir.filter(x => x !== file)
+
+    let cur = parent
+
+    while (segs.length > 0) {
+      const seg = segs.shift()
+      const nextParent = cur.dir.find(x => x.dir && !x.ext && x.name === seg)
+      if (nextParent) {
+        cur = nextParent
+      } else {
+        const dir = cur.dir
+        cur = {
+          file: seg,
+          filepath: (cur.filepath || '') + '/' + seg,
+          name: seg,
+          ext: '',
+          badExt: false,
+          dir: [],
+          // absolutePath: '/home/eric/projects/routify/svench/svench/example/src/000',
+          // dir: [
+          //   {
+          //     file: 'index.svench',
+          //     filepath: '/000/index.svench',
+          //     name: 'index',
+          //     ext: 'svench',
+          //     badExt: false,
+          //     absolutePath: '/home/eric/projects/routify/svench/svench/example/src/000/index.svench',
+          //     svench: {}
+          //   }
+          // ],
+          svench: {}
+        }
+        dir.push(cur)
+      }
+    }
+
+    cur.dir.push(file)
+    file.filepath = cur.filepath + '/' + file.file
+  }
+
+  if (file.dir) {
+    for (const child of file.dir) {
+      relocateVirtualFiles(child, file)
+    }
+  }
+
+  return file
+}
+
 export default {
   input: 'src/main.js',
   output: {
@@ -49,7 +112,7 @@ export default {
       routify({
         pages: './src',
         // TODO routify should accept '.svench'
-        extensions: ['svench', 'svench.svx', 'svhx'],
+        extensions: ['svench', 'svench.svx'],
         // watch delay is needed to prevent race:
         //
         // - user rename/delete page file
@@ -76,52 +139,38 @@ export default {
         // filepathToUrl: (file, prev) =>
         //   prev(file).replace(/\.svench(?=\/|$)/g, ''),
         hooks: {
-          readTree(file) {
-            file.svench = {}
+          file(file) {
+            file.svench = {
+              extraNesting: 0,
+            }
 
             const { filepath: oldFilepath } = file
 
-            if (file.dir) {
+            // remove .svench from dir
+            if (file.dir && file.name.endsWith('.svench')) {
               const dropSvench = x => x.replace(/\.svench$/g, '')
               file.name = dropSvench(file.name)
               file.filepath = dropSvench(file.filepath)
               if (file.ext) {
                 file.ext = file.ext.replace(/^svench$/g, '')
               }
+              updateChildrenPath(file, oldFilepath)
             }
 
             // . => /
-            // name is basename without extension
-            {
-              const prevName = file.name
-
-              // const segs = file.name.split('.')
-              const segs = file.name.split(/\.(?!index\b)/g)
-              file.name = segs.join('/')
-              file.svench.extraNesting = segs.length - 1
-
-              if (file.svench.extraNesting > 0) {
-                // filepath is full relative path, including extension
-                const segs = file.filepath.split('/')
-                const base = segs.pop()
-                // replace just name in path (keep extensions!)
-                if (base.startsWith(prevName)) {
-                  file.filepath = [
-                    ...segs,
-                    file.name + base.slice(prevName.length),
-                  ].join('/')
-                }
-              }
+            const segs = file.name.split('.')
+            if (segs.length > 1) {
+              delete file.name
+              file.segments = segs
             }
-
-            updateChildrenPath(file, oldFilepath)
           },
+          tree: relocateVirtualFiles,
           decorate: (file, parent) => {
             const svench = file.svench
 
             let basename = file.path.split('/').pop()
 
-            if (!isMagic(file)) {
+            if (!isMagic(file) && !/^[\d-]*$/.test(basename)) {
               const match = /^[\d-]+(.*)$/.exec(basename)
               if (match) {
                 basename = match[1]
@@ -135,19 +184,6 @@ export default {
             } else {
               file.path = '/' + basename
             }
-
-            // name: foo/bar/baz
-            // path: /bat => /foo/bar/bat (filename baz ignored)
-            const segs = file.name.split('/')
-            segs.pop()
-            if (segs.length > 0) {
-              file.path = '/' + [segs.join('/'), file.path].join('')
-            }
-
-            // if (file.file === 'View.3-init.index.svench.svx') {
-            //   console.log('>>>', file)
-            //   process.exit()
-            // }
           },
         },
       }),
