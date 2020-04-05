@@ -7,18 +7,6 @@ import RenderLayout from './RenderLayout.svelte'
 import DefaultIndex from './DefaultIndex.svelte'
 import DefaultFallback from './DefaultFallback.svelte'
 
-const renderLayout = {
-  component: () => RenderLayout,
-  path: '../../_layout',
-  svench: {},
-}
-
-const appLayout = {
-  component: () => App,
-  path: '../_layout',
-  svench: {},
-}
-
 const pageDefaults = {
   layouts: [],
   meta: {},
@@ -26,10 +14,18 @@ const pageDefaults = {
   isFile: true,
 }
 
+const makeLayout = (x, i, { length }) => {
+  if (typeof x === 'function') {
+    const Component = x
+    x = { component: () => Component }
+  }
+  return { svench: {}, path: `${'../'.repeat(length - i)}_layout`, ...x }
+}
+
 const prependLayouts = (...layouts) => routes =>
   routes.map(({ layouts: currentLayouts, ...route }) => ({
     ...route,
-    layouts: [...layouts, ...currentLayouts],
+    layouts: [...layouts.map(makeLayout), ...currentLayouts],
   }))
 
 const addDefaultIndexAndFallback = routes => {
@@ -100,6 +96,5 @@ export const augmentRoutes = pipe(
   routes => routes.map(addSvenchNode),
   addDefaultIndexAndFallback,
   componentIndexesRegisterTarget,
-  prependLayouts(appLayout, renderLayout)
-  // prependLayouts(appLayout)
+  prependLayouts(App, RenderLayout)
 )
