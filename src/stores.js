@@ -19,9 +19,7 @@ const toTreeArray = (tree, base = '') => {
       const isPage = !!childrenTree[PAGE]
       const sortKey = segment
       const node = {
-        title: segment
-          .replace(/_/g, ' ')
-          .trim(),
+        title: segment.replace(/_/g, ' ').trim(),
         sortKey,
         path: id,
         ...(childrenTree[INDEX] || childrenTree[PAGE]),

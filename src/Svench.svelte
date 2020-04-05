@@ -2,12 +2,11 @@
   import { onDestroy } from 'svelte'
   import { writable, derived } from 'svelte/store'
   import { setContext, makeNamer, noop } from './util.js'
-  import { createStores, route } from './stores.js'
+  import { createStores } from './stores.js'
   import { augmentRoutes } from './routify/index.js'
   // import test from './test.js'
-  import SvenchInner from './SvenchInner.svelte'
 
-  // import { Router, route } from '@sveltech/routify'
+  import { Router, route } from '@sveltech/routify'
 
   export let localStorageKey = 'Svench'
 
@@ -74,7 +73,8 @@
       localStorage.setItem(localStorageKey, JSON.stringify(values))
     }
 
-    console.log('updateState', history._replaceState)
+    // NOTE using history._replaceState to avoid useless looping with Routify
+    // _replaceState is the original replaceState before Routify hacks it
     if (window.history && history._replaceState) {
       const q = new URLSearchParams(window.location.search)
       stateOptions.forEach(name => {
@@ -97,7 +97,7 @@
     }
   }
 
-  // $: $route, updateState($options)
+  $: $route, updateState($options)
 
   // --- augmented routes ---
 
@@ -109,42 +109,18 @@
 
   // --- view ---
 
-  // const getView = () => new URLSearchParams(window.location.search).get('view')
-  //
-  // const view = writable()
-  // const focus = writable(false)
-  //
-  // const _disposers = []
-  // const disposer = {
-  //   set _(v) {
-  //     _disposers.push(v)
-  //     return true
-  //   }
-  // }
-  // const call = fn => fn()
-  // onDestroy(() => _disposers.forEach(call))
-  //
-  // $: $view = $route$, getView() || true
-  // $: $focus = $view !== true
+  const getView = () => new URLSearchParams(window.location.search).get('view')
+
+  const view = writable()
+  const focus = writable(false)
+
+  $: $route$, $view = getView() || true
+  $: $focus = $view !== true
 
   // --- route ---
 
   const route$ = route
-
-  // const route$ = writable()
-  // const route$ = writable()
-
-  // bug?
   // $: $route$ = $route
-  // disposer._ = route.subscribe(v => {
-  //   // if (v === $route$) return
-  //   // console.log('route', v)
-  //   // $route$ = v
-  //   // $view = getView() || true
-  //   // if ($focus !== $view !== true) {
-  //   //   $focus = $view !== true
-  //   // }
-  // })
 
   // --- tree ---
 
@@ -154,7 +130,7 @@
 
   const meta = writable()
 
-  // $: $meta = $route && $route.meta
+  $: $meta = $route && $route.meta
 
   // --- test ---
 
@@ -166,32 +142,18 @@
     options,
     routes,
     route$,
-    // meta,
+    meta,
     findRoute: ({ path }) => $routes.find(x => x.path === path),
     tree,
     register,
     getRenderName,
-    // render: view,
-    // focus,
+    render: view,
+    focus,
   })
 
   onDestroy(destroy)
-
-  const x = writable(0)
-  const xx = setInterval(() => {
-    $x++
-  }, 1000)
-  $: console.log('x', $x)
-  onDestroy(() => {
-    clearInterval(xx)
-  })
-
-  // setTimeout(() => {
-  //   debugger
-  //   $route = []
-  // }, 500)
 </script>
 
-{#if $tree}
-  <SvenchInner {routes} />
+{#if $routes.length > 0 && $tree}
+  <Router routes={$routes} />
 {/if}
