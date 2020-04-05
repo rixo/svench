@@ -1,10 +1,10 @@
 <script>
-  import { route, leftover, isActive } from '@sveltech/routify'
+  import { leftover, isActive } from '@sveltech/routify'
   import { slide } from 'svelte/transition'
   import MenuViewsList from './MenuViewsList.svelte'
   import { getContext } from '../util'
 
-  const { render } = getContext()
+  const { route$: route, render } = getContext()
 
   export let items = []
   export let indent = 0
