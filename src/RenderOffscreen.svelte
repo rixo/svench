@@ -17,11 +17,6 @@
     _target.appendChild(view)
   }
 
-  // onMount(() => {
-  //   const parent = document.createElement('div')
-  //   parent.appendChild(offscreen)
-  // })
-
   updateContext({ emitViewBox: update })
 </script>
 

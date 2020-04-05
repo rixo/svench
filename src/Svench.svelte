@@ -120,7 +120,7 @@
   onDestroy(() => _disposers.forEach(call))
 
   // $: $view = $route$, getView() || true
-  $: $focus = $view !== true
+  // $: $focus = $view !== true
 
   // --- route ---
 
@@ -131,10 +131,10 @@
   disposer._ = route.subscribe(v => {
     // if (v === $route$) return
     $route$ = v
-  })
-
-  disposer._ = route$.subscribe(() => {
     $view = getView() || true
+    if ($focus !== $view !== true) {
+      $focus = $view !== true
+    }
   })
 
   // --- tree ---
