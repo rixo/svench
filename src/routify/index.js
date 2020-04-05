@@ -19,6 +19,13 @@ const appLayout = {
   svench: {},
 }
 
+const pageDefaults = {
+  layouts: [],
+  meta: {},
+  svench: {},
+  isFile: true,
+}
+
 const prependLayouts = (...layouts) => routes =>
   routes.map(({ layouts: currentLayouts, ...route }) => ({
     ...route,
@@ -39,23 +46,19 @@ const addDefaultIndexAndFallback = routes => {
   const extraRoutes = []
   if (!hasUserIndex) {
     extraRoutes.push({
+      ...pageDefaults,
       component: () => DefaultIndex,
       isIndex: true,
       path: '/index',
-      layouts: [],
-      meta: {},
-      svench: {},
     })
   }
   if (!hasUserFallback) {
     extraRoutes.push({
+      ...pageDefaults,
       component: () => DefaultFallback,
       isFallback: true,
       isLayout: false,
       path: '/_fallback',
-      layouts: [],
-      meta: {},
-      svench: {},
     })
   }
   if (extraRoutes.length) {
@@ -65,13 +68,13 @@ const addDefaultIndexAndFallback = routes => {
 }
 
 const componentIndexesRegisterTarget = routes => {
-  // NOTE excluding isIndex because we only want to catch files with `.index`
-  // suffix, not real `/index.svench` files
-  const indexes = routes.filter(x => x.isIndex && x.svench.isVirtualIndex)
+  const indexes = routes.filter(x => x.isIndex)
   for (const index of indexes) {
     for (const route of routes) {
       if (route.path + '/index' === index.path) {
-        index.registerTarget = route
+        route.svench.customIndex = index
+        index.svench.registerTarget = route
+        index.registerTarget = route // DEBUG remove
         index.regex = index.regex.replace('(/index)?', '/index')
       }
     }

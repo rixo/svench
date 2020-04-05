@@ -56,9 +56,11 @@ const relocateVirtualFiles = (file, parent) => {
 
     while (segs.length > 0) {
       const seg = segs.shift()
-      const nextParent = cur.dir.find(x => x.dir && !x.ext && x.name === seg)
+      // const nextParent = cur.dir.find(x => x.dir && !x.ext && x.name === seg)
+      const nextParent = cur.dir.find(x => x.name === seg)
       if (nextParent) {
         cur = nextParent
+        if (!cur.dir) cur.dir = []
       } else {
         const dir = cur.dir
         cur = {
@@ -164,27 +166,34 @@ export default {
               file.segments = segs
             }
           },
+
           tree: relocateVirtualFiles,
+
           decorate: (file, parent) => {
             const svench = file.svench
 
             let basename = file.path.split('/').pop()
+            svench.sortKey = basename
 
             if (!isMagic(file) && !/^[\d-]*$/.test(basename)) {
               const match = /^[\d-]+(.*)$/.exec(basename)
               if (match) {
                 basename = match[1]
+                svench.sortKey = match[0]
+                svench.name = basename
               }
             }
 
-            svench.sortKey = basename
-
-            if (parent.path) {
-              file.path = parent.path + '/' + basename
-            } else {
-              file.path = '/' + basename
-            }
+            file.path = (parent.path || '') + '/' + basename
           },
+
+          finalize(file) {
+            const { svench } = file
+            svench.id = file.id || file.path
+            if (!file.meta.name) {
+              file.meta.name = (svench.name || file.name).replace(/_/g, ' ').trim()
+            }
+          }
         },
       }),
     svelte({

@@ -25,7 +25,7 @@
     // guard: a view is selected but we're evaluating a page item
     if ($render !== true) return false
     return (
-      $route.shortPath === item.shortPath ||
+      $route.shortPath === (item.shortPath || item.path) ||
       (item.registerTarget &&
         item.registerTarget.shortPath === $route.shortPath) ||
       _leftover === item.path
@@ -64,22 +64,54 @@
   }
 
   $: isExpanded && updateNaturalExpanded()
+
+  const sorter = (a, b) =>
+    a.svench.sortKey.localeCompare(b.svench.sortKey)
+
+  const sortTree = items => {
+    items.sort(sorter)
+    if (!items) return
+    for (const item of items) {
+      if (item.children) sortTree(item.children)
+    }
+  }
+
+  let _items
+  $: {
+    _items = []
+    for (const item of items) {
+      // guard: we already display dirs, we don't want to have an "index" entry
+      if (item.isIndex) continue
+      // guard: for component / custom index pairs, we only display component
+      if (item.svench.registerTarget) continue
+
+      const { svench } = item
+
+      const _item = Object.assign(Object.create(item), {
+        href: svench.customIndex ? svench.customIndex.path : item.path,
+        views$: svench.views$,
+        isDirectory: !item.isFile,
+      })
+      _items.push(_item)
+    }
+    sortTree(_items)
+  }
 </script>
 
 <ul class:nested={indent > 0}>
-  {#each items as item, i (item.id)}
+  {#each _items as item, i (item.svench.id)}
     <li class:active={isActiveItem(item)} class:expanded={isExpanded(item)}>
       <a
         class="text"
         style={`padding-left: ${indent * indentWidth}rem`}
-        href={item.path}>
+        href={item.href}>
         <span
           class="icon"
           class:expand={item.isDirectory}
           on:click|preventDefault={toggle(item)}>
           {#if item.isDirectory}▶{:else}❖{/if}
         </span>
-        {item.title}
+        {item.prettyName}
       </a>
       <!-- {#if $route.path === item.path} -->
       {#if isExpanded(item)}

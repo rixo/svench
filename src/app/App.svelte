@@ -35,7 +35,7 @@
       <h1>
         <a href="/"><span class="icon">🔧</span> Svench</a>
       </h1>
-      <Menu items={$tree} />
+      <Menu items={$tree.children} />
       <MenuResizeHandle bind:width={menuWidth} />
     </section>
 

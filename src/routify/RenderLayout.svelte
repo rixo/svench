@@ -1,18 +1,13 @@
 <script>
+  import UniqueBy from 'svelte-key'
+  import { leftover } from '@sveltech/routify'
   import { getContext } from '../util.js'
-  import RenderLayoutView from './RenderLayoutView.svelte'
 
   const { route$, render } = getContext()
 
-  let decorator
-
-  const Decorator = function(opts) {
-    return (decorator = new RenderLayoutView(opts))
-  }
-
-  $: if (decorator) {
-    decorator.$set({ key: $route$.path + '?' + $render })
-  }
+  $: key = $route$ && [$route$.path, $leftover, $render].join('_:')
 </script>
 
-<slot decorator={Decorator} />
+<UniqueBy {key}>
+  <slot />
+</UniqueBy>

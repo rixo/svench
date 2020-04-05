@@ -1,4 +1,4 @@
-import { writable, readable } from 'svelte/store'
+import { writable } from 'svelte/store'
 import { registerRoutes } from './register.js'
 
 const PAGE = Symbol('Svench.PAGE')
@@ -71,14 +71,6 @@ const toTree = pages => {
   return toTreeArray(tree)
 }
 
-const buffer = (delay, callback) => {
-  let timeout
-  return (...args) => {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => callback(...args), delay)
-  }
-}
-
 export const createStores = () => {
   const options = writable({})
 
@@ -86,14 +78,5 @@ export const createStores = () => {
 
   const { pages, register, destroy } = registerRoutes(routes, options)
 
-  // debounced derived
-  const tree = readable(null, set =>
-    pages.subscribe(
-      buffer(20, p => {
-        set(toTree(p))
-      })
-    )
-  )
-
-  return { options, routes, pages, tree, register, destroy }
+  return { options, routes, pages, register, destroy }
 }

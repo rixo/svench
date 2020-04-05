@@ -1,6 +1,6 @@
 <script>
   import { onDestroy } from 'svelte'
-  import { writable } from 'svelte/store'
+  import { writable, derived } from 'svelte/store'
   import { setContext, makeNamer, noop } from './util.js'
   import { createStores } from './stores.js'
   import { augmentRoutes } from './routify/index.js'
@@ -17,7 +17,7 @@
 
   export let defaults
 
-  const { options, tree, routes, register, destroy } = createStores()
+  const { options, routes, register, destroy } = createStores()
 
   // --- options ---
 
@@ -109,32 +109,43 @@
   const view = writable()
   const focus = writable(false)
 
-  $: $view = getView($route) || true
+  const _disposers = []
+  const disposer = {
+    set _(v) {
+      _disposers.push(v)
+      return true
+    }
+  }
+  const call = fn => fn()
+  onDestroy(() => _disposers.forEach(call))
+
+  // $: $view = $route$, getView() || true
   $: $focus = $view !== true
 
   // --- route ---
 
   const route$ = writable()
 
-  const routeFinder = routes => route => {
-    const result = routes.find(x => x.path === route.path)
-    // if (!result) debugger
-    return result
-  }
+  // bug?
+  // $: $route$ = $route
+  disposer._ = route.subscribe(v => {
+    // if (v === $route$) return
+    $route$ = v
+  })
 
-  $: findRoute = routeFinder($routes)
-  $: {
-    const r = findRoute($route)
-    if ($route$ !== r) {
-      $route$ = r
-    }
-  }
+  disposer._ = route$.subscribe(() => {
+    $view = getView() || true
+  })
+
+  // --- tree ---
+
+  const tree = derived(inputRoutes, x => x.tree)
 
   // --- meta ---
 
   const meta = writable()
 
-  $: $meta = $route$ && $route$.meta
+  $: $meta = $route && $route.meta
 
   // --- test ---
 
