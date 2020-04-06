@@ -1,0 +1,52 @@
+<script>
+  import { url } from 'svench'
+</script>
+
+# URLs
+
+Svench provides its own URL helper, with special resolution rules to help you reference your workbench pages without having to worry about generated URLs.
+
+See [URL resolution]({$url('./URL_resolution')}) for details on how path specifiers resolution.
+
+```html
+<script>
+  import { url } from 'svench'
+</script>
+```
+
+The `url` helper is a context-aware store, which means that you need to prefix it with a `$` to access the helper function:
+
+```js
+// this syntax only works in the context of a Svelte component, obviously
+const href = $url('../Foo')
+```
+
+<p>href = {$url('../Foo')}</p>
+
+## Linking
+
+You can use the `$url` helper to link to other pages of your workbench, in pure Svelte syntax, or markdown (i.e. [Mdsvex]({$url('../Mdsvex')})).
+
+### In Svelte syntax
+
+```html
+<script>
+  import { url } from 'svench'
+</script>
+
+<a href={$url('./menu')}>A link</a>
+```
+
+<a href={$url('./menu')}>A link</a>
+
+### In markdown syntax
+
+```md
+<script>
+  import { url } from 'svench'
+</script>
+
+Link to [another page]({$url('../components/Render')})
+```
+
+Link to [another page]({$url('../components/Render')})

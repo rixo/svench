@@ -1,0 +1,7 @@
+<script>
+import { View } from 'svench'
+</script>
+
+<View name="Render example">
+  Let's render.
+</View>

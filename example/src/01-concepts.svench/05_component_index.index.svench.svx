@@ -1,0 +1,44 @@
+<script>
+  import { Render } from 'svench'
+</script>
+
+# Component index
+
+The component index mechanism lets you use 2 Svench files to describe a component (or anything). This is mainly intended to help with lacking IDE support for futuristic languages like Mdsvex, but it can also be useful more generally. For example, to present views in a custom arrangement, render only some views of the main component, or repeat some of them...
+
+When a Svench component is accompanied by a file with the same name and suffix `.index` (the extension is discarded), then the index will act as a "component index".
+
+~~~bash
+/Foo.svench
+/Foo.index.svench.svx
+
+# or
+/Bar.svench
+/Bar.index.svench
+~~~
+
+It's the index that will be rendered when the menu item is clicked, yet it's the views defined in the main component that will be listed. The main component will be also be used to list and render the views.
+
+The idea is that you can use full Svelte tooling in your IDE in the `.svench` file (if you just manage to get it to recognize the extension), where you'd write the possibly involved code to define your views and their data sources. In the index file, you can include these views with simple `<Render>` block, for which markdown language support in your IDE should be enough.
+
+## Quick demo
+
+~~~html
+<script>
+  import { Render } from 'svench'
+</script>
+
+## Quick demo
+
+<Render view="number one" />
+
+<Render src="../Foo" name="default" />
+~~~
+
+In a component index, the `src` will default to the sister component. That'll save you some typing!
+
+<Render view="number one" />
+
+You can still render bits from other components:
+
+<Render src="../Foo" view="default" />

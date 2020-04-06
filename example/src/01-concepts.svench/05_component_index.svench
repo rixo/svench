@@ -1,0 +1,11 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<View name="number one">
+  #1
+</View>
+
+<View name="another">
+  This is different story.
+</View>

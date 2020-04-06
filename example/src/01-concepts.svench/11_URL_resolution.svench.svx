@@ -1,0 +1,23 @@
+<script>
+  import { url } from 'svench'
+</script>
+
+# URL Resolution
+
+You can references the pages of your Svench workbench with _path specifiers_ instead of URLs, to [link]({$url('./linking')}) your pages between them, or to specify source components to render with the [`<Render>`]({$url('../components/Render')}). This allows some decoupling from the generated URLs.
+
+## Rules
+
+### Ordering prefix
+
+The path to URL resolution algorithm ignores ordering prefixes in the file names (e.g. `01-` in `01-my_page.svench`), both in folders and files.
+
+This allows to reorder your pages by changing their filenames without having to update all the links pointing to them.
+
+For example we can link to the page at path `/01-concepts.svench/01_menu.svench.svx` with the following simplified path specifier:
+
+~~~md
+Link to [menu]({$url('/concepts/menu')}).
+~~~
+
+Link to [menu]({$url('/concepts/menu')}).

@@ -1,0 +1,60 @@
+<script>
+  import { url } from 'svench'
+</script>
+
+# Menu
+
+The navigation menu is generated automatically from the layout of your Svench component files.
+
+You still have some opportunities to customize the menu, with the help of naming conventions and "meta" options (e.g. `<-- routify:options ... -->`).
+
+## Naming
+
+- `_` are replaced with white spaces
+
+- `.` in filenames are replaced with `/`, effectively allowing to declare nested pages from the same directory. The rationale is that you may want to document different aspect of a given component in multiple Svench files, all while not wanting to go all the way to create some folder structure just for this.
+
+Examples:
+
+```
+MyComponent.svelte
+MyComponent.svench                  ❖ MyComponent
+MyComponent.1_what_ever.svench        ❖ what ever
+MyComponent.2_colors.svench           ❖ colors
+```
+
+### Custom title
+
+The page title that appears in the menu can be completely customized, independently of the file name (that will still be used for the generated URL though), with the `name` meta option:
+
+<code>
+  &lt;!-- routify:options name="custom page title" --&gt;
+</code>
+
+See [CustomizeMenu example]({$url('../examples/CustomizeMenu')})
+
+## Ordering
+
+Prefixes in page filenames that are composed of numbers and `-` are ignored when generating the page title.
+
+These prefixes can be used to control the order of the pages in the menu.
+
+Examples:
+
+```
+Filename                      Title
+--------              ->      -----
+
+1_Foo.svench                  Foo
+
+Foo.01_Baz.svench             Foo > Baz
+Foo.02_Bar.svench             Foo > Bar
+```
+
+## Sections
+
+You can further add sections to your menu by adding special folders with the `.svench` suffix to your sources.
+
+For example: a folder named `docs.svench/` will be turned into a `docs` section in the menu. This is useful to add redacted, doc oriented, sections to your workbench.
+
+Note: this only works for folders located at the root of your source directory.

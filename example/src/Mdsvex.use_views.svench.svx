@@ -17,21 +17,12 @@ You need Svench's `Render` component to render other views.
 
 ## Render from a component reference
 
-We can render from `.svench` files by passing a ref to a Svench component:
-
-<!-- ```html
-<Render src="{Sub}" view="big" />
-```
-
-<Render src={Sub} view="big" /> -->
-
-## ... or by path:
+We can render from `.svench` files by passing a path to a Svench component:
 
 ```html
 <Render src="./sub/Sub" view="small" />
 ```
 
-<!-- TODO view not found -->
 <Render src="./sub/Sub" view="large" />
 
 <Render src="./sub/Sub" view="small" />

@@ -1,0 +1,82 @@
+<script>
+  import { Render, url } from 'svench'
+</script>
+
+# `<Render />`
+
+Used to render views at other locations than the component they're actually defined in.
+
+```html
+<script>
+  import { Render } from 'svench'
+</script>
+
+<Render src="../Foo" view="another view" />
+```
+
+## Prop: `src`
+
+Relative `src` are resolved relative to file system (conceptually). See [URL resolution]({$url('/concepts/URL_resolution')}) for all details.
+
+Essentially: same as node requires.
+
+```html
+<Render src="../Foo" view="another view" />
+```
+
+<Render src="../Foo" view="another view" />
+
+Absolute `src` resolves from the root of your 'pages' directory:
+
+```html
+<Render src="/Foo" view="default" />
+```
+
+<Render src="/Foo" view="default" />
+
+### when no `view` is specified, all views are rendered
+
+<Render src="../Foo" />
+
+Ordering prefixes and `.svench` suffix (on folders) are ignored when matching `src`:
+
+```html
+<!-- real path is ../01-concepts.svench/05_component_index -->
+<Render src="../concepts/component_index" />
+```
+
+<Render src="../concepts/component_index" />
+
+Basic globbing (`*`, `**`, and `?`) is available:
+
+~~~html
+<Render src="../sub/*" />
+~~~
+
+<Render src="../sub/*" />
+
+### DRYing the `src`
+
+`<Render>` can be nested to share a common src:
+
+~~~html
+<Render src="../Child">
+  <Render view="default" />
+  <Render view="other" />
+</Render>
+~~~
+
+<Render src="../Child">
+  <Render view="default" />
+  <Render view="other" />
+</Render>
+
+### Component index
+
+The `src` of `<Render>` defaults to the Svench component of which this file is the index. That is, from the current file, you can render views from `./Render.svench` without specifying the `src`:
+
+```html
+<Render view="Render example" />
+```
+
+<Render view="Render example" />
