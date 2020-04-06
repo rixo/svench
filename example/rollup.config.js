@@ -323,12 +323,9 @@ export default {
       dev: !production,
       // We'll extract any component CSS out into a separate file — better for
       // performance
-      // NOTE extracting CSS doesn't work with HMR, so we're inlining when hot
-      ...(!hot && {
-        css: css => {
-          css.write('public/build/bundle.css')
-        },
-      }),
+      css: css => {
+        css.write('public/build/bundle.css')
+      },
       extensions: ['.svelte', '.svench', '.svx', '.svhx'],
       preprocess: [
         mdsvex({
@@ -384,13 +381,13 @@ export default {
     // Automatically create missing imported files. This helps keeping
     // the HMR server alive, because Rollup watch tends to crash and
     // hang indefinitely after you've tried to import a missing file.
-    // hot &&
-    //   autoCreate({
-    //     include: 'src/**/*',
-    //     // Set false to prevent recreating a file that has just been
-    //     // deleted (Rollup watch will crash when you do that though).
-    //     recreate: true,
-    //   }),
+    hot &&
+      autoCreate({
+        include: 'src/**/*',
+        // Set false to prevent recreating a file that has just been
+        // deleted (Rollup watch will crash when you do that though).
+        recreate: true,
+      }),
 
     hmr({
       public: 'public',

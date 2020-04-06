@@ -137,14 +137,15 @@
   dependencies:
     estree-walker "^1.0.1"
 
-"@sveltech/routify@sveltech/routify#master":
-  version "1.1.0-0"
-  resolved "https://codeload.github.com/sveltech/routify/tar.gz/9a796a978c40ba297fbc9c8d26307b265a00af87"
+"@sveltech/routify@rixo/routify#svench":
+  version "0.0.0-development"
+  resolved "https://codeload.github.com/rixo/routify/tar.gz/ed8e7727270a011543959fde72fb639467e1d541"
   dependencies:
     "@sveltech/ssr" "^0.0.9"
     cheap-watch "^1.0.2"
     commander "^4.0.1"
     config "^3.2.5"
+    fs-extra "^9.0.0"
     js-yaml "^3.13.1"
     picomatch "^2.2.1"
     readdirp "^3.3.0"
@@ -368,6 +369,10 @@ async-limiter@~1.0.0:
 asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
+
+at-least-node@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/at-least-node/-/at-least-node-1.0.0.tgz#602cd4b46e844ad4effc92a8011a3c46e0238dc2"
 
 atob@^2.1.2:
   version "2.1.2"
@@ -1476,6 +1481,15 @@ fresh@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
 
+fs-extra@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.0.0.tgz#b6afc31036e247b2466dc99c29ae797d5d4580a3"
+  dependencies:
+    at-least-node "^1.0.0"
+    graceful-fs "^4.2.0"
+    jsonfile "^6.0.1"
+    universalify "^1.0.0"
+
 fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
@@ -1553,7 +1567,7 @@ good-listener@^1.2.2:
   dependencies:
     delegate "^3.1.2"
 
-graceful-fs@^4.1.11, graceful-fs@^4.1.2:
+graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.3.tgz#4a12ff1b60376ef09862c2093edd908328be8423"
 
@@ -2001,6 +2015,14 @@ json5@^1.0.1:
   resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.1.tgz#779fb0018604fa854eacbf6252180d83543e3dbe"
   dependencies:
     minimist "^1.2.0"
+
+jsonfile@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/jsonfile/-/jsonfile-6.0.1.tgz#98966cba214378c8c84b82e085907b40bf614179"
+  dependencies:
+    universalify "^1.0.0"
+  optionalDependencies:
+    graceful-fs "^4.1.6"
 
 jsprim@^1.2.2:
   version "1.4.1"
@@ -2864,15 +2886,15 @@ rollup-plugin-livereload@^1.0.0:
   dependencies:
     livereload "0.8.0 || ^0.8.2"
 
-rollup-plugin-svelte-hot@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.4.2.tgz#e876144876ef41547acb684184113bb7f3373000"
+rollup-plugin-svelte-hot@^0.5.0-0:
+  version "0.5.0-0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.5.0-0.tgz#9a3aa292c2fc77e73122321c75592815c771ecb9"
   dependencies:
     require-relative "^0.8.7"
     rollup-plugin-hot "^0.0.9-0"
     rollup-pluginutils "^2.8.2"
-    sourcemap-codec "^1.4.4"
-    svelte-hmr "^0.5.0"
+    sourcemap-codec "^1.4.8"
+    svelte-hmr "^0.6.0-0"
   optionalDependencies:
     nollup ">=0.8.4"
 
@@ -3116,7 +3138,7 @@ source-map@^0.6.0, source-map@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
 
-sourcemap-codec@^1.4.1, sourcemap-codec@^1.4.4:
+sourcemap-codec@^1.4.1, sourcemap-codec@^1.4.4, sourcemap-codec@^1.4.8:
   version "1.4.8"
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
 
@@ -3278,9 +3300,9 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-hmr@^0.5.0:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.5.1.tgz#4f19a8c2635c6b71014784afcc5a6ae90f818caa"
+svelte-hmr@^0.6.0-0:
+  version "0.6.0-0"
+  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.6.0-0.tgz#9fab12b17093427642a3bc593bd6f473af8fedac"
 
 svelte-key@^1.0.0:
   version "1.0.0"
@@ -3290,11 +3312,11 @@ svelte@^3.20.1:
   version "3.20.1"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.20.1.tgz#8417fcd883a2f534b642a0737368272e651cf3ac"
 
-svench@rixo/svench#wip:
+svench@rixo/svench#master:
   version "0.0.1"
-  resolved "https://codeload.github.com/rixo/svench/tar.gz/d7dc7876e4f8f476e1cbdec15756bcb22789dc7b"
+  resolved "https://codeload.github.com/rixo/svench/tar.gz/09807f6f628baa2e93c2c69ed7e99fada1cdf631"
   dependencies:
-    "@sveltech/routify" sveltech/routify#master
+    "@sveltech/routify" rixo/routify#svench
     minimatch "^3.0.4"
     svelte-key "^1.0.0"
 
@@ -3453,6 +3475,10 @@ union-value@^1.0.0:
     get-value "^2.0.6"
     is-extendable "^0.1.1"
     set-value "^2.0.1"
+
+universalify@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/universalify/-/universalify-1.0.0.tgz#b61a1da173e8435b2fe3c67d29b9adf8594bd16d"
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
