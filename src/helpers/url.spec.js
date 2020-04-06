@@ -26,8 +26,11 @@ export const specs = [
   // },
   {
     route: {
-      path: '/Mdsvex/example_docs',
-      extraNesting: 1,
+      // path: '/Mdsvex/example_docs',
+      shortPath: '/Mdsvex/example_docs',
+      svench: {
+        extraNesting: 1,
+      },
       isIndex: false,
     },
     expects: [['declare_views', '/Mdsvex/declare_views']],
