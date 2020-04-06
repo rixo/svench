@@ -5,7 +5,6 @@
     "@rixo/eslint-config-svelte": "^0.8.1",
     "@rollup/plugin-commonjs": "^11.0.0",
     "@rollup/plugin-node-resolve": "^7.1.1",
-    "@sveltech/routify": "^1.5.0-beta.13",
     "cross-env": "^6.0.3",
     "mdsvex": "^0.5.1-beta.3",
     "nollup": "^0.10.6",

@@ -137,19 +137,6 @@
   dependencies:
     estree-walker "^1.0.1"
 
-"@sveltech/routify@^1.5.0-beta.13":
-  version "1.5.0-beta.13"
-  resolved "https://registry.yarnpkg.com/@sveltech/routify/-/routify-1.5.0-beta.13.tgz#111ae74accc11267843b24920941cadba4b3cc24"
-  dependencies:
-    "@sveltech/ssr" "^0.0.9"
-    cheap-watch "^1.0.2"
-    commander "^4.0.1"
-    config "^3.2.5"
-    js-yaml "^3.13.1"
-    picomatch "^2.2.1"
-    readdirp "^3.3.0"
-    rollup-pluginutils "^2.8.2"
-
 "@sveltech/routify@sveltech/routify#master":
   version "1.1.0-0"
   resolved "https://codeload.github.com/sveltech/routify/tar.gz/9a796a978c40ba297fbc9c8d26307b265a00af87"

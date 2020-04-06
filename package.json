@@ -13,7 +13,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
-    "@sveltech/routify": "sveltech/routify#master",
+    "@sveltech/routify": "rixo/routify#svench",
     "minimatch": "^3.0.4",
     "svelte-key": "^1.0.0"
   },
