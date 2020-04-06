@@ -35,7 +35,7 @@
       <h1>
         <a href="/"><span class="icon">🔧</span> Svench</a>
       </h1>
-      <Menu items={$tree.children} />
+      <Menu tree={$tree} />
       <MenuResizeHandle bind:width={menuWidth} />
     </section>
 
@@ -58,7 +58,7 @@
 
 <style>
   h1 {
-    margin: 0.5rem 1rem;
+    margin: 0.5rem 1rem 1.5rem;
     padding: 0;
     white-space: nowrap;
   }

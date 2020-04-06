@@ -38,6 +38,7 @@
 
     --gray: #a5b4b9;
     --gray-light: #e3e8ee;
+    --gray-dark: #79889a;
   }
 
   :global(h2, h3) {

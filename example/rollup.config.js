@@ -51,17 +51,21 @@ const relocateVirtualFiles = (file, parent) => {
     }
 
     parent.dir = parent.dir.filter(x => x !== file)
+    if (parent.dir.length < 1) {
+      delete parent.dir
+    }
 
     let cur = parent
 
     while (segs.length > 0) {
       const seg = segs.shift()
       // const nextParent = cur.dir.find(x => x.dir && !x.ext && x.name === seg)
-      const nextParent = cur.dir.find(x => x.name === seg)
+      const nextParent = cur.dir && cur.dir.find(x => x.name === seg)
       if (nextParent) {
         cur = nextParent
         if (!cur.dir) cur.dir = []
       } else {
+        if (!cur.dir) cur.dir = []
         const dir = cur.dir
         cur = {
           file: seg,
@@ -82,7 +86,7 @@ const relocateVirtualFiles = (file, parent) => {
           //     svench: {}
           //   }
           // ],
-          svench: {}
+          svench: {},
         }
         dir.push(cur)
       }
@@ -153,6 +157,7 @@ export default {
               const dropSvench = x => x.replace(/\.svench$/g, '')
               file.name = dropSvench(file.name)
               file.filepath = dropSvench(file.filepath)
+              file.svench.section = true
               if (file.ext) {
                 file.ext = file.ext.replace(/^svench$/g, '')
               }
@@ -169,6 +174,121 @@ export default {
 
           tree: relocateVirtualFiles,
 
+          // tree: tree => {
+          //   tree = relocateVirtualFiles(tree)
+          //
+          //   const walk = (item, parent, walker) => {
+          //     if (item.dir) {
+          //       for (const child of item.dir) {
+          //         walk(child, item, walker)
+          //       }
+          //     }
+          //     walker(item, parent)
+          //   }
+          //
+          //   tree.svench = { sections: {} }
+          //
+          //   walk(tree, null, file => {
+          //     if (!file.svench) {
+          //       return
+          //     }
+          //     const section = file.meta && file.meta['svench:section'] || ''
+          //     file.svench.section = section
+          //     file.svench.sections = {[section]: true}
+          //   })
+          //
+          //   walk(tree, null, (file, parent) => {
+          //     if (!parent) return
+          //     // if (parent && parent.svench && parent.svench.sections) {
+          //       Object.assign(
+          //         parent.svench.sections,
+          //         file.svench.sections,
+          //       )
+          //     // }
+          //   })
+          //
+          //   return tree
+          // },
+          //
+          // tree: tree => {
+          //   const walk = (item, parent, walker) => {
+          //     walker(item, parent)
+          //     if (item.dir) {
+          //       for (const child of item.dir) {
+          //         walk(child, item, walker)
+          //       }
+          //     }
+          //   }
+          //
+          //   const _tree = { ...tree }
+          //   _tree.dir = []
+          //
+          //   const byFilepath = filepath => x => x.filepath === filepath
+          //
+          //   const relocate = source => {
+          //     const file = { ...source }
+          //     if (file.dir) file.dir = []
+          //     const steps = file.segments || filepath.split('/')
+          //     const filepath = file.filepath
+          //     steps.shift()
+          //     file.name = steps.pop()
+          //     file.svench.section = steps[0]
+          //     let cur = _tree
+          //     let current = ''
+          //     while (steps.length > 0) {
+          //       const seg = steps.shift()
+          //       if (!cur.dir) cur.dir = []
+          //       const dir = cur.dir
+          //       current += '/' + seg
+          //       cur = dir.find(byFilepath(current))
+          //       if (!cur) {
+          //         cur = {
+          //           file: seg,
+          //           // filepath: (cur.filepath || '') + '/' + seg,
+          //           filepath: current,
+          //           name: seg,
+          //           ext: '',
+          //           badExt: false,
+          //           dir: [],
+          //           svench: { section: seg },
+          //         }
+          //         dir.push(cur)
+          //       }
+          //     }
+          //     const target = cur.dir.find(byFilepath(filepath))
+          //     if (target) {
+          //       const node = { ...target }
+          //       delete node.dir
+          //       Object.assign(target, node)
+          //     } else {
+          //       cur.dir.push(file)
+          //     }
+          //   }
+          //
+          //   walk(tree, null, file => {
+          //     if (!file.filepath) return
+          //     file.svench.section = (file.meta && file.meta['svench:section']) || '@'
+          //   })
+          //
+          //   // console.log(JSON.stringify(_tree, false, 2)) ; process.exit()
+          //
+          //   // walk(_tree, null, file => {
+          //   //   return file.isFile || (file.dir && file.dir.length > 0)
+          //   // })
+          //
+          //   walk(tree, null, relocateVirtualFiles)
+          //
+          //   // for (const section of [...sections]) {
+          //   //   const path = '/' + section
+          //   //   for (const item of tree.dir) {
+          //   //     if (item.filepath.replace(/^\/[\d-]*/, '/') !== path) continue
+          //   //     item.svench.section = section
+          //   //   }
+          //   // }
+          //
+          //   return tree
+          // },
+
           decorate: (file, parent) => {
             const svench = file.svench
 
@@ -176,7 +296,7 @@ export default {
             svench.sortKey = basename
 
             if (!isMagic(file) && !/^[\d-]*$/.test(basename)) {
-              const match = /^[\d-]+(.*)$/.exec(basename)
+              const match = /^[\d-]+_*(.*)$/.exec(basename)
               if (match) {
                 basename = match[1]
                 svench.sortKey = match[0]
@@ -191,9 +311,11 @@ export default {
             const { svench } = file
             svench.id = file.id || file.path
             if (!file.meta.name) {
-              file.meta.name = (svench.name || file.name).replace(/_/g, ' ').trim()
+              file.meta.name = (svench.name || file.name)
+                .replace(/_/g, ' ')
+                .trim()
             }
-          }
+          },
         },
       }),
     svelte({
