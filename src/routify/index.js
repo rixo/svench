@@ -45,6 +45,7 @@ const addDefaultIndexAndFallback = routes => {
       ...pageDefaults,
       component: () => DefaultIndex,
       isIndex: true,
+      isLayout: false,
       path: '/index',
     })
   }
@@ -66,14 +67,12 @@ const addDefaultIndexAndFallback = routes => {
 const componentIndexesRegisterTarget = routes => {
   const indexes = routes.filter(x => x.isIndex)
   for (const index of indexes) {
-    for (const route of routes) {
-      if (route.path + '/index' === index.path) {
-        route.svench.customIndex = index
-        index.svench.registerTarget = route
-        index.registerTarget = route // DEBUG remove
-        index.regex = index.regex.replace('(/index)?', '/index')
-      }
-    }
+    const route = routes.find(x => x.path + '/index' === index.path)
+    if (!route) continue
+    route.svench.customIndex = index
+    index.svench.registerTarget = route
+    index.registerTarget = route // DEBUG remove
+    index.regex = index.regex.replace('(/index)?', '/index')
   }
   return routes
 }
