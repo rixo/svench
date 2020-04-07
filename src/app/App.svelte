@@ -45,14 +45,19 @@
 
     <div class="ui toolbar-placeholder" />
 
-    <div
-      class="canvas"
-      class:focus
-      style={!fullscreen && `left: ${menuWidth}px`}>
-      <RenderOffscreen {focus}>
-        <slot />
-      </RenderOffscreen>
-    </div>
+    <main class:focus style={!fullscreen && `left: ${menuWidth}px`}>
+      <div class="canvas" class:focus>
+        <RenderOffscreen {focus}>
+          <slot />
+        </RenderOffscreen>
+      </div>
+
+      <!-- {#if focus}
+        <div class="ui extras">
+          <slot name="extras" />
+        </div>
+      {/if} -->
+    </main>
   </div>
 </ThemeOranges>
 
@@ -100,7 +105,7 @@
   .svench.fullscreen .ui {
     display: none;
   }
-  .svench.fullscreen .canvas {
+  .svench.fullscreen main {
     top: 0;
   }
 
@@ -111,16 +116,18 @@
     overflow: auto;
   }
 
-  .toolbar {
-    border-bottom: 1px solid var(--gray-light);
+  main {
+    display: flex;
   }
-
-  .canvas {
+  main .canvas {
+    flex: 1;
+  }
+  main {
     /* NOTE we want the canvas to fill available space, or it is hard to pick
        in dev tools (which end users might want to do to find missing cmp) */
     min-height: calc(100% - var(--toolbar-height));
   }
-  .canvas.focus {
+  main.focus {
     position: fixed;
     overflow: auto;
     top: var(--toolbar-height);
@@ -130,4 +137,15 @@
     display: flex;
     flex-direction: column;
   }
+
+  /*--- theme ---*/
+
+  .toolbar {
+    border-bottom: 1px solid var(--gray-light);
+  }
+
+  /* .extras {
+    border-top: 1px solid var(--gray-light);
+    padding: 1rem;
+  } */
 </style>
