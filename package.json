@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@sveltech/routify": "rixo/routify#svench",
-    "minimatch": "^3.0.4",
     "svelte-key": "^1.0.0"
   },
   "devDependencies": {
