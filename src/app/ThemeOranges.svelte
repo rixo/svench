@@ -33,7 +33,7 @@
     --primary-r: var(--light-1);
     --secondary: #bad5dc;
     --secondary-r: #fff;
-    --secondary-light: #E4ECF1;
+    --secondary-light: #e4ecf1;
     --tertiary: #b4b4af;
     --tertiary-r: #e3e8ee;
 
@@ -44,5 +44,10 @@
 
   :global(h2, h3) {
     font-size: 1rem;
+  }
+
+  :global(code[class*='language-']) {
+    font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono',
+      monospace;
   }
 </style>
