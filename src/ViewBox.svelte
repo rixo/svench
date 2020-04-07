@@ -1,4 +1,6 @@
 <script>
+  import Prism from './Prism.svelte'
+
   import { getContext } from './util.js'
   import ViewRenderError from './ViewRenderError.svelte'
 
@@ -12,6 +14,14 @@
 
   export let ui = true
   export let name
+
+  export let source
+
+  let showSource = null
+
+  const toggleSource = () => {
+    showSource = !showSource
+  }
 
   $: href =
     route && route.path ? `${route.path}?view=${name}` : route ? '' : null
@@ -35,8 +45,16 @@
   class:padding>
   {#if ui}
     <h3 class="svench view">
+      <div class="toolbar">
+        {#if source}
+          <button class="code" on:click={toggleSource}>{'</>'}</button>
+        {/if}
+      </div>
       <a {href}><span class="icon">◇</span> {name}</a>
     </h3>
+    {#if showSource}
+      <Prism code={source} />
+    {/if}
   {/if}
   <div bind:this={canvasEl} class="svench view canvas">
     <div bind:this={outlineEl} class="svench view outline">
@@ -117,5 +135,32 @@
     top: -2px;
     bottom: -2px;
     pointer-events: none;
+  }
+
+  h3 {
+    position: relative;
+  }
+  .toolbar {
+    position: absolute;
+    right: 0;
+    z-index: 1;
+  }
+  .toolbar button {
+    background: none;
+    border: none;
+    font-weight: bold;
+    color: #fff;
+    border: 2px solid;
+    border-radius: 2px;
+    padding: 0.1em 0.2em;
+    margin: 0.2em 0.5rem;
+    opacity: 0.9;
+  }
+  .toolbar button:hover {
+    cursor: pointer;
+    opacity: 1;
+  }
+  button.code {
+    font-family: 'Fira Code';
   }
 </style>

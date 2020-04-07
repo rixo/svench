@@ -16,6 +16,7 @@
   export let name = null
   export let init = null
   export let hide = false
+  export let source = null
 
   const {
     register,
@@ -102,7 +103,7 @@
   {#if isolate}
     <Render src={$route$} view={actualName} breakIsolate />
   {:else}
-    <ViewBox {error} {ui} name={actualName} bind:canvas bind:outline>
+    <ViewBox {error} {ui} name={actualName} {source} bind:canvas bind:outline>
       {#if !error && resolved}
         <slot id={actualName} />
         <!-- <pre>{JSON.stringify(meta, false, 2)}</pre> -->

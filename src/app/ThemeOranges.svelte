@@ -33,6 +33,7 @@
     --primary-r: var(--light-1);
     --secondary: #bad5dc;
     --secondary-r: #fff;
+    --secondary-light: #E4ECF1;
     --tertiary: #b4b4af;
     --tertiary-r: #e3e8ee;
 
