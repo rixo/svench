@@ -6,7 +6,7 @@
 
 Pages can customize their title with `svench:title`:
 
-```html
+```svelte
 <!-- routify:options name="custom page title" -->
 ```
 

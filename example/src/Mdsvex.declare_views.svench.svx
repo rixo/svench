@@ -2,7 +2,7 @@
 
 <!-- routify:options svench:docs=true -->
 
-```md
+```svelte
 <script>
   import { url, View } from 'svench'
 </script>
@@ -20,7 +20,7 @@ You can [use](<{$url('use_views')}>) bla bla bli
 
 Views can be hidden from docs page:
 
-```html
+```svelte
 <View name="hidden" hide>
   I am an unlisted view.
 </View>

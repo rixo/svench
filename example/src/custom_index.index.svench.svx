@@ -12,7 +12,7 @@ Without an index, the default index just renders your Svench source component wi
 
 The `src` paths are still resolved relative to the file system, so the `src` for sister file of this index is `./custom_index` (even if the URL of this file would actually be one directory away: `./custom_index/index`).
 
-```html
+```svelte
 <Render src="./custom_index" view="foo" />
 ```
 
@@ -22,7 +22,7 @@ The `src` paths are still resolved relative to the file system, so the `src` for
 
 The `src` of `<Render>` defaults to the Svench file of which this file is the index. That is, from the current file, you can render views from `custom_index.svench` without specifying the `src`:
 
-```html
+```svelte
 <Render view="bar" />
 ```
 
@@ -30,7 +30,7 @@ The `src` of `<Render>` defaults to the Svench file of which this file is the in
 
 ## Here be listing
 
-```html
+```svelte
 <Render />
 ```
 
@@ -40,7 +40,7 @@ The `src` of `<Render>` defaults to the Svench file of which this file is the in
 
 `<Render>` can be nested into itself to change the default `src`!
 
-```html
+```svelte
 <Render with="./Child">
   <Render view="default" />
   <Render view="other" />

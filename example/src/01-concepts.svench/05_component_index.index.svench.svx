@@ -23,7 +23,7 @@ The idea is that you can use full Svelte tooling in your IDE in the `.svench` fi
 
 ## Quick demo
 
-~~~html
+~~~svelte
 <script>
   import { Render } from 'svench'
 </script>

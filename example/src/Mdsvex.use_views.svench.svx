@@ -19,7 +19,7 @@ You need Svench's `Render` component to render other views.
 
 We can render from `.svench` files by passing a path to a Svench component:
 
-```html
+```svelte
 <Render src="./sub/Sub" view="small" />
 ```
 
@@ -31,7 +31,7 @@ We can render from `.svench` files by passing a path to a Svench component:
 
 ### Render all views from a source:
 
-```html
+```svelte
 <Render src="./Child" />
 ```
 
@@ -41,13 +41,13 @@ We can render from `.svench` files by passing a path to a Svench component:
 
 Only trailing `/*` and `/**` are supported.
 
-```html
+```svelte
 <Render src="./other_dir/*" />
 ```
 
 <Render src="./other_dir/*" />
 
-```html
+```svelte
 <Render src="./nested/**" />
 ```
 
@@ -65,7 +65,7 @@ Only trailing `/*` and `/**` are supported.
 
 Side note: we're rendering the above with:
 
-```html
+```svelte
 <Render src="./View.default_names" view="view 3" />
 ```
 

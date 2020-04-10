@@ -8,7 +8,7 @@ Svench provides its own URL helper, with special resolution rules to help you re
 
 See [URL resolution]({$url('./URL_resolution')}) for details on how path specifiers resolution.
 
-```html
+```svelte
 <script>
   import { url } from 'svench'
 </script>
@@ -29,7 +29,7 @@ You can use the `$url` helper to link to other pages of your workbench, in pure 
 
 ### In Svelte syntax
 
-```html
+```svelte
 <script>
   import { url } from 'svench'
 </script>

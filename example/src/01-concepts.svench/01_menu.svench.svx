@@ -31,7 +31,7 @@ The page title that appears in the menu can be completely customized, independen
   &lt;!-- routify:options name="custom page title" --&gt;
 </code>
 
-See [CustomizeMenu example]({$url('../examples/CustomizeMenu')})
+See [CustomizeMenu example](<{$url('../examples/CustomizeMenu')}>)
 
 ## Ordering
 
@@ -52,6 +52,8 @@ Foo.02_Bar.svench             Foo > Bar
 ```
 
 ## Sections
+
+**NOTE** Careful with this: this is bound to change very soon.
 
 You can further add sections to your menu by adding special folders with the `.svench` suffix to your sources.
 

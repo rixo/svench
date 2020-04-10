@@ -4,7 +4,7 @@ By combining Svench and Mdsvex, you can write illustrated documentation pages, a
 
 Start by importing a bit of svench, and a little bit of what you need to illustrate. And maybe some little bit of helpers... but we don't need any presently.
 
-```html
+```svelte
 <script>
   import { View } from 'svench'
   import Child from './Child.svelte'

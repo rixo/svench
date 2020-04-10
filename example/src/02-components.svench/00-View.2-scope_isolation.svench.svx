@@ -12,7 +12,7 @@ Views are isolated by default.
 
 This means that an instance of component that declares the view will be created for each individual view -- and, most crucially, the `<script>` will be run for each view and it's scope variables won't be shared.
 
-```html
+```svelte
 <script>
   import { View } from 'svench'
 
@@ -42,7 +42,7 @@ This means that an instance of component that declares the view will be created 
 
 The `jailbreak` prop can be used on some `<View>`s to make them share the same scope -- provided they appear in the same page (and with the same render parent...).
 
-```html
+```svelte
 <View name="jailbreak 1" jailbreak>
   <Binder bind:value />
 </View>
