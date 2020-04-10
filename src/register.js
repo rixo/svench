@@ -81,7 +81,16 @@ export const registerRoutes = (routes, options) => {
     ))
   )
 
-  const register = (name, path = _route.path) => viewRegisters[path](name)
+  const register = (name, path = _route.path) => {
+    // FIXME this is probably masking a bug in Routify
+    // repro: be on a focused view page => navigate to fallback (i.e. dir)
+    if (!viewRegisters[path]) {
+      if (path === '/_fallback') return
+      debugger // if someone ends up here, please report
+      return
+    }
+    return viewRegisters[path](name)
+  }
 
   const destroy = pipe(...destroyers)
 
