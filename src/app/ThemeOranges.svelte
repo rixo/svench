@@ -1,3 +1,17 @@
+<svelte:head>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css"
+    integrity="sha256-cuvic28gVvjQIo3Q4hnRpQSNB0aMw3C+kjkR0i+hrWg="
+    crossorigin="anonymous" />
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/toolbar/prism-toolbar.min.css"
+    integrity="sha256-P45OhhEWm49G8sadt2n5rDaWLa3xZbDOQhJliuaojH0="
+    crossorigin="anonymous" />
+</svelte:head>
+
 <slot />
 
 <style>
@@ -46,11 +60,25 @@
     font-size: 1rem;
   }
 
+  /* === Prism === */
+
   @import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@2/distr/fira_code.css);
 
   :global(code[class*='language-']) {
     font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono',
       monospace;
-    font-size: .9em;
+    font-size: 0.9em;
+  }
+
+  /* === OverlayScrollbars === */
+
+  :global(body
+      .os-theme-dark
+      > .os-scrollbar
+      > .os-scrollbar-track
+      > .os-scrollbar-handle) {
+    /* border-radius: 0px; */
+    opacity: 0.2;
+    background-color: var(--primary);
   }
 </style>
