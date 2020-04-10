@@ -34,7 +34,12 @@ export default {
     enableSvench &&
       svench({
         pages: './src',
-        extensions: ['.svench', '.svench.svx'],
+        extensions: [
+          '.svench',
+          '.svench.svelte',
+          '.svench.svelte',
+          '.svench.svx',
+        ],
       }),
 
     svelte({
@@ -50,7 +55,8 @@ export default {
         mdsvex({
           extension: '.svx',
         }),
-        // automatically extracts source code from View
+        // preprocessor is only needed to automatically extracts source code
+        // from View components
         svench.preprocess({
           extensions: ['.svench', '.svench.svx'],
         }),
