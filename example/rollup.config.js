@@ -34,12 +34,7 @@ export default {
     enableSvench &&
       svench({
         pages: './src',
-        extensions: [
-          '.svench',
-          '.svench.svelte',
-          '.svench.svelte',
-          '.svench.svx',
-        ],
+        extensions: ['.svench', '.svench.svelte', '.svench.svx'],
       }),
 
     svelte({
