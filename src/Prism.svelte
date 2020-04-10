@@ -1,14 +1,3 @@
-<script context="module">
-  const addStylesheet = href => {
-    const style = document.createElement('link')
-    style.rel = 'stylesheet'
-    style.href = href
-    document.head.appendChild(style)
-  }
-  addStylesheet('https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css')
-  addStylesheet('https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/toolbar/prism-toolbar.min.css')
-</script>
-
 <script>
   import { slide } from 'svelte/transition'
   import Prism from './Prism.vendor.js'
@@ -32,6 +21,6 @@
 <style>
   pre.prism {
     margin: 0;
-    padding: .5rem;
+    padding: 0.5rem;
   }
 </style>

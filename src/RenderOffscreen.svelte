@@ -9,15 +9,7 @@
 
   let offscreen
 
-  // TODO probably should move Prism out of this component
-  const prism = view => {
-    if (typeof Prism === 'undefined') return
-    // eslint-disable-next-line no-undef
-    Prism.highlightAllUnder(view.closest('.svench.canvas'))
-  }
-
   const update = async view => {
-    prism(view)
     if (!focus) return
     if (!offscreen) return
     const _target = target || offscreen.parentNode

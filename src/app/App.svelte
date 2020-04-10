@@ -4,7 +4,6 @@
   import MenuResizeHandle from './MenuResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
   import ThemeOranges from './ThemeOranges.svelte'
-  import RenderOffscreen from '../RenderOffscreen.svelte'
 
   const { options, tree, focus: focus$ } = getContext()
 
@@ -46,10 +45,8 @@
     <div class="ui toolbar-placeholder" />
 
     <main class:focus style={!fullscreen && `left: ${menuWidth}px`}>
-      <div class="canvas" class:focus>
-        <RenderOffscreen {focus}>
-          <slot />
-        </RenderOffscreen>
+      <div class="svench canvas" class:focus>
+        <slot />
       </div>
 
       <!-- {#if focus}
