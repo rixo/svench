@@ -75,10 +75,12 @@ export const registerRoutes = (routes, options) => {
   )
 
   destroyers.push(
-    routes.subscribe(pipe(
-      filter(notFallback),
-      forEach(addViewsStore({ viewRegisters, options, routes }))
-    ))
+    routes.subscribe(
+      pipe(
+        filter(notFallback),
+        forEach(addViewsStore({ viewRegisters, options, routes }))
+      )
+    )
   )
 
   const register = (name, path = _route.path) => {
