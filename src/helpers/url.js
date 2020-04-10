@@ -37,7 +37,7 @@ export const urlResolver = route => {
           ) || './'
         )
       : relativeTo(route, path) // relative/virtual
-    const virtual = relative.replace(/(?<!\.|^|\/)\.(?!\.)/g, '/')
+    const virtual = relative.replace(/([^./])\.(?!\.)/g, '$1/')
     return resolveUrl(from, virtual, ...args)
   }
 }
