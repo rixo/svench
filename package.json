@@ -1,11 +1,15 @@
 {
   "name": "svench",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "src/index.js",
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
-  "files": ["src", "lib", "rollup.js"],
+  "files": [
+    "src",
+    "lib",
+    "rollup.js"
+  ],
   "peerDependencies": {
     "svelte": "^3.0.0"
   },
