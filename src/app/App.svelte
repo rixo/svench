@@ -93,7 +93,7 @@
     right: 0;
     height: var(--toolbar-height);
     background-color: var(--white);
-    z-index: 1;
+    z-index: 2;
   }
   .toolbar-placeholder {
     height: var(--toolbar-height);
