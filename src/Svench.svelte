@@ -15,7 +15,7 @@
 
   export let fixed = true
 
-  export let defaults
+  export let defaults = {}
 
   const { options, routes, register, destroy } = createStores()
 
@@ -114,7 +114,7 @@
   const view = writable()
   const focus = writable(false)
 
-  $: $route$, $view = getView() || true
+  $: $route$, ($view = getView() || true)
   $: $focus = $view !== true
 
   // --- route ---
