@@ -5,7 +5,9 @@
  */
 
 import { writable } from 'svelte/store'
-import { routes, tree } from '@sveltech/routify/tmp/routes'
+// import { routes, tree } from '@sveltech/routify/tmp/routes'
+import routes from 'routix/routes'
+import tree from 'routix/tree'
 
 const hotData = (import.meta.hot && import.meta.hot.data) || {}
 

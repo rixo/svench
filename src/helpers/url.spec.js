@@ -26,14 +26,51 @@ export const specs = [
   // },
   {
     route: {
-      // path: '/Mdsvex/example_docs',
-      shortPath: '/Mdsvex/example_docs',
-      svench: {
-        extraNesting: 1,
-      },
+      path: '/Mdsvex/example_docs',
+      dir: '',
       isIndex: false,
     },
-    expects: [['declare_views', '/Mdsvex/declare_views']],
+    expects: [
+      ['declare_views', '/Mdsvex/declare_views'],
+      ['./declare_views', '/declare_views'],
+      ['./././foo', '/foo'],
+      ['.///foo', '/foo'],
+      ['/foo', '/foo'],
+      ['//foo', '/foo'],
+    ],
+  },
+  {
+    route: {
+      path: '/Mdsvex/example_docs',
+      dir: 'Mdsvex',
+      isIndex: false,
+    },
+    expects: [
+      ['declare_views', '/Mdsvex/declare_views'],
+      ['./declare_views', '/Mdsvex/declare_views'],
+      ['./././foo', '/Mdsvex/foo'],
+      ['.///foo', '/Mdsvex/foo'],
+      ['/foo', '/foo'],
+      ['//foo', '/foo'],
+    ],
+  },
+  {
+    route: {
+      path: '/a/b/c/d',
+      dir: '/a/b', // meaning, actual file is 'a/b/c.d.svelte'
+      isIndex: false,
+    },
+    expects: [
+      ['foo', '/a/b/c/foo'],
+      ['./foo', '/a/b/foo'],
+      ['./././foo', '/a/b/foo'],
+      ['.///foo', '/a/b/foo'],
+      ['/foo', '/foo'],
+      ['//foo', '/foo'],
+      ['../foo', '/a/foo'],
+      ['../../foo', '/foo'],
+      ['./../bar/../foo', '/a/foo'],
+    ],
   },
 ]
 

@@ -5,7 +5,7 @@
   const defaultSectionSortKey = '0000'
 
   export let tree
-  export let autofold = true
+  export let autofold = false
 
   const splitSections = items => {
     const defaultSection = {
@@ -28,7 +28,8 @@
     return sections.sort((a, b) => a.sortKey.localeCompare(b.sortKey))
   }
 
-  $: sections = splitSections(tree.children)
+  // $: sections = splitSections(tree.children)
+  $: sections = [{ path: '', items: tree.children }]
 </script>
 
 {#each sections as { path, name, items, href } (path)}
@@ -36,7 +37,9 @@
     <h2>
       {#if href}
         <a {href}>{name}</a>
-      {:else}<span>{name}</span>{/if}
+      {:else}
+        <span>{name}</span>
+      {/if}
     </h2>
   {/if}
   <MenuItems {items} {autofold} />

@@ -12,4 +12,12 @@
   , then its index is still skipped.
 </View>
 
-<View>Third anonymous View</View>
+<View name="View 4">
+  (This name will conflict with the next generated one.)
+</View>
+
+<View>
+  View names are made unique, both for conflicts with generated names...
+</View>
+
+<View name="View 4">... and for conflicts between user provided names.</View>

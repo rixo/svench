@@ -1,51 +1,24 @@
-import { get } from 'svelte/store'
-import { getContext as getSvenchContext, noop } from '../util.js'
-import { resolveUrl, trimIndex } from './url.impl.js'
+import { getContext, noop } from '../util.js'
 
-const repeat = (x, n) => Array.from({ length: n }).map(() => x)
-
-const relativeTo = (route, path) => {
-  const segments = route.shortPath.split('/')
-  const nesting = route.svench.extraNesting - (route.isIndex ? 1 : 0)
-  const parts = [
-    ...repeat('..', nesting),
-    ...(nesting > 0 ? segments.slice(1, -nesting) : segments.slice(1)),
-  ]
-  if (nesting < 1) {
-    parts.unshift('')
-  }
-  if (path) {
-    parts.push(path)
-  }
-  return parts.join('/')
+const resolveRaw = (route, path) => {
+  if (path.startsWith('.')) return ['', route.dir, path].join('/')
+  if (path.startsWith('/')) return path
+  return ['', ...route.path.split('/').slice(0, -1), path].join('/')
 }
 
-export const urlResolver = route => {
-  return (path, ...args) => {
-    const { shortPath: from } = route
-    const relative = path.startsWith('/') // /absolute
-      ? path
-      : path.startsWith('.') // ./relative/fs
-      ? path.replace(
-          /^\.\//,
-          '../'.repeat(
-            Math.max(
-              0,
-              route.svench.extraNesting -
-                (route.path.endsWith('/index') ? 1 : 0)
-            )
-          ) || './'
-        )
-      : relativeTo(route, path) // relative/virtual
-    const virtual = relative.replace(/([^./])\.(?!\.)/g, '$1/')
-    return resolveUrl(from, virtual, ...args)
-  }
-}
+const resolveUp = path =>
+  path.split('../').reduce((lead, next) => lead.replace(/[^/]+\/$/, next))
+
+const clean = path =>
+  path.replace(/(?:\/|^)\.(?=\/|$)/g, '/').replace(/\/{2,}/g, '/')
+
+export const urlResolver = route => path =>
+  resolveUp(clean(resolveRaw(route, path)))
 
 export const url = {
   subscribe: listener => {
-    const { route$ } = getSvenchContext()
-    listener(urlResolver(get(route$)))
+    const { route } = getContext()
+    listener(urlResolver(route))
     return noop
   },
 }

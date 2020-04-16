@@ -6,7 +6,7 @@
 
 Svench provides its own URL helper, with special resolution rules to help you reference your workbench pages without having to worry about generated URLs.
 
-See [URL resolution]({$url('./URL_resolution')}) for details on how path specifiers resolution.
+See [URL resolution](<{$url('./URL_resolution')}>) for details on how path specifiers resolution.
 
 ```svelte
 <script>
@@ -25,7 +25,7 @@ const href = $url('../Foo')
 
 ## Linking
 
-You can use the `$url` helper to link to other pages of your workbench, in pure Svelte syntax, or markdown (i.e. [Mdsvex]({$url('../Mdsvex')})).
+You can use the `$url` helper to link to other pages of your workbench, in pure Svelte syntax, or markdown (i.e. [Mdsvex](<{$url('../Mdsvex')}>)).
 
 ### In Svelte syntax
 
@@ -37,7 +37,7 @@ You can use the `$url` helper to link to other pages of your workbench, in pure 
 <a href={$url('./menu')}>A link</a>
 ```
 
-<a href={$url('./menu')}>A link</a>
+<!-- <a href={$url('./menu')}>A link</a> -->
 
 ### In markdown syntax
 
@@ -46,7 +46,7 @@ You can use the `$url` helper to link to other pages of your workbench, in pure 
   import { url } from 'svench'
 </script>
 
-Link to [another page]({$url('../components/Render')})
+Link to [another page](<{$url('../components/Render')}>)
 ```
 
-Link to [another page]({$url('../components/Render')})
+Link to [another page](<{$url('../components/Render')}>)

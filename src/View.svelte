@@ -1,113 +1,112 @@
 <script>
-  /**
-   * NOTE We want to render a view with some (minimal) default UI so that a
-   *      .svench file can rendered as is. That is, without some context wrapper
-   *      to pass options down to views.
-   */
-  import { getContext } from './util'
-  import ViewBox from './ViewBox.svelte'
-  import { VIEW_INIT } from './constants'
-  import Render from './Render'
+  import { onMount, onDestroy } from 'svelte'
+  import { getContext, updateContext } from './util.js'
+  import Offscreen from './RenderOffscreen.svelte'
+  import ViewBox from './app/ViewBox.svelte'
 
-  export let jailbreak = null
-  let _isolate = null
-  export { _isolate as isolate }
+  let providedName = null
+  export { providedName as name }
 
-  export let name = null
   export let init = null
   export let hide = false
   export let source = null
+  export let jailbreak = false
 
   const {
+    raw,
     register,
-    registerOnly,
-    render,
-    focus,
-    getRenderName,
-    meta: ctxMeta,
-    route$,
-    breakIsolate,
-    [VIEW_INIT]: mainInit,
-  } = getContext() || {}
+    options,
+    route,
+    makeNamer,
+    view,
+    focused,
+    component: Cmp,
+    getViewName,
+    emitViewBox,
+  } = getContext()
 
-  $: ui = !$focus
-
-  const actualName = getRenderName(name)
+  const name = getViewName(providedName, onDestroy)
 
   if (register) {
-    register(actualName)
+    register(name)
   }
 
-  const extractMeta = props =>
-    Object.fromEntries(
-      Object.entries(props)
-        .filter(([name]) => name.startsWith('meta:'))
-        .map(([name, value]) => [name.slice(5), value])
-    )
+  const renderPhase = view != null
 
-  const extractContextMeta = opts =>
-    opts &&
-    Object.fromEntries(
-      Object.entries(opts)
-        .filter(([name]) => name.startsWith('svench:'))
-        .map(([name, value]) => [name.slice(7), value])
-    )
+  const isActive = !register && ((view == null && !hide) || view === name)
 
-  $: meta = {
-    ...extractContextMeta($ctxMeta),
-    ...$$props.meta,
-    ...extractMeta($$props),
+  const willRender = (isActive && renderPhase) || jailbreak
+
+  const href = route.path + '?view=' + name
+
+  let el
+
+  if (!renderPhase) {
+    updateContext({ view: name, getViewName: makeNamer() })
   }
 
-  $: isolate =
-    // isolate defaults to true, except if jailbreak is true; _isolate has higher
-    // priority than jailbreak
-    // _isolate prop can be used to override the default somehow
-    (_isolate || !jailbreak) &&
-    // we needn't isolate the view in focus because, by definition, it's solo
-    !$focus &&
-    // breakIsolate comes from <Render> -- means we're the inner, isolated view
-    !breakIsolate
+  if (isActive && renderPhase && !raw) {
+    onMount(() => {
+      emitViewBox(el)
+    })
+  }
 
-  let shouldRender
-  $: shouldRender =
-    !registerOnly &&
-    (($render === true && !hide) || ($render && actualName === $render))
-
-  $: willRender = shouldRender && !isolate
-
-  let error = null
+  // init
   let resolved = false
-
-  const prepare = async () => {
-    try {
-      if (mainInit) await mainInit()
-      if (init) await init()
-      resolved = true
-    } catch (err) {
-      // eslint-disable-next-line no-console
-      console.error(err)
-      error = err
+  let error = null
+  {
+    const prepare = async () => {
+      try {
+        // if (mainInit) await mainInit()
+        if (init) await init()
+        resolved = true
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err)
+        error = err
+      }
     }
-  }
-
-  $: if (willRender) prepare()
-
-  let canvas, outline
-  $: if (canvas && outline) {
-    // console.log('go', canvas, outline)
+    if (willRender) {
+      prepare()
+    }
   }
 </script>
 
-{#if shouldRender}
-  {#if isolate}
-    <Render src={$route$} view={actualName} breakIsolate />
-  {:else}
-    <ViewBox {error} {ui} name={actualName} {source} bind:canvas bind:outline>
-      {#if !error && resolved}
-        <slot id={actualName} />
-        <!-- <pre>{JSON.stringify(meta, false, 2)}</pre> -->
+{#if isActive}
+  {#if renderPhase || jailbreak}
+    {#if focused && raw}
+      {#if resolved}
+        <slot />
       {/if}
-    </ViewBox>
+    {:else}
+      <!-- WARNING if we bind el to an element inside viewbox, view won't be
+           reemitted on HMR (hence stay "offscreen") -->
+      <!-- /!\ NEEDED FOR HMR -->
+      <div bind:this={el} class="svench-view-target">
+        <ViewBox
+          ui={!focused}
+          options={$options}
+          {name}
+          {href}
+          {source}
+          {error}>
+          {#if resolved}
+            <slot />
+          {/if}
+        </ViewBox>
+      </div>
+    {/if}
+  {:else}
+    <Offscreen>
+      <Cmp />
+    </Offscreen>
   {/if}
 {/if}
+
+<style>
+  div {
+    flex: inherit;
+    display: inherit;
+    flex-direction: inherit;
+  }
+</style>

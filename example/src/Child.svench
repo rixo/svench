@@ -16,7 +16,7 @@
   <Child name="yes, another!" />
 </View>
 
-<View name="view 5">
+<View name="View 5">
   <h3>Ah, ah!</h3>
 </View>
 

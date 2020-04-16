@@ -3,6 +3,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
+import postcss from 'rollup-plugin-postcss'
 import hmr, { autoCreate } from 'rollup-plugin-hot'
 import { mdsvex } from 'mdsvex'
 import svench from 'svench/rollup'
@@ -24,11 +25,16 @@ const spa = false || enableSvench
 
 export default {
   input: 'src/main.js',
+  // output: {
+  //   sourcemap: true,
+  //   format: 'iife',
+  //   name: 'app',
+  //   file: 'public/build/bundle.js',
+  // },
   output: {
     sourcemap: true,
-    format: 'iife',
-    name: 'app',
-    file: 'public/build/bundle.js',
+    format: 'esm',
+    dir: 'public/build',
   },
   plugins: [
     enableSvench &&
@@ -36,6 +42,8 @@ export default {
         pages: './src',
         extensions: ['.svench', '.svench.svelte', '.svench.svx'],
       }),
+
+    postcss({}),
 
     svelte({
       // Enable run-time checks when not in production
@@ -99,13 +107,13 @@ export default {
     // Automatically create missing imported files. This helps keeping
     // the HMR server alive, because Rollup watch tends to crash and
     // hang indefinitely after you've tried to import a missing file.
-    hot &&
-      autoCreate({
-        include: 'src/**/*',
-        // Set false to prevent recreating a file that has just been
-        // deleted (Rollup watch will crash when you do that though).
-        recreate: true,
-      }),
+    // hot &&
+    //   autoCreate({
+    //     include: 'src/**/*',
+    //     // Set false to prevent recreating a file that has just been
+    //     // deleted (Rollup watch will crash when you do that though).
+    //     recreate: true,
+    //   }),
 
     hmr({
       public: 'public',

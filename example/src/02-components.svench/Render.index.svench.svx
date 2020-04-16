@@ -4,7 +4,7 @@
 
 # `<Render />`
 
-Used to render views at other locations than the component they're actually defined in.
+Used to render views in other pages than the component where they're defined.
 
 ```svelte
 <script>
@@ -16,7 +16,7 @@ Used to render views at other locations than the component they're actually defi
 
 ## Prop: `src`
 
-Relative `src` are resolved relative to file system (conceptually). See [URL resolution]({$url('/concepts/URL_resolution')}) for all details.
+Relative `src` are resolved relative to file system (conceptually). See [URL resolution](<{$url('/concepts/URL_resolution')}>) for all details.
 
 Essentially: same as node requires.
 
@@ -36,6 +36,10 @@ Absolute `src` resolves from the root of your 'pages' directory:
 
 ### when no `view` is specified, all views are rendered
 
+```svelte
+<Render src="../Foo" />
+```
+
 <Render src="../Foo" />
 
 Ordering prefixes and `.svench` suffix (on folders) are ignored when matching `src`:
@@ -49,9 +53,9 @@ Ordering prefixes and `.svench` suffix (on folders) are ignored when matching `s
 
 Basic globbing (`*`, `**`, and `?`) is available:
 
-~~~svelte
+```svelte
 <Render src="../sub/*" />
-~~~
+```
 
 <Render src="../sub/*" />
 
@@ -59,12 +63,12 @@ Basic globbing (`*`, `**`, and `?`) is available:
 
 `<Render>` can be nested to share a common src:
 
-~~~svelte
+```svelte
 <Render src="../Child">
   <Render view="default" />
   <Render view="other" />
 </Render>
-~~~
+```
 
 <Render src="../Child">
   <Render view="default" />

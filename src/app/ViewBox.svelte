@@ -1,42 +1,23 @@
 <script>
-  import Prism from './Prism.svelte'
+  import Prism from '../Prism.svelte'
 
-  import { getContext } from './util.js'
-  import ViewRenderError from './ViewRenderError.svelte'
-
-  const { options, route$, emitViewBox } = getContext()
-
-  $: ({ outline, centered, padding } = $options)
-
-  $: route = $route$
-
+  export let ui
+  export let name
+  export let source
+  export let href
+  export let options
   export let error = null
 
-  export let ui = true
-  export let name
-
-  export let source
+  $: ({ outline, centered, padding } = options)
 
   let showSource = null
 
   const toggleSource = () => {
     showSource = !showSource
   }
-
-  $: href =
-    route && route.path ? `${route.path}?view=${name}` : route ? '' : null
-
-  let el
-
-  $: el && emitViewBox(el)
-
-  let canvasEl = null
-  let outlineEl = null
-  export { canvasEl as canvas, outlineEl as outline }
 </script>
 
 <div
-  bind:this={el}
   class="svench view box"
   class:ui
   class:flex={!ui}
@@ -50,16 +31,19 @@
           <button class="code" on:click={toggleSource}>{'</>'}</button>
         {/if}
       </div>
-      <a {href}><span class="icon">◇</span> {name}</a>
+      <a {href}>
+        <span class="icon">◇</span>
+        {name}
+      </a>
     </h3>
     {#if showSource}
       <Prism code={source} />
     {/if}
   {/if}
-  <div bind:this={canvasEl} class="svench view canvas">
-    <div bind:this={outlineEl} class="svench view outline">
+  <div class="svench view canvas">
+    <div class="svench view outline">
       {#if error}
-        <ViewRenderError {error} />
+        <pre>{error}</pre>
       {:else}
         <slot />
       {/if}

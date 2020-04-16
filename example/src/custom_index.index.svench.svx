@@ -41,13 +41,13 @@ The `src` of `<Render>` defaults to the Svench file of which this file is the in
 `<Render>` can be nested into itself to change the default `src`!
 
 ```svelte
-<Render with="./Child">
+<Render src="./Child">
   <Render view="default" />
   <Render view="other" />
 </Render>
 ```
 
-<Render with="./Child">
+<Render src="./Child">
   <Render view="default" />
   <Render view="other" />
 </Render>

@@ -105,3 +105,17 @@ export default {
   ]
 }
 ```
+
+## Recipes
+
+### Render a component unencombured by Svench
+
+Useful for die hard testing: when rendered in iframe / isolated mode, only your own DOM elements will appear in the iframe. Nothing Svench. There will still be a bit of logic for basic routing.
+
+On the other hand, you won't be able to have multiple views in a single component (and, obviously, non-present views won't appear in the navigation, etc.).
+
+Just don't use anything Svench in your `.svench` file:
+
+```html
+<p>I am `simple.svench`</p>
+```

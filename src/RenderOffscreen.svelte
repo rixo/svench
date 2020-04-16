@@ -1,32 +1,22 @@
 <script>
-  // TODO cleanup
-
-  // import { onMount } from 'svelte'
   import { updateContext } from './util.js'
 
-  export let focus = false
   export let target = null
 
   let offscreen
 
   const update = async view => {
-    if (!focus) return
-    if (!offscreen) return
     const _target = target || offscreen.parentNode
     if (!_target) return
-    _target.appendChild(view)
+    _target.insertBefore(view, offscreen.nextSibling)
   }
 
   updateContext({ emitViewBox: update })
 </script>
 
-{#if focus}
-  <div bind:this={offscreen} class="svench offscreen" id={$$props.id}>
-    <slot />
-  </div>
-{:else}
+<div bind:this={offscreen} class="svench offscreen" id={$$props.id}>
   <slot />
-{/if}
+</div>
 
 <style>
   div {

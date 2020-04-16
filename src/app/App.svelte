@@ -5,7 +5,7 @@
   import Toolbar from './Toolbar.svelte'
   import ThemeOranges from './ThemeOranges.svelte'
 
-  const { options, tree, focus: focus$ } = getContext()
+  const { options, tree, focus$ } = getContext()
 
   $: focus = $focus$
 
@@ -32,7 +32,10 @@
     style={fullscreen ? null : `padding-left: ${menuWidth}px`}>
     <section class="ui menu" style="width: {menuWidth}px">
       <h1>
-        <a href="/"><span class="icon">🔧</span> Svench</a>
+        <a href="/">
+          <span class="icon">🔧</span>
+          Svench
+        </a>
       </h1>
       <Menu tree={$tree} />
       <MenuResizeHandle bind:width={menuWidth} />

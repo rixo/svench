@@ -1,71 +1,67 @@
 <script>
-  import { leftover, isActive } from '@sveltech/routify'
   import MenuViewsList from './MenuViewsList.svelte'
   import { getContext } from '../util'
 
-  const { route$: route, render } = getContext()
+  const {
+    router,
+    router: { current },
+  } = getContext()
 
   export let items = []
   export let indent = 0
-  export let autofold = true
+  export let autofold
 
   const indentWidth = 1.2
 
-  const expanded = {}
+  const expandLocks = {}
 
   const toggle = item => {
     if (autofold) return
-    expanded[item.id] = !expanded[item.id]
+    expandLocks[item.id] = !expandLocks[item.id]
   }
 
-  $: _leftover = $leftover && `/${$leftover}`
+  $: route = $current && $current.route
 
-  $: isActiveItem = item => {
-    // guard: a view is selected but we're evaluating a page item
-    if ($render !== true) return false
-    return (
-      $route.shortPath === (item.shortPath || item.path) ||
-      (item.svench.registerTarget &&
-        item.svench.registerTarget.shortPath === $route.shortPath) ||
-      _leftover === item.path
-    )
+  const findCurrentItem = () => {
+    const targetPath = route.path.endsWith('/index')
+      ? route.path.slice(0, -'/index'.length)
+      : route.path
+    return items.find(item => item.path === targetPath)
   }
 
-  const _isActive = item =>
-    !!(
-      $isActive(item.path, false) ||
-      (item.svench.registerTarget &&
-        $isActive(item.svench.registerTarget.path, false))
-    )
+  $: activeItem = route && $current && !$current.view && findCurrentItem()
 
-  let isExpanded
-  $: {
-    $route,
-      (isExpanded = item =>
-        expanded[item.id] ||
-        _isActive(item) ||
-        // for: _fallback
-        _leftover === item.path ||
-        _leftover.startsWith(item.path + '/') ||
-        // for:
-        //     /nested/index.svench
-        //     /nested/default_index/Foo.svench
-        $leftover === item.path.replace(/\/index(?:\/|$)/, '') ||
-        $leftover.startsWith(item.path.replace(/\/index(?:\/|$)/, '') + '/'))
+  $: expanded =
+    route && $current
+      ? Object.fromEntries(
+          items
+            .filter(
+              item => expandLocks[item.id] || route.path.startsWith(item.path)
+            )
+            .map(x => [x.id, true])
+        )
+      : {}
+
+  $: isActivePath = item => {
+    if (!route) return false
+    if (!$current) return false
+    return route.path.startsWith(item.path)
   }
 
-  const updateNaturalExpanded = () => {
-    if (autofold) return
-    for (const item of items) {
-      if (expanded[item.id]) continue
-      if (!isExpanded(item)) continue
-      expanded[item.id] = true
-    }
+  $: getActiveView = item => {
+    if (!$current) return false
+    if (!route) return false
+    if (route.path !== item.path) return false
+    return $current.view
   }
 
-  $: isExpanded && updateNaturalExpanded()
+  const autoexpand = item => {
+    expandLocks[item.id] = true
+  }
 
-  const sorter = (a, b) => a.svench.sortKey.localeCompare(b.svench.sortKey)
+  $: !autofold && activeItem && autoexpand(activeItem)
+
+  const sorter = (a, b) => a.sortKey.localeCompare(b.sortKey)
 
   const sortTree = items => {
     items.sort(sorter)
@@ -73,36 +69,24 @@
     for (const item of items) {
       if (item.children) sortTree(item.children)
     }
+    return items
   }
 
-  let _items
-  $: {
-    _items = []
-
-    for (const item of items) {
-      // guard: we already display dirs, we don't want to have an "index" entry
-      if (item.isIndex) continue
-      // guard: for component / custom index pairs, we only display component
-      if (item.svench.registerTarget) continue
-
-      const { svench } = item
-
-      const _item = Object.assign(Object.create(item), {
-        href: svench.customIndex ? svench.customIndex.path : item.path,
-        views$: svench.views$,
-        isDirectory: !item.isFile,
-      })
-      _items.push(_item)
-    }
-
-    sortTree(_items)
-  }
+  $: _items = sortTree(
+    items.map(x => ({
+      ...x,
+      href: router.format(x.path),
+      isDirectory: !x.import,
+    }))
+  )
 </script>
 
 {#if _items.length > 0}
   <ul class:nested={indent > 0}>
-    {#each _items as item, i (item.svench.id)}
-      <li class:active={isActiveItem(item)} class:expanded={isExpanded(item)}>
+    {#each _items as item, i (item.path)}
+      <li
+        class:active={activeItem && item.id === activeItem.id}
+        class:expanded={expanded[item.id]}>
         <a
           class="text"
           style={`padding-left: ${indent * indentWidth}rem`}
@@ -110,20 +94,17 @@
           <span
             class="icon"
             class:expand={item.isDirectory}
-            on:click|preventDefault={toggle(item)}>
+            on:click|preventDefault={() => toggle(item)}>
             {#if item.isDirectory}▶{:else}❖{/if}
           </span>
-          {item.prettyName}
+          {item.title}
         </a>
-        <!-- {#if $route.path === item.path} -->
-        {#if isExpanded(item)}
-          <!-- {#if $isActive(item.path) || item.isDirectory} -->
-          <!-- {#if $isActive(item.path) || (item.isDirectory && expanded[item.id])} -->
+        {#if expanded[item.id]}
           {#if item.views$}
             <MenuViewsList
               {item}
               views={item.views$}
-              active={$route.shortPath === (item.svench.registerTarget || item).shortPath && $render}
+              active={getActiveView(item)}
               indent={indent + 1}
               {indentWidth} />
           {/if}
@@ -131,11 +112,6 @@
             <svelte:self items={item.children} indent={indent + 1} />
           {/if}
         {/if}
-        <!-- <span class="text">{item.title}</span> -->
-        <!-- <pre>{$isActive(item.path)} -- {item.path}</pre> -->
-        <!-- {#if item.children}
-        <svelte:self items={item.children} indent={indent + 1} />
-      {/if} -->
       </li>
     {/each}
   </ul>

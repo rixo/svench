@@ -49,16 +49,29 @@ export const makeNamer = getOptions => {
 
   reset()
 
-  const getRenderName = _name => {
+  const getRenderName = (_name, onDestroy) => {
     const { renderTimeout, defaultViewName } = getOptions()
+
     clearTimeout(timeout)
     timeout = setTimeout(reset, renderTimeout)
+
     index++
-    let name = _name == null ? defaultViewName(index) : _name
+
+    const wantedName = _name == null ? defaultViewName(index) : _name
+
+    let name = wantedName
     if (taken[name]) {
-      name = name + '.' + taken[name]
+      name = `${name} (${taken[wantedName]})`
     }
-    taken[name] = (taken[name] || 0) + 1
+
+    taken[wantedName] = (taken[wantedName] || 0) + 1
+
+    // we need to handle leaving View components for HMR (otherwise components
+    // rerendered by HMR messes the actual index and new views end up not being
+    // rendered because they are given unsync indexes)
+    onDestroy(() => {
+      taken[wantedName]--
+    })
     return name
   }
 

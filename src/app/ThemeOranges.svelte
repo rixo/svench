@@ -1,17 +1,3 @@
-<svelte:head>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/themes/prism.min.css"
-    integrity="sha256-cuvic28gVvjQIo3Q4hnRpQSNB0aMw3C+kjkR0i+hrWg="
-    crossorigin="anonymous" />
-
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.20.0/plugins/toolbar/prism-toolbar.min.css"
-    integrity="sha256-P45OhhEWm49G8sadt2n5rDaWLa3xZbDOQhJliuaojH0="
-    crossorigin="anonymous" />
-</svelte:head>
-
 <slot />
 
 <style>
