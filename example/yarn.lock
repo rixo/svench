@@ -2997,6 +2997,10 @@ rollup@^1.31.1:
     "@types/node" "*"
     acorn "^7.1.0"
 
+routix@^0.0.1-7:
+  version "0.0.1-7"
+  resolved "https://registry.yarnpkg.com/routix/-/routix-0.0.1-7.tgz#5bd6ae38e7c3a9cc273da2f105b0cbb7da3a2dc3"
+
 run-async@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/run-async/-/run-async-2.4.0.tgz#e59054a5b86876cfae07f431d18cbaddc594f1e8"
@@ -3403,11 +3407,12 @@ svelte@^3.20.1:
   version "3.20.1"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.20.1.tgz#8417fcd883a2f534b642a0737368272e651cf3ac"
 
-svench@rixo/svench#master:
-  version "0.0.2"
-  resolved "https://codeload.github.com/rixo/svench/tar.gz/0f5f26ae81e1b55a1f892e30b7b373555b5d8bfc"
+svench@^0.0.3-0:
+  version "0.0.3-0"
+  resolved "https://registry.yarnpkg.com/svench/-/svench-0.0.3-0.tgz#704fe62bd0e0883a83a72ee3c4cbc803de5e894a"
   dependencies:
     "@sveltech/routify" rixo/routify#svench
+    routix "^0.0.1-7"
     svelte-key "^1.0.0"
 
 symbol-tree@^3.2.4:
