@@ -9,7 +9,7 @@
     "mdsvex": "^0.5.1-beta.3",
     "nollup": "^0.10.6",
     "rollup": "^1.31.1",
-    "rollup-plugin-hot": "^0.0.14",
+    "rollup-plugin-hot": "^0.0.17",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-postcss": "^2.8.1",
     "rollup-plugin-svelte-hot": "^0.5.0-0",
