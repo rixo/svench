@@ -38,7 +38,7 @@ export default {
   },
   plugins: [
     enableSvench &&
-      svench({
+      svench.rollup({
         pages: './src',
         extensions: ['.svench', '.svench.svelte', '.svench.svx'],
       }),
