@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "@rixo/eslint-config-svelte": "^0.8.1",
-    "@rollup/plugin-commonjs": "^11.0.0",
+    "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "cross-env": "^6.0.3",
     "mdsvex": "^0.5.1-beta.3",
