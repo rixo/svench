@@ -31,15 +31,13 @@
 </div>
 
 <style>
-  div {
-    padding: 0.66rem;
-  }
-  div > :not(:first-child) {
-    margin-left: 1rem;
-  }
   .wrapper {
     display: flex;
     align-items: center;
+    padding: 0.66rem;
+  }
+  .wrapper > :not(:first-child) {
+    margin-left: 1rem;
   }
   .spacer {
     flex-grow: 100;
