@@ -16,6 +16,7 @@
   "dependencies": {
     "@sveltech/routify": "rixo/routify#svench",
     "routix": "^0.0.1-7",
+    "dedent": "^0.7.0",
     "svelte-key": "^1.0.0"
   },
   "devDependencies": {
@@ -24,7 +25,6 @@
     "@rollup/plugin-json": "^4.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "clipboard": "^2.0.6",
-    "dedent": "^0.7.0",
     "navaid": "^1.1.0",
     "picomatch": "^2.2.1",
     "prism-svelte": "^0.4.6",
