@@ -1,6 +1,7 @@
 <script>
   import { setContext } from './util.js'
 
+  export let router
   export let routes
   export let makeNamer
   export let register
@@ -9,6 +10,7 @@
   export let component
 
   setContext({
+    router,
     routes,
     route,
     register,

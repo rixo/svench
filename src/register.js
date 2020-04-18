@@ -1,7 +1,7 @@
 import { readable } from 'svelte/store'
 import Register from './Register.svelte'
 
-export default ({ routes, makeNamer }) => route => {
+export default ({ routes, router, makeNamer }) => route => {
   route.views$ = readable([], set => {
     let cmp
     route
@@ -20,6 +20,7 @@ export default ({ routes, makeNamer }) => route => {
         cmp = new Register({
           target: document.createDocumentFragment(),
           props: {
+            router,
             routes,
             route,
             component,
