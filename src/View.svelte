@@ -16,6 +16,7 @@
     raw,
     register,
     options,
+    router,
     route,
     makeNamer,
     view,
@@ -37,7 +38,7 @@
 
   const willRender = (isActive && renderPhase) || jailbreak
 
-  const href = route.path + '?view=' + name
+  const href = router.resolve(`${route.path}?view=${name}`)
 
   let el
 

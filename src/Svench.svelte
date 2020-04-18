@@ -1,6 +1,7 @@
 <script>
   import { onDestroy } from 'svelte'
   import { writable, derived } from 'svelte/store'
+  import navaid from 'navaid'
   import { setContext, makeNamer as _makeNamer, noop } from './util.js'
   import createRouter from './router.js'
   import Router from './Router.svelte'
@@ -11,11 +12,27 @@
 
   export let localStorageKey = 'Svench'
 
+  export let base = '/'
+  export let fallback = null
+
   export let routes$
 
   export let fixed = true
 
-  export let defaults = {}
+  export let defaults = {
+    fixed,
+    enabled: !fallback,
+    defaultViewName: index => `view ${index}`,
+    // time before which view index is reset (for HMR)
+    registerTimeout: 100,
+    renderTimeout: 100,
+    menuWidth: 200,
+    // ui
+    centered: false,
+    outline: false,
+    padding: false,
+    fullscreen: false,
+  }
 
   // --- focus (view only) routing ---
 
@@ -25,7 +42,7 @@
 
   // --- options ---
 
-  const options = writable()
+  const options = writable({ ...defaults })
 
   const stateOptions = ['fullscreen', 'centered', 'outline', 'padding']
 
@@ -53,17 +70,6 @@
       : noop
 
   $: $options = {
-    fixed,
-    defaultViewName: index => `view ${index}`,
-    // time before which view index is reset (for HMR)
-    registerTimeout: 100,
-    renderTimeout: 100,
-    menuWidth: 200,
-    // ui
-    centered: false,
-    outline: false,
-    padding: false,
-    fullscreen: false,
     ...defaults,
     ...readStoredOptions(),
     ...readParamsOptions(),
@@ -130,10 +136,30 @@
 
   const makeNamer = () => _makeNamer(() => $options)
 
+  // --- fallback ---
+
+  if (fallback) {
+    const rootRouter = navaid('/', () => {
+      $options.enabled = false
+    })
+
+    rootRouter.listen()
+
+    onDestroy(rootRouter.unlisten)
+  }
+
+  // --- router ---
+
+  const router = createRouter({ base, getRoutes: () => $_routes })
+
+  router.onMatch = () => {
+    $options.enabled = true
+  }
+
   // --- augment ---
 
   const _routes = derived(routes$, ({ routes }) => {
-    routes.forEach(addRegister({ makeNamer, routes: _routes }))
+    routes.forEach(addRegister({ makeNamer, router, routes: _routes }))
 
     const indexes = Object.fromEntries(
       routes
@@ -155,12 +181,6 @@
   // --- tree ---
 
   const tree = derived(routes$, x => x.tree)
-
-  // --- router ---
-
-  const router = createRouter(() => $_routes)
-
-  onDestroy(router.unlisten)
 
   // // --- meta ---
   //
@@ -185,14 +205,20 @@
     tree,
     focus,
   })
+
+  onDestroy(router.listen())
 </script>
 
-{#if single}
-  <Router {router} />
+{#if $options.enabled}
+  {#if single}
+    <Router {router} />
+  {:else}
+    <AppContext>
+      <App>
+        <Router {router} />
+      </App>
+    </AppContext>
+  {/if}
 {:else}
-  <AppContext>
-    <App>
-      <Router {router} />
-    </App>
-  </AppContext>
+  <svelte:component this={fallback} />
 {/if}

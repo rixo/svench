@@ -1,7 +1,8 @@
 <script>
   import Render from '../Render.svelte'
+  import { getContext } from '../util.js'
 
-  export let route
+  const { route } = getContext()
 </script>
 
 <Render src={route.path + '/*'} />

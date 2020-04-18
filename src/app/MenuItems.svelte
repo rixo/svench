@@ -75,7 +75,7 @@
   $: _items = sortTree(
     items.map(x => ({
       ...x,
-      href: router.format(x.path),
+      href: router.resolve(x.path),
       isDirectory: !x.import,
     }))
   )
@@ -102,6 +102,7 @@
         {#if expanded[item.id]}
           {#if item.views$}
             <MenuViewsList
+              {router}
               {item}
               views={item.views$}
               active={getActiveView(item)}

@@ -13,15 +13,11 @@
 {#if $error}
   <h2>Error: failed to load component</h2>
   <pre>{$error}</pre>
-{:else if $current}
+{:else if $current && $current.cmp}
   <Unique key={$current}>
-    {#if $current.cmp}
-      <ComponentContext
-        route={$current.route}
-        component={$current.cmp}
-        view={$current.view} />
-    {:else if $current.page}
-      <svelte:component this={$current.page} route={$current.route} />
-    {/if}
+    <ComponentContext
+      route={$current.route}
+      component={$current.cmp}
+      view={$current.view} />
   </Unique>
 {/if}

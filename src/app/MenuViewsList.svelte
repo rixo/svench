@@ -1,6 +1,7 @@
 <script>
   import { slide } from 'svelte/transition'
 
+  export let router
   export let item
   export let views
   export let indent
@@ -15,7 +16,7 @@
     <a
       class="text"
       style={`padding-left: ${indent * indentWidth}rem`}
-      href={path + `?view=${name}`}>
+      href={router.resolve(`${path}?view=${name}`)}>
       <span class="icon">◇</span>
       {name}
     </a>
