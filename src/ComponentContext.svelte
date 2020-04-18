@@ -1,7 +1,7 @@
 <script>
   import { getContext, updateContext } from './util.js'
   import Offscreen from './RenderOffscreen.svelte'
-  import ApplyPrism from './routify/ApplyPrism.svelte'
+  import ApplyPrism from './ApplyPrism.svelte'
 
   export let route
   export let component
