@@ -1189,6 +1189,10 @@ decode-uri-component@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/decode-uri-component/-/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
 
+dedent@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.7.0.tgz#2495ddbaf6eb874abb0e1be9df22d2e5a544326c"
+
 deep-is@~0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/deep-is/-/deep-is-0.1.3.tgz#b369d6fb5dbc13eecf524f91b070feedc357cf34"
@@ -4351,11 +4355,12 @@ svelte@^3.20.1:
   version "3.20.1"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.20.1.tgz#8417fcd883a2f534b642a0737368272e651cf3ac"
 
-svench@^0.0.3-0:
-  version "0.0.3-0"
-  resolved "https://registry.yarnpkg.com/svench/-/svench-0.0.3-0.tgz#704fe62bd0e0883a83a72ee3c4cbc803de5e894a"
+svench@^0.0.3-1:
+  version "0.0.3-1"
+  resolved "https://registry.yarnpkg.com/svench/-/svench-0.0.3-1.tgz#3abd3b0f11d6c18aeb3e2174b803c69d602aa86d"
   dependencies:
     "@sveltech/routify" rixo/routify#svench
+    dedent "^0.7.0"
     routix "^0.0.1-7"
     svelte-key "^1.0.0"
 
