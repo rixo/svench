@@ -41,11 +41,11 @@
       <MenuResizeHandle bind:width={menuWidth} />
     </section>
 
-    <section class="ui toolbar" style="left: {menuWidth}px">
+    <section class="ui svench-toolbar" style="left: {menuWidth}px">
       <Toolbar />
     </section>
 
-    <div class="ui toolbar-placeholder" />
+    <div class="ui svench-toolbar-placeholder" />
 
     <main class:focus style={!fullscreen && `left: ${menuWidth}px`}>
       <div class="svench canvas" class:focus>
@@ -90,7 +90,7 @@
     bottom: 0;
     left: 0;
   }
-  .toolbar {
+  .svench-toolbar {
     position: fixed;
     top: 0;
     right: 0;
@@ -98,7 +98,7 @@
     background-color: var(--white);
     z-index: 2;
   }
-  .toolbar-placeholder {
+  .svench-toolbar-placeholder {
     height: var(--toolbar-height);
   }
 
@@ -142,7 +142,7 @@
 
   /*--- theme ---*/
 
-  .toolbar {
+  .svench-toolbar {
     border-bottom: 1px solid var(--gray-light);
   }
 
