@@ -1,6 +1,6 @@
 {
   "name": "svench",
-  "version": "0.0.3-0",
+  "version": "0.0.3-1",
   "main": "src/index.js",
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@sveltech/routify": "rixo/routify#svench",
-    "routix": "^0.0.1-7",
     "dedent": "^0.7.0",
+    "routix": "^0.0.1-7",
     "svelte-key": "^1.0.0"
   },
   "devDependencies": {
