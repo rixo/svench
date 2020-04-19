@@ -68,68 +68,45 @@
     padding: false,
     fullscreen: false,
     ...defaults,
-    // ...readStoredOptions(),
-    // ...readParamsOptions(),
+    ...readStoredOptions(),
+    ...readParamsOptions(),
   })
 
-  // // --- local state (query params) ---
-  //
-  // const updateState = opts => {
-  //   if (localStorageKey && window.localStorage) {
-  //     const values = Object.fromEntries(
-  //       localOptions.map(name => [name, opts[name]])
-  //     )
-  //     localStorage.setItem(localStorageKey, JSON.stringify(values))
-  //   }
-  //
-  //   // NOTE using history._replaceState to avoid useless looping with Routify
-  //   // _replaceState is the original replaceState before Routify hacks it
-  //   if (window.history && history._replaceState) {
-  //     const q = new URLSearchParams(window.location.search)
-  //     stateOptions.forEach(name => {
-  //       const value = opts[name]
-  //       if (value === false || value == null) {
-  //         q.delete(name)
-  //       } else {
-  //         q.set(name, value)
-  //       }
-  //     })
-  //     let url = location.pathname
-  //     const qs = q.toString()
-  //     if (qs.length > 0) {
-  //       url += '?' + qs.replace(/=true(?=&|$)/g, '')
-  //     }
-  //     const currentUrl = location.pathname + location.search
-  //     if (url !== currentUrl) {
-  //       history._replaceState({}, '', url)
-  //     }
-  //   }
-  // }
-  //
-  // $: $route, updateState($options)
-  //
-  // // --- augmented routes ---
-  //
-  // $: $routes = augmentRoutes($inputRoutes.routes)
-  //
-  // // --- getRenderName ---
-  //
-  // const getRenderName = makeNamer(() => $options)
-  //
-  // // --- view ---
-  //
-  // const getView = () => new URLSearchParams(window.location.search).get('view')
-  //
-  // const view = writable()
-  // const focus = writable(false)
-  //
-  // $: $route$, ($view = getView() || true)
-  // $: $focus = $view !== true
-  //
-  // // --- route ---
-  //
-  // const route$ = route
-  // // $: $route$ = $route
+  // --- local state (query params) ---
+
+  const updateState = opts => {
+    if (localStorageKey && window.localStorage) {
+      const values = Object.fromEntries(
+        localOptions.map(name => [name, opts[name]])
+      )
+      localStorage.setItem(localStorageKey, JSON.stringify(values))
+    }
+
+    // NOTE using history._replaceState to avoid useless looping with Routify
+    // _replaceState is the original replaceState before Routify hacks it
+    if (window.history && history._replaceState) {
+      const q = new URLSearchParams(window.location.search)
+      stateOptions.forEach(name => {
+        const value = opts[name]
+        if (value === false || value == null) {
+          q.delete(name)
+        } else {
+          q.set(name, value)
+        }
+      })
+      let url = location.pathname
+      const qs = q.toString()
+      if (qs.length > 0) {
+        url += '?' + qs.replace(/=true(?=&|$)/g, '')
+      }
+      const currentUrl = location.pathname + location.search
+      if (url !== currentUrl) {
+        history._replaceState({}, '', url)
+      }
+    }
+  }
+
+  $: updateState($options)
 
   const makeNamer = () => _makeNamer(() => $options)
 
