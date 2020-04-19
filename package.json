@@ -5,11 +5,7 @@
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
-  "files": [
-    "src",
-    "lib",
-    "rollup.js"
-  ],
+  "files": ["src", "lib", "rollup.js", "routes.js", "prism.js"],
   "peerDependencies": {
     "svelte": "^3.0.0"
   },
