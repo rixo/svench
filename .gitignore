@@ -3,3 +3,5 @@
 yarn-error.log
 *.bak.*
 /tmp/
+
+/prism.js

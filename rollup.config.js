@@ -4,6 +4,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 import copy from 'rollup-plugin-copy'
+import postcss from 'rollup-plugin-postcss'
 import json from '@rollup/plugin-json'
 // import builtins from 'builtin-modules'
 
@@ -20,50 +21,78 @@ const globals = {
   [path.resolve(__dirname, 'src/routify/index.js')]: 'Svench.routify',
 }
 
-export default {
-  input: 'src/index.js',
-
-  output: [
-    // {
-    //   sourcemap: true,
-    //   format: 'iife',
-    //   dir: './dist',
-    //   name: 'Svench',
-    //   globals,
-    // },
-    {
-      sourcemap: true,
-      format: 'esm',
-      entryFileNames: '[name].esm.js',
-      dir: './dist',
-      globals,
+export default [
+  {
+    input: 'src/prism.js',
+    output: {
+      format: 'iife',
+      file: 'prism.js',
     },
-  ],
-
-  external: ['./routify/index.js', '@sveltech/routify'],
-
-  watch: {
-    clearScreen: false,
+    plugins: [
+      postcss({
+        // extract: 'prism.css',
+      }),
+      resolve({
+        // routify uses svelte
+        mainFields: ['svelte', 'module', 'main'],
+        browser: true,
+        dedupe: ['svelte'],
+        // preferBuiltins: true,
+      }),
+      commonjs(),
+    ],
   },
+]
 
-  plugins: [
-    copy({
-      targets: [{ src: 'src/routify', dest: 'dist' }],
-    }),
-
-    json(),
-
-    svelte(),
-
-    resolve({
-      // routify uses svelte
-      mainFields: ['svelte', 'module', 'main'],
-      browser: true,
-      dedupe: ['svelte'],
-      // preferBuiltins: true,
-    }),
-    commonjs(),
-
-    production && terser(),
-  ],
-}
+// export default {
+//   input: 'src/index.js',
+//
+//   output: [
+//     {
+//       sourcemap: true,
+//       format: 'iife',
+//       // dir: './dist',
+//       // name: 'Svench',
+//       file: 'svench-all.js',
+//       globals,
+//     },
+//     // {
+//     //   sourcemap: true,
+//     //   format: 'esm',
+//     //   entryFileNames: '[name].esm.js',
+//     //   dir: './dist',
+//     // },
+//   ],
+//
+//   external: ['./routify/index.js', '@sveltech/routify'],
+//
+//   watch: {
+//     clearScreen: false,
+//   },
+//
+//   plugins: [
+//     copy({
+//       flatten: false,
+//       targets: [{ src: 'src/**/*.svelte', dest: 'dist' }],
+//     }),
+//
+//     json(),
+//
+//     postcss({
+//       extract: 'theme-default.css'
+//     }),
+//
+//     svelte(),
+//
+//     resolve({
+//       // routify uses svelte
+//       mainFields: ['svelte', 'module', 'main'],
+//       browser: true,
+//       dedupe: ['svelte'],
+//       // preferBuiltins: true,
+//     }),
+//     commonjs(),
+//
+//     // production && terser(),
+//   ],
+// }

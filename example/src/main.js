@@ -1,4 +1,5 @@
 import { Svench } from 'svench'
+import 'svench/prism'
 
 const app = new Svench({
   target: document.body,

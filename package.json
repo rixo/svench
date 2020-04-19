@@ -28,6 +28,7 @@
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-json": "^4.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
+    "np": "^6.2.1",
     "rollup": "^2.0.5",
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-postcss": "^2.6.4",
@@ -38,8 +39,13 @@
     "zora-node-reporter": "rixo/zora-reporters#zora-node-reporter-v0.0.1-rixo.3-gitpkg",
     "zorax": "^0.0.8"
   },
+  "np": {
+    "releaseDraft": false
+  },
   "scripts": {
     "dev": "rollup -c -w",
+    "build": "rollup -c",
+    "publish": "yarn build && np",
     "test": "echo TODO"
   }
 }
