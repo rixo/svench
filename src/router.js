@@ -25,6 +25,7 @@ export default ({ base = '/', getRoutes }) => {
   router.resolve = uri => {
     if (!uri) return uri
     uri = base + uri.replace(/^\/|\/$/g, '')
+    uri = uri.replace(/\/+/g, '/')
     return uri
   }
 
