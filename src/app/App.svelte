@@ -3,7 +3,7 @@
   import Menu from './Menu.svelte'
   import MenuResizeHandle from './MenuResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
-  import ThemeOranges from './ThemeOranges.svelte'
+  import DefaultTheme from './DefaultTheme.svelte'
 
   const { options, tree, focus$ } = getContext()
 
@@ -24,7 +24,7 @@
 
 <svelte:window on:keydown={onKeydown} />
 
-<ThemeOranges>
+<DefaultTheme>
   <div
     class="svench svench"
     class:fixed
@@ -59,7 +59,7 @@
       {/if} -->
     </main>
   </div>
-</ThemeOranges>
+</DefaultTheme>
 
 <style>
   h1 {
