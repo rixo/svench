@@ -110,7 +110,7 @@
               {indentWidth} />
           {/if}
           {#if item.children}
-            <svelte:self items={item.children} indent={indent + 1} />
+            <svelte:self {autofold} items={item.children} indent={indent + 1} />
           {/if}
         {/if}
       </li>
