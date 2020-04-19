@@ -140,3 +140,17 @@ Use `base` to scope Svench's routing to some specific sub section of your site, 
 
 <Svench base="/svench" fallback="{App}" />
 ```
+
+### Syntax highlighting with Prism
+
+Svench is prewired to make good use of Prism for syntax highlighting, yet this is not a hard dependency.
+
+If `Prism` is found in the global scope, it will be used for highlighting of views' code example, and the various Prism-compliant code snippets otherwise present in your (Svench) pages. This means you can use your existing Prism setup, or tune it to your specific needs.
+
+For convenience and ease of use, Svench ships with a bundled version of Prism that works well in most Svench scenarios. It includes Prism's default theme, that plays well with Svench's default theme, the copy code plugin, and grammars for Svelte, JS, HTML (markup), CSS, and markdown.
+
+To use it, just drop an import of `svench/prism.js` in your app, or include the `prism.js` found in the root of the Svench package into your HTML file. Prism's CSS is embedded into this JS file, so you don't need a CSS bundler plugin to use it with `import`.
+
+```js
+import 'svench/prism'
+```
