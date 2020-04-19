@@ -10,29 +10,16 @@
   import addRegister from './register.js'
   // import test from './test.js'
 
+  import routes$ from '../routes.js'
+
   export let localStorageKey = 'Svench'
 
   export let base = '/'
   export let fallback = null
 
-  export let routes$
-
   export let fixed = true
 
-  export let defaults = {
-    fixed,
-    enabled: !fallback,
-    defaultViewName: index => `view ${index}`,
-    // time before which view index is reset (for HMR)
-    registerTimeout: 100,
-    renderTimeout: 100,
-    menuWidth: 200,
-    // ui
-    centered: false,
-    outline: false,
-    padding: false,
-    fullscreen: false,
-  }
+  export let defaults = {}
 
   // --- focus (view only) routing ---
 
@@ -41,8 +28,6 @@
   const raw = q.has('raw')
 
   // --- options ---
-
-  const options = writable({ ...defaults })
 
   const stateOptions = ['fullscreen', 'centered', 'outline', 'padding']
 
@@ -69,11 +54,23 @@
         }
       : noop
 
-  $: $options = {
+  const options = writable({
+    fixed,
+    enabled: !fallback,
+    defaultViewName: index => `view ${index}`,
+    // time before which view index is reset (for HMR)
+    registerTimeout: 100,
+    renderTimeout: 100,
+    menuWidth: 200,
+    // ui
+    centered: false,
+    outline: false,
+    padding: false,
+    fullscreen: false,
     ...defaults,
-    ...readStoredOptions(),
-    ...readParamsOptions(),
-  }
+    // ...readStoredOptions(),
+    // ...readParamsOptions(),
+  })
 
   // // --- local state (query params) ---
   //
