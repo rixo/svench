@@ -2,7 +2,15 @@
 
 > A lightweight workbench to develop your Svelte components in isolation.
 
+## Status
+
 **WORK IN PROGRESS**
+
+This is very much a work in progress. Actually, it's still just a demo / POC for now.
+
+I'm very interested in any idea or feedback, though.
+
+In particular, if you're tempted to try to include and use Svench in your project, feel free to reach to me for help. At this point, I'm still researching the best ways to integrate this tool in the different scenarios and setups it might encounter, so I would be happy to study your specific case and see how to make it fit. Ping me on Svelte's Discord, or open an issue here if you're interested!
 
 ## Running the example
 
@@ -119,3 +127,5 @@ Just don't use anything Svench in your `.svench` file:
 ```html
 <p>I am `simple.svench`</p>
 ```
+
+###
