@@ -1,6 +1,6 @@
 {
   "name": "svench",
-  "version": "0.0.3-6",
+  "version": "0.0.3-7",
   "main": "src/index.js",
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
