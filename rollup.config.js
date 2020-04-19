@@ -27,6 +27,7 @@ export default [
     output: {
       format: 'iife',
       file: 'prism.js',
+      name: 'Prism',
     },
     plugins: [
       postcss({
