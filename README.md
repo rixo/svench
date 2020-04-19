@@ -128,4 +128,15 @@ Just don't use anything Svench in your `.svench` file:
 <p>I am `simple.svench`</p>
 ```
 
-###
+### Integrate in a larger app (e.g. integrated styleguide)
+
+Use `base` to scope Svench's routing to some specific sub section of your site, and `fallback` to render something else when URL doesn't match `base`.
+
+```html
+<script>
+  import { Svench } from 'svench'
+  import App from './App.svelte'
+</script>
+
+<Svench base="/svench" fallback="{App}" />
+```
