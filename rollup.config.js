@@ -1,11 +1,11 @@
 import * as path from 'path'
-import svelte from 'rollup-plugin-svelte-hot'
+// import svelte from 'rollup-plugin-svelte-hot'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import { terser } from 'rollup-plugin-terser'
-import copy from 'rollup-plugin-copy'
+// import { terser } from 'rollup-plugin-terser'
+// import copy from 'rollup-plugin-copy'
 import postcss from 'rollup-plugin-postcss'
-import json from '@rollup/plugin-json'
+// import json from '@rollup/plugin-json'
 // import builtins from 'builtin-modules'
 
 // NOTE The NOLLUP env variable is picked by various HMR plugins to switch
@@ -27,7 +27,7 @@ export default [
     output: {
       format: 'iife',
       file: 'prism.js',
-      name: 'Prism',
+      name: 'SvenchPrism',
     },
     plugins: [
       postcss({
