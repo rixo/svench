@@ -20,11 +20,11 @@ export default ({ base = '/', getRoutes }) => {
 
   const router = navaid(base, on404)
 
-  base = '/' + base.replace(/^\/|\/$/g, '') + '/';
+  base = '/' + base.replace(/^\/|\/$/g, '') + '/'
 
   router.resolve = uri => {
-		if (!uri) return uri;
-		uri = base + uri.replace(/^\/|\/$/g, '');
+    if (!uri) return uri
+    uri = base + uri.replace(/^\/|\/$/g, '')
     return uri
   }
 
@@ -88,6 +88,7 @@ export default ({ base = '/', getRoutes }) => {
     if (route) loadComponent(route, view)
     else on404()
 
+    // onMatch: for fallback
     if (router.onMatch) router.onMatch()
   })
 
