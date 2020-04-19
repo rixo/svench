@@ -41,7 +41,7 @@
   "scripts": {
     "dev": "rollup -c -w",
     "build": "rollup -c",
-    "pub": "yarn build && np",
+    "prepublish": "yarn build",
     "test": "echo TODO"
   }
 }
