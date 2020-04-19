@@ -25,14 +25,16 @@ if (import.meta.hot) {
 
     let scrollTopBefore = null
 
-    import.meta.hot.beforeUpdate(() => {
-      scrollTopBefore = document.body.scrollTop
-    })
-
-    import.meta.hot.afterUpdate(() => {
-      requestAnimationFrame(() => {
-        document.body.scrollTop = scrollTopBefore
+    if (import.meta.hot.beforeUpdate) {
+      import.meta.hot.beforeUpdate(() => {
+        scrollTopBefore = document.body.scrollTop
       })
-    })
+
+      import.meta.hot.afterUpdate(() => {
+        requestAnimationFrame(() => {
+          document.body.scrollTop = scrollTopBefore
+        })
+      })
+    }
   }
 }
