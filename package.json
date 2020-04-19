@@ -5,11 +5,7 @@
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
-  "files": [
-    "src",
-    "lib",
-    "rollup.js"
-  ],
+  "files": ["src", "lib", "rollup.js"],
   "peerDependencies": {
     "svelte": "^3.0.0"
   },
@@ -45,7 +41,7 @@
   "scripts": {
     "dev": "rollup -c -w",
     "build": "rollup -c",
-    "publish": "yarn build && np",
+    "pub": "yarn build && np",
     "test": "echo TODO"
   }
 }
