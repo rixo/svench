@@ -1,11 +1,17 @@
 {
   "name": "svench",
-  "version": "0.0.3-5",
+  "version": "0.0.3-6",
   "main": "src/index.js",
   "svelte": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
-  "files": ["src", "lib", "rollup.js", "routes.js", "prism.js"],
+  "files": [
+    "src",
+    "lib",
+    "rollup.js",
+    "routes.js",
+    "prism.js"
+  ],
   "peerDependencies": {
     "svelte": "^3.0.0"
   },
