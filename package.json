@@ -14,7 +14,6 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
-    "@sveltech/routify": "rixo/routify#svench",
     "clipboard": "^2.0.6",
     "dedent": "^0.7.0",
     "navaid": "^1.1.0",
