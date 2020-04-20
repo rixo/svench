@@ -104,18 +104,14 @@
     <!-- slot for nested <Render> -->
     <slot>
       {#if naked}
-        <ComponentContext
-          {route}
-          component={Component}
-          {view}
-          focused={false} />
+        <ComponentContext {route} component={Component} {view} focus={false} />
       {:else}
         <RenderBox {title} {href}>
           <ComponentContext
             {route}
             component={Component}
             {view}
-            focused={false} />
+            focus={false} />
         </RenderBox>
       {/if}
     </slot>

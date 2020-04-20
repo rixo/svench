@@ -23,7 +23,7 @@
     route,
     makeNamer,
     view,
-    focused,
+    focus,
     component: Cmp,
     getViewName,
     emitView,
@@ -94,7 +94,7 @@
           <slot />
         {/if}
       {:else}
-        <ViewBox {focused} options={$options} {name} {href} {source} {error}>
+        <ViewBox {focus} options={$options} {name} {href} {source} {error}>
           {#if resolved}
             <slot />
           {/if}
@@ -113,7 +113,7 @@
           <slot />
         {/if}
       {:else}
-        <ViewBox {focused} options={$options} {name} {href} {source} {error}>
+        <ViewBox {focus} options={$options} {name} {href} {source} {error}>
           {#if resolved && onScreen}
             <slot />
           {/if}

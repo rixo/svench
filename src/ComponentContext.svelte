@@ -7,13 +7,13 @@
   export let component
   export let view
 
-  export let focused = view !== null
+  export let focus = view !== null
 
   const { raw, makeNamer } = getContext()
 
   updateContext({
     route,
-    focused,
+    focus,
     view,
     component,
     makeNamer,

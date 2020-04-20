@@ -1,7 +1,7 @@
 <script>
   import Prism from '../Prism.svelte'
 
-  export let focused
+  export let focus
   export let name
   export let source
   export let href
@@ -19,12 +19,12 @@
 
 <div
   class="svench view box"
-  class:ui={!focused}
-  class:flex={focused}
+  class:ui={!focus}
+  class:flex={focus}
   class:outline
   class:centered
   class:padding>
-  {#if !focused}
+  {#if !focus}
     <h3 class="svench view">
       <div class="toolbar">
         {#if source}
