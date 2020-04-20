@@ -1,7 +1,7 @@
 <script>
   import { getContext, updateContext } from './util.js'
   import Offscreen from './Offscreen.svelte'
-  import ApplyPrism from './ApplyPrism.svelte'
+  import PrismApply from './PrismApply.svelte'
 
   export let route
   export let component
@@ -21,7 +21,7 @@
   })
 </script>
 
-<ApplyPrism>
+<PrismApply>
   {#if raw}
     <svelte:component this={component} />
   {:else if view}
@@ -29,4 +29,4 @@
   {:else}
     <svelte:component this={component} />
   {/if}
-</ApplyPrism>
+</PrismApply>
