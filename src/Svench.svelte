@@ -185,7 +185,11 @@
     naked,
     options,
     makeNamer,
-    router,
+    router: {
+      resolve: (...args) => router.resolve(...args),
+      current: router.current,
+      error: router.error,
+    },
     routes: _routes,
     //   route$,
     //   meta,
