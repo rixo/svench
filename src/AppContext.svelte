@@ -12,14 +12,9 @@
 
   const currentRoute = writable(null)
 
-  const focus$ = writable(false)
-
   $: focus = $current && $current.view !== null
 
-  updateContext({
-    currentRoute,
-    focus$,
-  })
+  updateContext({ currentRoute })
 </script>
 
 <svelte:component this={component} {options} {tree} {focus}>

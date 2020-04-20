@@ -41,7 +41,7 @@
     </section>
 
     <section class="ui svench-toolbar" style="left: {menuWidth}px">
-      <Toolbar />
+      <Toolbar {options} />
     </section>
 
     <div class="ui svench-toolbar-placeholder" />

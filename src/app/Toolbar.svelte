@@ -1,7 +1,5 @@
 <script>
-  import { getContext } from '../util.js'
-
-  const { options } = getContext()
+  export let options
 
   const toggleFullscreen = () => {
     $options.fullscreen = !$options.fullscreen
