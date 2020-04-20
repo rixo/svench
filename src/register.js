@@ -4,6 +4,7 @@ import Register from './Register.svelte'
 export default ({ routes, router, makeNamer }) => route => {
   route.views$ = readable([], set => {
     let cmp
+
     route
       .import()
       .then(({ default: component }) => {
@@ -33,6 +34,7 @@ export default ({ routes, router, makeNamer }) => route => {
         // DEBUG DEBUG DEBUG handle error properly
         console.error('register error', err)
       })
+
     return () => {
       if (cmp) cmp.$destroy()
     }
