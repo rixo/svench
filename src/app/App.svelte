@@ -1,13 +1,12 @@
 <script>
-  import { getContext } from '../util'
   import Menu from './Menu.svelte'
   import MenuResizeHandle from './MenuResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
   import DefaultTheme from './DefaultTheme.svelte'
 
-  const { options, tree, focus$ } = getContext()
-
-  $: focus = $focus$
+  export let options
+  export let tree
+  export let focus
 
   $: ({ fixed, fullscreen } = $options)
 

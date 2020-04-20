@@ -196,10 +196,8 @@
   {#if single}
     <Router {router} />
   {:else}
-    <AppContext>
-      <App>
-        <Router {router} />
-      </App>
+    <AppContext component={App}>
+      <Router {router} />
     </AppContext>
   {/if}
 {:else}
