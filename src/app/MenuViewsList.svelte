@@ -1,6 +1,4 @@
 <script>
-  import { slide } from 'svelte/transition'
-
   export let router
   export let item
   export let views
@@ -28,8 +26,4 @@
     margin: 0;
     padding: 0;
   }
-  /* .icon {
-    position: absolute;
-    margin-left: -16px;
-  } */
 </style>
