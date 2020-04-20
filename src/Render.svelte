@@ -1,12 +1,18 @@
 <script>
   import { updateContext, getContext } from './util.js'
   import ComponentContext from './ComponentContext.svelte'
-  import RenderBox from './app/RenderBox.svelte'
   import { urlResolver } from './helpers/url.js'
 
   import { matchPath } from './Render.util.js'
 
-  const { naked, register, route, routes, defaultRenderSrc } = getContext()
+  const {
+    naked,
+    register,
+    route,
+    routes,
+    defaultRenderSrc,
+    RenderBox,
+  } = getContext()
 
   export let src = null
   export let view = null

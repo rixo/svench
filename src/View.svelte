@@ -4,7 +4,6 @@
   import { onMount, onDestroy } from 'svelte'
   import { getContext, updateContext } from './util.js'
   import Offscreen from './Offscreen.svelte'
-  import ViewBox from './app/ViewBox.svelte'
 
   let providedName = null
   export { providedName as name }
@@ -27,6 +26,7 @@
     component: Cmp,
     getViewName,
     emitView,
+    ViewBox,
   } = getContext()
 
   const name = getViewName(providedName, onDestroy)

@@ -10,6 +10,9 @@
   import addRegister from './register.js'
   // import test from './test.js'
 
+  import ViewBox from './app/ViewBox.svelte'
+  import RenderBox from './app/RenderBox.svelte'
+
   import routes$ from '../routes.js'
 
   export let localStorageKey = 'Svench'
@@ -187,6 +190,8 @@
     //   route$,
     //   meta,
     tree,
+    ViewBox,
+    RenderBox,
   })
 
   onDestroy(router.listen())
