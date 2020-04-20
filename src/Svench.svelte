@@ -187,7 +187,6 @@
     //   route$,
     //   meta,
     tree,
-    focus,
   })
 
   onDestroy(router.listen())
