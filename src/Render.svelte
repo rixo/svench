@@ -6,9 +6,7 @@
 
   import { matchPath } from './Render.util.js'
 
-  const ctx = getContext()
-  const { routes, defaultRenderSrc } = ctx
-  const { register, route } = ctx
+  const { naked, register, route, routes, defaultRenderSrc } = getContext()
 
   export let src = null
   export let view = null
@@ -105,9 +103,13 @@
   {#each components as { Component, route, title, href } (Component)}
     <!-- slot for nested <Render> -->
     <slot>
-      <RenderBox {title} {href}>
-        <ComponentContext {route} component={Component} {view} focus={false} />
-      </RenderBox>
+      {#if naked}
+        <ComponentContext {route} component={Component} {view} />
+      {:else}
+        <RenderBox {title} {href}>
+          <ComponentContext {route} component={Component} {view} />
+        </RenderBox>
+      {/if}
     </slot>
   {/each}
 {:else}

@@ -15,7 +15,7 @@
 You can [use](<{$url('use_views')}>) bla bla bli
 
 <View name="default">
-  I am a View.
+  <strong>I am a View.</strong>
 </View>
 
 Views can be hidden from docs page:

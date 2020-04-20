@@ -1,3 +1,11 @@
 # Hello
 
 I am pure
+
+```svelte
+<script>
+  console.log('I am no View')
+</script>
+
+<p>But I have code snippet</p>
+```

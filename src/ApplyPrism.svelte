@@ -1,25 +1,16 @@
 <script>
   import { onMount } from 'svelte'
+  import onHmr from './ApplyPrism.hmr.js'
 
-  onMount(() => {
+  const highlight = () => {
     if (typeof Prism === 'undefined') return
     // eslint-disable-next-line no-undef
     Prism.highlightAll()
-  })
+  }
+
+  onMount(highlight)
+
+  onHmr(highlight)
 </script>
 
-<!-- NOTE
-     unfortunately a wrapper is needed, otherwise Prism leaks is UI elements
-     into the parent (that is, the canvas), and they're never cleaned away -->
-
-<div class="svench prism">
-  <slot />
-</div>
-
-<style>
-  div {
-    flex: inherit;
-    display: inherit;
-    flex-direction: inherit;
-  }
-</style>
+<slot />

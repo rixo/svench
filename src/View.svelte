@@ -1,7 +1,9 @@
 <script>
+  '@!hmr'
+
   import { onMount, onDestroy } from 'svelte'
   import { getContext, updateContext } from './util.js'
-  import Offscreen from './RenderOffscreen.svelte'
+  import Offscreen from './Offscreen.svelte'
   import ViewBox from './app/ViewBox.svelte'
 
   let providedName = null
@@ -14,6 +16,7 @@
 
   const {
     raw,
+    naked,
     register,
     options,
     router,
@@ -23,7 +26,7 @@
     focused,
     component: Cmp,
     getViewName,
-    emitViewBox,
+    emitView,
   } = getContext()
 
   const name = getViewName(providedName, onDestroy)
@@ -32,24 +35,34 @@
     register(name)
   }
 
-  const renderPhase = view != null
+  const hasView = view != null
 
-  const isActive = !register && ((view == null && !hide) || view === name)
+  const rendering = hasView || jailbreak
 
-  const willRender = (isActive && renderPhase) || jailbreak
+  const isActive = !register && ((!hasView && !hide) || view === name)
+
+  const willRender = isActive && rendering
 
   const href = router.resolve(`${route.path}?view=${name}`)
 
   let el
 
-  if (!renderPhase) {
+  if (!rendering) {
     updateContext({ view: name, getViewName: makeNamer() })
   }
 
-  if (isActive && renderPhase && !raw) {
+  // NOTE we defer creating the actual View's content (slot) because we don't
+  // want user's onMount callbacks firing from outside the document's DOM
+  let onScreen = false
+
+  if (isActive && hasView && !raw) {
     onMount(() => {
-      emitViewBox(el)
+      emitView(el, () => {
+        onScreen = true
+      })
     })
+  } else {
+    onScreen = true
   }
 
   // init
@@ -74,40 +87,49 @@
 </script>
 
 {#if isActive}
-  {#if renderPhase || jailbreak}
-    {#if focused && raw}
-      {#if resolved}
-        <slot />
-      {/if}
-    {:else}
-      <!-- WARNING if we bind el to an element inside viewbox, view won't be
-           reemitted on HMR (hence stay "offscreen") -->
-      <!-- /!\ NEEDED FOR HMR -->
-      <div bind:this={el} class="svench-view-target">
-        <ViewBox
-          ui={!focused}
-          options={$options}
-          {name}
-          {href}
-          {source}
-          {error}>
+  {#if raw}
+    {#if rendering}
+      {#if naked}
+        {#if resolved}
+          <slot />
+        {/if}
+      {:else}
+        <ViewBox {focused} options={$options} {name} {href} {source} {error}>
           {#if resolved}
             <slot />
           {/if}
         </ViewBox>
-      </div>
+      {/if}
+    {:else}
+      <svelte:component this={Cmp} />
     {/if}
+  {:else if rendering}
+    <!-- WARNING if we bind el to an element inside viewbox, view won't be
+         reemitted on HMR (hence stay "offscreen") -->
+    <!-- /!\ NEEDED FOR HMR -->
+    <svench:view bind:this={el} {name}>
+      {#if naked}
+        {#if resolved && onScreen}
+          <slot />
+        {/if}
+      {:else}
+        <ViewBox {focused} options={$options} {name} {href} {source} {error}>
+          {#if resolved && onScreen}
+            <slot />
+          {/if}
+        </ViewBox>
+      {/if}
+    </svench:view>
   {:else}
-    <Offscreen>
-      <Cmp />
-    </Offscreen>
+    <Offscreen Component={Cmp} />
   {/if}
 {/if}
 
 <style>
-  div {
-    flex: inherit;
+  * {
     display: inherit;
+    flex: inherit;
     flex-direction: inherit;
+    float: inherit;
   }
 </style>

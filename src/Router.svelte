@@ -1,9 +1,13 @@
 <script>
   import Unique from 'svelte-key'
   import ComponentContext from './ComponentContext.svelte'
-  import { updateContext } from './util.js'
+  import RouterError from './RouterError.svelte'
+  import RouterWrap from './RouterWrap.svelte'
+  import { getContext, updateContext } from './util.js'
 
   export let router
+
+  const { raw } = getContext()
 
   const { current, error } = router
 
@@ -11,13 +15,14 @@
 </script>
 
 {#if $error}
-  <h2>Error: failed to load component</h2>
-  <pre>{$error}</pre>
+  <RouterError error={$error} />
 {:else if $current && $current.cmp}
   <Unique key={$current}>
-    <ComponentContext
-      route={$current.route}
-      component={$current.cmp}
-      view={$current.view} />
+    <RouterWrap {raw}>
+      <ComponentContext
+        route={$current.route}
+        component={$current.cmp}
+        view={$current.view} />
+    </RouterWrap>
   </Unique>
 {/if}

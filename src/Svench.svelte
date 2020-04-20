@@ -26,10 +26,19 @@
   const q = new URLSearchParams(window.location.search)
   const single = q.has('focus')
   const raw = q.has('raw')
+  const naked = q.has('naked')
 
   // --- options ---
 
-  const stateOptions = ['fullscreen', 'centered', 'outline', 'padding']
+  const stateOptions = [
+    'fullscreen',
+    'centered',
+    'outline',
+    'padding',
+    'focus',
+    'raw',
+    'naked',
+  ]
 
   const localOptions = ['menuWidth']
 
@@ -170,6 +179,7 @@
 
   setContext({
     raw,
+    naked,
     options,
     makeNamer,
     router,

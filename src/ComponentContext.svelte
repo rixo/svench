@@ -1,19 +1,19 @@
 <script>
   import { getContext, updateContext } from './util.js'
-  import Offscreen from './RenderOffscreen.svelte'
+  import Offscreen from './Offscreen.svelte'
   import ApplyPrism from './ApplyPrism.svelte'
 
   export let route
   export let component
   export let view
 
-  export let focus = view !== null
+  export let focused = view !== null
 
   const { raw, makeNamer } = getContext()
 
   updateContext({
     route,
-    focused: focus,
+    focused,
     view,
     component,
     makeNamer,
@@ -22,14 +22,10 @@
 </script>
 
 <ApplyPrism>
-  {#if view}
-    {#if raw}
-      <svelte:component this={component} />
-    {:else}
-      <Offscreen>
-        <svelte:component this={component} />
-      </Offscreen>
-    {/if}
+  {#if raw}
+    <svelte:component this={component} />
+  {:else if view}
+    <Offscreen Component={component} />
   {:else}
     <svelte:component this={component} />
   {/if}

@@ -6,6 +6,21 @@
   const toggleFullscreen = () => {
     $options.fullscreen = !$options.fullscreen
   }
+
+  const goRaw = () => {
+    const sep = location.href.includes('?') ? '&' : '?'
+    location.href = location.href + sep + 'focus&raw'
+  }
+
+  const goNaked = () => {
+    const sep = location.href.includes('?') ? '&' : '?'
+    location.href = location.href + sep + 'focus&naked'
+  }
+
+  const goRawNaked = () => {
+    const sep = location.href.includes('?') ? '&' : '?'
+    location.href = location.href + sep + 'focus&raw&naked'
+  }
 </script>
 
 <div class="wrapper">
@@ -22,6 +37,14 @@
     Outline
   </label>
   <div class="spacer" />
+  <button aria-label="raw" on:click={goRaw} title="Render raw">↧</button>
+  <button aria-label="naked" on:click={goNaked} title="Render naked">⇟</button>
+  <button
+    aria-label="raw naked"
+    on:click={goRawNaked}
+    title="Render raw & naked">
+    ⤓
+  </button>
   <button
     aria-label="fullscreen"
     on:click={toggleFullscreen}
