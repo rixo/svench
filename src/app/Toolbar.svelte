@@ -9,17 +9,17 @@
 
   const goRaw = () => {
     const sep = location.href.includes('?') ? '&' : '?'
-    location.href = location.href + sep + 'focus&raw'
+    location.href = location.href + sep + 'only&raw'
   }
 
   const goNaked = () => {
     const sep = location.href.includes('?') ? '&' : '?'
-    location.href = location.href + sep + 'focus&naked'
+    location.href = location.href + sep + 'only&naked'
   }
 
   const goRawNaked = () => {
     const sep = location.href.includes('?') ? '&' : '?'
-    location.href = location.href + sep + 'focus&raw&naked'
+    location.href = location.href + sep + 'only&raw&naked'
   }
 </script>
 

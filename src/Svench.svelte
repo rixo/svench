@@ -24,7 +24,7 @@
   // --- focus (view only) routing ---
 
   const q = new URLSearchParams(window.location.search)
-  const single = q.has('focus')
+  const single = q.has('only')
   const raw = q.has('raw')
   const naked = q.has('naked')
 
