@@ -1,7 +1,7 @@
 <script>
   import { updateContext, getContext } from './util.js'
   import ComponentContext from './ComponentContext.svelte'
-  import RenderBox from './RenderBox.svelte'
+  import RenderBox from './app/RenderBox.svelte'
   import { urlResolver } from './helpers/url.js'
 
   import { matchPath } from './Render.util.js'
