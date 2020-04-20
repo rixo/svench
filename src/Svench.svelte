@@ -172,6 +172,14 @@
 
   const tree = derived(routes$, x => x.tree)
 
+  // --- focus ---
+
+  const extras = writable(null)
+
+  let focus = false
+
+  $: if (!focus) $extras = null
+
   // // --- meta ---
   //
   // const meta = writable()
@@ -199,6 +207,8 @@
     //   meta,
     tree,
 
+    extras,
+
     ViewBox,
     RenderBox,
     Fallback,
@@ -209,10 +219,10 @@
 
 {#if $options.enabled}
   {#if single}
-    <Router />
+    <Router bind:focus />
   {:else}
-    <AppContext component={App}>
-      <Router />
+    <AppContext {App} {focus}>
+      <Router bind:focus />
     </AppContext>
   {/if}
 {:else}

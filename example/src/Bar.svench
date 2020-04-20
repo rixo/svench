@@ -3,3 +3,13 @@
 </script>
 
 <View name="default">I am Bard</View>
+
+<View name="high">
+  <div>I am a very high component</div>
+</View>
+
+<style>
+  div {
+    height: 3000px;
+  }
+</style>

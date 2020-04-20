@@ -23,6 +23,7 @@
     makeNamer,
     view,
     focus,
+    extras,
     component: Cmp,
     getViewName,
     emitView,
@@ -51,6 +52,16 @@
     updateContext({ view: name, getViewName: makeNamer() })
   }
 
+  // --- focused view ---
+
+  if (extras && focus && isActive) {
+    $extras = {
+      source,
+    }
+  }
+
+  // --- offscreen ---
+
   // NOTE we defer creating the actual View's content (slot) because we don't
   // want user's onMount callbacks firing from outside the document's DOM
   let onScreen = false
@@ -65,7 +76,8 @@
     onScreen = true
   }
 
-  // init
+  // --- init ---
+
   let resolved = false
   let error = null
   {

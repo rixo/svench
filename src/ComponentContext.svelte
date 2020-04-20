@@ -8,7 +8,7 @@
   export let component
   export let view
 
-  export let focus = view !== null
+  export let focus
 
   const { raw, makeNamer } = getContext()
 

@@ -3,11 +3,13 @@
   import MenuResizeHandle from './MenuResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
   import DefaultTheme from './DefaultTheme.svelte'
+  import ExtraSource from './ExtraSource.svelte'
 
   export let options
   export let tree
   export let router
   export let focus
+  export let extras
 
   $: ({ fixed, fullscreen } = $options)
 
@@ -52,13 +54,15 @@
       <div class="svench canvas" class:focus>
         <slot />
       </div>
-
-      <!-- {#if focus}
-        <div class="ui extras">
-          <slot name="extras" />
-        </div>
-      {/if} -->
     </main>
+
+    {#if extras}
+      <div class="ui svench-extras-placeholder" />
+
+      <div class="ui svench-extras" style="left: {menuWidth}px">
+        <ExtraSource code={extras.source} />
+      </div>
+    {/if}
   </div>
 </DefaultTheme>
 
@@ -84,6 +88,7 @@
 
   .svench {
     --toolbar-height: 3rem;
+    --extras-height: 15rem;
   }
   .menu {
     position: fixed;
@@ -102,6 +107,17 @@
   .svench-toolbar-placeholder {
     height: var(--toolbar-height);
   }
+  .svench-extras {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: var(--extras-height);
+    background-color: var(--white);
+    z-index: 2;
+  }
+  .svench-extras-placeholder {
+    height: var(--extras-height);
+  }
 
   .svench.fullscreen .ui {
     display: none;
@@ -119,6 +135,7 @@
 
   main {
     display: flex;
+    flex-direction: column;
   }
   main .canvas {
     flex: 1;
@@ -126,13 +143,13 @@
   main {
     /* NOTE we want the canvas to fill available space, or it is hard to pick
        in dev tools (which end users might want to do to find missing cmp) */
-    min-height: calc(100% - var(--toolbar-height));
+    min-height: calc(100% - var(--toolbar-height) - var(--extras-height));
   }
   main.focus {
     position: fixed;
     overflow: auto;
     top: var(--toolbar-height);
-    bottom: 0;
+    bottom: var(--extras-height);
     left: 0;
     right: 0;
   }
@@ -147,8 +164,12 @@
     border-bottom: 1px solid var(--gray-light);
   }
 
-  /* .extras {
+  .svench-extras {
     border-top: 1px solid var(--gray-light);
-    padding: 1rem;
-  } */
+    padding: 0;
+  }
+  .svench-extras :global(pre) {
+    margin: 0;
+    height: 100%;
+  }
 </style>
