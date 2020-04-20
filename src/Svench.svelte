@@ -12,6 +12,7 @@
 
   import ViewBox from './app/ViewBox.svelte'
   import RenderBox from './app/RenderBox.svelte'
+  import Fallback from './app/Fallback.svelte'
 
   import routes$ from '../routes.js'
 
@@ -136,7 +137,10 @@
 
   // --- router ---
 
-  const router = createRouter({ base, getRoutes: () => $_routes })
+  const router = createRouter({
+    base,
+    getRoutes: () => $_routes,
+  })
 
   router.onMatch = () => {
     $options.enabled = true
@@ -194,8 +198,10 @@
     //   route$,
     //   meta,
     tree,
+
     ViewBox,
     RenderBox,
+    Fallback,
   })
 
   onDestroy(router.listen())
@@ -203,10 +209,10 @@
 
 {#if $options.enabled}
   {#if single}
-    <Router {router} />
+    <Router />
   {:else}
     <AppContext component={App}>
-      <Router {router} />
+      <Router />
     </AppContext>
   {/if}
 {:else}

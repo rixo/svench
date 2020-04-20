@@ -5,6 +5,7 @@
   export let component
 
   const {
+    router,
     router: { current },
     options,
     tree,
@@ -17,6 +18,6 @@
   updateContext({ currentRoute })
 </script>
 
-<svelte:component this={component} {options} {tree} {focus}>
+<svelte:component this={component} {options} {tree} {router} {focus}>
   <slot />
 </svelte:component>

@@ -1,9 +1,7 @@
 import { writable } from 'svelte/store'
 import navaid from 'navaid'
-import DirectoryPage from './app/DirectoryPage.svelte'
 
-export default ({ base = '/', getRoutes }) => {
-  // const {currentRoute } = getContext()
+export default ({ base = '/', getRoutes, Fallback }) => {
   let currentRoute = null
   let currentView = null
   let current
@@ -11,10 +9,13 @@ export default ({ base = '/', getRoutes }) => {
   const on404 = () => {
     const pathname = router.format(location.pathname)
     const route = getRoutes().dirs.find(x => x.path === pathname)
-    const current = { route }
+
+    const current = { route, fallback: true }
+
     if (route) {
-      current.cmp = DirectoryPage
+      current.cmp = Fallback
     }
+
     setCurrent(current)
   }
 

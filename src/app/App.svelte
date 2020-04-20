@@ -6,6 +6,7 @@
 
   export let options
   export let tree
+  export let router
   export let focus
 
   $: ({ fixed, fullscreen } = $options)
@@ -37,7 +38,7 @@
           Svench
         </a>
       </h1>
-      <Menu tree={$tree} />
+      <Menu tree={$tree} {router} />
       <MenuResizeHandle bind:width={menuWidth} />
     </section>
 

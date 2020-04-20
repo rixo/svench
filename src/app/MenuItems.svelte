@@ -1,15 +1,12 @@
 <script>
   import MenuViewsList from './MenuViewsList.svelte'
-  import { getContext } from '../util'
 
-  const {
-    router,
-    router: { current },
-  } = getContext()
-
+  export let router
   export let items = []
   export let indent = 0
   export let autofold
+
+  const { current } = router
 
   const indentWidth = 1.2
 
@@ -110,7 +107,11 @@
               {indentWidth} />
           {/if}
           {#if item.children}
-            <svelte:self {autofold} items={item.children} indent={indent + 1} />
+            <svelte:self
+              {router}
+              {autofold}
+              items={item.children}
+              indent={indent + 1} />
           {/if}
         {/if}
       </li>

@@ -5,6 +5,7 @@
   const defaultSectionSortKey = '0000'
 
   export let tree
+  export let router
   export let autofold = false
 
   const splitSections = items => {
@@ -42,7 +43,7 @@
       {/if}
     </h2>
   {/if}
-  <MenuItems {items} {autofold} />
+  <MenuItems {router} {items} {autofold} />
 {/each}
 
 <style>
