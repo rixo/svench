@@ -29,6 +29,7 @@
     class:fixed
     class:fullscreen
     style={fullscreen ? null : `padding-left: ${menuWidth}px`}>
+
     <section class="ui menu" style="width: {menuWidth}px">
       <h1>
         <a href="/">
