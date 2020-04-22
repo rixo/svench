@@ -1,6 +1,7 @@
 <article>
   <h1>
-    <span class="icon">🔧</span>
+    <!-- <span class="icon">🔧</span> -->
+    <span class="icon">🔬</span>
     Svench
   </h1>
 
@@ -27,7 +28,9 @@
     opacity: 0.5;
     display: inline-block;
     transform: rotateY(180deg);
-    margin-left: -1em;
-    width: 1em;
+    margin-left: -0.6em;
+    width: 0.6em;
+    font-weight: normal;
+    font-size: 1.25em;
   }
 </style>
