@@ -149,7 +149,9 @@
   // --- augment ---
 
   const _routes = derived(routes$, ({ routes }) => {
-    routes.forEach(addRegister({ makeNamer, router, routes: _routes }))
+    routes
+      .filter(x => x.import)
+      .forEach(addRegister({ makeNamer, router, routes: _routes }))
 
     const indexes = Object.fromEntries(
       routes

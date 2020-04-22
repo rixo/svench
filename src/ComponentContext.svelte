@@ -5,8 +5,8 @@
   import ComponentWrap from './ComponentWrap.svelte'
 
   export let route
-  export let component
-  export let view
+  export let component = null
+  export let view = null
 
   export let focus
 

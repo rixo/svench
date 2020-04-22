@@ -7,16 +7,8 @@ export default ({ base = '/', getRoutes, Fallback }) => {
   let current
 
   const on404 = () => {
-    const pathname = router.format(location.pathname)
-    const route = getRoutes().dirs.find(x => x.path === pathname)
-
-    const current = { route, fallback: true }
-
-    if (route) {
-      current.cmp = Fallback
-    }
-
-    setCurrent(current)
+    // what now?
+    // TODO 404
   }
 
   const router = navaid(base, on404)
@@ -42,6 +34,10 @@ export default ({ base = '/', getRoutes, Fallback }) => {
 
   const setError = x => {
     router.error.set(x)
+  }
+
+  const loadDir = route => {
+    setCurrent({ route, fallback: true, cmp: Fallback })
   }
 
   const loadComponent = async (_route, _view) => {
@@ -87,8 +83,10 @@ export default ({ base = '/', getRoutes, Fallback }) => {
     const routes = getRoutes()
     const route = find(router.format(location.pathname), view == null, routes)
 
-    if (route) loadComponent(route, view)
-    else on404()
+    if (route) {
+      if (route.import) loadComponent(route, view)
+      else loadDir(route)
+    } else on404()
 
     // onMatch: for fallback
     if (router.onMatch) router.onMatch()

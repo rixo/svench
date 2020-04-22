@@ -7,4 +7,4 @@
   setContext(context)
 </script>
 
-<Component />
+<svelte:component this={Component} />

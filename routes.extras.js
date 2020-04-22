@@ -5,19 +5,19 @@
  */
 import { writable } from 'svelte/store'
 
-import { routes, tree } from './tmp/routes.js'
+import extras from './tmp/extras.js'
 
 const hotData = (import.meta.hot && import.meta.hot.data) || {}
 
-const routes$ = hotData.routes || writable([])
+const extras$ = hotData.extras || writable([])
 
-routes$.set({ routes, tree })
+extras$.set(extras)
 
-export default routes$
+export default extras$
 
 if (import.meta.hot) {
   import.meta.hot.dispose(data => {
-    data.routes = routes$
+    data.extras = extras$
   })
   // stop the update bubble
   import.meta.hot.accept()

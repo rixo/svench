@@ -23,6 +23,12 @@ const enableSvench = !!process.env.SVENCH
 
 const spa = false || enableSvench
 
+const preprocess = [
+  mdsvex({
+    extension: '.svx',
+  }),
+]
+
 export default {
   input: 'src/main.js',
   // output: {
@@ -37,13 +43,14 @@ export default {
     dir: 'public/build',
   },
   plugins: [
+    postcss({}),
+
     enableSvench &&
       svench.rollup({
         pages: './src',
         extensions: ['.svench', '.svench.svelte', '.svench.svx'],
+        preprocess,
       }),
-
-    postcss({}),
 
     svelte({
       // Enable run-time checks when not in production
@@ -54,16 +61,7 @@ export default {
         css.write('public/build/bundle.css')
       },
       extensions: ['.svelte', '.svench', '.svx', '.svhx'],
-      preprocess: [
-        mdsvex({
-          extension: '.svx',
-        }),
-        // preprocessor is only needed to automatically extracts source code
-        // from View components
-        svench.preprocess({
-          extensions: ['.svench', '.svench.svx'],
-        }),
-      ],
+      preprocess,
       hot: hot && {
         // Optimistic will try to recover from runtime
         // errors during component init

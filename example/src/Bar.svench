@@ -2,9 +2,20 @@
   import { View } from 'svench'
 </script>
 
-<View name="default">I am Bard</View>
+<svench:options
+  title="ah > ah"
+  x={false}
+  js={{ a: 1, b: 2 }}
+  tags={['colors', 'brim', 42]} />
 
-<View name="high">
+<View name="default">I am Bar</View>
+
+<View
+  name="high"
+  source={`  <div>
+    Custom code
+  </div>
+`}>
   <div>I am a very high component</div>
 </View>
 

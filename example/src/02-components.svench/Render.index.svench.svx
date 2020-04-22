@@ -1,5 +1,6 @@
 <script>
   import { Render, url } from 'svench'
+  import Bar from '../Bar.svench'
 </script>
 
 # `<Render />`
@@ -15,6 +16,26 @@ Used to render views in other pages than the component where they're defined.
 ```
 
 ## Prop: `src`
+
+### Component `src`
+
+`src` can be a Svench component:
+
+```svelte
+<Render src={Bar} view="default" />
+```
+
+<Render src={Bar} view="default" />
+
+This component can also be passed as a dynamic import promise:
+
+```svelte
+<Render src={import('../Bar.svench')} view="default" />
+```
+
+<Render src={import('../Bar.svench')} view="default" />
+
+### Path `src`
 
 Relative `src` are resolved relative to file system (conceptually). See [URL resolution](<{$url('/concepts/URL_resolution')}>) for all details.
 

@@ -82,14 +82,27 @@
     }
   }
 
+  const loadSrcComponent = async cmp => {
+    const targetId = cmp.$$svench_id
+    const route = $routes.find(x => x.id === targetId)
+    return loadSrcRoute(route)
+  }
+
+  const loadSrcObject = async obj => {
+    obj = await obj
+    if (obj.default) return loadSrcComponent(obj.default)
+    if (obj.$$svench_id) return loadSrcComponent(obj)
+    return loadSrcRoute(obj)
+  }
+
   const resolveSrc = src =>
     !src
       ? null
       : typeof src === 'string'
       ? loadSrc(src)
-      : typeof src === 'function'
+      : typeof src === 'function' && !src.$$svench_id
       ? [src].flat()
-      : loadSrcRoute(src)
+      : loadSrcObject(src)
 
   $: !register && route && resolveSrc(src || defaultRenderSrc || route.indexOf)
 
