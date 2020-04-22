@@ -13,6 +13,7 @@
   import ViewBox from './app/ViewBox.svelte'
   import RenderBox from './app/RenderBox.svelte'
   import Fallback from './app/Fallback.svelte'
+  import DefaultIndex from './app/DefaultIndex.svelte'
 
   import routes$ from '../routes.js'
   import extras$ from '../routes.extras.js'
@@ -142,6 +143,7 @@
   const router = createRouter({
     base,
     getRoutes: () => $_routes,
+    DefaultIndex,
   })
 
   router.onMatch = () => {

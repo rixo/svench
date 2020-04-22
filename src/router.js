@@ -1,14 +1,17 @@
 import { writable } from 'svelte/store'
 import navaid from 'navaid'
 
-export default ({ base = '/', getRoutes, Fallback }) => {
+export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
   let currentRoute = null
   let currentView = null
   let current
 
-  const on404 = () => {
-    // what now?
-    // TODO 404
+  const on404 = path => {
+    if (path === '/' || path === '/index') {
+      setCurrent({ cmp: DefaultIndex })
+    } else {
+      setCurrent(null)
+    }
   }
 
   const router = navaid(base, on404)
@@ -81,12 +84,15 @@ export default ({ base = '/', getRoutes, Fallback }) => {
   router.on('*', () => {
     const view = getView()
     const routes = getRoutes()
-    const route = find(router.format(location.pathname), view == null, routes)
+    const path = router.format(location.pathname)
+    const route = find(path.replace(/^\/$/, ''), view == null, routes)
 
     if (route) {
       if (route.import) loadComponent(route, view)
       else loadDir(route)
-    } else on404()
+    } else {
+      on404(path)
+    }
 
     // onMatch: for fallback
     if (router.onMatch) router.onMatch()
