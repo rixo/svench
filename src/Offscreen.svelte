@@ -8,14 +8,18 @@
   export let Component
 
   let offscreen
-  let parent
-
-  parent = null
+  let parent = null
+  let anchor = null
 
   const views = []
 
   const emitView = async (view, callback) => {
-    views.push([view, callback])
+    if (parent) {
+      parent.insertBefore(view, anchor)
+      callback()
+    } else {
+      views.push([view, callback])
+    }
   }
 
   updateContext({ emitView })
@@ -31,12 +35,12 @@
         context: { ...context, emitView },
       },
     })
-    onDestroy(() => cmp.$destroy)
+    onDestroy(cmp.$destroy)
   }
 
   onMount(() => {
     parent = offscreen.parentNode
-    const anchor = offscreen.nextSibling
+    anchor = offscreen.nextSibling
     while (views.length > 0) {
       const [view, callback] = views.shift()
       parent.insertBefore(view, anchor)
