@@ -13,7 +13,7 @@
 
   $: ({ fallback, route, cmp, view } = $current || {})
 
-  $: focus = view !== null
+  $: focus = !fallback && view !== null
 </script>
 
 {#if $error}

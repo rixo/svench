@@ -1,9 +1,9 @@
 <script>
   import Menu from './Menu.svelte'
-  import MenuResizeHandle from './MenuResizeHandle.svelte'
+  import ResizeHandle from './ResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
   import DefaultTheme from './DefaultTheme.svelte'
-  import ExtraSource from './ExtraSource.svelte'
+  import ExtrasPanel from './ExtrasPanel.svelte'
 
   export let options
   export let tree
@@ -14,14 +14,18 @@
   $: ({ fixed, fullscreen } = $options)
 
   let menuWidth = $options.menuWidth
+  let extrasHeight = $options.extrasHeight
 
   $: $options.menuWidth = menuWidth
+  $: $options.extrasHeight = extrasHeight
 
   const onKeydown = e => {
     if (e.key === 'Escape') {
       $options.fullscreen = false
     }
   }
+
+  $: hasExtras = extras && extras.source
 </script>
 
 <svelte:window on:keydown={onKeydown} />
@@ -41,7 +45,7 @@
         </a>
       </h1>
       <Menu tree={$tree} {router} />
-      <MenuResizeHandle bind:width={menuWidth} />
+      <ResizeHandle right bind:width={menuWidth} />
     </section>
 
     <section class="ui svench-toolbar" style="left: {menuWidth}px">
@@ -50,18 +54,22 @@
 
     <div class="ui svench-toolbar-placeholder" />
 
-    <main class:focus style={!fullscreen && `left: ${menuWidth}px`}>
+    <main
+      class:focus
+      class:extras={hasExtras}
+      style={!fullscreen && `left: ${menuWidth}px; ` + `min-height: calc(100% - var(--toolbar-height) - ${extrasHeight}px);`}>
       <div class="svench canvas" class:focus>
         <slot />
       </div>
     </main>
 
-    {#if extras}
-      <div class="ui svench-extras-placeholder" />
-
-      <div class="ui svench-extras" style="left: {menuWidth}px">
-        <ExtraSource code={extras.source} />
-      </div>
+    {#if hasExtras}
+      <aside
+        class="ui svench-extras"
+        style="left: {menuWidth}px; height: {extrasHeight}px">
+        <ExtrasPanel {extras} />
+        <ResizeHandle top bind:width={extrasHeight} />
+      </aside>
     {/if}
   </div>
 </DefaultTheme>
@@ -111,19 +119,17 @@
     position: fixed;
     bottom: 0;
     right: 0;
-    height: var(--extras-height);
     background-color: var(--white);
     z-index: 2;
-  }
-  .svench-extras-placeholder {
-    height: var(--extras-height);
   }
 
   .svench.fullscreen .ui {
     display: none;
   }
-  .svench.fullscreen main {
+  .svench.fullscreen main,
+  .svench.fullscreen main.focus {
     top: 0;
+    bottom: 0;
   }
 
   .menu {
@@ -149,9 +155,12 @@
     position: fixed;
     overflow: auto;
     top: var(--toolbar-height);
-    bottom: var(--extras-height);
+    bottom: 0;
     left: 0;
     right: 0;
+  }
+  main.focus.extras {
+    bottom: var(--extras-height);
   }
   main.focus .canvas {
     display: flex;
@@ -167,9 +176,7 @@
   .svench-extras {
     border-top: 1px solid var(--gray-light);
     padding: 0;
-  }
-  .svench-extras :global(pre) {
-    margin: 0;
-    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 </style>

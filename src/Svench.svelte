@@ -15,6 +15,7 @@
   import Fallback from './app/Fallback.svelte'
 
   import routes$ from '../routes.js'
+  import extras$ from '../routes.extras.js'
 
   export let localStorageKey = 'Svench'
 
@@ -44,7 +45,7 @@
     'naked',
   ]
 
-  const localOptions = ['menuWidth']
+  const localOptions = ['menuWidth', 'extrasHeight']
 
   const readParamsOptions = () => {
     const q = new URLSearchParams(window.location.search)
@@ -75,6 +76,7 @@
     registerTimeout: 100,
     renderTimeout: 100,
     menuWidth: 200,
+    extrasHeight: 200,
     // ui
     centered: false,
     outline: false,
@@ -148,10 +150,14 @@
 
   // --- augment ---
 
+  const addSource = route => {
+    route.extra = derived(extras$, extras => extras[route.id] || {})
+  }
+
   const _routes = derived(routes$, ({ routes }) => {
-    routes
-      .filter(x => x.import)
-      .forEach(addRegister({ makeNamer, router, routes: _routes }))
+    const files = routes.filter(x => x.import)
+    files.forEach(addRegister({ makeNamer, router, routes: _routes }))
+    files.forEach(addSource)
 
     const indexes = Object.fromEntries(
       routes

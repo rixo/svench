@@ -8,7 +8,9 @@
   js={{ a: 1, b: 2 }}
   tags={['colors', 'brim', 42]} />
 
-<View name="default">I am Bar</View>
+<View name="default">
+  <p>I am Bar</p>
+</View>
 
 <View
   name="high"
@@ -16,7 +18,13 @@
     Custom code
   </div>
 `}>
-  <div>I am a very high component</div>
+  <div>
+    <p>
+      I am a
+      <em>very</em>
+      high component.
+    </p>
+  </div>
 </View>
 
 <style>

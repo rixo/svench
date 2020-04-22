@@ -10,7 +10,6 @@
 
   export let init = null
   export let hide = false
-  export let source = null
   export let jailbreak = false
 
   const {
@@ -30,7 +29,11 @@
     ViewBox,
   } = getContext()
 
+  const routeExtra = route.extra
+
   const name = getViewName(providedName, onDestroy)
+
+  export let source = $routeExtra.sources[name]
 
   if (register) {
     register(name)
