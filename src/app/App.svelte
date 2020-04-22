@@ -40,7 +40,8 @@
     <section class="ui menu" style="width: {menuWidth}px">
       <h1>
         <a href="/">
-          <span class="icon">🔧</span>
+          <!-- <span class="icon">🔧</span> -->
+          <span class="icon">🔬</span>
           Svench
         </a>
       </h1>
@@ -87,7 +88,8 @@
   h1 .icon {
     opacity: 0.5;
     display: inline-block;
-    transform: rotateY(180deg);
+    transform: rotateY(180deg) scale(1.25) translateY(-0.12rem);
+    font-weight: normal;
   }
 
   :global(body) {
