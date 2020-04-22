@@ -46,7 +46,7 @@ export default {
     postcss({}),
 
     enableSvench &&
-      svench.rollup({
+      svench({
         pages: './src',
         extensions: ['.svench', '.svench.svelte', '.svench.svx'],
         preprocess,
