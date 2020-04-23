@@ -111,7 +111,7 @@
   .box.outline .outline:before {
     content: ' ';
     display: block;
-    border: 2px solid magenta;
+    border: 2px solid cyan;
     position: absolute;
     z-index: 1;
     left: -2px;
