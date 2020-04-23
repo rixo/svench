@@ -1,4 +1,4 @@
-import * as path from 'path'
+// import * as path from 'path'
 // import svelte from 'rollup-plugin-svelte-hot'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
@@ -6,22 +6,34 @@ import commonjs from '@rollup/plugin-commonjs'
 // import copy from 'rollup-plugin-copy'
 import postcss from 'rollup-plugin-postcss'
 // import json from '@rollup/plugin-json'
-// import builtins from 'builtin-modules'
+import builtins from 'builtin-modules'
 
 // NOTE The NOLLUP env variable is picked by various HMR plugins to switch
 // in compat mode. You should not change its name (and set the env variable
 // yourself if you launch nollup with custom comands).
-const watch = !!process.env.ROLLUP_WATCH
-const useLiveReload = !!process.env.LIVERELOAD
+// const watch = !!process.env.ROLLUP_WATCH
+// const useLiveReload = !!process.env.LIVERELOAD
 
-const dev = watch || useLiveReload
-const production = !dev
-
-const globals = {
-  [path.resolve(__dirname, 'src/routify/index.js')]: 'Svench.routify',
-}
+// const dev = watch || useLiveReload
+// const production = !dev
 
 export default [
+  {
+    input: 'lib/index.js',
+    output: {
+      format: 'cjs',
+      file: 'rollup.js',
+      sourcemap: true,
+    },
+    external: builtins,
+    plugins: [
+      resolve({
+        preferBuiltins: true,
+      }),
+      commonjs(),
+    ],
+  },
+
   {
     input: 'src/prism.js',
     output: {
@@ -34,11 +46,9 @@ export default [
         // extract: 'prism.css',
       }),
       resolve({
-        // routify uses svelte
         mainFields: ['svelte', 'module', 'main'],
         browser: true,
         dedupe: ['svelte'],
-        // preferBuiltins: true,
       }),
       commonjs(),
     ],

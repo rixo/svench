@@ -4,4 +4,6 @@ yarn-error.log
 *.bak.*
 /tmp/
 
+/rollup.js
+/rollup.js.map
 /prism.js
