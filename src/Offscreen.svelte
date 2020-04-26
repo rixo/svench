@@ -35,7 +35,9 @@
         context: { ...context, emitView },
       },
     })
-    onDestroy(cmp.$destroy)
+    onDestroy(() => {
+      cmp.$destroy()
+    })
   }
 
   onMount(() => {
