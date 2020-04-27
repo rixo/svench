@@ -1,6 +1,6 @@
 {
   "name": "svench",
-  "version": "0.0.3-11",
+  "version": "0.0.3-12",
   "main": "src/index.js",
   "svelte": "src/index.js",
   "browser": "src/index.js",
