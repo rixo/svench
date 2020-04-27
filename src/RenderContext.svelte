@@ -1,15 +1,11 @@
 <script>
-  import { getContext, updateContext, makeNamer, constStore } from './util'
-
-  const { options } = getContext()
+  import { updateContext, constStore } from './util'
 
   export let route
 
-  const getRenderName = makeNamer(() => $options)
-
   const route$ = constStore(route)
 
-  updateContext({ getRenderName, route$, defaultRenderSrc: route })
+  updateContext({ route$, defaultRenderSrc: route })
 </script>
 
 <slot />

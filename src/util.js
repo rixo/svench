@@ -38,22 +38,11 @@ export const constStore = value => ({
 })
 
 export const makeNamer = getOptions => {
-  let index
-  let taken
-  let timeout
-
-  const reset = () => {
-    index = 0
-    taken = {}
-  }
-
-  reset()
+  const taken = {}
+  let index = 0
 
   const getRenderName = (_name, onDestroy) => {
-    const { renderTimeout, defaultViewName } = getOptions()
-
-    clearTimeout(timeout)
-    timeout = setTimeout(reset, renderTimeout)
+    const { defaultViewName } = getOptions()
 
     index++
 
@@ -70,6 +59,7 @@ export const makeNamer = getOptions => {
     // rerendered by HMR messes the actual index and new views end up not being
     // rendered because they are given unsync indexes)
     onDestroy(() => {
+      index--
       taken[wantedName]--
     })
     return name
