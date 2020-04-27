@@ -92,7 +92,9 @@
             class="icon"
             class:expand={item.isDirectory}
             on:click|preventDefault={() => toggle(item)}>
-            {#if item.isDirectory}▶{:else}❖{/if}
+            {#if item.isDirectory}
+              ▶
+            {:else if item.views && item.views.length > 0}❖{:else}🞛{/if}
           </span>
           {item.title}
         </a>

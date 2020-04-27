@@ -32,7 +32,7 @@
         {/if}
       </div>
       <a {href}>
-        <span class="icon">◇</span>
+        <span class="icon">⟡</span>
         {name}
       </a>
     </h3>
