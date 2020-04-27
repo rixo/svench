@@ -3,15 +3,10 @@
   "version": "0.0.3-7",
   "main": "src/index.js",
   "svelte": "src/index.js",
+  "browser": "src/index.js",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
-  "files": [
-    "src",
-    "lib",
-    "rollup.js",
-    "routes.js",
-    "prism.js"
-  ],
+  "files": ["src", "rollup.js", "main.js", "routes.js", "prism.js"],
   "peerDependencies": {
     "svelte": "^3.0.0"
   },
@@ -27,14 +22,17 @@
   "devDependencies": {
     "@rixo/eslint-config-svelte": "^0.8.1",
     "@rollup/plugin-commonjs": "11.0.2",
-    "@rollup/plugin-json": "^4.0.2",
+    "@rollup/plugin-json": "^4.0.3",
     "@rollup/plugin-node-resolve": "^7.1.1",
+    "express": "^4.17.1",
     "np": "^6.2.1",
+    "polka": "^0.5.2",
     "rollup": "^2.0.5",
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-postcss": "^2.6.4",
     "rollup-plugin-svelte-hot": "^0.4.1",
     "rollup-plugin-terser": "^5.3.0",
+    "sirv": "^0.4.2",
     "svelte": "^3.0.0",
     "zoar": "^0.0.3",
     "zora-node-reporter": "rixo/zora-reporters#zora-node-reporter-v0.0.1-rixo.3-gitpkg",

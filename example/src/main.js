@@ -1,12 +1,9 @@
-import { Svench } from 'svench'
-import 'svench/prism'
+import App from './App.svelte'
 
-const app = new Svench({
+const app = new App({
   target: document.body,
   props: {
-    defaults: {
-      padding: true,
-    },
+    name: 'Svench',
   },
 })
 
@@ -17,24 +14,4 @@ if (import.meta.hot) {
   })
 
   import.meta.hot.accept()
-
-  // DEBUG DEBUG DEBUG move to some good location (preserve scroll on HMR update)
-  {
-    // NOTE this is mostly irrelevant for focused view pages, but it becomes
-    // important for docs / long pages
-
-    let scrollTopBefore = null
-
-    if (import.meta.hot.beforeUpdate) {
-      import.meta.hot.beforeUpdate(() => {
-        scrollTopBefore = document.body.scrollTop
-      })
-
-      import.meta.hot.afterUpdate(() => {
-        requestAnimationFrame(() => {
-          document.body.scrollTop = scrollTopBefore
-        })
-      })
-    }
-  }
 }

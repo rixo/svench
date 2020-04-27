@@ -45,26 +45,22 @@ export default {
 
       extensions: ['.svench', '.svench.svelte', '.svench.svx'],
 
-      // Example: code splitting with ES modules
+      // This example writes Svench to a single iife file
       override: {
         // replace your entry with Svench's one
         input: true,
+        // inlining `import(...)` from Svench's codebase is required for iife
+        inlineDynamicImports: true,
+        // output to another file
         output: {
-          // change output format to ES module
-          format: 'es',
-          // remove the file from the original config (can't have file & dir)
-          file: null,
-          // and change to a dir (code splitting outputs multiple files)
-          dir: 'public/svench',
+          file: 'public/build/svench.js',
         },
       },
 
       index: {
         source: 'public/index.html',
-        // NOTE we need to add type="module" to use script in ES format
         replace: {
-          '<script defer src="/build/bundle.js">':
-            '<script defer type="module" src="/svench/svench.js">',
+          '/build/bundle.js': '/build/svench.js',
           'Svelte app': 'Svench app',
         },
         write: 'public/svench.html',
@@ -96,7 +92,8 @@ export default {
     }),
     commonjs(),
 
-    // NOTE with this config, we're using separate rollup processes
+    // NOTE with this config, we're using separate rollup processes (and so we
+    // don't want to run your server and Svench's server simultaneously)
     !isSvench && dev && serve(),
 
     useLiveReload && livereload('public'),

@@ -171,10 +171,6 @@
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
 
-"@types/estree@*":
-  version "0.0.44"
-  resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.44.tgz#980cc5a29a3ef3bea6ff1f7d021047d7ea575e21"
-
 "@types/estree@0.0.39":
   version "0.0.39"
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
@@ -225,7 +221,7 @@ acorn-walk@^7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-7.1.1.tgz#345f0dffad5c735e7373d2fec9a1023e6a44b83e"
 
-acorn@^7.0.0, acorn@^7.1.0, acorn@^7.1.1:
+acorn@^7.0.0, acorn@^7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.1.1.tgz#e35668de0b402f359de515c5482a1ab9f89a69bf"
 
@@ -3829,9 +3825,9 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rollup-plugin-hot@^0.0.17:
-  version "0.0.17"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.17.tgz#d6a477ed03bfc1e872900a232cbee652bd0aede6"
+rollup-plugin-hot@^0.0.20:
+  version "0.0.20"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.20.tgz#ca820e38c584e3dcc0be916d29857c36b18baa95"
   dependencies:
     cors "^2.8.5"
     express "^4.17.1"
@@ -3873,15 +3869,15 @@ rollup-plugin-postcss@^2.8.1:
     safe-identifier "^0.4.1"
     style-inject "^0.3.0"
 
-rollup-plugin-svelte-hot@^0.5.0-0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.5.0.tgz#1306dfc93aeb414e1a589e72984694882a6909d7"
+rollup-plugin-svelte-hot@^0.6.2:
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.6.2.tgz#76c5a0fe64da06132b7e53efa3ac1cede77cb4b6"
   dependencies:
     require-relative "^0.8.7"
     rollup-plugin-hot "^0.0.9-0"
     rollup-pluginutils "^2.8.2"
     sourcemap-codec "^1.4.8"
-    svelte-hmr "^0.6.0"
+    svelte-hmr "^0.7.0"
   optionalDependencies:
     nollup ">=0.8.4"
 
@@ -3901,13 +3897,11 @@ rollup-pluginutils@^2.8.2:
   dependencies:
     estree-walker "^0.6.1"
 
-rollup@^1.31.1:
-  version "1.32.1"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-1.32.1.tgz#4480e52d9d9e2ae4b46ba0d9ddeaf3163940f9c4"
-  dependencies:
-    "@types/estree" "*"
-    "@types/node" "*"
-    acorn "^7.1.0"
+rollup@^2.7.2:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.7.2.tgz#0f8ee6216d33e83c0750116312c2c92b94cc7f72"
+  optionalDependencies:
+    fsevents "~2.1.2"
 
 routix@^0.0.1-7:
   version "0.0.1-7"
@@ -4357,9 +4351,9 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-hmr@^0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.6.0.tgz#649fdbdae874a60ab9d71637c74557758f679345"
+svelte-hmr@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.7.0.tgz#a287ad8b1bec984fbd08e882e34b297a66c7194e"
 
 svelte-key@^1.0.0:
   version "1.0.0"

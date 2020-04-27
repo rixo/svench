@@ -5,7 +5,7 @@ overrides:
   # - files: ["**/*.svench", "**/*.svx"]
   - files: ["**/*.svench"]
     processor: svelte3/svelte3
-  - files: ["rollup.config.js"]
+  - files: ["rollup.config.*"]
     env:
       node: true
 

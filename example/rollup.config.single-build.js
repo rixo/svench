@@ -14,7 +14,6 @@ const dev = watch || useLiveReload
 const production = !dev
 
 const hot = watch && !useLiveReload
-const isSvench = !!process.env.SVENCH
 
 const spa = true
 
@@ -45,26 +44,28 @@ export default {
 
       extensions: ['.svench', '.svench.svelte', '.svench.svx'],
 
-      // Example: code splitting with ES modules
+      // This example builds & run your app and Svench with in a single process
+      //
+
+      // NOTE we're _adding_ Svench entry to your existing one
+      addInput: true,
+
       override: {
-        // replace your entry with Svench's one
-        input: true,
         output: {
-          // change output format to ES module
-          format: 'es',
-          // remove the file from the original config (can't have file & dir)
+          // output to dir instead of file
           file: null,
-          // and change to a dir (code splitting outputs multiple files)
-          dir: 'public/svench',
+          dir: 'public/build',
+          // we need an output format that supports multiple entry points
+          format: 'es',
         },
       },
 
       index: {
         source: 'public/index.html',
-        // NOTE we need to add type="module" to use script in ES format
         replace: {
+          // NOTE we need type="module" since we're using ES format
           '<script defer src="/build/bundle.js">':
-            '<script defer type="module" src="/svench/svench.js">',
+            '<script defer type="module" src="/build/svench.js">',
           'Svelte app': 'Svench app',
         },
         write: 'public/svench.html',
@@ -96,8 +97,8 @@ export default {
     }),
     commonjs(),
 
-    // NOTE with this config, we're using separate rollup processes
-    !isSvench && dev && serve(),
+    // NOTE with this example, your app and Svench runs simultaneously!
+    dev && serve(),
 
     useLiveReload && livereload('public'),
 
