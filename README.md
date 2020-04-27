@@ -429,35 +429,35 @@ SVENCH=1 rollup -cw
 
 #### enabled
 
-Type: `bool`
+Type: `bool`<br>
 Default: `!!process.env.SVENCH`
 
 When not enabled, the plugin does nothing at all.
 
 #### dir
 
-Type: `string`
+Type: `string`<br>
 Default: `'src'`
 
 The directory that Svench need to traverse (and watch, if applicable) to find your Svench components.
 
 #### extensions
 
-Type: `string[]`
+Type: `string[]`<br>
 Default: `['.svench', '.svench.svelte']`
 
 Only the files matching one of these extensions will be picked as Svench components. The matching extension will also be dropped from the component's name generated from its filename.
 
 #### preprocess
 
-Type: `function[]`
+Type: `function[]`<br>
 Default: `undefined`
 
 Svench need to be able to parse your Svench components (i.e. as Svelte components). For that, it needs to know the preprocessors you use. This needs to be the same as what you're using in the Svelte plugin.
 
 #### watch
 
-Type: `bool`
+Type: `bool`<br>
 Default: `!!process.env.ROLLUP_WATCH`
 
 Whether to watch the file system for changes. The default is to watch when Rollup itself watches.
@@ -466,7 +466,7 @@ Whether to watch the file system for changes. The default is to watch when Rollu
 
 #### override
 
-Type: `object`
+Type: `object`<br>
 Default: `undefined`
 
 Apply some overrides to your Rollup config when the Svench plugin is enabled.
@@ -496,7 +496,7 @@ override: {
 
 #### addInput
 
-Type: `bool|string`
+Type: `bool|string`<br>
 Default: `false`
 
 If you want to build both your app and Svench with the same Rollup build process (that is, run only one `rollup -cw` process), you need to have both your app and Svench's entry points in the `input` option.
@@ -515,7 +515,7 @@ override: {
 
 #### preserveOutputFileName
 
-Type: `bool`
+Type: `bool`<br>
 Default: `true`
 
 In Rollup, when using `output.file`, you're free to pick any filename you want. However, when using `output.dir`, the name of the produced files is derived from the name of the entry file (from `input`). This means that if your config normally uses `output.file` and you override it to `output.dir` when Svench is enabled, it might be impossible to output your app "bundle" (really bundled entry point) to the same destination file.
@@ -526,7 +526,7 @@ Note that this option only has some effect when all of the following conditions 
 
 #### index
 
-Type: `object|false`
+Type: `object|false`<br>
 Default: `false`
 
 In addition to building it's entry point together with your own config, Svench needs a HTML file to bootstrap its web app. Svench ships with a minimal `index.html` and will use that by default. But you may want to reuse your app's `index.html` somehow, because it contains some stylesheets, external scripts, etc. that are needed to render your components correctly.
@@ -548,14 +548,14 @@ index: {
 
 #### index.source
 
-Type: `string`
+Type: `string`<br>
 Default: `undefined`
 
 Path to the file containing the source HTML.
 
 #### index.replace
 
-Type: `object|function`
+Type: `object|function`<br>
 Default: `{}`
 
 Either an object with strings to search for as keys, and replacements as value, or a function to apply any arbitrary transformation.
@@ -573,21 +573,21 @@ index: {
 
 #### index.write
 
-Type: `string`
+Type: `string`<br>
 Default: `undefined`
 
 Path to the destination file you want to write the result.
 
 #### index.public
 
-Type: `string`
+Type: `string`<br>
 Default: `serve && serve.public`
 
 Path to your public directory. This is needed to automatically compute `svench.ENTRY_URL`.
 
 #### serve
 
-Type: `object|bool`
+Type: `object|bool`<br>
 Default: `false`
 
 Svench ships with a web server that you can use during development. It is very basic, but it is perfectly adapted to Svench's very basic needs, and it can avoid you from searching your own solution and clutter your project.
@@ -604,24 +604,24 @@ serve: {
 
 #### serve.host
 
-Type: `string`
+Type: `string`<br>
 Default: `localhost`
 
 #### serve.port
 
-Type: `int`
+Type: `int`<br>
 Default: `4242`
 
 #### serve.public
 
-Type: `string`
+Type: `string`<br>
 Default: `public`
 
 Path to the directory you want to serve from.
 
 #### serve.index
 
-Type: `string`
+Type: `string`<br>
 Default: `undefined`
 
 You can specify a custom file to be used as index.
