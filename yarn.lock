@@ -4512,9 +4512,9 @@ rollup@^2.0.5:
   optionalDependencies:
     fsevents "~2.1.2"
 
-routix@^0.0.1-9:
-  version "0.0.1-9"
-  resolved "https://registry.yarnpkg.com/routix/-/routix-0.0.1-9.tgz#f5e3e5907d79369e16eab9bd2c2d4d368b91c213"
+routix@^0.0.1-10:
+  version "0.0.1-10"
+  resolved "https://registry.yarnpkg.com/routix/-/routix-0.0.1-10.tgz#647ae9dc0ea6aa340deb17cb88f094810abc86d4"
 
 run-async@^2.2.0, run-async@^2.4.0:
   version "2.4.0"
