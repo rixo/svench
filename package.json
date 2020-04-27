@@ -23,7 +23,7 @@
     "navaid": "^1.1.0",
     "prism-svelte": "^0.4.6",
     "prismjs": "^1.20.0",
-    "routix": "^0.0.1-7",
+    "routix": "^0.0.1-8",
     "svelte-key": "^1.0.0"
   },
   "devDependencies": {
