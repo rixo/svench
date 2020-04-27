@@ -40,7 +40,7 @@
     if (!parentNode) return
     parentNode.classList.add('svench-container')
     return () => {
-      parentNode.classList.emove('svench-container')
+      parentNode.classList.remove('svench-container')
     }
   })
 </script>
