@@ -6,12 +6,15 @@
 </script>
 
 {#if error}
-  <h2 class="error">Error!</h2>
-  <pre>{error.stack || error}</pre>
+  <h2 class="svench-ui error">Error!</h2>
+  <pre class="svench-ui">{error.stack || error}</pre>
 {:else}
   {#if title != null}
-    <h2>
-      <a {href}><span class="icon">❖</span> {title}</a>
+    <h2 class="svench-ui">
+      <a {href}>
+        <span class="icon">❖</span>
+        {title}
+      </a>
     </h2>
   {/if}
 
@@ -36,8 +39,8 @@
   h2 a {
     font-size: 1.2em;
     display: block;
-    padding: 0.5rem 1rem;
-    padding-left: 0.5rem;
+    padding: 0.5em 1em;
+    padding-left: 0.5em;
     background-color: var(--tertiary);
     opacity: 0.95;
   }
@@ -49,7 +52,7 @@
 
   h2 a .icon {
     display: inline-block;
-    width: 1.5rem;
+    width: 1.5em;
     text-align: center;
     font-weight: 100;
   }

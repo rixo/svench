@@ -13,7 +13,7 @@
   <li class:active={name === active}>
     <a
       class="text"
-      style={`padding-left: ${indent * indentWidth}rem`}
+      style={`padding-left: ${indent * indentWidth}em`}
       href={router.resolve(`${path}?view=${name}`)}>
       <span class="icon">◇</span>
       {name}

@@ -24,7 +24,7 @@
 <style>
   pre.prism {
     margin: 0;
-    padding: 0.5rem;
+    padding: 0.5em;
     min-height: 100%;
     box-sizing: border-box;
   }

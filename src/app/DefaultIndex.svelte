@@ -20,7 +20,7 @@
     margin-top: 3em;
   }
   h1 {
-    font-size: 3rem;
+    font-size: 3em;
     margin-top: 1em;
     color: var(--gray);
   }

@@ -54,7 +54,7 @@
   h2 > a {
     display: block;
     color: var(--gray-dark);
-    margin: 0.5rem;
+    margin: 0.5em;
     margin-bottom: 0;
     text-transform: capitalize;
     opacity: 0.9;

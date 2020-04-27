@@ -86,7 +86,7 @@
         class:expanded={expanded[item.id]}>
         <a
           class="text"
-          style={`padding-left: ${indent * indentWidth}rem`}
+          style={`padding-left: ${indent * indentWidth}em`}
           href={item.href}>
           <span
             class="icon"
@@ -132,7 +132,7 @@
     list-style: none;
   }
   ul:not(.nested) {
-    padding: 0.5rem;
+    padding: 0.5em;
   }
   /* ul:not(.nested) > :global(li .text) {
     padding-right: 8px;
@@ -148,8 +148,8 @@
     content: ' ';
     display: block;
     position: absolute;
-    left: -0.5rem;
-    right: -0.5rem;
+    left: -0.5em;
+    right: -0.5em;
     top: 0;
     bottom: 0;
     background-color: var(--gray);
@@ -166,8 +166,8 @@
   ul :global(li .icon) {
     display: inline-block;
     text-align: center;
-    width: 1.1rem;
-    height: 1.1rem;
+    width: 1.1em;
+    height: 1.1em;
     /* border: 1px solid red; */
   }
 
@@ -177,8 +177,8 @@
     position: relative;
   }
   li.expanded > .text > .expand.icon {
-    left: 0.1rem;
-    top: 0.2rem;
+    left: 0.1em;
+    top: 0.2em;
     transform: rotate(90deg);
   }
 </style>

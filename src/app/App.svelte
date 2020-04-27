@@ -1,4 +1,6 @@
 <script>
+  import { onMount } from 'svelte'
+
   import hmrRestoreScroll from './hmr-restore-scroll.js'
 
   import Menu from './Menu.svelte'
@@ -30,18 +32,30 @@
   }
 
   $: hasExtras = extras && extras.source
+
+  let el
+
+  onMount(() => {
+    const { parentNode } = el
+    if (!parentNode) return
+    parentNode.classList.add('svench-container')
+    return () => {
+      parentNode.classList.emove('svench-container')
+    }
+  })
 </script>
 
 <svelte:window on:keydown={onKeydown} />
 
 <DefaultTheme>
   <div
+    bind:this={el}
     class="svench svench"
     class:fixed
     class:fullscreen
     style={fullscreen ? null : `padding-left: ${menuWidth}px`}>
 
-    <section class="ui menu" style="width: {menuWidth}px">
+    <section class="svench-ui menu" style="width: {menuWidth}px">
       <h1>
         <a href="/">
           <!-- <span class="icon">🔧</span> -->
@@ -53,11 +67,11 @@
       <ResizeHandle right bind:width={menuWidth} />
     </section>
 
-    <section class="ui svench-toolbar" style="left: {menuWidth}px">
+    <section class="svench-ui svench-toolbar" style="left: {menuWidth}px">
       <Toolbar {options} />
     </section>
 
-    <div class="ui svench-toolbar-placeholder" />
+    <div class="svench-ui svench-toolbar-placeholder" />
 
     <main
       class:focus
@@ -70,7 +84,7 @@
 
     {#if hasExtras}
       <aside
-        class="ui svench-extras"
+        class="svench-ui svench-extras"
         style="left: {menuWidth}px; height: {extrasHeight}px">
         <ExtrasPanel {extras} />
         <ResizeHandle top bind:width={extrasHeight} />
@@ -81,7 +95,7 @@
 
 <style>
   h1 {
-    margin: 0.5rem 1rem 1.5rem;
+    margin: 0.5em 1em 1.5em;
     padding: 0;
     white-space: nowrap;
   }
@@ -92,7 +106,7 @@
   h1 .icon {
     opacity: 0.5;
     display: inline-block;
-    transform: rotateY(180deg) scale(1.25) translateY(-0.12rem);
+    transform: rotateY(180deg) scale(1.25) translateY(-0.12em);
     font-weight: normal;
   }
 
@@ -106,8 +120,8 @@
   }
 
   .svench {
-    --toolbar-height: 3rem;
-    --extras-height: 15rem;
+    --toolbar-height: 3em;
+    --extras-height: 15em;
   }
   .menu {
     position: fixed;
@@ -134,7 +148,7 @@
     z-index: 2;
   }
 
-  .svench.fullscreen .ui {
+  .svench.fullscreen .svench-ui {
     display: none;
   }
   .svench.fullscreen main,

@@ -19,7 +19,7 @@
 
 <div
   class="svench view box"
-  class:ui={!focus}
+  class:svench-ui={!focus}
   class:flex={focus}
   class:outline
   class:centered
@@ -58,8 +58,8 @@
   }
   h3 a {
     display: block;
-    padding: 0.33rem 1rem;
-    padding-left: 0.5rem;
+    padding: 0.33em 1em;
+    padding-left: 0.5em;
     text-decoration: none;
     opacity: 0.95;
   }
@@ -74,11 +74,11 @@
 
   h3 a .icon {
     display: inline-block;
-    width: 1.5rem;
+    width: 1.5em;
     text-align: center;
   }
 
-  .box.ui {
+  .box.svench-ui {
     border-bottom: 1px solid var(--secondary);
     /* margin-bottom: -1px; */
   }
@@ -101,7 +101,7 @@
     justify-content: center;
   }
   .box.padding .canvas {
-    padding: 1rem;
+    padding: 1em;
   }
   .box.outline .outline {
     display: inline-block;
@@ -136,13 +136,15 @@
     color: #fff;
     border: 2px solid;
     border-radius: 2px;
+    font-size: 0.8em;
     padding: 0.1em 0.2em;
-    margin: 0.2em 0.5rem;
+    margin: 0.33em 0.5em;
     opacity: 0.9;
   }
   .toolbar button:hover {
     cursor: pointer;
     opacity: 1;
+    background-color: rgba(255, 255, 255, 0.1);
   }
   button.code {
     font-family: 'Fira Code';

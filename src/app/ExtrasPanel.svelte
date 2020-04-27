@@ -41,6 +41,7 @@
     background-color: transparent;
     border: none;
     cursor: pointer;
+    margin: 0;
     padding: 0.5em 1.5em;
     transition: 0.3s;
     border-bottom: 3px solid transparent;

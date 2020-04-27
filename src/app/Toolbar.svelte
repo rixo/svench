@@ -55,12 +55,27 @@
   .wrapper {
     display: flex;
     align-items: center;
-    padding: 0.66rem;
+    padding: 0 0.5em;
+    height: var(--toolbar-height);
   }
-  .wrapper > :not(:first-child) {
-    margin-left: 1rem;
+  .wrapper > * {
+    margin: 0.25em;
   }
   .spacer {
     flex-grow: 100;
+  }
+
+  .wrapper > label {
+    margin: 0 0.5em;
+  }
+  label > input[type='checkbox'] {
+    position: relative;
+    top: 2px;
+  }
+
+  button {
+    line-height: 0.8em;
+    margin: 0 0.25em;
+    padding: 0.4em;
   }
 </style>
