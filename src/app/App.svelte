@@ -1,4 +1,6 @@
 <script>
+  import hmrRestoreScroll from './hmr-restore-scroll.js'
+
   import Menu from './Menu.svelte'
   import ResizeHandle from './ResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
@@ -10,6 +12,8 @@
   export let router
   export let focus
   export let extras
+
+  hmrRestoreScroll()
 
   $: ({ fixed, fullscreen } = $options)
 
