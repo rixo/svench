@@ -72,7 +72,7 @@
   const options = writable({
     fixed,
     enabled: !fallback,
-    defaultViewName: index => `view ${index}`,
+    defaultViewName: index => `View ${index}`,
     // time before which view index is reset (for HMR)
     registerTimeout: 100,
     renderTimeout: 100,
