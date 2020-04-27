@@ -11,6 +11,7 @@
     "rollup.js",
     "main.js",
     "routes.js",
+    "routes.extras.js",
     "prism.js",
     "svench.js"
   ],
