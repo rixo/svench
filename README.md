@@ -477,7 +477,7 @@ If you set `override.input` to `true`, then it will automatically be replaced by
 
 As an alternative to `override.input`, you can use the `addInput` option (see bellow) if you want to run both your app and Svench with the same Rollup build process.
 
-You may also need to alter your `output` option to make it compatible with code splitting, because Svench's code base uses dynamic imports. Alternatively, you can enable Rollup's [inlineDynamicImports]([https://rollupjs.org/guide/en/#inlinedynamicimports](https://rollupjs.org/guide/en/#inlinedynamicimports) option to resolve dynamic imports.
+You may also need to alter your `output` option to make it compatible with code splitting, because Svench's code base uses dynamic imports. Alternatively, you can enable Rollup's [`inlineDynamicImports`](https://rollupjs.org/guide/en/#inlinedynamicimports) option to resolve dynamic imports.
 
 ```js
 import svench from 'svench/rollup'
