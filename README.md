@@ -144,7 +144,7 @@ export default {
       // === Core ===
 
       // When `false`, the Svench plugin does nothing at all
-	  enabled: !!process.env.SVENCH,
+  	  enabled: !!process.env.SVENCH,
 
       watch: !!process.env.ROLLUP_WATCH,
 
