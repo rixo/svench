@@ -89,7 +89,7 @@ Use the `<Render>` component to display views anywhere outside of the file where
 
 # Foo
 
-> A good demo is worth a thousand words, yet they can't tell the whole story!
+> A good demo is worth a thousand words... Yet they can't tell the whole story!
 
 Svench wants to facilitate taking notes, explaining intentions, writing docs
 bit, etc. **at the best time to do it**: when you are actively in the process of
@@ -115,7 +115,7 @@ npm install -D svench
 
 ## Configuration
 
-The Svench plugin aims to fulfill two distinct missions. first, running Svench's core operations and, secondly, integration into your project.
+The Svench plugin aims to fulfill two distinct missions: first, running Svench's core operations and, secondly, integration into your project.
 
 Svench's core operations consist of traversing FS to collect Svench components, watching, reading code to extract views's source code, etc.
 
@@ -126,6 +126,8 @@ The integration part aims at helping you reuse your existing Rollup config and, 
 Let's start with a synthetic example. Don't worry if it doesn't immediately makes sense for you, you'll find more detailed explanations just after.
 
 See the [`rollup.config.js`](./example/rollup.config.js) in the example folder for a working example.
+
+Note: you can copy paste the example bellow into Svelte's [official template](https://github.com/sveltejs/template) (or, even better, the [HMR template](https://github.com/rixo/svelte-template-hot)), and get a working Svench.
 
 ```js
 import svelte from 'rollup-plugin-svelte-hot'
@@ -235,6 +237,8 @@ But, to be useful, this app also need to be able to build and use your own compo
 
 In a nutshell, here's what we need to do:
 
+- tell the Svelte compiler to process your Svench files' extensions
+
 - override your config when Svench is running
 
   - replace `input` with Svench's entry point (alternatively: add it, if you want to run both your app and Svench with the same Rollup build process)
@@ -245,9 +249,30 @@ In a nutshell, here's what we need to do:
 
 - serve all this to the browser
 
+#### Extensions
+
+Svench will traverse your source directory to find Svench components, based on file extensions. For that, it needs to know what extension(s) you want to use for your Svench components.
+
+You don't have to use a custom extension for your Svench components. For example, you can use `.svench.svelte` and call it done.
+
+However, if you want to use something fancy, like `.svench`, you also need to let the Svelte compiler that those are Svelte components. Use the [`extensions`](https://github.com/sveltejs/rollup-plugin-svelte#usage) option of the Svelte plugin.
+
+```js
+export default {
+  svench({
+    extensions: ['.svench', '.svench.svx'],
+    ...
+  }),
+  svelte({
+    extensions: ['.svelte', '.svench', '.svx'],
+    ...
+  })
+}
+```
+
 #### Override
 
-The principle of the override options is that when the Svench plugin is not enabled, it's like if it was not there. It does nothing at all, your config just works normally. When the plugin is enabled, the overrides are applied, allowing us to make the config compatible with Svench's need.
+The principle of the override option is that when the Svench plugin is not enabled, it's like if it was not there. It does nothing at all, your config just works normally. When the plugin is enabled, the overrides are applied, allowing us to make the config compatible with Svench's needs and output to a different file (or files) than your app.
 
 What's cool with this, is that the Svench plugin shares your real config. You don't have to try and replicate it now, and won't have to do so when it evolves in the future.
 
@@ -261,7 +286,7 @@ All the other props you have in your `override` will get flatly copied over your
 
 Svench needs its own entry point. There's 2 way to slice this cake, depending on whether you want to run Svench with its own separate Rollup process, or if you want to run a unique build process for both.
 
-This consideration is mostly important for dev run (and watch). The latter approach can avoid running essentially the same build twice in parallel. On the other hand, the first one is probably easier to implement. Also, in theory, a standalone build for Svench should be faster (considering only Svench), since your app is supposed to do more than just rendering UI components, it should have more to build than what is needed for just Svench...
+This consideration is mostly important for dev run (and watch). The latter approach can avoid running essentially the same build twice in parallel. On the other hand, the first one is probably easier to implement. Also, in theory, a standalone build for Svench should be faster (considering only Svench), since your app is supposed to do more than just rendering UI components, it should have more to build than what is needed for just your Svench workbench...
 
 So, for the first solution, independent builds, you just need to override your entry point:
 
@@ -283,7 +308,7 @@ svench({
 })
 ```
 
-Multiple entry points are very well supported by Rollup, but they might require some deeper adaptations to your project, if it's not already for them. In particular, you'll need to use `output.dir` instead of `output.file`, and an `output.format` that supports code splitting. More on that in the next section.
+Multiple entry points are very well supported by Rollup, but they might require some deeper adaptations to your project, if it's not already ready for them. In particular, you'll need to use `output.dir` instead of `output.file`, and an `output.format` that supports code splitting. More on that in the next section.
 
 A note on the entry file: you can pass `true` to use Svench's default entry point, or you can pass a string with a path to a custom file you want to use. The default entry point doesn't do a whole lot, and you might want to customize it. In essence, it just renders a new `Svench` component to the body.
 
@@ -291,7 +316,7 @@ A note on the entry file: you can pass `true` to use Svench's default entry poin
 new Svench({ target: document.body })
 ```
 
-Here's its whole code (imports have been adapted to what you'd use in a custom file):
+Here's its whole code (imports have been adapted to what you'd use in a custom file -- the actual file is [there](https://github.com/rixo/svench/blob/master/svench.js)):
 
 ```js
 import { Svench } from 'svench'
@@ -316,7 +341,7 @@ With our entry point in place, we now need to tweak the `output` option a little
 
 ##### With code splitting
 
-Svench's codebase, as well as the generated JS file listing all your Svench component, use code splitting, that is dynamic imports. If you want to preserve code splitting (including if you decided to use multiple entry points), here's what you need:
+Svench's codebase, as well as the generated JS file listing all your Svench components, use code splitting, that is dynamic imports. If you want to preserve code splitting (including if you decided to use multiple entry points), here's what you need:
 
 - use `output.dir` (and not `output.file`)
 - use an `output.format` that supports dynamic imports, like `'es'`
@@ -339,7 +364,7 @@ svench({
 })
 ```
 
-Note that if you want the single build workflow, that means that your app will be built to `'es'` format too. In turn, this will require that you use `type="module"` in _your app's `index.html`_. It might be a deal breaker for the single build workflow, if your app is not already into that...
+Note that if you want the single build workflow, that means that your app will be built to `'es'` format too. In turn, this will require that you use `type="module"` in _your app_'s `index.html`. It might be a deal breaker for the single build workflow, if your app is not already into that...
 
 ##### Without code splitting
 
@@ -401,7 +426,7 @@ You might be tempted to reuse the server you're already using for serving your a
 
 Since Svench has very basic serving needs, and we've already asked so much from you setup wise, the Svench plugin ships with its own tiny static file server that you can use and be done with it.
 
-Note: the server will only fire in watch mode (this is controlled with the plugin's [`watch`](#watch) option).
+Note: the server will only fire in watch mode (as defined by the plugin's [`watch`](#watch) option).
 
 ```js
 serve: {
@@ -415,12 +440,12 @@ If you use the index generator util, the web server will know to use this as its
 
 If you do want to use the file generated with the index helper, however, leave the `server.index` option empty. Even if your generated file is written to disk. Otherwise, the index file will be reading from disk each time your (re)load your Svench page instead of being saved from RAM. It's wasteful.
 
-And with that, you should be ready to go and read about all the available option! Given the time it took me to write all this, I think you owe me that... Kidding! Go try your Svench!
+And with that, you should be ready to go, and read about all the available options bellow. Given the time it took me to write all this docs, I think you owe me that... Kidding! Go try your Svench!
 
 Fire Rollup in watch mode, making sure the `enabled` option of the Svench plugin is met, and enjoy! It should be a command like that:
 
 ```bash
-SVENCH=1 rollup -cw
+SVENCH=1 npx rollup -cw
 ```
 
 ## Options
