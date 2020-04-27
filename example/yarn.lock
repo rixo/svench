@@ -3943,9 +3943,9 @@ svelte@^3.20.1:
   version "3.20.1"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.20.1.tgz#8417fcd883a2f534b642a0737368272e651cf3ac"
 
-svench@^0.0.3-10:
-  version "0.0.3-10"
-  resolved "https://registry.yarnpkg.com/svench/-/svench-0.0.3-10.tgz#939d0d37f963073a20ed0d8b8431a6eed3c98c8b"
+svench@^0.0.3-11:
+  version "0.0.3-11"
+  resolved "https://registry.yarnpkg.com/svench/-/svench-0.0.3-11.tgz#68a0cc448eeb257e1a1b942163e3aa94c60add07"
   dependencies:
     clipboard "^2.0.6"
     dedent "^0.7.0"
