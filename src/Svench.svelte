@@ -5,7 +5,6 @@
   import { setContext, makeNamer as _makeNamer, noop } from './util.js'
   import createRouter from './router.js'
   import Router from './Router.svelte'
-  import App from './app/App.svelte'
   import AppContext from './AppContext.svelte'
   import addRegister from './register.js'
   // import test from './test.js'
@@ -235,7 +234,7 @@
   {#if single}
     <Router bind:focus />
   {:else}
-    <AppContext {App} {focus}>
+    <AppContext App={import('./app/App.svelte')} {focus}>
       <Router bind:focus />
     </AppContext>
   {/if}
