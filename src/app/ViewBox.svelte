@@ -17,12 +17,12 @@
   } = options)
 
   const backgroundAliases = {
-    '':
+    '@none':
       'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA4SURBVHgB7dOxDQBACAJA/b1Y54dyHRZzBQoLY6Am1xCS5A8hAErpvRiOQYMbwFSL6qM8isGTYAOhNQbW5Q4iGwAAAABJRU5ErkJggg==)',
   }
 
   const viewBackgroundAliases = {
-    '': 'transparent',
+    '@none': 'transparent',
   }
 
   $: canvasBg = backgroundAliases[canvasBackground] || canvasBackground

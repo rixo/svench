@@ -3,7 +3,7 @@
 </script>
 
 <select bind:value>
-  <option value="" class="pattern">None</option>
+  <option value="@none" class="pattern">None</option>
   <option value="#fff" class="light" style="background: #fff;">#fff</option>
   <option value="#000" class="dark" style="background: #000;">#000</option>
   <option value="#f00" class="dark" style="background: #f00;">#f00</option>
