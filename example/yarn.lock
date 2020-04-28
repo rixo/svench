@@ -3507,9 +3507,9 @@ rollup@^2.7.2:
   optionalDependencies:
     fsevents "~2.1.2"
 
-routix@^0.0.1-8:
-  version "0.0.1-8"
-  resolved "https://registry.yarnpkg.com/routix/-/routix-0.0.1-8.tgz#f193af96db033ffd4dace417bb805196bb39a071"
+routix@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/routix/-/routix-0.0.1.tgz#720d7dbe694f5de902abd4b023e11819a3619452"
 
 run-async@^2.4.0:
   version "2.4.0"
@@ -3943,16 +3943,16 @@ svelte@^3.20.1:
   version "3.20.1"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.20.1.tgz#8417fcd883a2f534b642a0737368272e651cf3ac"
 
-svench@^0.0.3-11:
-  version "0.0.3-11"
-  resolved "https://registry.yarnpkg.com/svench/-/svench-0.0.3-11.tgz#68a0cc448eeb257e1a1b942163e3aa94c60add07"
+svench@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/svench/-/svench-0.0.3.tgz#9f3cf79594957de80b9b27f9a4501ef2a2eddf16"
   dependencies:
     clipboard "^2.0.6"
     dedent "^0.7.0"
     navaid "^1.1.0"
     prism-svelte "^0.4.6"
     prismjs "^1.20.0"
-    routix "^0.0.1-8"
+    routix "^0.0.1"
     svelte-key "^1.0.0"
 
 svgo@^1.0.0:
