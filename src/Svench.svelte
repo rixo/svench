@@ -44,6 +44,8 @@
     'focus',
     'raw',
     'naked',
+    'canvasBackground',
+    'viewBackground',
   ]
 
   const localOptions = ['menuWidth', 'extrasHeight']
@@ -83,6 +85,8 @@
     outline: false,
     padding: false,
     fullscreen: false,
+    canvasBackground: '',
+    viewBackground: '#fff',
     ...defaults,
     ...readStoredOptions(),
     ...readParamsOptions(),

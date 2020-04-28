@@ -8,7 +8,25 @@
   export let options
   export let error = null
 
-  $: ({ outline, centered, padding } = options)
+  $: ({
+    outline,
+    centered,
+    padding,
+    canvasBackground,
+    viewBackground,
+  } = options)
+
+  const backgroundAliases = {
+    '':
+      'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA4SURBVHgB7dOxDQBACAJA/b1Y54dyHRZzBQoLY6Am1xCS5A8hAErpvRiOQYMbwFSL6qM8isGTYAOhNQbW5Q4iGwAAAABJRU5ErkJggg==)',
+  }
+
+  const viewBackgroundAliases = {
+    '': 'transparent',
+  }
+
+  $: canvasBg = backgroundAliases[canvasBackground] || canvasBackground
+  $: viewBg = viewBackgroundAliases[viewBackground] || viewBackground
 
   let showSource = null
 
@@ -23,7 +41,8 @@
   class:flex={focus}
   class:outline
   class:centered
-  class:padding>
+  class:padding
+  style="background: {canvasBg}">
   {#if !focus}
     <h3 class="svench view">
       <div class="toolbar">
@@ -41,7 +60,7 @@
     {/if}
   {/if}
   <div class="svench view canvas">
-    <div class="svench view outline">
+    <div class="svench view outline" style="background: {viewBg}">
       {#if error}
         <pre>{error}</pre>
       {:else}
@@ -80,7 +99,6 @@
 
   .box.svench-ui {
     border-bottom: 1px solid var(--secondary);
-    /* margin-bottom: -1px; */
   }
 
   .box.flex {
@@ -103,7 +121,7 @@
   .box.padding .canvas {
     padding: 1em;
   }
-  .box.outline .outline {
+  .box .outline {
     display: inline-block;
     overflow: visible;
     position: relative;

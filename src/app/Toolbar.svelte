@@ -1,4 +1,6 @@
 <script>
+  import BackgroundSelect from './BackgroundSelect.svelte'
+
   export let options
 
   const toggleFullscreen = () => {
@@ -33,6 +35,14 @@
   <label>
     <input type="checkbox" bind:checked={$options.outline} />
     Outline
+  </label>
+  <label>
+    Canvas
+    <BackgroundSelect bind:value={$options.canvasBackground} />
+  </label>
+  <label>
+    Background
+    <BackgroundSelect bind:value={$options.viewBackground} />
   </label>
   <div class="spacer" />
   <button aria-label="raw" on:click={goRaw} title="Render raw">↧</button>
