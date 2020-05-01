@@ -66,7 +66,6 @@ export default [
     output: {
       format: 'es',
       file: 'app.js',
-      name: 'SvenchApp',
       footer: "export { default as css } from './app.css.js';",
     },
     plugins: [
