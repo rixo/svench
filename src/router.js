@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store'
-import navaid from 'navaid'
+import navaid from './navaid.js'
 
 export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
   let currentRoute = null
