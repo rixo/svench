@@ -3,5 +3,5 @@
 </script>
 
 <View name="default">
-  I am the default view
+  <span>I am the default view</span>
 </View>
