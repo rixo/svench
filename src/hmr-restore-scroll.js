@@ -4,7 +4,7 @@
 const hook = () => {
   let scrollTopBefore = null
 
-  if (import.meta.hot.beforeUpdate) {
+  if (typeof import.meta.hot !== 'undefined' && import.meta.hot.beforeUpdate) {
     import.meta.hot.beforeUpdate(() => {
       scrollTopBefore = document.body.scrollTop
     })

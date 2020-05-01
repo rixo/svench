@@ -1,18 +1,23 @@
 <script>
   import { updateContext, getContext } from './util.js'
   import ComponentContext from './ComponentContext.svelte'
+  import Shadow from './Shadow.svelte'
   import { urlResolver } from './helpers/url.js'
 
   import { matchPath } from './Render.util.js'
 
   const {
+    options,
+    router,
+    getUi,
     naked,
     register,
     route,
     routes,
     defaultRenderSrc,
-    RenderBox,
   } = getContext()
+
+  const { RenderBox, css } = getUi ? getUi() : {}
 
   export let src = null
   export let view = null
@@ -124,6 +129,14 @@
     <slot>
       {#if naked}
         <ComponentContext {route} component={Component} {view} focus={false} />
+      {:else if $options.shadow}
+        <Shadow {css} {router} Component={RenderBox} props={{ title, href }}>
+          <ComponentContext
+            {route}
+            component={Component}
+            {view}
+            focus={false} />
+        </Shadow>
       {:else}
         <RenderBox {title} {href}>
           <ComponentContext

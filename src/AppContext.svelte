@@ -1,35 +1,87 @@
 <script>
-  import { getContext } from './util.js'
+  import { getContext, updateContext } from './util.js'
+  import Shadow from './Shadow.svelte'
 
   let loader
-  export { loader as App }
+  export { loader as ui }
+
   export let focus
 
-  let App
+  let App, ViewBox, RenderBox
   let error
 
-  Promise.resolve(loader)
-    .then(({ default: Cmp }) => {
+  let css
+  let stylesheet
+  let cssString = ''
+
+  Promise.resolve(loader())
+    .then(module => {
       error = null
-      App = Cmp
+      ;({ App, ViewBox, RenderBox } = module)
+      cssString = module.css
+      if (stylesheet) {
+        stylesheet.innerHTML = cssString
+      }
+      if (css) {
+        css.replace(cssString)
+      }
     })
     .catch(err => {
       error = err
     })
 
   const { router, options, tree, extras } = getContext()
+
+  $: ({ shadow } = $options)
+
+  $: props = { options, tree, router, focus, extras: $extras }
+
+  updateContext({
+    getUi: () => ({ css, ViewBox, RenderBox }),
+  })
+
+  const setShadow = shadow => {
+    if (shadow) {
+      if (stylesheet) {
+        stylesheet.remove()
+        stylesheet = null
+      }
+      if (!css) {
+        // https://stackoverflow.com/a/42647968/1387519
+        css = new CSSStyleSheet()
+        css.replace(cssString)
+      }
+    } else {
+      if (css) {
+        css = null
+      }
+      if (!stylesheet) {
+        stylesheet = document.createElement('style')
+        stylesheet.innerHTML = cssString
+        document.head.appendChild(stylesheet)
+      }
+    }
+  }
+
+  $: setShadow(shadow)
 </script>
+
+<svelte:head>
+  {#if shadow}
+    {@html `${'<'}style>${cssString}</style>`}
+  {/if}
+</svelte:head>
 
 {#if error}
   <pre>{error}</pre>
-{:else}
-  <svelte:component
-    this={App}
-    {options}
-    {tree}
-    {router}
-    {focus}
-    extras={$extras}>
-    <slot />
-  </svelte:component>
+{:else if App}
+  {#if shadow}
+    <Shadow {router} Component={App} {props} {css}>
+      <slot />
+    </Shadow>
+  {:else}
+    <svelte:component this={App} {...props}>
+      <slot />
+    </svelte:component>
+  {/if}
 {/if}

@@ -7,17 +7,23 @@
   import Router from './Router.svelte'
   import AppContext from './AppContext.svelte'
   import addRegister from './register.js'
+  import hmrRestoreScroll from './hmr-restore-scroll.js'
+
   // import test from './test.js'
 
-  import ViewBox from './app/ViewBox.svelte'
-  import RenderBox from './app/RenderBox.svelte'
   import Fallback from './app/Fallback.svelte'
   import DefaultIndex from './app/DefaultIndex.svelte'
 
   import routes$ from '../routes.js'
   import extras$ from '../routes.extras.js'
 
+  hmrRestoreScroll()
+
   export let localStorageKey = 'Svench'
+
+  export let shadow = true
+  export let ui
+  export let fixBodyStyle = true
 
   export let base = '/'
   export let fallback = null
@@ -80,6 +86,7 @@
     menuWidth: 200,
     extrasHeight: 200,
     // ui
+    shadow,
     centered: false,
     outline: false,
     padding: false,
@@ -211,6 +218,7 @@
     options,
     makeNamer,
     router: {
+      listen: router.listen,
       resolve: (...args) => router.resolve(...args),
       current: router.current,
       error: router.error,
@@ -222,22 +230,34 @@
 
     extras,
 
-    ViewBox,
-    RenderBox,
     Fallback,
   })
 
   onDestroy(router.listen())
+
+  $: if (fixBodyStyle) {
+    document.body.classList.add('svench-body')
+  } else {
+    document.body.classList.remove('svench-body')
+  }
 </script>
 
 {#if $options.enabled}
   {#if single}
     <Router bind:focus />
   {:else}
-    <AppContext App={import('./app/App.svelte')} {focus}>
+    <AppContext {ui} {focus}>
       <Router bind:focus />
     </AppContext>
   {/if}
 {:else}
   <svelte:component this={fallback} />
 {/if}
+
+<style>
+  :global(body.svench-body) {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+</style>

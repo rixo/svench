@@ -13,11 +13,9 @@
   }
 </script>
 
-<div transition:slide|local={{ duration: 200 }}>
-  <pre class="prism">
-    <code bind:this={el} class="language-{language}">{code}</code>
-  </pre>
-</div>
+<pre class="prism" transition:slide|local={{ duration: 200 }}>
+  <code bind:this={el} class="language-{language}">{code}</code>
+</pre>
 
 <style>
   pre.prism {

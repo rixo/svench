@@ -100,8 +100,8 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
 
   const listen = router.listen
 
-  router.listen = () => {
-    listen()
+  router.listen = (el) => {
+    listen(el)
     return () => router.unlisten()
   }
 

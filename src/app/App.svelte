@@ -1,8 +1,4 @@
 <script>
-  import { onMount } from 'svelte'
-
-  import hmrRestoreScroll from './hmr-restore-scroll.js'
-
   import Menu from './Menu.svelte'
   import ResizeHandle from './ResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
@@ -14,8 +10,6 @@
   export let router
   export let focus
   export let extras
-
-  hmrRestoreScroll()
 
   $: ({ fixed, fullscreen } = $options)
 
@@ -32,24 +26,12 @@
   }
 
   $: hasExtras = extras && extras.source
-
-  let el
-
-  onMount(() => {
-    const { parentNode } = el
-    if (!parentNode) return
-    parentNode.classList.add('svench-container')
-    return () => {
-      parentNode.classList.remove('svench-container')
-    }
-  })
 </script>
 
 <svelte:window on:keydown={onKeydown} />
 
 <DefaultTheme>
   <div
-    bind:this={el}
     class="svench svench"
     class:fixed
     class:fullscreen

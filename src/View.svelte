@@ -4,6 +4,7 @@
   import { onMount, onDestroy } from 'svelte'
   import { getContext, updateContext } from './util.js'
   import Offscreen from './Offscreen.svelte'
+  import Shadow from './Shadow.svelte'
 
   let providedName = null
   export { providedName as name }
@@ -26,8 +27,10 @@
     component: Cmp,
     getViewName,
     emitView,
-    ViewBox,
+    getUi,
   } = getContext()
+
+  const { ViewBox, css } = getUi ? getUi() : {}
 
   const routeExtra = route.extra
 
@@ -99,6 +102,8 @@
       prepare()
     }
   }
+
+  $: props = { focus, options: $options, name, href, source, error }
 </script>
 
 {#if isActive}
@@ -109,7 +114,14 @@
           <slot />
         {/if}
       {:else}
-        <ViewBox {focus} options={$options} {name} {href} {source} {error}>
+        <ViewBox
+          {router}
+          {focus}
+          options={$options}
+          {name}
+          {href}
+          {source}
+          {error}>
           {#if resolved}
             <slot />
           {/if}
@@ -127,8 +139,12 @@
         {#if resolved && onScreen}
           <slot />
         {/if}
+      {:else if $options.shadow && !focus}
+        <Shadow {router} {css} Component={ViewBox} {props}>
+          <slot />
+        </Shadow>
       {:else}
-        <ViewBox {focus} options={$options} {name} {href} {source} {error}>
+        <ViewBox {router} {...props}>
           {#if resolved && onScreen}
             <slot />
           {/if}

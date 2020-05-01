@@ -87,6 +87,7 @@ export default {
       hot: hot && {
         optimistic: true,
         noPreserveState: false,
+        noDisableCss: true,
       },
     }),
 

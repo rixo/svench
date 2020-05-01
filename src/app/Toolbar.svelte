@@ -44,6 +44,10 @@
     Background
     <BackgroundSelect bind:value={$options.viewBackground} />
   </label>
+  <label>
+    <input type="checkbox" bind:checked={$options.shadow} />
+    Shadow
+  </label>
   <div class="spacer" />
   <button aria-label="raw" on:click={goRaw} title="Render raw">↧</button>
   <button aria-label="naked" on:click={goNaked} title="Render naked">⇟</button>

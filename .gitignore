@@ -7,3 +7,5 @@ yarn-error.log
 /rollup.js
 /rollup.js.map
 /prism.js
+
+/app.*

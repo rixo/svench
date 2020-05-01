@@ -7,13 +7,6 @@
       Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   }
 
-  :global(body.svench-container) {
-    color: #333;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
   /* https://colorpalettes.net/color-palette-4122/ */
   /* https://colorpalettes.net/color-palette-3548/ */
   :global(.svench.svench) {

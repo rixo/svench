@@ -1,9 +1,11 @@
 import Svench from './src/Svench.svelte'
 
-// use preconfigured Prism bundle
-import './prism.js'
-
-const app = new Svench({ target: document.body })
+const app = new Svench({
+  target: document.body,
+  props: {
+    ui: () => import('./app.js'),
+  },
+})
 
 // recreate the whole app if an HMR update touches this module
 if (import.meta.hot) {
