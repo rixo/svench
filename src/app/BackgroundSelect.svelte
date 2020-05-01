@@ -1,17 +1,30 @@
 <script>
   export let value
+
+  const colors = [
+    { value: '@none', label: '' },
+    { value: '#fff' },
+    { value: '#000', dark: true },
+    { value: '#f00', dark: true },
+    { value: '#0f0' },
+    { value: '#00f', dark: true },
+    { value: '#ff0' },
+    { value: '#f0f' },
+    { value: '#0ff', dark: true },
+    ...Array.from({ length: 21 })
+      .map((_, i) => ({
+        label: `${i * 5}%`,
+        value: `hsl(0, 0%, ${i * 5}%)`,
+        dark: i <= 10,
+      }))
+      .reverse(),
+  ].map(x => ({ label: x.value, dark: false, ...x }))
 </script>
 
 <select bind:value>
-  <option value="@none" class="pattern">None</option>
-  <option value="#fff" class="light" style="background: #fff;">#fff</option>
-  <option value="#000" class="dark" style="background: #000;">#000</option>
-  <option value="#f00" class="dark" style="background: #f00;">#f00</option>
-  <option value="#0f0" class="light" style="background: #0f0;">#0f0</option>
-  <option value="#00f" class="dark" style="background: #00f;">#00f</option>
-  <option value="#ff0" class="light" style="background: #ff0;">#ff0</option>
-  <option value="#f0f" class="dark" style="background: #f0f;">#f0f</option>
-  <option value="#0ff" class="light" style="background: #0ff;">#0ff</option>
+  {#each colors as { value, label, dark } (value)}
+    <option {value} class:dark style="background: {value};">{label}</option>
+  {/each}
 </select>
 
 <style>
