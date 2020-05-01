@@ -12,8 +12,9 @@
     "main.js",
     "routes.js",
     "routes.extras.js",
-    "prism.js",
-    "svench.js"
+    "svench.js",
+    "app.js",
+    "app.css.js"
   ],
   "peerDependencies": {
     "svelte": "^3.0.0"
