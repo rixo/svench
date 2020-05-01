@@ -141,7 +141,9 @@
         {/if}
       {:else if $options.shadow && !focus}
         <Shadow {router} {css} Component={ViewBox} {props}>
-          <slot />
+          {#if resolved && onScreen}
+            <slot />
+          {/if}
         </Shadow>
       {:else}
         <ViewBox {router} {...props}>
