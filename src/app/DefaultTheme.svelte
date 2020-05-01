@@ -5,6 +5,7 @@
     font-size: 16px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
       Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    color: var(--text-primary);
   }
 
   /* https://colorpalettes.net/color-palette-4122/ */
@@ -28,6 +29,8 @@
     --gray-light: #eee; */
 
     --white: white;
+
+    --text-primary: #666;
 
     --light-1: rgba(141, 169, 196, 1);
     --light-1-r: white;
