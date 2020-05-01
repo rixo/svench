@@ -61,7 +61,10 @@
     stateOptions.forEach(name => {
       if (!q.has(name)) return
       const v = q.get(name)
-      if (v === 'false') return
+      if (v === 'false') {
+        opts[name] = false
+        return
+      }
       opts[name] =
         v === 'true' || v === '' ? true : /^\d+$/.test(v) ? parseInt(v) : v
     })
@@ -87,11 +90,11 @@
     extrasHeight: 200,
     // ui
     shadow,
-    centered: false,
+    centered: true,
     outline: false,
-    padding: false,
+    padding: true,
     fullscreen: false,
-    canvasBackground: '',
+    canvasBackground: '@none',
     viewBackground: '#fff',
     ...defaults,
     ...readStoredOptions(),
@@ -114,8 +117,10 @@
       const q = new URLSearchParams(window.location.search)
       stateOptions.forEach(name => {
         const value = opts[name]
-        if (value === false || value == null) {
+        if (value == null) {
           q.delete(name)
+        } else if (value === false) {
+          q.set(name, 'false')
         } else {
           q.set(name, value)
         }
