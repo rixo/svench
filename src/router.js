@@ -81,6 +81,15 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
     return actual
   }
 
+  router.findRoute = href => {
+    const view = getView()
+    const routes = getRoutes()
+    const url = new URL(href)
+    const path = router.format(url.pathname)
+    const route = find(path.replace(/^\/$/, ''), view == null, routes)
+    return route
+  }
+
   router.on('*', () => {
     const view = getView()
     const routes = getRoutes()
@@ -100,7 +109,7 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
 
   const listen = router.listen
 
-  router.listen = (el) => {
+  router.listen = el => {
     listen(el)
     return () => router.unlisten()
   }

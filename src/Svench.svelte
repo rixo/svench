@@ -228,6 +228,7 @@
     router: {
       listen: router.listen,
       resolve: (...args) => router.resolve(...args),
+      findRoute: (...args) => router.findRoute(...args),
       current: router.current,
       error: router.error,
     },
