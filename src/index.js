@@ -1,4 +1,4 @@
-// we need to do this before anything imports Routify... hope this is not
+// we need to do this before anything imports navaid... hope this is not
 // already too late!
 history._replaceState = history.replaceState
 

@@ -3,6 +3,8 @@
 
 import convert from 'regexparam';
 
+history._replaceState = history.replaceState
+
 export default function Navaid(base, on404) {
 	let rgx, routes=[], $={};
 
