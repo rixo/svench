@@ -146,7 +146,7 @@
           {/if}
         </Shadow>
       {:else}
-        <ViewBox {router} {...props}>
+        <ViewBox {...props}>
           {#if resolved && onScreen}
             <slot />
           {/if}
