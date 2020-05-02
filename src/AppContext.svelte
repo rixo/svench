@@ -14,21 +14,30 @@
   let stylesheet
   let cssString = ''
 
-  Promise.resolve(loader())
-    .then(module => {
-      error = null
-      ;({ App, ViewBox, RenderBox } = module)
-      cssString = module.css
-      if (stylesheet) {
-        stylesheet.innerHTML = cssString
-      }
-      if (css) {
-        css.replace(cssString)
-      }
-    })
-    .catch(err => {
-      error = err
-    })
+  let currentLoader
+
+  const load = loader => {
+    if (currentLoader === loader) return
+    currentLoader = loader
+    App = ViewBox = RenderBox = null
+    Promise.resolve(loader())
+      .then(module => {
+        error = null
+        ;({ App, ViewBox, RenderBox } = module)
+        cssString = module.css
+        if (stylesheet) {
+          stylesheet.innerHTML = cssString
+        }
+        if (css) {
+          css.replace(cssString)
+        }
+      })
+      .catch(err => {
+        error = err
+      })
+  }
+
+  $: load(loader)
 
   const { router, options, tree, extras } = getContext()
 

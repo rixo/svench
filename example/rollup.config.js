@@ -48,7 +48,7 @@ export default {
       // Example: code splitting with ES modules
       override: {
         // replace your entry with Svench's one
-        input: true,
+        input: svench.entry.shadowLight,
         output: {
           // change output format to ES module
           format: 'es',
@@ -56,6 +56,7 @@ export default {
           file: null,
           // and change to a dir (code splitting outputs multiple files)
           dir: 'public/svench',
+          entryFileNames: 'svench.js',
         },
       },
 
@@ -93,7 +94,9 @@ export default {
 
     resolve({
       browser: true,
-      dedupe: ['svelte'],
+      // dedupe: ['svelte', 'svelte/internal'],
+      dedupe: importee =>
+        importee === 'svelte' || importee.startsWith('svelte/'),
     }),
     commonjs(),
 

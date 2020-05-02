@@ -3,9 +3,9 @@ import * as fs from 'fs'
 
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-// import json from '@rollup/plugin-json'
+import json from '@rollup/plugin-json'
 import postcss from 'rollup-plugin-postcss'
-// import builtins from 'builtin-modules'
+import builtins from 'builtin-modules'
 import svelte from 'rollup-plugin-svelte-hot'
 
 const production = !process.env.ROLLUP_WATCH
@@ -44,25 +44,25 @@ export default [
   //   ],
   // },
 
-  // {
-  //   input: 'lib/rollup-plugin.js',
-  //   output: {
-  //     format: 'cjs',
-  //     file: 'rollup.js',
-  //     sourcemap: true,
-  //   },
-  //   external: builtins,
-  //   plugins: [
-  //     json(), // required by express
-  //     resolve({
-  //       preferBuiltins: true,
-  //     }),
-  //     commonjs(),
-  //   ],
-  // },
+  {
+    input: 'lib/rollup-plugin.js',
+    output: {
+      format: 'cjs',
+      file: 'rollup.js',
+      sourcemap: true,
+    },
+    external: builtins,
+    plugins: [
+      json(), // required by express
+      resolve({
+        preferBuiltins: true,
+      }),
+      commonjs(),
+    ],
+  },
 
   {
-    input: 'src/app/index.js',
+    input: 'src/app/index.shadow.js',
     output: {
       format: 'es',
       file: 'app.js',
@@ -86,7 +86,9 @@ export default [
       resolve({
         mainFields: ['svelte', 'module', 'main'],
         browser: true,
-        dedupe: ['svelte'],
+        // dedupe: ['svelte', 'svelte/internal'],
+        dedupe: importee =>
+          importee === 'svelte' || importee.startsWith('svelte/'),
       }),
       commonjs(),
       {
@@ -105,21 +107,17 @@ export default [
     ],
   },
 
-  // {
-  //   input: 'src/prism.css.js',
-  //   output: {
-  //     format: 'iife',
-  //     file: 'prism.css.js',
-  //     name: 'SvenchPrismCss',
-  //   },
-  //   plugins: [
-  //     postcss({}),
-  //     resolve({
-  //       mainFields: ['svelte', 'module', 'main'],
-  //       browser: true,
-  //       dedupe: ['svelte'],
-  //     }),
-  //     commonjs(),
-  //   ],
-  // },
+  {
+    input: 'src/app/prism.js',
+    output: {
+      format: 'iife',
+      file: 'prism.js',
+      name: 'SvenchPrismWithCss',
+    },
+    plugins: [
+      postcss({}),
+      resolve({ browser: true }),
+      commonjs(),
+    ],
+  },
 ]

@@ -23,6 +23,8 @@
 
   export let shadow = true
   export let ui
+  export let lightUi = null
+  export let shadowUi = null
   export let fixBodyStyle = true
 
   export let base = '/'
@@ -252,7 +254,7 @@
   {#if single}
     <Router bind:focus />
   {:else}
-    <AppContext {ui} {focus}>
+    <AppContext ui={($options.shadow ? shadowUi : lightUi) || ui} {focus}>
       <Router bind:focus />
     </AppContext>
   {/if}
