@@ -1,45 +1,20 @@
 <script>
   import MenuItems from './MenuItems.svelte'
 
-  const defaultSectionName = ''
-  const defaultSectionSortKey = '0000'
-
   export let tree
   export let router
   export let autofold = false
 
-  const splitSections = items => {
-    const defaultSection = {
-      path: '',
-      name: defaultSectionName,
-      sortKey: defaultSectionSortKey,
-    }
-    const sections = [defaultSection]
-    defaultSection.items = items.filter(item => {
-      if (!item.svench.section) return true
-      sections.push({
-        path: item.path,
-        name: item.prettyName,
-        items: item.children,
-        sortKey: item.svench.sortKey || item.prettyName,
-        href: item.children.some(x => x.isIndex) ? item.path : false,
-      })
-      return false
-    })
-    return sections.sort((a, b) => a.sortKey.localeCompare(b.sortKey))
-  }
-
-  // $: sections = splitSections(tree.children)
-  $: sections = [{ path: '', items: tree.children }]
+  $: sections = tree.children
 </script>
 
-{#each sections as { path, name, items, href } (path)}
-  {#if name}
+{#each sections as { id, path, title, children: items, href } (id)}
+  {#if path !== '/_'}
     <h2>
       {#if href}
-        <a {href}>{name}</a>
+        <a {href}>{title}</a>
       {:else}
-        <span>{name}</span>
+        <span>{title}</span>
       {/if}
     </h2>
   {/if}
