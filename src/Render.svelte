@@ -122,7 +122,11 @@
 </script>
 
 {#if error}
-  <RenderBox {error} />
+  {#if $options.shadow}
+    <Shadow {css} {router} Component={RenderBox} props={{ error }} />
+  {:else}
+    <RenderBox {error} />
+  {/if}
 {:else if components}
   {#each components as { Component, route, title, href } (Component)}
     <!-- slot for nested <Render> -->
