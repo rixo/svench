@@ -9,8 +9,8 @@
     { value: '#0f0' },
     { value: '#00f', dark: true },
     { value: '#ff0' },
-    { value: '#f0f' },
-    { value: '#0ff', dark: true },
+    { value: '#f0f', dark: true },
+    { value: '#0ff' },
     ...Array.from({ length: 21 })
       .map((_, i) => ({
         label: `${i * 5}%`,
