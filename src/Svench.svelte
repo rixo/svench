@@ -51,6 +51,7 @@
     'naked',
     'canvasBackground',
     'viewBackground',
+    'shadow',
   ]
 
   const localOptions = ['menuWidth', 'extrasHeight']
@@ -120,7 +121,7 @@
         if (value == null) {
           q.delete(name)
         } else if (value === false) {
-          q.set(name, 'false')
+          q.set(name, 0)
         } else {
           q.set(name, value)
         }
