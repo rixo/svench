@@ -2,6 +2,13 @@ import { readable } from 'svelte/store'
 import Register from './Register.svelte'
 
 export default ({ routes, router, makeNamer }) => route => {
+  const isDynamic = route.options && route.options.dynamic
+
+  if (route.views$ && !isDynamic) {
+    route.views$ = readable(route.views || [])
+    return
+  }
+
   route.views$ = readable([], set => {
     let cmp
 
