@@ -3,7 +3,7 @@ import { getContext, noop } from '../util.js'
 const resolveRaw = (route, path) => {
   if (path.startsWith('.')) return ['', route.dir, path].join('/')
   if (path.startsWith('/')) return path
-  return ['', ...route.path.split('/').slice(0, -1), path].join('/')
+  return ['', ...route.canonical.split('/').slice(0, -1), path].join('/')
 }
 
 const resolveUp = path =>
