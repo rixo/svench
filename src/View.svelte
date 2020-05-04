@@ -134,7 +134,7 @@
     <!-- WARNING if we bind el to an element inside viewbox, view won't be
          reemitted on HMR (hence stay "offscreen") -->
     <!-- /!\ NEEDED FOR HMR -->
-    <svench:view bind:this={el} {name}>
+    <svench-view bind:this={el} {name}>
       {#if naked}
         {#if resolved && onScreen}
           <slot />
@@ -152,14 +152,14 @@
           {/if}
         </ViewBox>
       {/if}
-    </svench:view>
+    </svench-view>
   {:else}
     <Offscreen Component={Cmp} />
   {/if}
 {/if}
 
 <style>
-  * {
+  svench-view {
     display: inherit;
     flex: inherit;
     flex-direction: inherit;
