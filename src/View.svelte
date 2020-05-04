@@ -28,9 +28,14 @@
     getViewName,
     emitView,
     getUi,
+    emitViewSlot,
+    nextSlotId,
   } = getContext()
 
-  const { ViewBox, css } = getUi ? getUi() : {}
+  // NOTE getUi is not defined in register
+  const { shadow, css, ViewBox } = getUi ? getUi() : {}
+
+  const slotId = emitViewSlot && nextSlotId()
 
   const routeExtra = route.extra
 
@@ -73,10 +78,19 @@
   let onScreen = false
 
   if (isActive && hasView && !raw) {
+    // if (isActive && !raw && rendering && !naked) {
     onMount(() => {
-      emitView(el, () => {
+      const afterEmit = () => {
         onScreen = true
-      })
+      }
+      if (emitViewSlot) {
+        const slot = document.createElement('slot')
+        slot.name = slotId
+        emitViewSlot(slotId, el)
+        emitView(slot, afterEmit)
+      } else {
+        emitView(el, afterEmit)
+      }
     })
   } else {
     onScreen = true
@@ -134,16 +148,19 @@
     <!-- WARNING if we bind el to an element inside viewbox, view won't be
          reemitted on HMR (hence stay "offscreen") -->
     <!-- /!\ NEEDED FOR HMR -->
-    <svench:view bind:this={el} {name}>
+    {#if emitViewSlot}
+      {@html `<slot name="${slotId}"></slot>`}
+    {/if}
+    <svench-view bind:this={el} {name}>
       {#if naked}
         {#if resolved && onScreen}
           <slot />
         {/if}
-      {:else if $options.shadow && !focus}
+      {:else if shadow && !focus}
         <Shadow {router} {css} Component={ViewBox} {props}>
-          {#if resolved && onScreen}
-            <slot />
-          {/if}
+          <!-- {#if resolved && onScreen} -->
+          <slot />
+          <!-- {/if} -->
         </Shadow>
       {:else}
         <ViewBox {...props}>
@@ -152,17 +169,18 @@
           {/if}
         </ViewBox>
       {/if}
-    </svench:view>
+    </svench-view>
   {:else}
     <Offscreen Component={Cmp} />
   {/if}
 {/if}
 
 <style>
-  * {
+  svench-view {
     display: inherit;
     flex: inherit;
     flex-direction: inherit;
     float: inherit;
+    all: inherit;
   }
 </style>

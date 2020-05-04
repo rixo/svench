@@ -48,7 +48,8 @@ export default {
       // Example: code splitting with ES modules
       override: {
         // replace your entry with Svench's one
-        input: svench.entry.shadowLight,
+        // input: svench.entry.shadowLight,
+        input: true,
         output: {
           // change output format to ES module
           format: 'es',

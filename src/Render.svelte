@@ -17,7 +17,7 @@
     defaultRenderSrc,
   } = getContext()
 
-  const { RenderBox, css } = getUi ? getUi() : {}
+  const { RenderBox, shadow, css } = getUi ? getUi() : {}
 
   export let src = null
   export let view = null
@@ -122,7 +122,7 @@
 </script>
 
 {#if error}
-  {#if $options.shadow}
+  {#if shadow}
     <Shadow {css} {router} Component={RenderBox} props={{ error }} />
   {:else}
     <RenderBox {error} />
@@ -133,7 +133,7 @@
     <slot>
       {#if naked}
         <ComponentContext {route} component={Component} {view} focus={false} />
-      {:else if $options.shadow}
+      {:else if shadow}
         <Shadow {css} {router} Component={RenderBox} props={{ title, href }}>
           <ComponentContext
             {route}

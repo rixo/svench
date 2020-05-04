@@ -6,6 +6,7 @@
   import createRouter from './router.js'
   import Router from './Router.svelte'
   import AppContext from './AppContext.svelte'
+  import UiResolver from './UiResolver.svelte'
   import addRegister from './register.js'
   import hmrRestoreScroll from './hmr-restore-scroll.js'
 
@@ -198,7 +199,10 @@
 
   // --- tree ---
 
-  const tree = derived(routes$, x => x.tree)
+  // const tree = derived(routes$, x => x.tree)
+  const tree = {
+    subscribe: run => routes$.subscribe(x => run(x.tree)),
+  }
 
   // --- focus ---
 
@@ -252,13 +256,20 @@
 </script>
 
 {#if $options.enabled}
-  {#if single}
-    <Router bind:focus />
-  {:else}
-    <AppContext ui={($options.shadow ? shadowUi : lightUi) || ui} {focus}>
+  <UiResolver
+    shadow={$options.shadow}
+    {ui}
+    {lightUi}
+    {shadowUi}
+    let:current={{ App, error, shadow, css }}>
+    {#if single}
       <Router bind:focus />
-    </AppContext>
-  {/if}
+    {:else if !shadow || css}
+      <AppContext {focus} {shadow} {App} {error} {css}>
+        <Router bind:focus />
+      </AppContext>
+    {/if}
+  </UiResolver>
 {:else}
   <svelte:component this={fallback} />
 {/if}

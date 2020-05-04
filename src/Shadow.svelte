@@ -30,20 +30,29 @@
 </script>
 
 <script>
-  import { onMount } from 'svelte'
+  import { onMount, onDestroy } from 'svelte'
 
   export let router
   export let Component
   export let props
   export let css
 
-  let host
+  export let host
   let cmp
 
   $: if (cmp) cmp.$set(props)
 
-  onMount(() => {
+  const init = () => {
     const shadowRoot = host.attachShadow({ mode: 'open' })
+
+    const style = document.createElement('style')
+    style.innerHTML = `
+      :host,
+      slot {
+        all: inherit;
+      }
+    `
+    shadowRoot.appendChild(style)
 
     shadowRoot.adoptedStyleSheets = [css]
 
@@ -57,14 +66,28 @@
         $$scope: {},
       },
     })
+  }
 
-    return () => {
-      cmp.$destroy()
-      cmp = null
-    }
-  })
+  const dispose = () => {
+    if (!cmp) return
+    cmp.$destroy()
+    cmp = null
+  }
+
+  // onMount(() => {
+  //   init()
+  //   return dispose
+  // })
+
+  // onMount is called before host is bound with shadow in shadow (viewbox)
+  $: if (!cmp && host) init()
+  onDestroy(dispose)
 </script>
 
-<svench-shadow bind:this={host}>
+<h2>Out of shadow</h2>
+
+<svench-shadow bind:this={host} for={Component.name}>
+  <h2>in the shadow</h2>
+
   <slot />
 </svench-shadow>

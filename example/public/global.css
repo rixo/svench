@@ -1,8 +1,12 @@
 * {
   color: skyblue;
+  /* font-size: 32px; */
+  /* border: 1px solid red; */
 }
 
 body {
+  /* font-size: 32px; */
+  color: green;
   margin: 0;
   padding: 8px;
   box-sizing: border-box;
