@@ -4,7 +4,7 @@ import Register from './Register.svelte'
 export default ({ routes, router, makeNamer }) => route => {
   const isDynamic = route.options && route.options.dynamic
 
-  if (route.views$ && !isDynamic) {
+  if (route.views && !isDynamic) {
     route.views$ = readable(route.views || [])
     return
   }
@@ -28,6 +28,7 @@ export default ({ routes, router, makeNamer }) => route => {
         cmp = new Register({
           target: document.createDocumentFragment(),
           props: {
+            naked: true, // prevent crash on missing getUi
             router,
             routes,
             route,
