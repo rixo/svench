@@ -7,13 +7,13 @@
 {:else}
   <!-- NOTE we do need a wrapping element that is destroyed on change, or
        offscreen will leak all other the place -->
-  <svench:page>
+  <svench-component>
     <slot />
-  </svench:page>
+  </svench-component>
 {/if}
 
 <style>
-  * {
+  svench-component {
     flex: inherit;
     display: inherit;
     flex-direction: inherit;
