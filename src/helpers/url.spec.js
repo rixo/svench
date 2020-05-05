@@ -10,7 +10,7 @@ const throwsOutside = {
 export const specs = [
   // {
   //   route: {
-  //     path: '/custom_index/index',
+  //     canonical: '/custom_index/index',
   //     extraNesting: 1,
   //     isIndex: false,
   //   },
@@ -18,7 +18,7 @@ export const specs = [
   // },
   // {
   //   route: {
-  //     path: '/docs/index',
+  //     canonical: '/docs/index',
   //     extraNesting: 1,
   //     isIndex: false,
   //   },
@@ -26,7 +26,7 @@ export const specs = [
   // },
   {
     route: {
-      path: '/Mdsvex/example_docs',
+      canonical: '/Mdsvex/example_docs',
       dir: '',
       isIndex: false,
     },
@@ -41,7 +41,7 @@ export const specs = [
   },
   {
     route: {
-      path: '/Mdsvex/example_docs',
+      canonical: '/Mdsvex/example_docs',
       dir: 'Mdsvex',
       isIndex: false,
     },
@@ -56,7 +56,7 @@ export const specs = [
   },
   {
     route: {
-      path: '/a/b/c/d',
+      canonical: '/a/b/c/d',
       dir: '/a/b', // meaning, actual file is 'a/b/c.d.svelte'
       isIndex: false,
     },
@@ -99,8 +99,9 @@ macro.title = (title, from, input, expected) =>
     expected.throws ? `throws ${expected.throws}` : expected
   }`
 
-for (const { route, from = route.path, expects } of specs) {
-  for (const [input, expected] of expects) {
-    test(macro, from, input, expected, { ...route, path: from })
+for (const { route, from = route.canonical, expects } of specs) {
+  for (const [input, expected, only] of expects) {
+    const _test = only ? test.only : test
+    _test(macro, from, input, expected, { ...route, path: from })
   }
 }
