@@ -68,10 +68,14 @@
       if (css) {
         css = null
       }
-      if (!stylesheet) {
+      if (!stylesheet && cssString) {
         stylesheet = document.createElement('style')
         stylesheet.innerHTML = cssString
         document.head.appendChild(stylesheet)
+      }
+      if (stylesheet && cssString) {
+        stylesheet.remove()
+        stylesheet = null
       }
     }
     update()
