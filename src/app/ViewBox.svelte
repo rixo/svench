@@ -36,15 +36,15 @@
 </script>
 
 <div
-  class="svench view box"
-  class:svench-ui={!focus}
+  class="view box"
+  class:svench-viewbox-ui={!focus}
   class:flex={focus}
   class:outline
   class:centered
   class:padding
   style="background: {canvasBg}">
   {#if !focus}
-    <h3 class="svench view">
+    <h3 class="svench-ui view">
       <div class="toolbar">
         {#if source}
           <button class="code" on:click={toggleSource}>{'</>'}</button>
@@ -59,8 +59,8 @@
       <Prism code={source} />
     {/if}
   {/if}
-  <div class="svench view canvas">
-    <div class="svench view outline" style="background: {viewBg}">
+  <div class="view canvas">
+    <div class="view outline" style="background: {viewBg}">
       {#if error}
         <pre>{error}</pre>
       {:else}
@@ -97,7 +97,7 @@
     text-align: center;
   }
 
-  .box.svench-ui {
+  .box.svench-viewbox-ui {
     border-bottom: 1px solid var(--secondary);
   }
 
