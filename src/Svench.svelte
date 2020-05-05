@@ -44,28 +44,33 @@
 
   // --- options ---
 
-  const stateOptions = [
-    'fullscreen',
-    'centered',
-    'outline',
-    'padding',
-    'focus',
-    'raw',
-    'naked',
-    'canvasBackground',
-    'viewBackground',
-    'shadow',
-    'dev',
-  ]
+  const stateOptions = {
+    fs: 'fullscreen',
+    c: 'centered',
+    o: 'outline',
+    p: 'padding',
+    f: 'focus',
+    x: 'raw',
+    xx: 'naked',
+    cv: 'canvasBackground',
+    bg: 'viewBackground',
+    shadow: 'shadow',
+    dev: 'dev',
+  }
+
+  const hiddenOptionValues = {
+    shadow: false,
+    dev: false,
+  }
 
   const localOptions = ['menuWidth', 'extrasHeight']
 
   const readParamsOptions = () => {
     const q = new URLSearchParams(window.location.search)
     const opts = {}
-    stateOptions.forEach(name => {
-      if (!q.has(name)) return
-      const v = q.get(name)
+    Object.entries(stateOptions).forEach(([key, name]) => {
+      if (!q.has(key)) return
+      const v = q.get(key)
       if (v === 'false') {
         opts[name] = false
         return
@@ -122,14 +127,14 @@
     // _replaceState is the original replaceState before Routify hacks it
     if (window.history && history._replaceState) {
       const q = new URLSearchParams(window.location.search)
-      stateOptions.forEach(name => {
+      Object.entries(stateOptions).forEach(([key, name]) => {
         const value = opts[name]
-        if (value == null) {
-          q.delete(name)
+        if (value == null || hiddenOptionValues[name] == opts[name]) {
+          q.delete(key)
         } else if (value === false) {
-          q.set(name, 0)
+          q.set(key, 0)
         } else {
-          q.set(name, value)
+          q.set(key, value)
         }
       })
       let url = location.pathname
