@@ -1,10 +1,17 @@
-import { getContext, noop } from '../util.js'
+import { getContext, noop, pipe } from '../util.js'
 
-const resolveRaw = (route, path) => {
+const defaultSection = '_'
+
+const resolveRaw = route => path => {
   if (path.startsWith('.')) return ['', route.dir, path].join('/')
   if (path.startsWith('/')) return path
   return ['', ...route.canonical.split('/').slice(0, -1), path].join('/')
 }
+
+const dropDefaultSection = path =>
+  path.startsWith('/' + defaultSection)
+    ? path.slice(defaultSection.length + 1)
+    : path
 
 const resolveUp = path =>
   path.split('../').reduce((lead, next) => lead.replace(/[^/]+\/$/, next))
@@ -12,8 +19,9 @@ const resolveUp = path =>
 const clean = path =>
   path.replace(/(?:\/|^)\.(?=\/|$)/g, '/').replace(/\/{2,}/g, '/')
 
-export const urlResolver = route => path =>
-  resolveUp(clean(resolveRaw(route, path)))
+// route => path => resolvedPath
+export const urlResolver = route =>
+  pipe(dropDefaultSection, resolveUp, clean, resolveRaw(route))
 
 export const url = {
   subscribe: listener => {
