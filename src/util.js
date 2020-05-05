@@ -20,6 +20,12 @@ export const pipe = (...fns) => x => fns.reduce((f, g) => g(f), x)
 
 export const noop = () => {}
 
+export const _log = (...args) => x => {
+  // eslint-disable-next-line no-console
+  console.log(...args)
+  return x
+}
+
 export const get = steps => route =>
   steps.split('.').reduce((cur, step) => cur && cur[step], route)
 
