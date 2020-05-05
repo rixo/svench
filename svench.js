@@ -1,9 +1,10 @@
 import Svench from './src/Svench.svelte'
+import { App, RenderBox, ViewBox } from './src/app'
 
 const app = new Svench({
   target: document.body,
   props: {
-    ui: () => import('./app.js'),
+    ui: () => ({ App, RenderBox, ViewBox }),
   },
 })
 

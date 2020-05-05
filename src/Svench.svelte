@@ -22,7 +22,6 @@
 
   export let localStorageKey = 'Svench'
 
-  export let shadow = true
   export let ui
   export let lightUi = null
   export let shadowUi = null
@@ -56,6 +55,7 @@
     'canvasBackground',
     'viewBackground',
     'shadow',
+    'dev',
   ]
 
   const localOptions = ['menuWidth', 'extrasHeight']
@@ -93,8 +93,10 @@
     renderTimeout: 100,
     menuWidth: 200,
     extrasHeight: 200,
+    // dev mode
+    dev: false,
     // ui
-    shadow,
+    shadow: false,
     centered: true,
     outline: false,
     padding: true,
