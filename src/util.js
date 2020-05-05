@@ -22,7 +22,7 @@ export const noop = () => {}
 
 export const _log = (...args) => x => {
   // eslint-disable-next-line no-console
-  console.log(...args)
+  console.log(...args, x)
   return x
 }
 
