@@ -7,7 +7,6 @@
   import { matchPath } from './Render.util.js'
 
   const {
-    options,
     router,
     getUi,
     naked,
