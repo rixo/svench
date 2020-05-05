@@ -52,7 +52,7 @@
 <DefaultTheme>
   <div
     on:mousemove={mousemove}
-    class="svench svench"
+    class="svench-app"
     class:fixed
     class:fullscreen
     style={fullscreen ? null : `padding-left: ${menuWidth}px`}>
@@ -69,17 +69,17 @@
       <ResizeHandle right bind:width={menuWidth} />
     </section>
 
-    <section class="svench-ui svench-toolbar" style="left: {menuWidth}px">
+    <section class="svench-ui svench-app-toolbar" style="left: {menuWidth}px">
       <Toolbar {options} />
     </section>
 
-    <div class="svench-ui svench-toolbar-placeholder" />
+    <div class="svench-ui svench-app-toolbar-placeholder" />
 
     <main
       class:focus
       class:extras={hasExtras}
       style={!fullscreen && `left: ${menuWidth}px; ` + `min-height: calc(100% - var(--toolbar-height) - ${extrasHeight}px);`}>
-      <div class="svench canvas" class:focus>
+      <div class="svench-app canvas" class:focus>
         <slot />
       </div>
     </main>
@@ -121,7 +121,7 @@
       Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   } */
 
-  .svench {
+  .svench-app {
     --toolbar-height: 3em;
     --extras-height: 15em;
   }
@@ -131,7 +131,7 @@
     bottom: 0;
     left: 0;
   }
-  .svench-toolbar {
+  .svench-app-toolbar {
     position: fixed;
     top: 0;
     right: 0;
@@ -139,7 +139,7 @@
     background-color: var(--white);
     z-index: 2;
   }
-  .svench-toolbar-placeholder {
+  .svench-app-toolbar-placeholder {
     height: var(--toolbar-height);
   }
   .svench-extras {
@@ -150,11 +150,11 @@
     z-index: 2;
   }
 
-  .svench.fullscreen .svench-ui {
+  .svench-app.fullscreen .svench-ui {
     display: none;
   }
-  .svench.fullscreen main,
-  .svench.fullscreen main.focus {
+  .svench-app.fullscreen main,
+  .svench-app.fullscreen main.focus {
     top: 0;
     bottom: 0;
   }
@@ -196,7 +196,7 @@
 
   /*--- theme ---*/
 
-  .svench-toolbar {
+  .svench-app-toolbar {
     border-bottom: 1px solid var(--gray-light);
   }
 

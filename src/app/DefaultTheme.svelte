@@ -1,6 +1,7 @@
 <slot />
 
 <style>
+  :global(.svench-ui *),
   :global(.svench-ui) {
     font-size: 16px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
@@ -10,7 +11,7 @@
 
   /* https://colorpalettes.net/color-palette-4122/ */
   /* https://colorpalettes.net/color-palette-3548/ */
-  :global(.svench.svench) {
+  :global(.svench-app) {
     /* --light-1: rgba(141, 169, 196, 1);
     --light-1-r: white;
     --light-2: #6bc4a6;

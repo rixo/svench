@@ -23,7 +23,7 @@
   }
 </script>
 
-<div class="wrapper">
+<div class="svench-ui wrapper">
   <label>
     <input type="checkbox" bind:checked={$options.centered} />
     Centered

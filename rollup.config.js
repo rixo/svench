@@ -114,10 +114,6 @@ export default [
       file: 'prism.js',
       name: 'SvenchPrismWithCss',
     },
-    plugins: [
-      postcss({}),
-      resolve({ browser: true }),
-      commonjs(),
-    ],
+    plugins: [postcss({}), resolve({ browser: true }), commonjs()],
   },
 ]
