@@ -26,6 +26,7 @@
   export let ui
   export let lightUi = null
   export let shadowUi = null
+
   export let fixBodyStyle = true
 
   export let base = '/'
