@@ -84,10 +84,6 @@
   onDestroy(dispose)
 </script>
 
-<h2>Out of shadow</h2>
-
 <svench-shadow bind:this={host} for={Component.name}>
-  <h2>in the shadow</h2>
-
   <slot />
 </svench-shadow>
