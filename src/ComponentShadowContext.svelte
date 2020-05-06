@@ -7,6 +7,4 @@
   setContext(context)
 </script>
 
-<h3>Just the context</h3>
-
 <Component />
