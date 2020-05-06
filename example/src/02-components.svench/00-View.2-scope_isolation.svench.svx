@@ -46,6 +46,10 @@ The `jailbreak` prop can be used on some `<View>`s to make them share the same s
 <View name="jailbreak 1" jailbreak>
   <Binder bind:value />
 </View>
+
+<View name="jailbreak 2" jailbreak>
+  <Binder bind:value />
+</View>
 ```
 
 <View name="jailbreak 1" jailbreak>
