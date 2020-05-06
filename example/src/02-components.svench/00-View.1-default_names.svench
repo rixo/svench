@@ -4,12 +4,28 @@
 
 <p>Views without a given name have a default one generated form them.</p>
 
+<p>
+  This lets you jump right into the action, and come back to find a good name
+  for your view later!
+</p>
+
+<pre>
+  <code class="language-svelte">{`<View>First anonymous View</View>`}</code>
+</pre>
+
 <View>First anonymous View</View>
 
-<View name="custom">
+<p>
   If a view has a given
   <code>name</code>
   , then its index is still skipped.
-</View>
+</p>
+
+<View name="custom">I am a named view in position 2.</View>
+
+<p>
+  In clear: the next view will have index 3, because index 2 has been consumed
+  by the previous (named) view.
+</p>
 
 <View>Third anonymous View</View>
