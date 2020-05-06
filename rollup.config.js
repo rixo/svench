@@ -45,24 +45,7 @@ export default [
   // },
 
   {
-    input: 'lib/rollup-plugin.js',
-    output: {
-      format: 'cjs',
-      file: 'rollup.js',
-      sourcemap: true,
-    },
-    external: builtins,
-    plugins: [
-      json(), // required by express
-      resolve({
-        preferBuiltins: true,
-      }),
-      commonjs(),
-    ],
-  },
-
-  {
-    input: 'src/app/index.shadow.js',
+    input: 'src/app/index.js',
     output: {
       format: 'es',
       file: 'app.js',
@@ -115,5 +98,22 @@ export default [
       name: 'SvenchPrismWithCss',
     },
     plugins: [postcss({}), resolve({ browser: true }), commonjs()],
+  },
+
+  {
+    input: 'lib/rollup-plugin.js',
+    output: {
+      format: 'cjs',
+      file: 'rollup.js',
+      sourcemap: true,
+    },
+    external: builtins,
+    plugins: [
+      json(), // required by express
+      resolve({
+        preferBuiltins: true,
+      }),
+      commonjs(),
+    ],
   },
 ]
