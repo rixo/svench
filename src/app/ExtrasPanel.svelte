@@ -1,18 +1,27 @@
 <script>
   import ExtraSource from './ExtraSource.svelte'
+  import ExtraKnobs from './ExtraKnobs.svelte'
 
   export let extras
 
-  const tabs = {
+  const titles = {
+    knobs: 'Knobs',
     source: 'Source',
-    // knobs: 'Knobs',
     // test: 'Test',
   }
 
-  let activeTab = Object.keys(tabs)[0]
+  $: tabs = Object.fromEntries(
+    Object.entries(extras)
+      .map(([x, v]) => v && [x, titles[x]])
+      .filter(Boolean)
+  )
+
+  $: activeTab = Object.keys(tabs)[0]
+
+  $: hasExtras = Object.keys(tabs).length > 0
 </script>
 
-{#if extras.source}
+{#if hasExtras}
   <div class="tabs">
     {#each Object.entries(tabs) as [id, name] (id)}
       <button
@@ -25,11 +34,13 @@
     {/each}
   </div>
 
-  {#if activeTab === 'source'}
-    <div class="content">
+  <div class="content">
+    {#if activeTab === 'source'}
       <ExtraSource code={extras.source} />
-    </div>
-  {/if}
+    {:else if activeTab === 'knobs'}
+      <ExtraKnobs knobs={extras.knobs} />
+    {/if}
+  </div>
 {/if}
 
 <style>
@@ -54,5 +65,6 @@
   .content {
     flex: 1;
     overflow: auto;
+    background-color: #F5F2F0;
   }
 </style>

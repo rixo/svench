@@ -1,0 +1,17 @@
+<script>
+  import { View } from 'svench'
+
+  const knobs = [
+    { name: 'text', default: 'Lorem ipsum dolor sit amet.' },
+    { name: 'number', type: 'number', default: 123 },
+    { name: 'range', type: 'range', default: 500, min: 0, max: 1000 },
+    { name: 'bool', type: 'bool', default: false },
+  ]
+</script>
+
+<View name="default" {knobs} let:knobs={{ text, number, range, bool }}>
+  <p>Some text: {text}</p>
+  <p>Also, some number: {number}</p>
+  <p>Another number: {range}</p>
+  <p>And some bool: {bool}</p>
+</View>
