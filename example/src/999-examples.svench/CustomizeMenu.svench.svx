@@ -2,12 +2,12 @@
   import { View } from 'svench'
 </script>
 
-<!-- routify:options name="custom page title" -->
+<svench:options title="custom page title" />
 
 Pages can customize their title with `svench:title`:
 
 ```svelte
-<!-- routify:options name="custom page title" -->
+<svench:options name="custom page title" />
 ```
 
 See: the title (in the menu) of this page is different from its path!
