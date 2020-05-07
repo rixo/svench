@@ -27,6 +27,20 @@
 
   $: hasExtras = extras && extras.source
 
+  let mainStyle
+
+  $: if (fullscreen) {
+    mainStyle = ''
+  } else {
+    mainStyle = `
+      left: ${menuWidth}px;
+      min-height: calc(100% - var(--toolbar-height) - ${extrasHeight}px);
+    `
+    if (focus && hasExtras) {
+      mainStyle += `bottom: ${extrasHeight}px;`
+    }
+  }
+
   const mousemove = e => {
     if (e.target.tagName !== 'A') return
     if (e.target.dataset.prefetched) return
@@ -75,10 +89,7 @@
 
     <div class="svench-ui svench-app-toolbar-placeholder" />
 
-    <main
-      class:focus
-      class:extras={hasExtras}
-      style={!fullscreen && `left: ${menuWidth}px; ` + `min-height: calc(100% - var(--toolbar-height) - ${extrasHeight}px);`}>
+    <main class:focus style={mainStyle}>
       <div class="svench-app canvas" class:focus>
         <slot />
       </div>
@@ -185,9 +196,6 @@
     bottom: 0;
     left: 0;
     right: 0;
-  }
-  main.focus.extras {
-    bottom: var(--extras-height);
   }
   main.focus .canvas {
     display: flex;
