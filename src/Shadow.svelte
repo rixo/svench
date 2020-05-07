@@ -37,7 +37,7 @@
   export let props
   export let css
 
-  export let host
+  export let host = null
   let cmp
 
   $: if (cmp) cmp.$set(props)
