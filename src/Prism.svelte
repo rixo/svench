@@ -3,6 +3,7 @@
 
   export let code
   export let language = 'svelte'
+  export let anim = true
 
   const Prism = window.Prism
 
@@ -13,9 +14,15 @@
   }
 </script>
 
-<pre class="prism" transition:slide|local={{ duration: 200 }}>
-  <code bind:this={el} class="language-{language}">{code}</code>
-</pre>
+{#if anim}
+  <pre class="prism" transition:slide|local={{ duration: 200 }}>
+    <code bind:this={el} class="language-{language}">{code}</code>
+  </pre>
+{:else}
+  <pre class="prism">
+    <code bind:this={el} class="language-{language}">{code}</code>
+  </pre>
+{/if}
 
 <style>
   pre.prism {

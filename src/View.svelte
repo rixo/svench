@@ -2,7 +2,8 @@
   '@!hmr'
 
   import { onMount, onDestroy } from 'svelte'
-  import { getContext, updateContext } from './util.js'
+  import { writable } from 'svelte/store'
+  import { getContext, updateContext, noop } from './util.js'
   import Offscreen from './Offscreen.svelte'
   import Shadow from './Shadow.svelte'
   import Knobs from './knobs.js'
@@ -70,6 +71,9 @@
   // --- focused view ---
 
   let knobs
+  let action = noop
+
+  $: ({ actions: actionsStore } = $extras || {})
 
   if (isActive && rendering) {
     const previous =
@@ -83,7 +87,23 @@
   }
 
   if (extras && focus && isActive) {
-    $extras = { id: componentContextId, source, knobs }
+    $extras = {
+      id: componentContextId,
+      source,
+      knobs,
+      actions: writable({
+        events: [],
+      }),
+    }
+
+    action = (...args) => {
+      $actionsStore.events.unshift({
+        date: new Date(),
+        event: args.shift(),
+        data: args.shift(),
+      })
+      $actionsStore = $actionsStore
+    }
   }
 
   // --- offscreen ---
@@ -140,7 +160,7 @@
     {#if rendering}
       {#if naked}
         {#if resolved}
-          <slot knobs={$knobs || {}} />
+          <slot knobs={$knobs || {}} {action} />
         {/if}
       {:else}
         <ViewBox
@@ -152,7 +172,7 @@
           {source}
           {error}>
           {#if resolved}
-            <slot knobs={$knobs || {}} />
+            <slot knobs={$knobs || {}} {action} />
           {/if}
         </ViewBox>
       {/if}
@@ -173,12 +193,12 @@
         {/if}
       {:else if shadow && !focus}
         <Shadow {router} {css} Component={ViewBox} {props}>
-          <slot knobs={$knobs || {}} />
+          <slot knobs={$knobs || {}} {action} />
         </Shadow>
       {:else}
         <ViewBox {...props}>
           {#if resolved && onScreen}
-            <slot knobs={$knobs || {}} />
+            <slot knobs={$knobs || {}} {action} />
           {/if}
         </ViewBox>
       {/if}
