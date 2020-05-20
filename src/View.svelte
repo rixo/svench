@@ -5,6 +5,7 @@
   import { getContext, updateContext } from './util.js'
   import Offscreen from './Offscreen.svelte'
   import Shadow from './Shadow.svelte'
+  import Knobs from './knobs.js'
 
   let providedName = null
   export { providedName as name }
@@ -30,6 +31,7 @@
     getUi,
     emitViewSlot,
     nextSlotId,
+    componentContextId,
   } = getContext()
 
   // NOTE getUi is not defined in register
@@ -42,6 +44,8 @@
   const name = getViewName(providedName, onDestroy)
 
   export let source = $routeExtra.sources[name]
+  let knobsConfig = null
+  export { knobsConfig as knobs }
 
   if (register) {
     register(name)
@@ -65,10 +69,21 @@
 
   // --- focused view ---
 
+  let knobs
+
+  if (isActive && rendering) {
+    const previous =
+      extras &&
+      focus &&
+      isActive &&
+      $extras &&
+      $extras.id === componentContextId &&
+      $extras.knobs
+    knobs = Knobs(knobsConfig, previous)
+  }
+
   if (extras && focus && isActive) {
-    $extras = {
-      source,
-    }
+    $extras = { id: componentContextId, source, knobs }
   }
 
   // --- offscreen ---
@@ -165,7 +180,7 @@
       {:else}
         <ViewBox {...props}>
           {#if resolved && onScreen}
-            <slot />
+            <slot knobs={$knobs || {}} />
           {/if}
         </ViewBox>
       {/if}

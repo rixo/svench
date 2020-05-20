@@ -12,11 +12,12 @@
 
   $: tabs = Object.fromEntries(
     Object.entries(extras)
-      .map(([x, v]) => v && [x, titles[x]])
+      .map(([x, v]) => v && titles[x] && [x, titles[x]])
       .filter(Boolean)
   )
 
-  $: activeTab = Object.keys(tabs)[0]
+  $: activeTab =
+    activeTab == null || !tabs[activeTab] ? Object.keys(tabs)[0] : activeTab
 
   $: hasExtras = Object.keys(tabs).length > 0
 </script>
@@ -56,6 +57,8 @@
     padding: 0.5em 1.5em;
     transition: 0.3s;
     border-bottom: 3px solid transparent;
+    /* FIXME anyway to make this accessible? */
+    outline: none;
   }
 
   .tabs button.active {
@@ -65,6 +68,6 @@
   .content {
     flex: 1;
     overflow: auto;
-    background-color: #F5F2F0;
+    background-color: #f5f2f0;
   }
 </style>

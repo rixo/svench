@@ -1,3 +1,7 @@
+<script context="module">
+  let componentContextId = 0
+</script>
+
 <script>
   import { getContext, updateContext } from './util.js'
   import Offscreen from './Offscreen.svelte'
@@ -23,6 +27,7 @@
     component,
     makeNamer,
     getViewName: makeNamer(),
+    componentContextId: ++componentContextId,
   })
 
   const isShadow = !raw && !view && shadow
