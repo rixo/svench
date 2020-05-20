@@ -9,9 +9,24 @@
   ]
 </script>
 
-<View name="default" {knobs} let:knobs={{ text, number, range, bool }}>
+<View name="visual example" {knobs} let:knobs={{ text, number, range, bool }}>
+  <div class:border={bool} style="font-size: {range / 33}px">
+    {text} ({number})
+  </div>
+</View>
+
+<View name="synthetic example" {knobs} let:knobs={{ text, number, range, bool }}>
   <p>Some text: {text}</p>
   <p>Also, some number: {number}</p>
   <p>Another number: {range}</p>
   <p>And some bool: {bool}</p>
 </View>
+
+<style>
+  div {
+    padding: 1em;
+  }
+  .border {
+    border: .2em solid violet;
+  }
+</style>
