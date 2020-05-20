@@ -140,7 +140,7 @@
     {#if rendering}
       {#if naked}
         {#if resolved}
-          <slot />
+          <slot knobs={$knobs || {}} />
         {/if}
       {:else}
         <ViewBox
@@ -152,7 +152,7 @@
           {source}
           {error}>
           {#if resolved}
-            <slot />
+            <slot knobs={$knobs || {}} />
           {/if}
         </ViewBox>
       {/if}
@@ -173,9 +173,7 @@
         {/if}
       {:else if shadow && !focus}
         <Shadow {router} {css} Component={ViewBox} {props}>
-          <!-- {#if resolved && onScreen} -->
-          <slot />
-          <!-- {/if} -->
+          <slot knobs={$knobs || {}} />
         </Shadow>
       {:else}
         <ViewBox {...props}>
