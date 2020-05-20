@@ -15,7 +15,10 @@
   </div>
 </View>
 
-<View name="synthetic example" {knobs} let:knobs={{ text, number, range, bool }}>
+<View
+  name="synthetic example"
+  {knobs}
+  let:knobs={{ text, number, range, bool }}>
   <p>Some text: {text}</p>
   <p>Also, some number: {number}</p>
   <p>Another number: {range}</p>
@@ -27,6 +30,6 @@
     padding: 1em;
   }
   .border {
-    border: .2em solid violet;
+    border: 0.2em solid violet;
   }
 </style>
