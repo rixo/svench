@@ -51,14 +51,8 @@
     </label>
   {/if}
   <div class="spacer" />
-  <button aria-label="raw" on:click={goRaw} title="Render raw">↧</button>
-  <button aria-label="naked" on:click={goNaked} title="Render naked">⇟</button>
-  <button
-    aria-label="raw naked"
-    on:click={goRawNaked}
-    title="Render raw & naked">
-    ⤓
-  </button>
+  <button aria-label="naked" on:click={goNaked} title="Render naked">↧</button>
+  <button aria-label="raw" on:click={goRawNaked} title="Render raw">⇟</button>
   <button
     aria-label="fullscreen"
     on:click={toggleFullscreen}
