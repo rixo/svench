@@ -4,10 +4,7 @@ const app = new Svench({
   target: document.body,
   props: {
     ui: () => import('./app.js'),
-    lightUi: () => Promise.all([
-      import('./src/app/index.js'),
-      import('./prism.js')
-    ]).then(([app]) => app),
+    lightUi: () => import('./src/app/index.js'),
   },
 })
 
