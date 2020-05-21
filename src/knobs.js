@@ -10,7 +10,7 @@ const parseValueType = value => {
       type = 'range'
     }
   }
-  return { value, type }
+  return { default: value, type }
 }
 
 const parseConfig = cfg => {
