@@ -2535,9 +2535,25 @@ node-releases@^1.1.53:
   version "1.1.53"
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.53.tgz#2d821bfa499ed7c5dffc5e2f28c88e78a08ee3f4"
 
-nollup@>=0.8.4, nollup@^0.10.6:
+nollup@>=0.8.4:
   version "0.10.7"
   resolved "https://registry.yarnpkg.com/nollup/-/nollup-0.10.7.tgz#cf14ebb4d4a254e92dd4c7a323eec9c71a9e47dc"
+  dependencies:
+    "@rollup/pluginutils" "^3.0.8"
+    acorn "^7.0.0"
+    chokidar "^2.0.2"
+    convert-source-map "^1.5.1"
+    express "^4.16.3"
+    express-history-api-fallback "^2.2.1"
+    express-http-proxy "^1.5.1"
+    express-ws "^4.0.0"
+    magic-string "^0.24.0"
+    mime-types "^2.1.24"
+    source-map "^0.5.6"
+
+nollup@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/nollup/-/nollup-0.11.0.tgz#0e7272c811ccc19b26503cd06c26ca07bcc57654"
   dependencies:
     "@rollup/pluginutils" "^3.0.8"
     acorn "^7.0.0"
@@ -3429,9 +3445,9 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rollup-plugin-hot@^0.0.20:
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.20.tgz#ca820e38c584e3dcc0be916d29857c36b18baa95"
+rollup-plugin-hot@^0.0.21:
+  version "0.0.21"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.21.tgz#50b29c8879944d9fbb987c141be0d3d43226d9e4"
   dependencies:
     cors "^2.8.5"
     express "^4.17.1"

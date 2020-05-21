@@ -89,7 +89,7 @@ export default {
       hot: hot && {
         optimistic: true,
         noPreserveState: false,
-        noDisableCss: true,
+        // noDisableCss: true,
       },
     }),
 
@@ -111,7 +111,7 @@ export default {
     hmr({
       public: 'public',
       inMemory: true,
-      compatModuleHot: !hot,
+      compatModuleHot: !hot, // for terser
     }),
   ],
   watch: {
