@@ -21,6 +21,7 @@
     "routes.js",
     "routes.extras.js",
     "svench.js",
+    "prism.js",
     "app.js",
     "app.css.js"
   ],
