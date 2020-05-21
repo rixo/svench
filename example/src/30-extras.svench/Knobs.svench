@@ -25,6 +25,16 @@
   <p>And some bool: {bool}</p>
 </View>
 
+<View
+  name="shortcut syntax"
+  knobs={{ text: '', number: 123, range: '0-100', bool: false }}
+  let:knobs={{ text, number, range, bool }}>
+  <p>Some text: {text}</p>
+  <p>Also, some number: {number}</p>
+  <p>Another number: {range}</p>
+  <p>And some bool: {bool}</p>
+</View>
+
 <style>
   div {
     padding: 1em;

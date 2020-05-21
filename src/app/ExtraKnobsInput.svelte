@@ -13,7 +13,7 @@
     <input type="number" bind:value={$knobs[field.name]} {...props} />
   {:else if type === 'range'}
     <input type="range" bind:value={$knobs[field.name]} {...props} />
-  {:else if type === 'bool' || type === 'checkbox'}
+  {:else if type === 'bool' || type === 'boolean' || type === 'checkbox'}
     <input type="checkbox" bind:checked={$knobs[field.name]} {...props} />
   {:else}
     <input bind:value={$knobs[field.name]} {...props} />
