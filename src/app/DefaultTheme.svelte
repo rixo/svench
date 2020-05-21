@@ -60,10 +60,9 @@
 
   @import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@2/distr/fira_code.css);
 
-  :global(code[class*='language-']) {
+  :global(.svench-ui code[class*='language-'] *) {
     font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono',
       monospace;
-    font-size: 0.9em;
   }
 
   /* === OverlayScrollbars === */
