@@ -96,10 +96,10 @@
       }),
     }
 
-    action = (...args) => {
+    action = event => (...args) => {
       $actionsStore.events.unshift({
         date: new Date(),
-        event: args.shift(),
+        event,
         data: args.shift(),
       })
       $actionsStore = $actionsStore

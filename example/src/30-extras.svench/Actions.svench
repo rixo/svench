@@ -3,5 +3,5 @@
 </script>
 
 <View name="default" let:action>
-  <button on:click={e => action('click', e)}>Click me!</button>
+  <button on:click={action('click')}>Click me!</button>
 </View>
