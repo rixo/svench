@@ -52,10 +52,6 @@
     --gray-dark: #79889a;
   }
 
-  :global(h2, h3) {
-    font-size: 1em;
-  }
-
   /* === Prism === */
 
   @import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@2/distr/fira_code.css);
