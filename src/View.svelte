@@ -96,13 +96,20 @@
       }),
     }
 
-    action = event => (...args) => {
-      $actionsStore.events.unshift({
-        date: new Date(),
-        event,
-        data: args.shift(),
-      })
-      $actionsStore = $actionsStore
+    action = (event, ...args) => {
+      const handler = (...args) => {
+        $actionsStore.events.unshift({
+          date: new Date(),
+          event,
+          data: args.shift(),
+        })
+        $actionsStore = $actionsStore
+      }
+      if (args.length > 0) {
+        return handler(...args)
+      } else {
+        return handler
+      }
     }
   }
 
