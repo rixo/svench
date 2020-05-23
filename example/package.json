@@ -9,13 +9,13 @@
     "mdsvex": "^0.5.1-beta.3",
     "nollup": "^0.11.0",
     "rollup": "^2.7.2",
-    "rollup-plugin-hot": "^0.0.21",
+    "rollup-plugin-hot": "^0.0.22",
     "rollup-plugin-livereload": "^1.0.0",
     "rollup-plugin-postcss": "^2.8.1",
-    "rollup-plugin-svelte-hot": "^0.6.2",
+    "rollup-plugin-svelte-hot": "^0.7.0",
     "rollup-plugin-terser": "^5.1.2",
     "svelte": "^3.21.0",
-    "svench": "^0.0.3",
+    "svench": "^0.0.8",
     "zorax": "^0.0.8"
   },
   "dependencies": {

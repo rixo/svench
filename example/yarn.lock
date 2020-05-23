@@ -3445,9 +3445,9 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rollup-plugin-hot@^0.0.21:
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.21.tgz#50b29c8879944d9fbb987c141be0d3d43226d9e4"
+rollup-plugin-hot@^0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.22.tgz#6057325f34473caaac0935c44773cdbe1322477b"
   dependencies:
     cors "^2.8.5"
     express "^4.17.1"
@@ -3489,15 +3489,15 @@ rollup-plugin-postcss@^2.8.1:
     safe-identifier "^0.4.1"
     style-inject "^0.3.0"
 
-rollup-plugin-svelte-hot@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.6.2.tgz#76c5a0fe64da06132b7e53efa3ac1cede77cb4b6"
+rollup-plugin-svelte-hot@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.7.0.tgz#6554cda7e8feb8f64bd11b63a5363eee4ff123c1"
   dependencies:
     require-relative "^0.8.7"
     rollup-plugin-hot "^0.0.9-0"
     rollup-pluginutils "^2.8.2"
     sourcemap-codec "^1.4.8"
-    svelte-hmr "^0.7.0"
+    svelte-hmr "^0.8.0"
   optionalDependencies:
     nollup ">=0.8.4"
 
@@ -3947,9 +3947,9 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-hmr@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.7.0.tgz#a287ad8b1bec984fbd08e882e34b297a66c7194e"
+svelte-hmr@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.8.0.tgz#c02c9b5bbe2e8fa23f6f7e221aef4d00495d9e39"
 
 svelte-key@^1.0.0:
   version "1.0.0"
@@ -3959,9 +3959,9 @@ svelte@^3.21.0:
   version "3.21.0"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.21.0.tgz#e326591cb92267e90b4fb5b961d80d9763792551"
 
-svench@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/svench/-/svench-0.0.3.tgz#9f3cf79594957de80b9b27f9a4501ef2a2eddf16"
+svench@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/svench/-/svench-0.0.8.tgz#04b6236ee69c2fc53e15dab90d31770401827c55"
   dependencies:
     clipboard "^2.0.6"
     dedent "^0.7.0"
