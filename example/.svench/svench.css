@@ -1,0 +1,22 @@
+.mdsvex {
+  color: #333;
+  /* font-size: 32px; */
+  /* color: green; */
+  margin: 0;
+  padding: 8px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+}
+
+/* .svench-canvas:not(.focus) > svench-component, */
+.svench-canvas:not(.focus) > .svench-render-box-body {
+  padding: 1.5em 1em;
+}
+/* .svench-canvas:not(.focus) svench-component {
+  padding-bottom: 2.5em;
+} */
+
+svench-component:not(.focus) .svench-viewbox {
+  border-width: 1px;
+}
