@@ -3499,9 +3499,9 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rollup-plugin-hot@^0.0.22:
-  version "0.0.22"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.22.tgz#6057325f34473caaac0935c44773cdbe1322477b"
+rollup-plugin-hot@^0.0.23:
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.23.tgz#84693cd7e3aafbac5a6b126ba45fad8330832bdc"
   dependencies:
     cors "^2.8.5"
     express "^4.17.1"
