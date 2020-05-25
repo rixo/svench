@@ -4,14 +4,14 @@ import * as fs from 'fs'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
-import postcss from 'rollup-plugin-postcss'
+import postcss from 'rollup-plugin-postcss-hot'
 import builtins from 'builtin-modules'
 import svelte from 'rollup-plugin-svelte-hot'
 
 const production = !process.env.ROLLUP_WATCH
 // const hot = !production
 
-export default [
+const configs = {
   // {
   //   input: 'src/app.ce/index.js',
   //   output: {
@@ -44,7 +44,7 @@ export default [
   //   ],
   // },
 
-  {
+  app: {
     input: 'src/app/index.js',
     output: {
       format: 'es',
@@ -90,7 +90,7 @@ export default [
     ],
   },
 
-  {
+  prism: {
     input: 'src/app/prism.js',
     output: {
       format: 'iife',
@@ -100,12 +100,15 @@ export default [
     plugins: [postcss({}), resolve({ browser: true }), commonjs()],
   },
 
-  {
+  rollup: {
     input: 'lib/rollup-plugin.js',
     output: {
       format: 'cjs',
       file: 'rollup.js',
       sourcemap: true,
+      ...(!production && {
+        banner: "require('source-map-support').install();",
+      }),
     },
     external: builtins,
     plugins: [
@@ -116,4 +119,33 @@ export default [
       commonjs(),
     ],
   },
-]
+
+  theme: [
+    {
+      input: 'src/themes/default.js',
+      output: {
+        format: 'es',
+        file: 'themes/default.js',
+      },
+      plugins: [
+        postcss({ extract: true }),
+        {
+          generateBundle(outputOptions, bundle) {
+            delete bundle['default.js']
+          },
+        },
+      ],
+    },
+    {
+      input: 'src/themes/default.js',
+      output: {
+        format: 'iife',
+        file: 'themes/default.css.js',
+      },
+      plugins: [postcss()],
+    },
+  ],
+}
+
+export default ({ configTarget }) =>
+  configTarget ? configs[configTarget] : Object.values(configs).flat()
