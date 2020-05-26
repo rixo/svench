@@ -14,6 +14,12 @@
   $: ({ fallback, route, cmp, view } = $current || {})
 
   $: focus = !fallback && view !== null
+
+  let last
+  $: if ($current !== last) {
+    last = $current
+    document.body.scrollTo({ top: 0 })
+  }
 </script>
 
 {#if $error}
