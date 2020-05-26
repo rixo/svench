@@ -23,7 +23,8 @@
     "svench.js",
     "prism.js",
     "app.js",
-    "app.css.js"
+    "app.css.js",
+    "themes"
   ],
   "peerDependencies": {
     "svelte": "^3.0.0"
