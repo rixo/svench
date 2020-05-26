@@ -2,7 +2,6 @@
   import Menu from './Menu.svelte'
   import ResizeHandle from './ResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
-  import DefaultTheme from './DefaultTheme.svelte'
   import ExtrasPanel from './ExtrasPanel.svelte'
 
   export let options
@@ -63,48 +62,46 @@
 
 <svelte:window on:keydown={onKeydown} />
 
-<DefaultTheme>
-  <div
-    on:mousemove={mousemove}
-    class="svench-app"
-    class:fixed
-    class:fullscreen
-    style={fullscreen ? null : `padding-left: ${menuWidth}px`}>
+<div
+  on:mousemove={mousemove}
+  class="svench-app"
+  class:fixed
+  class:fullscreen
+  style={fullscreen ? null : `padding-left: ${menuWidth}px`}>
 
-    <section class="svench-ui menu" style="width: {menuWidth}px">
-      <h1>
-        <a href="/">
-          <!-- <span class="icon">🔧</span> -->
-          <span class="icon">🔬</span>
-          Svench
-        </a>
-      </h1>
-      <Menu tree={$tree} {router} />
-      <ResizeHandle right bind:width={menuWidth} />
-    </section>
+  <section class="svench-ui menu" style="width: {menuWidth}px">
+    <h1>
+      <a href="/">
+        <!-- <span class="icon">🔧</span> -->
+        <span class="icon">🔬</span>
+        Svench
+      </a>
+    </h1>
+    <Menu tree={$tree} {router} />
+    <ResizeHandle right bind:width={menuWidth} />
+  </section>
 
-    <section class="svench-ui svench-app-toolbar" style="left: {menuWidth}px">
-      <Toolbar {options} />
-    </section>
+  <section class="svench-ui svench-app-toolbar" style="left: {menuWidth}px">
+    <Toolbar {options} />
+  </section>
 
-    <div class="svench-ui svench-app-toolbar-placeholder" />
+  <div class="svench-ui svench-app-toolbar-placeholder" />
 
-    <main class:focus style={mainStyle}>
-      <div class="svench-app canvas" class:focus>
-        <slot />
-      </div>
-    </main>
+  <main class:focus style={mainStyle}>
+    <div class="svench-app svench-canvas canvas" class:focus>
+      <slot />
+    </div>
+  </main>
 
-    {#if hasExtras}
-      <aside
-        class="svench-ui svench-extras"
-        style="left: {menuWidth}px; height: {extrasHeight}px">
-        <ExtrasPanel {extras} />
-        <ResizeHandle top bind:width={extrasHeight} />
-      </aside>
-    {/if}
-  </div>
-</DefaultTheme>
+  {#if hasExtras}
+    <aside
+      class="svench-ui svench-extras"
+      style="left: {menuWidth}px; height: {extrasHeight}px">
+      <ExtrasPanel {extras} />
+      <ResizeHandle top bind:width={extrasHeight} />
+    </aside>
+  {/if}
+</div>
 
 <style>
   h1 {

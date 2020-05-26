@@ -1,5 +1,7 @@
 import Svench from './src/Svench.svelte'
 import { App, RenderBox, ViewBox } from './src/app'
+import './themes/default.css.js'
+// import './themes/default.css'
 
 const app = new Svench({
   target: document.body,

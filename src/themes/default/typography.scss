@@ -1,0 +1,62 @@
+h1.mdsvex {
+  font-size: 2em;
+}
+h2.mdsvex {
+  font-size: 1.66em;
+}
+h3.mdsvex {
+  font-size: 1.33em;
+}
+h4.mdsvex {
+  font-size: 1.25em;
+  font-weight: 300;
+}
+h5.mdsvex {
+  font-size: 1em;
+  font-weight: 500;
+}
+h6.mdsvex {
+  font-size: 1em;
+  font-weight: 300;
+  font-style: italic;
+}
+
+h1.mdsvex,
+h2.mdsvex,
+h3.mdsvex,
+h4.mdsvex,
+h5.mdsvex,
+h6.mdsvex {
+  margin-top: 1.33em;
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+h1.svench-content-md {
+  font-size: 2em;
+}
+
+h2.svench-content-md {
+  font-size: 1.66em;
+}
+
+h3.svench-content-md {
+  font-size: 1.33em;
+}
+
+h4.svench-content-md {
+  font-size: 1.33em;
+  font-weight: normal;
+}
+
+h5.svench-content-md {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+h6.svench-content-md {
+  font-size: 1em;
+  font-weight: normal;
+  font-style: italic;
+}
