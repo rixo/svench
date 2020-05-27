@@ -1,0 +1,9 @@
+<script>
+  import { Render } from 'svench'
+</script>
+
+# Dynamic pages
+
+<Render />
+
+<Render src="*" />

@@ -1,0 +1,20 @@
+<script>
+  import { View } from 'svench'
+
+  const names = ['foo', 'bar', 'baz']
+</script>
+
+{#each names as name (name)}
+  <View
+    {name}
+    knobs={{ text: 'I am', green: false }}
+    let:knobs={{ text, green }}>
+    <p class:green>{text || 'I am'} {name}.</p>
+  </View>
+{/each}
+
+<style>
+  .green {
+    color: forestgreen;
+  }
+</style>
