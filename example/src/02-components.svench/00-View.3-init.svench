@@ -16,13 +16,16 @@
 </script>
 
 <View name="View.init">
-  Hello {name}! (<code>{prop}</code>)
+  Hello {name}! (
+  <code>{prop}</code>
+  )
 </View>
 
 <View name="init" init={initFoo}>Hello {name}! ({prop})</View>
 
 <View
   name="init error"
+  hide
   init={() => {
     throw new Error('I am an error (expected in the demo)')
   }}>

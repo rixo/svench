@@ -7,7 +7,7 @@
 Pages can customize their title with `svench:title`:
 
 ```svelte
-<svench:options name="custom page title" />
+<svench:options title="custom page title" />
 ```
 
 See: the title (in the menu) of this page is different from its path!

@@ -1,0 +1,13 @@
+<script>
+  import { Render } from 'svench'
+</script>
+
+# Automatic component index
+
+```js
+svenchPlugin({
+  autoComponentIndex: '.svx',
+})
+```
+
+<Render name="foo" />
