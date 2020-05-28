@@ -7,5 +7,6 @@
 <style>
   h2 {
     color: blue;
+    margin: 1em;
   }
 </style>

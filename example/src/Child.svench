@@ -3,7 +3,7 @@
   import Child from './Child.svelte'
 </script>
 
-<View name="default">
+<View name="default" fill>
   <Child />
 </View>
 

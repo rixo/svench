@@ -1,0 +1,17 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<View>
+  <button>I am a button</button>
+</View>
+
+<View fill>
+  <p>I am a <code>&lt;p&gt;</code></p>
+</View>
+
+<style>
+  p {
+    background-color: lightyellow;
+  }
+</style>

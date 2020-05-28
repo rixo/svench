@@ -1,7 +1,5 @@
 # Declaring views from Mdsvex
 
-<!-- routify:options svench:docs=true -->
-
 ```svelte
 <script>
   import { url, View } from 'svench'
