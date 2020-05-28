@@ -1,25 +1,10 @@
 /* eslint-env node */
-import addClasses from 'rehype-add-classes'
-import { mdsvex } from 'mdsvex'
 import postcss from 'rollup-plugin-postcss-hot'
 import { svenchify } from 'svench/rollup'
 
 export default svenchify('./rollup.config.js', {
   // The root dir that Svench will parse and watch.
   dir: './src',
-
-  // Extensions Svench will process.
-  // These extensions will also be appended to the svelte plugin.
-  extensions: ['.svench', '.svench.svelte', '.svench.svx'],
-
-  svelte: {
-    preprocess: [
-      mdsvex({
-        extension: '.svx',
-        rehypePlugins: [[addClasses, { '*': 'mdsvex' }]],
-      }),
-    ],
-  },
 
   // Example: code splitting with ES modules
   override: {

@@ -1,0 +1,11 @@
+<script>
+  import { Render } from 'svench'
+</script>
+
+<Render src="component_index_auto" />
+
+<Render src="component_index_auto.index" />
+
+<Render src="component_index" ui />
+
+<Render src="component_index.index" />

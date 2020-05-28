@@ -4,7 +4,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 import hmr from 'rollup-plugin-hot'
-import { mdsvex } from 'mdsvex'
+// import { mdsvex } from 'mdsvex'
 import svench from 'svench/rollup'
 
 const watch = !!process.env.ROLLUP_WATCH
@@ -19,9 +19,9 @@ const isSvench = !!process.env.SVENCH
 const spa = true
 
 const preprocess = [
-  mdsvex({
-    extension: '.svx',
-  }),
+  // mdsvex({
+  //   extension: '.svx',
+  // }),
 ]
 
 export default {
