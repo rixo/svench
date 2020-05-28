@@ -5106,6 +5106,14 @@ rollup-plugin-svelte-hot@^0.4.1:
   optionalDependencies:
     nollup ">=0.8.4"
 
+rollup-plugin-svelte@^5.2.2:
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte/-/rollup-plugin-svelte-5.2.2.tgz#709244243c79ae47394a6943a3d899516d4a610d"
+  dependencies:
+    require-relative "^0.8.7"
+    rollup-pluginutils "^2.8.2"
+    sourcemap-codec "^1.4.8"
+
 rollup-plugin-terser@^5.3.0:
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/rollup-plugin-terser/-/rollup-plugin-terser-5.3.0.tgz#9c0dd33d5771df9630cd027d6a2559187f65885e"
@@ -5407,7 +5415,7 @@ source-map@^0.6.0, source-map@^0.6.1, source-map@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
 
-sourcemap-codec@^1.4.1, sourcemap-codec@^1.4.4:
+sourcemap-codec@^1.4.1, sourcemap-codec@^1.4.4, sourcemap-codec@^1.4.8:
   version "1.4.8"
   resolved "https://registry.yarnpkg.com/sourcemap-codec/-/sourcemap-codec-1.4.8.tgz#ea804bd94857402e6992d05a38ef1ae35a9ab4c4"
 
