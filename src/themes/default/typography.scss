@@ -1,62 +1,54 @@
-h1.mdsvex {
+.svench-content {
+  color: #333;
+  // margin: 0;
+  // padding: 8px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+}
+
+h1.svench-content {
   font-size: 2em;
 }
-h2.mdsvex {
+
+h2.svench-content {
   font-size: 1.66em;
 }
-h3.mdsvex {
-  font-size: 1.33em;
-}
-h4.mdsvex {
-  font-size: 1.25em;
-  font-weight: 300;
-}
-h5.mdsvex {
-  font-size: 1em;
+
+h3.svench-content {
+  font-size: 1.2em;
   font-weight: 500;
 }
-h6.mdsvex {
-  font-size: 1em;
+
+h4.svench-content {
+  font-size: 1.2em;
   font-weight: 300;
-  font-style: italic;
 }
 
-h1.mdsvex,
-h2.mdsvex,
-h3.mdsvex,
-h4.mdsvex,
-h5.mdsvex,
-h6.mdsvex {
-  margin-top: 1.33em;
-  &:first-child {
-    margin-top: 0;
-  }
-}
-
-h1.svench-content-md {
-  font-size: 2em;
-}
-
-h2.svench-content-md {
-  font-size: 1.66em;
-}
-
-h3.svench-content-md {
-  font-size: 1.33em;
-}
-
-h4.svench-content-md {
-  font-size: 1.33em;
-  font-weight: normal;
-}
-
-h5.svench-content-md {
+h5.svench-content {
   font-size: 1em;
   font-weight: bold;
 }
 
-h6.svench-content-md {
+h6.svench-content {
   font-size: 1em;
   font-weight: normal;
   font-style: italic;
+}
+
+h1.svench-content,
+h2.svench-content,
+h3.svench-content,
+h4.svench-content,
+h5.svench-content,
+h6.svench-content {
+  margin-top: 1.5em;
+  margin-bottom: .66em;
+}
+
+h1.svench-content {
+  margin-top: 0;
+}
+.svench-page .svench-page h1 {
+  margin-top: 1.5em;
 }

@@ -1,0 +1,64 @@
+.svench-viewbox-title {
+  margin: 0;
+  padding: 0;
+}
+.svench-viewbox-title a {
+  display: block;
+  padding: 0.33em 1em;
+  padding-left: 0.5em;
+  text-decoration: none;
+  opacity: 0.95;
+}
+.svench-viewbox-title a[href]:hover {
+  opacity: 1;
+}
+.svench-viewbox-title a,
+.svench-viewbox-title a * {
+  background: var(--secondary, #aaa);
+  color: var(--secondary-r, #fff);
+}
+
+.svench-viewbox-title a .icon {
+  display: inline-block;
+  width: 1.5em;
+  text-align: center;
+}
+
+.svench-viewbox {
+  border-color: var(--secondary);
+  border-style: solid;
+  border-width: 0 0 1px;
+  background-color: #fff;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.svench-viewbox-title {
+  position: relative;
+}
+.svench-viewbox-toolbar {
+  position: absolute;
+  right: 0;
+  z-index: 1;
+}
+.svench-viewbox-toolbar button {
+  background: none;
+  border: none;
+  font-weight: bold;
+  color: #fff;
+  border: 2px solid;
+  border-radius: 2px;
+  font-size: 0.8em;
+  padding: 0.1em 0.2em;
+  margin: 0.33em 0.5em;
+  opacity: 0.9;
+}
+.svench-viewbox-toolbar button:hover {
+  cursor: pointer;
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+button.code {
+  font-family: 'Fira Code';
+}

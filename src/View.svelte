@@ -7,6 +7,7 @@
   import Offscreen from './Offscreen.svelte'
   import Shadow from './Shadow.svelte'
   import Knobs from './knobs.js'
+  import ViewCanvas from './ViewCanvas.svelte'
 
   let providedName = null
   export { providedName as name }
@@ -14,6 +15,8 @@
   export let init = null
   export let hide = false
   export let jailbreak = false
+
+  export let fill = false
 
   const {
     raw,
@@ -40,11 +43,10 @@
 
   const slotId = emitViewSlot && nextSlotId()
 
-  const routeExtra = route.extra
-
   const name = getViewName(providedName, onDestroy)
 
-  export let source = $routeExtra.sources[name]
+  export let source
+
   let knobsConfig = null
   export { knobsConfig as knobs }
 
@@ -159,30 +161,30 @@
     }
   }
 
-  $: props = { focus, options: $options, name, href, source, error }
+  // $: props = { options: $options, name, href, source, error }
+  $: props = { name, href, source }
+  $: canvasProps = { error, options: $options, focus, fill }
 </script>
 
 {#if isActive}
   {#if raw}
     {#if rendering}
-      {#if naked}
+      {#if resolved}
+        <slot knobs={$knobs || {}} {action} />
+      {/if}
+      <!-- {#if naked}
         {#if resolved}
           <slot knobs={$knobs || {}} {action} />
         {/if}
       {:else}
-        <ViewBox
-          {router}
-          {focus}
-          options={$options}
-          {name}
-          {href}
-          {source}
-          {error}>
-          {#if resolved}
-            <slot knobs={$knobs || {}} {action} />
-          {/if}
+        <ViewBox {...props}>
+          <ViewCanvas {...canvasProps}>
+            {#if resolved}
+              <slot knobs={$knobs || {}} {action} />
+            {/if}
+          </ViewCanvas>
         </ViewBox>
-      {/if}
+      {/if} -->
     {:else}
       <svelte:component this={Cmp} />
     {/if}
@@ -193,20 +195,28 @@
     {#if emitViewSlot}
       {@html `<slot name="${slotId}"></slot>`}
     {/if}
-    <svench-view bind:this={el} {name}>
+    <svench-view bind:this={el} {name} {fill}>
       {#if naked}
         {#if resolved && onScreen}
-          <slot />
+          <slot knobs={$knobs || {}} {action} />
         {/if}
       {:else if shadow && !focus}
         <Shadow {router} {css} Component={ViewBox} {props}>
           <slot knobs={$knobs || {}} {action} />
         </Shadow>
-      {:else}
-        <ViewBox {...props}>
+      {:else if focus}
+        <ViewCanvas {...canvasProps}>
           {#if resolved && onScreen}
             <slot knobs={$knobs || {}} {action} />
           {/if}
+        </ViewCanvas>
+      {:else}
+        <ViewBox {...props}>
+          <ViewCanvas {...canvasProps}>
+            {#if resolved && onScreen}
+              <slot knobs={$knobs || {}} {action} />
+            {/if}
+          </ViewCanvas>
         </ViewBox>
       {/if}
     </svench-view>
@@ -221,6 +231,6 @@
     flex: inherit;
     flex-direction: inherit;
     float: inherit;
-    all: inherit;
+    /* all: inherit; */
   }
 </style>

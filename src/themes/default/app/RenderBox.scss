@@ -1,0 +1,41 @@
+/* .focus :global(> *) {
+  display: none;
+}
+.focus :global(> .svench.view) {
+  display: inherit;
+} */
+
+.svench-renderbox-title {
+  margin: 0;
+  padding: 0;
+
+  &:not(:first-child) {
+    margin-top: 2em;
+  }
+
+  a, a * {
+    color: var(--tertiary-r);
+
+    .icon {
+      display: inline-block;
+      width: 1.5em;
+      text-align: center;
+      font-weight: 100;
+    }
+
+    text-decoration: none;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.svench-renderbox-title.svench-error,
+.svench-renderbox-title a {
+  font-size: 1.2em;
+  display: block;
+  padding: 0.5em 1em;
+  padding-left: 0.5em;
+  background-color: var(--tertiary);
+  opacity: 0.95;
+}

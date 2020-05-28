@@ -1,4 +1,5 @@
 @import './typography.scss';
+@import './app/app.scss';
 
 .svench-ui *,
 .svench-ui {
@@ -75,14 +76,38 @@ body
 
 // === Markdown / content layout ===
 
-/* .svench-canvas:not(.focus) > svench-component, */
-.svench-canvas:not(.focus) > .svench-render-box-body {
+// .svench-canvas:not(.focus) > svench-component,
+// .svench-canvas:not(.focus) > .svench-render-box-body {
+.svench-page {
   padding: 1.5em 1em;
-}
-/* .svench-canvas:not(.focus) svench-component {
-  padding-bottom: 2.5em;
-} */
+  & .svench-page {
+    padding: 0;
+  }
 
-svench-component:not(.focus) .svench-viewbox {
+  .svench-viewbox {
+    border-width: 1px;
+    margin: 0.5em 0;
+  }
+}
+
+.svench-viewbox {
+  // margin: 0.5em 0;
+  margin: 1em;
   border-width: 1px;
 }
+// .svench-canvas:not(.focus) > svench-component {
+//   padding: 1.5em 1em;
+//   padding-bottom: 2.5em;
+// }
+
+// svench-component:not(.svench-focus) svench-view {
+//   border-width: 1px;
+//   // margin-bottom: 1em;
+//   // &:not(:first-child) {
+//   //   margin-top: 1em;
+//   // }
+// }
+
+// svench-view:not(:first-child) {
+//   margin-top: 1em;
+// }
