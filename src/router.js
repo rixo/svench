@@ -8,7 +8,11 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
 
   const on404 = path => {
     if (path === '/' || path === '/index') {
-      setCurrent({ cmp: DefaultIndex })
+      const route = {
+        path,
+        options: {}
+      }
+      setCurrent({ route, cmp: DefaultIndex })
     } else {
       setCurrent(null)
     }
