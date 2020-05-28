@@ -16,7 +16,7 @@
   import DefaultIndex from './app/DefaultIndex.svelte'
 
   import routes$ from '../routes.js'
-  import extras$ from '../routes.extras.js'
+  // import extras$ from '../routes.extras.js'
 
   hmrRestoreScroll()
 
@@ -179,17 +179,17 @@
 
   // --- augment ---
 
-  const addSource = route => {
-    route.extra = derived(extras$, extras => extras[route.id] || {})
-  }
+  // const addSource = route => {
+  //   route.extra = derived(extras$, extras => extras[route.id] || {})
+  // }
 
   const _routes = derived(routes$, ({ routes }) => {
     const files = routes.filter(x => x.import)
     files.forEach(addRegister({ makeNamer, router, routes: _routes }))
-    files.forEach(addSource)
+    // files.forEach(addSource)
 
     const indexes = Object.fromEntries(
-      routes
+      files
         .filter(route => route.path.endsWith('/index'))
         .map(route => [route.path.slice(0, -'/index'.length), route])
     )
