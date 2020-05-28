@@ -110,7 +110,7 @@ const configs = {
         banner: "require('source-map-support').install();",
       }),
     },
-    external: builtins,
+    external: ['svelte/compiler', ...builtins],
     plugins: [
       json(), // required by express
       resolve({
@@ -148,4 +148,10 @@ const configs = {
 }
 
 export default ({ configTarget }) =>
-  configTarget ? configs[configTarget] : Object.values(configs).flat()
+  configTarget
+    ? configTarget
+        .split(',')
+        .map(x => x.trim())
+        .map(x => configs[x])
+        .flat()
+    : Object.values(configs).flat()
