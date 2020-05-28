@@ -24,7 +24,9 @@
     "prism.js",
     "app.js",
     "app.css.js",
-    "themes"
+    "themes",
+    "lib/rollup-svenchify.proxyquire.js",
+    "lib/rollup-svenchify.require.js"
   ],
   "peerDependencies": {
     "svelte": "^3.0.0"
