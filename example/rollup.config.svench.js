@@ -42,8 +42,6 @@ export default svenchify('./rollup.config.js', {
     host: '0.0.0.0',
     port: 4242,
     public: ['.svench/dist', 'public'],
-    nollup: {
-      port: 42421
-    },
+    nollup: { port: 42421 },
   },
 })
