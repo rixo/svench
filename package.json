@@ -48,6 +48,7 @@
     "@rollup/plugin-json": "^4.0.3",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "hast-util-select": "^4.0.0",
+    "http-proxy": "^1.18.1",
     "mdsvex": "^0.8.0",
     "node-sass": "^4.14.1",
     "np": "^6.2.1",

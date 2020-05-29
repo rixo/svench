@@ -17,7 +17,7 @@ export default svenchify('./rollup.config.js', {
       // remove the file from the original config (can't have file & dir)
       file: null,
       // and change to a dir (code splitting outputs multiple files)
-      dir: 'public/svench',
+      dir: '.svench/dist',
       // ensure we know the name of our entry point (useful when input file is
       // not named svench.js)
       entryFileNames: 'svench.js',
@@ -31,16 +31,19 @@ export default svenchify('./rollup.config.js', {
     // NOTE we need to add type="module" to use script in ES format
     replace: {
       '<script defer src="/build/bundle.js">':
-        '<script defer type="module" src="/svench/svench.js">',
+        '<script defer type="module" src="/svench.js">',
+      '"/build/bundle.css"': '/bundle.css',
       'Svelte app': 'Svench app',
     },
-    // write: 'public/svench/index.html',
+    // write: '.svench/dist/index.html',
   },
 
   serve: {
     host: '0.0.0.0',
     port: 4242,
-    // public: ['.svench/build', 'public'],
-    public: 'public',
+    public: ['.svench/dist', 'public'],
+    nollup: {
+      port: 42421
+    },
   },
 })

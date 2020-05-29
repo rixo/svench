@@ -2,6 +2,6 @@
 /public/build/
 /public/svench/
 /public/svench.html
-/.svench/build/
+/.svench/dist/
 
 .DS_Store
