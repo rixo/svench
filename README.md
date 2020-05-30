@@ -38,6 +38,18 @@ Svench is very opinionated. It's opinion is that it should not get in the way.
 
 - Also, for people who cares, Svench has over the top HMR support.
 
+## Quick start
+
+### Components template
+
+https://github.com/rixo/svench-component-template
+
+We're a bit behind on the goal of integrating smoothly with your project so, meanwhile, the components template is a good way to get a quick preview of Svench.
+
+It is a standalone project, featuring Svench, and configured to produce sharable components, as per the guidelines from the [official component template](https://github.com/sveltejs/component-template).
+
+Currently, it's the main thing that I try to keep "stable".
+
 ## Running the demo
 
 ```bash
