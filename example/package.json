@@ -23,8 +23,8 @@
   "scripts": {
     "clean": "rm -r public/build public/svench",
     "build": "rollup -c",
-    "svench": "nollup --hot --port 42421 --watch ./src --watch node_modules/svench --config rollup.config.svench.js",
-    "svench:rollup": "rollup --config rollup.config.svench.js --watch",
+    "svench": "rollup --config rollup.config.svench.js --watch",
+    "svench:nollup": "nollup --hot --port 42421 --watch ./src --watch node_modules/svench --config rollup.config.svench.js",
     "svench:iife": "SVENCH=1 rollup -w --config rollup.config.svelte-template.js",
     "svench:single": "SVENCH=1 rollup -w --config rollup.config.single-build.js",
     "svench:livereload": "routify --extensions svench,svench.svx --pages src --child-process='svench:start:livereload'",
