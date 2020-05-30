@@ -6,7 +6,7 @@
     "@rollup/plugin-commonjs": "11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1",
     "cross-env": "^6.0.3",
-    "nollup": "^0.11.0",
+    "nollup": "rixo/nollup#next",
     "rollup": "^2.7.2",
     "rollup-plugin-hot": "^0.0.23",
     "rollup-plugin-livereload": "^1.0.0",
@@ -23,7 +23,7 @@
   "scripts": {
     "clean": "rm -r public/build public/svench",
     "build": "rollup -c",
-    "svench": "nollup --hot --port 42421 --watch ./src --watch ../src --config rollup.config.svench.js",
+    "svench": "nollup --hot --port 42421 --watch ./src --watch node_modules/svench --config rollup.config.svench.js",
     "svench:rollup": "rollup --config rollup.config.svench.js --watch",
     "svench:iife": "SVENCH=1 rollup -w --config rollup.config.svelte-template.js",
     "svench:single": "SVENCH=1 rollup -w --config rollup.config.single-build.js",

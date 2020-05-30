@@ -642,6 +642,20 @@ chokidar@^2.0.2:
   optionalDependencies:
     fsevents "^1.2.7"
 
+chokidar@^3.0.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.4.0.tgz#b30611423ce376357c765b9b8f904b9fba3c0be8"
+  dependencies:
+    anymatch "~3.1.1"
+    braces "~3.0.2"
+    glob-parent "~5.1.0"
+    is-binary-path "~2.1.0"
+    is-glob "~4.0.1"
+    normalize-path "~3.0.0"
+    readdirp "~3.4.0"
+  optionalDependencies:
+    fsevents "~2.1.2"
+
 chokidar@^3.3.0:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.3.1.tgz#c84e5b3d18d9a4d77558fef466b1bf16bbeb3450"
@@ -2545,13 +2559,13 @@ nollup@>=0.8.4:
     mime-types "^2.1.24"
     source-map "^0.5.6"
 
-nollup@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/nollup/-/nollup-0.11.0.tgz#0e7272c811ccc19b26503cd06c26ca07bcc57654"
+nollup@rixo/nollup#next:
+  version "0.11.1"
+  resolved "https://codeload.github.com/rixo/nollup/tar.gz/33d551782d81ab4cadd1176748d0245acdad3541"
   dependencies:
     "@rollup/pluginutils" "^3.0.8"
     acorn "^7.0.0"
-    chokidar "^2.0.2"
+    chokidar "^3.0.0"
     convert-source-map "^1.5.1"
     express "^4.16.3"
     express-history-api-fallback "^2.2.1"
@@ -2815,7 +2829,7 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-picomatch@^2.0.4, picomatch@^2.0.5, picomatch@^2.0.7:
+picomatch@^2.0.4, picomatch@^2.0.5, picomatch@^2.0.7, picomatch@^2.2.1:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.2.2.tgz#21f333e9b6b8eaff02468f5146ea406d345f4dad"
 
@@ -3322,6 +3336,12 @@ readdirp@~3.3.0:
   resolved "https://registry.yarnpkg.com/readdirp/-/readdirp-3.3.0.tgz#984458d13a1e42e2e9f5841b129e162f369aff17"
   dependencies:
     picomatch "^2.0.7"
+
+readdirp@~3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/readdirp/-/readdirp-3.4.0.tgz#9fdccdf9e9155805449221ac645e8303ab5b9ada"
+  dependencies:
+    picomatch "^2.2.1"
 
 regenerate-unicode-properties@^8.2.0:
   version "8.2.0"
