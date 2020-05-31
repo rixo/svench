@@ -1,10 +1,17 @@
 /* eslint-env node */
-import postcss from 'rollup-plugin-postcss-hot'
 import { svenchify } from 'svench/rollup'
+import postcss from 'rollup-plugin-postcss-hot'
+import del from 'rollup-plugin-delete'
 
 export default svenchify('./rollup.config.js', {
   // The root dir that Svench will parse and watch.
   dir: './src',
+
+  // svelte: {
+  //   css: css => {
+  //     css.write('.svench/dist/bundle.css')
+  //   },
+  // },
 
   // Example: code splitting with ES modules
   override: {
@@ -23,7 +30,13 @@ export default svenchify('./rollup.config.js', {
       entryFileNames: 'svench.js',
     },
 
-    plugins: plugins => [...plugins, postcss()],
+    plugins: plugins => [
+      // NOTE del is needed to avoid serving stale static files that would
+      // shadown Nollup
+      del({ targets: '.svench/dist/*', runOnce: true, hook: 'options' }),
+      ...plugins,
+      postcss(),
+    ],
   },
 
   index: {
