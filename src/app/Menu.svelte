@@ -11,7 +11,7 @@
 {#each sections as { id, path, title, children: items, href } (id)}
   {#if path !== '/_'}
     <h2>
-      {#if href}
+      {#if href = router.resolve(path)}
         <a {href}>{title}</a>
       {:else}
         <span>{title}</span>
