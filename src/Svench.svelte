@@ -205,6 +205,18 @@
     return routes
   })
 
+  let lastRoutes = null
+
+  // fix HMR when a Svench component has been renamed (hence we have a stale
+  // component in the route)
+  $: if ($_routes !== lastRoutes) {
+    const previous = lastRoutes
+    lastRoutes = $_routes
+    if (previous !== null) {
+      router.run()
+    }
+  }
+
   // --- tree ---
 
   // const tree = derived(routes$, x => x.tree)

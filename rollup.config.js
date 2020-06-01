@@ -44,52 +44,6 @@ const configs = {
   //   ],
   // },
 
-  app: {
-    input: 'src/app/index.js',
-    output: {
-      format: 'es',
-      file: 'app.js',
-      footer: "export { default as css } from './app.css.js';",
-    },
-    plugins: [
-      svelte({
-        // dev: !production,
-        css: css => {
-          css.write('app.css', false)
-        },
-        extensions: ['.svelte'],
-        // hot: hot && {
-        //   optimistic: true,
-        //   noPreserveState: false,
-        // },
-      }),
-      postcss({
-        extract: 'app.vendor.css',
-      }),
-      resolve({
-        mainFields: ['svelte', 'module', 'main'],
-        browser: true,
-        // dedupe: ['svelte', 'svelte/internal'],
-        dedupe: importee =>
-          importee === 'svelte' || importee.startsWith('svelte/'),
-      }),
-      commonjs(),
-      {
-        async writeBundle() {
-          const sources = ['app.css', 'app.vendor.css'].map(x =>
-            path.resolve(__dirname, x)
-          )
-          const dest = path.resolve(__dirname, 'app.css.js')
-          const css = (
-            await Promise.all(sources.map(x => fs.promises.readFile(x, 'utf8')))
-          ).join('\n')
-          const js = `export default ${JSON.stringify(css)}`
-          await fs.promises.writeFile(dest, js, 'utf8')
-        },
-      },
-    ],
-  },
-
   prism: {
     input: 'src/app/prism.js',
     output: {
@@ -145,6 +99,52 @@ const configs = {
       plugins: [postcss()],
     },
   ],
+
+  app: {
+    input: 'src/app/index.js',
+    output: {
+      format: 'es',
+      file: 'app.js',
+      footer: "export { default as css } from './app.css.js';",
+    },
+    plugins: [
+      svelte({
+        // dev: !production,
+        css: css => {
+          css.write('app.css', false)
+        },
+        extensions: ['.svelte'],
+        // hot: hot && {
+        //   optimistic: true,
+        //   noPreserveState: false,
+        // },
+      }),
+      postcss({
+        extract: 'app.vendor.css',
+      }),
+      resolve({
+        mainFields: ['svelte', 'module', 'main'],
+        browser: true,
+        // dedupe: ['svelte', 'svelte/internal'],
+        dedupe: importee =>
+          importee === 'svelte' || importee.startsWith('svelte/'),
+      }),
+      commonjs(),
+      {
+        async writeBundle() {
+          const sources = ['app.css', 'app.vendor.css'].map(x =>
+            path.resolve(__dirname, x)
+          )
+          const dest = path.resolve(__dirname, 'app.css.js')
+          const css = (
+            await Promise.all(sources.map(x => fs.promises.readFile(x, 'utf8')))
+          ).join('\n')
+          const js = `export default ${JSON.stringify(css)}`
+          await fs.promises.writeFile(dest, js, 'utf8')
+        },
+      },
+    ],
+  },
 }
 
 export default ({ configTarget }) =>

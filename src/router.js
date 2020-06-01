@@ -98,7 +98,7 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
     const view = getView()
     const routes = getRoutes()
     const path = router.format(location.pathname)
-    const route = find(path.replace(/^\/$/, ''), view == null, routes)
+    const route = find(path, view == null, routes)
 
     if (route) {
       if (route.import) loadComponent(route, view)

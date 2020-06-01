@@ -50,6 +50,8 @@
   let knobsConfig = null
   export { knobsConfig as knobs }
 
+  export let actions = null
+
   if (register) {
     register(name)
   }
@@ -94,6 +96,7 @@
       source,
       knobs,
       actions: writable({
+        enabled: !!actions,
         events: [],
       }),
     }
