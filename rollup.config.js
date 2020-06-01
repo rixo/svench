@@ -72,6 +72,9 @@ const configs = {
       }),
       commonjs(),
     ],
+    watch: {
+      clearScreen: false,
+    },
   },
 
   theme: [
