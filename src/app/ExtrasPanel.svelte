@@ -30,9 +30,22 @@
 
   $: ({ actions } = extras)
 
-  $: if (!actionsVisible && $actions && $actions.events.length === 1) {
+  const enableActions = () => {
     actionsVisible = true
-    activeTab = 'actions'
+    // NOTE when not $actions.enabled, this means we show because of new event
+    if (!$actions.enabled) {
+      activeTab = 'actions'
+    }
+  }
+
+  $: if (
+    !actionsVisible &&
+    $actions &&
+    ($actions.enabled || $actions.events.length === 1)
+  ) {
+    // setTimeout to break circular dep with actionsVisible (otherwise this
+    // reactive block doesn't run -- bug in Svelte probably)
+    setTimeout(enableActions)
   }
 
   $: hasExtras = Object.keys(tabs).length > 0
