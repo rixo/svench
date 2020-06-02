@@ -103,6 +103,21 @@ const configs = {
     },
   ],
 
+  /**
+   * util-esm is prebundled legacy vendor deps to esm, in order to avoid
+   * requiring from the user to have specific plugins (resolve, commonjs) in
+   * their config
+   */
+  'util-esm': {
+    input: 'src.util-esm/index.js',
+    output: {
+      format: 'es',
+      file: 'src/util-esm.js',
+      sourcemap: true,
+    },
+    plugins: [resolve({ browser: true }), commonjs()],
+  },
+
   app: {
     input: 'src/app/index.js',
     output: {
