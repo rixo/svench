@@ -32,8 +32,8 @@ export default svenchify('./rollup.config.js', {
 
     plugins: plugins => [
       // NOTE del is needed to avoid serving stale static files that would
-      // shadown Nollup
-      del({ targets: '.svench/dist/*', runOnce: true, hook: 'options' }),
+      // shadow Nollup's in-memory files
+      del({ targets: '.svench/dist/*', runOnce: true }),
       ...plugins,
       postcss(),
     ],
