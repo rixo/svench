@@ -12,7 +12,7 @@
     padding,
     backgroundAliases,
     canvasBackground,
-    viewBackground,
+    background,
   } = options)
 
   const viewBackgroundAliases = {
@@ -21,9 +21,9 @@
 
   $: canvasBg = backgroundAliases[canvasBackground] || canvasBackground
   $: viewBg =
-    viewBackgroundAliases[viewBackground] ||
-    backgroundAliases[viewBackground] ||
-    viewBackground
+    viewBackgroundAliases[background] ||
+    backgroundAliases[background] ||
+    background
 </script>
 
 <!-- <style>

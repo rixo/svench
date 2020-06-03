@@ -50,7 +50,7 @@
     x: 'raw',
     xx: 'naked',
     cv: 'canvasBackground',
-    bg: 'viewBackground',
+    bg: 'background',
     shadow: 'shadow',
     dev: 'dev',
   }

@@ -46,7 +46,7 @@
     Background
     <BackgroundSelect
       colors={$options.backgrounds}
-      bind:value={$options.viewBackground} />
+      bind:value={$options.background} />
   </label>
   {#if $options.dev}
     <label>

@@ -23,8 +23,8 @@ export const parseOptions = ({
   padding = true,
   fullscreen = false,
 
+  background = '#fff', // view "outline" background
   canvasBackground = '@none',
-  viewBackground = '#fff',
   backgroundAliases = {
     '@none':
       'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA4SURBVHgB7dOxDQBACAJA/b1Y54dyHRZzBQoLY6Am1xCS5A8hAErpvRiOQYMbwFSL6qM8isGTYAOhNQbW5Q4iGwAAAABJRU5ErkJggg==)',
@@ -63,7 +63,7 @@ export const parseOptions = ({
   padding,
   fullscreen,
   canvasBackground,
-  viewBackground,
+  background,
   backgroundAliases,
   backgrounds,
   canvasBackgrounds,
