@@ -1,5 +1,47 @@
-export const parseOptions = ({
-  // enabled = !fallback,
+import { writable, derived } from 'svelte/store'
+import { noop, pipe } from './util.js'
+
+const stateOptions = {
+  fs: 'fullscreen',
+  c: 'centered',
+  o: 'outline',
+  p: 'padding',
+  f: 'focus',
+  x: 'raw',
+  xx: 'naked',
+  cv: 'canvasBackground',
+  bg: 'background',
+  shadow: 'shadow',
+  dev: 'dev',
+}
+
+const hiddenOptionValues = {
+  shadow: false,
+  dev: false,
+}
+
+const localOptions = ['menuWidth', 'extrasHeight']
+
+const readParamsOptions = () => {
+  const q = new URLSearchParams(window.location.search)
+  const opts = {}
+  Object.entries(stateOptions).forEach(([key, name]) => {
+    if (!q.has(key)) return
+    const v = q.get(key)
+    if (v === 'false') {
+      opts[name] = false
+      return
+    }
+    opts[name] =
+      v === 'true' || v === '' ? true : /^\d+$/.test(v) ? parseInt(v) : v
+  })
+  return opts
+}
+
+const parseOptions = ({
+  localStorageKey = 'Svench',
+
+  enabled,
 
   fixed = true,
 
@@ -47,6 +89,8 @@ export const parseOptions = ({
   ],
   canvasBackgrounds = backgrounds,
 }) => ({
+  localStorageKey,
+  enabled,
   fixed,
   defaultViewName,
   // time before which view index is reset (for HMR)
@@ -68,3 +112,68 @@ export const parseOptions = ({
   backgrounds,
   canvasBackgrounds,
 })
+
+const stateful = initialOptions => {
+  const { localStorageKey } = initialOptions
+
+  const readStoredOptions =
+    localStorageKey && window.localStorage
+      ? () => {
+          const stored = localStorage.getItem(localStorageKey)
+          return (stored && JSON.parse(stored)) || {}
+        }
+      : noop
+
+  // --- local state (query params) ---
+
+  const updateState = opts => {
+    if (localStorageKey && window.localStorage) {
+      const values = Object.fromEntries(
+        localOptions.map(name => [name, opts[name]])
+      )
+      localStorage.setItem(localStorageKey, JSON.stringify(values))
+    }
+
+    // NOTE using history._replaceState to avoid useless looping with Routify
+    // _replaceState is the original replaceState before Routify hacks it
+    if (window.history && history._replaceState) {
+      const q = new URLSearchParams(window.location.search)
+      Object.entries(stateOptions).forEach(([key, name]) => {
+        const value = opts[name]
+        if (value == null || hiddenOptionValues[name] == opts[name]) {
+          q.delete(key)
+        } else if (value === false) {
+          q.set(key, 0)
+        } else {
+          q.set(key, value)
+        }
+      })
+      let url = location.pathname
+      const qs = q.toString()
+      if (qs.length > 0) {
+        url += '?' + qs.replace(/=true(?=&|$)/g, '')
+      }
+      const currentUrl = location.pathname + location.search
+      if (url !== currentUrl) {
+        history._replaceState({}, '', url)
+      }
+    }
+  }
+
+  const store = writable({
+    ...initialOptions,
+    ...readStoredOptions(),
+    ...readParamsOptions(),
+  })
+
+  const persisting = derived(store, x => {
+    updateState(x)
+    return x
+  })
+
+  persisting.set = (...args) => store.set(...args)
+
+  return persisting
+}
+
+export default pipe(parseOptions, stateful)

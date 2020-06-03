@@ -2,14 +2,14 @@
   import { onDestroy } from 'svelte'
   import { writable, derived } from 'svelte/store'
   import navaid from 'navaid'
-  import { setContext, makeNamer as _makeNamer, noop } from './util.js'
+  import { setContext, makeNamer as _makeNamer } from './util.js'
   import createRouter from './router.js'
   import Router from './Router.svelte'
   import AppContext from './AppContext.svelte'
   import UiResolver from './UiResolver.svelte'
   import addRegister from './register.js'
   import hmrRestoreScroll from './hmr-restore-scroll.js'
-  import { parseOptions } from './Svench.options.js'
+  import createOptions from './Svench.options.js'
 
   // import test from './test.js'
 
@@ -20,8 +20,6 @@
   // import extras$ from '../routes.extras.js'
 
   hmrRestoreScroll()
-
-  export let localStorageKey = 'Svench'
 
   export let ui
   export let lightUi = null
@@ -41,95 +39,12 @@
 
   // --- options ---
 
-  const stateOptions = {
-    fs: 'fullscreen',
-    c: 'centered',
-    o: 'outline',
-    p: 'padding',
-    f: 'focus',
-    x: 'raw',
-    xx: 'naked',
-    cv: 'canvasBackground',
-    bg: 'background',
-    shadow: 'shadow',
-    dev: 'dev',
-  }
-
-  const hiddenOptionValues = {
-    shadow: false,
-    dev: false,
-  }
-
-  const localOptions = ['menuWidth', 'extrasHeight']
-
-  const readParamsOptions = () => {
-    const q = new URLSearchParams(window.location.search)
-    const opts = {}
-    Object.entries(stateOptions).forEach(([key, name]) => {
-      if (!q.has(key)) return
-      const v = q.get(key)
-      if (v === 'false') {
-        opts[name] = false
-        return
-      }
-      opts[name] =
-        v === 'true' || v === '' ? true : /^\d+$/.test(v) ? parseInt(v) : v
-    })
-    return opts
-  }
-
-  const readStoredOptions =
-    localStorageKey && window.localStorage
-      ? () => {
-          const stored = localStorage.getItem(localStorageKey)
-          return (stored && JSON.parse(stored)) || {}
-        }
-      : noop
-
-  const options = writable({
+  const options = createOptions({
     enabled: !fallback,
-    ...parseOptions($$props),
-    ...readStoredOptions(),
-    ...readParamsOptions(),
+    ...$$props,
   })
 
-  // --- local state (query params) ---
-
-  const updateState = opts => {
-    if (localStorageKey && window.localStorage) {
-      const values = Object.fromEntries(
-        localOptions.map(name => [name, opts[name]])
-      )
-      localStorage.setItem(localStorageKey, JSON.stringify(values))
-    }
-
-    // NOTE using history._replaceState to avoid useless looping with Routify
-    // _replaceState is the original replaceState before Routify hacks it
-    if (window.history && history._replaceState) {
-      const q = new URLSearchParams(window.location.search)
-      Object.entries(stateOptions).forEach(([key, name]) => {
-        const value = opts[name]
-        if (value == null || hiddenOptionValues[name] == opts[name]) {
-          q.delete(key)
-        } else if (value === false) {
-          q.set(key, 0)
-        } else {
-          q.set(key, value)
-        }
-      })
-      let url = location.pathname
-      const qs = q.toString()
-      if (qs.length > 0) {
-        url += '?' + qs.replace(/=true(?=&|$)/g, '')
-      }
-      const currentUrl = location.pathname + location.search
-      if (url !== currentUrl) {
-        history._replaceState({}, '', url)
-      }
-    }
-  }
-
-  $: updateState($options)
+  // $: updateState($options)
 
   const makeNamer = () => _makeNamer(() => $options)
 
