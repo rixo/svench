@@ -9,6 +9,7 @@
   import UiResolver from './UiResolver.svelte'
   import addRegister from './register.js'
   import hmrRestoreScroll from './hmr-restore-scroll.js'
+  import { parseOptions } from './Svench.options.js'
 
   // import test from './test.js'
 
@@ -30,10 +31,6 @@
 
   export let base = '/'
   export let fallback = null
-
-  export let fixed = true
-
-  export let defaults = {}
 
   // --- focus (view only) routing ---
 
@@ -90,25 +87,8 @@
       : noop
 
   const options = writable({
-    fixed,
     enabled: !fallback,
-    defaultViewName: index => `View ${index}`,
-    // time before which view index is reset (for HMR)
-    registerTimeout: 100,
-    renderTimeout: 100,
-    menuWidth: 200,
-    extrasHeight: 200,
-    // dev mode
-    dev: false,
-    // ui
-    shadow: false,
-    centered: true,
-    outline: false,
-    padding: true,
-    fullscreen: false,
-    canvasBackground: '@none',
-    viewBackground: '#fff',
-    ...defaults,
+    ...parseOptions($$props),
     ...readStoredOptions(),
     ...readParamsOptions(),
   })

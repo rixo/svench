@@ -32,7 +32,7 @@
     currentLoader = loader
     App = ViewBox = RenderBox = null
     update()
-    Promise.resolve(loader())
+    Promise.resolve(typeof loader === 'function' ? loader() : loader)
       .then(module => {
         error = null
         ;({ App, ViewBox, RenderBox } = module)

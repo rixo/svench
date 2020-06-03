@@ -12,3 +12,6 @@ export { default as Svench } from './Svench.svelte'
 // helpers
 export { default as onRender } from './helpers/onRender.js'
 export { url } from './helpers/url.js'
+
+// entry points
+export { default as start } from './start.js'

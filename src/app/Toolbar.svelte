@@ -38,11 +38,15 @@
   </label>
   <label>
     Canvas
-    <BackgroundSelect bind:value={$options.canvasBackground} />
+    <BackgroundSelect
+      colors={$options.canvasBackgrounds}
+      bind:value={$options.canvasBackground} />
   </label>
   <label>
     Background
-    <BackgroundSelect bind:value={$options.viewBackground} />
+    <BackgroundSelect
+      colors={$options.backgrounds}
+      bind:value={$options.viewBackground} />
   </label>
   {#if $options.dev}
     <label>

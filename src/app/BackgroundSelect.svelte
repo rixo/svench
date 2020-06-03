@@ -1,28 +1,23 @@
 <script>
-  export let value
+  import { isDark } from '../util-esm.js'
 
-  const colors = [
-    { value: '@none', label: '' },
-    { value: '#fff' },
-    { value: '#000', dark: true },
-    { value: '#f00', dark: true },
-    { value: '#0f0' },
-    { value: '#00f', dark: true },
-    { value: '#ff0' },
-    { value: '#f0f', dark: true },
-    { value: '#0ff' },
-    ...Array.from({ length: 21 })
-      .map((_, i) => ({
-        label: `${i * 5}%`,
-        value: `hsl(0, 0%, ${i * 5}%)`,
-        dark: i <= 10,
-      }))
-      .reverse(),
-  ].map(x => ({ label: x.value, dark: false, ...x }))
+  export let value
+  export let colors
+
+  const parseColor = x => {
+    if (typeof x === 'string') return parseColor({ value: x })
+    return {
+      label: x.value,
+      dark: isDark(x.value),
+      ...x,
+    }
+  }
+
+  $: _colors = [{ value: '@none', label: '' }, ...colors].map(parseColor)
 </script>
 
 <select bind:value>
-  {#each colors as { value, label, dark } (value)}
+  {#each _colors as { value, label, dark } (value)}
     <option {value} class:dark style="background: {value};">{label}</option>
   {/each}
 </select>
@@ -31,12 +26,6 @@
   select,
   option {
     font-family: monospace;
-  }
-  .pattern {
-    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA4SURBVHgB7dOxDQBACAJA/b1Y54dyHRZzBQoLY6Am1xCS5A8hAErpvRiOQYMbwFSL6qM8isGTYAOhNQbW5Q4iGwAAAABJRU5ErkJggg==)
-      repeat;
-  }
-  .light {
     color: #333;
   }
   .dark {
