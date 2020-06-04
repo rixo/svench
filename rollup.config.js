@@ -4,12 +4,35 @@ import * as fs from 'fs'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
-import postcss from 'rollup-plugin-postcss-hot'
+import _postcss from 'rollup-plugin-postcss-hot'
 import builtins from 'builtin-modules'
 import svelte from 'rollup-plugin-svelte-hot'
+import postcssNesting from 'postcss-nesting'
+import prefixer from 'postcss-prefix-selector'
+import atImport from 'postcss-import'
 
 const production = !process.env.ROLLUP_WATCH
 // const hot = !production
+
+const postcss = opts =>
+  _postcss({
+    sourceMap: production ? true : 'inline',
+    ...opts,
+  })
+
+const postcssPlugins = [atImport(), postcssNesting()]
+
+const postcssMarkdownPlugins = [
+  ...postcssPlugins,
+  prefixer({
+    prefix: '.svench-content',
+    transform: (prefix, selector) => {
+      if (selector.includes('svench-')) return selector
+      if (selector.startsWith('.')) return prefix + selector
+      return selector.replace(/^([a-z0-9]+|\S+)(.*)$/, `$1${prefix}$2`)
+    },
+  }),
+]
 
 const configs = {
   // {
@@ -85,7 +108,10 @@ const configs = {
         file: 'themes/default.js',
       },
       plugins: [
-        postcss({ extract: true }),
+        postcss({
+          extract: true,
+          plugins: postcssPlugins,
+        }),
         {
           generateBundle(outputOptions, bundle) {
             delete bundle['default.js']
@@ -99,7 +125,41 @@ const configs = {
         format: 'iife',
         file: 'themes/default.css.js',
       },
-      plugins: [postcss()],
+      plugins: [postcss({ plugins: postcssPlugins })],
+    },
+
+    {
+      input: 'src/themes/default-markdown.js',
+      output: {
+        format: 'es',
+        file: 'themes/default-markdown.js',
+      },
+      plugins: [
+        postcss({
+          extract: true,
+          plugins: postcssMarkdownPlugins,
+          // modules: {
+          //   generateScopedName: '[name].svench-content',
+          //   generateScopedName: (name, filename, css) => {
+          //     console.log('>>>', name, filename)
+          //     return `svench-content-${name}`
+          //   },
+          // },
+        }),
+        {
+          generateBundle(outputOptions, bundle) {
+            delete bundle['default-markdown.js']
+          },
+        },
+      ],
+    },
+    {
+      input: 'src/themes/default-markdown.js',
+      output: {
+        format: 'iife',
+        file: 'themes/default-markdown.css.js',
+      },
+      plugins: [postcss({ plugins: postcssMarkdownPlugins })],
     },
   ],
 

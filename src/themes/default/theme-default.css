@@ -1,5 +1,7 @@
-@import './typography.scss';
-@import './app/app.scss';
+/* @import './typography.css'; */
+@import './app/app.css';
+
+@import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@2/distr/fira_code.css);
 
 .svench-ui *,
 .svench-ui {
@@ -54,8 +56,6 @@
 
 /* === Prism === */
 
-@import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@2/distr/fira_code.css);
-
 code[class*='language-'],
 .svench-ui code[class*='language-'] * {
   font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono',
@@ -74,44 +74,49 @@ body
   background-color: var(--primary);
 }
 
-// === Markdown / content layout ===
+/* === Markdown / content layout === */
 
-// .svench-canvas:not(.focus) > svench-component,
-// .svench-canvas:not(.focus) > .svench-render-box-body {
+/* .svench-canvas:not(.focus) > svench-component, */
+/* .svench-canvas:not(.focus) > .svench-render-box-body { */
 .svench-page {
-  padding: 1.5em 1em;
+  padding: 1.5em;
   & .svench-page {
-    padding: 0;
+    padding-left: 0;
+    padding-right: 0;
   }
 
-  > :first-child {
+  & > :first-child {
     margin-top: 0;
   }
 
-  .svench-viewbox {
+  & svench-view {
+    margin: 1em 0;
+  }
+
+  & .svench-viewbox {
     border-width: 1px;
-    margin: 0.5em 0;
   }
 }
 
-.svench-viewbox {
-  // margin: 0.5em 0;
-  margin: 1em;
+/* .svench-viewbox {
+  margin: 0.5em 0;
+  margin: 1em 0;
   border-width: 1px;
-}
-// .svench-canvas:not(.focus) > svench-component {
-//   padding: 1.5em 1em;
-//   padding-bottom: 2.5em;
-// }
+} */
 
-// svench-component:not(.svench-focus) svench-view {
-//   border-width: 1px;
-//   // margin-bottom: 1em;
-//   // &:not(:first-child) {
-//   //   margin-top: 1em;
-//   // }
-// }
+/* .svench-canvas:not(.focus) > svench-component {
+  padding: 1.5em 1em;
+  padding-bottom: 2.5em;
+} */
 
-// svench-view:not(:first-child) {
-//   margin-top: 1em;
-// }
+/* svench-component:not(.svench-focus) svench-view {
+  border-width: 1px;
+  // margin-bottom: 1em;
+  // &:not(:first-child) {
+  //   margin-top: 1em;
+  // }
+} */
+
+/* svench-view:not(:first-child) {
+  margin-top: 1em;
+} */

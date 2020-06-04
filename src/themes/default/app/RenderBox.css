@@ -13,10 +13,11 @@
     margin-top: 2em;
   }
 
-  a, a * {
+  & a,
+  & a * {
     color: var(--tertiary-r);
 
-    .icon {
+    & .icon {
       display: inline-block;
       width: 1.5em;
       text-align: center;
@@ -24,6 +25,7 @@
     }
 
     text-decoration: none;
+
     &:hover {
       opacity: 1;
     }

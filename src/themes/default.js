@@ -1,1 +1,1 @@
-import './default/theme-default.scss'
+import './default/theme-default.css'
