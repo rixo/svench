@@ -57,7 +57,7 @@
 <PrismApply>
   <!-- NOTE slot is used for fallback component -->
   <slot>
-    <ComponentWrap {raw} {focus} page={route.options.page}>
+    <ComponentWrap {raw} {focus}>
       {#if raw}
         <svelte:component this={component} />
       {:else if view}

@@ -52,6 +52,11 @@
   --gray: #a5b4b9;
   --gray-light: #e3e8ee;
   --gray-dark: #79889a;
+
+  /* - padding of pages
+   * - margin of views
+   */
+  --svench-spacing: 1.5em;
 }
 
 /* === Prism === */
@@ -79,7 +84,9 @@ body
 /* .svench-canvas:not(.focus) > svench-component, */
 /* .svench-canvas:not(.focus) > .svench-render-box-body { */
 .svench-page {
-  padding: 1.5em;
+  padding: var(--svench-spacing);
+  padding-bottom: calc(var(--svench-spacing) * 2);
+
   & .svench-page {
     padding-left: 0;
     padding-right: 0;
@@ -90,11 +97,7 @@ body
   }
 
   & svench-view {
-    margin: 1em 0;
-  }
-
-  & .svench-viewbox {
-    border-width: 1px;
+    margin: var(--svench-spacing) 0;
   }
 }
 

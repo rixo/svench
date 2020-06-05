@@ -25,9 +25,7 @@
 }
 
 .svench-viewbox {
-  border-color: var(--secondary);
-  border-style: solid;
-  border-width: 0 0 1px;
+  border: 1px solid var(--secondary);
   background-color: #fff;
 
   display: flex;

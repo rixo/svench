@@ -9,10 +9,6 @@
   margin: 0;
   padding: 0;
 
-  &:not(:first-child) {
-    margin-top: 2em;
-  }
-
   & a,
   & a * {
     color: var(--tertiary-r);
