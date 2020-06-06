@@ -28,7 +28,7 @@ export default function Navaid(base, on404) {
 		return $;
 	}
 
-	$.run = function (uri) {
+	$.run = function (uri, state) {
 		let i=0, params={}, arr, obj;
 		if (uri = fmt(uri || location.pathname)) {
 			uri = uri.match(/[^\?#]*/)[0];
@@ -37,7 +37,7 @@ export default function Navaid(base, on404) {
 					for (i=0; i < obj.keys.length;) {
 						params[obj.keys[i]] = arr[++i] || null;
 					}
-					obj.fn(params); // todo loop?
+					obj.fn(params, state); // todo loop?
 					return $;
 				}
 			}
@@ -51,7 +51,7 @@ export default function Navaid(base, on404) {
 		wrap('replace');
 
 		function run(e) {
-			$.run();
+			$.run(null, e.state);
 		}
 
 		function click(e) {
@@ -59,6 +59,7 @@ export default function Navaid(base, on404) {
 			if (e.ctrlKey || e.metaKey || e.altKey || e.shiftKey || e.button || e.defaultPrevented) return;
 			if (!y || x.target || x.host !== location.host) return;
 			if (y[0] != '/' || rgx.test(y)) {
+				if (y[0] === '#') return
 				e.preventDefault();
 				$.route(y);
 			}
@@ -96,10 +97,10 @@ function wrap(type, fn) {
 	if (history[type]) return;
 	history[type] = type;
 	fn = history[type += 'State'];
-	history[type] = function (uri) {
+	history[type] = function (uri, ...args) {
 		const ev = new Event(type.toLowerCase());
 		ev.uri = uri;
-		fn.apply(this, arguments);
+		fn.call(this, { uri, scrollTop: document.body.scrollTop }, ...args);
 		return dispatchEvent(ev);
 	}
 }
