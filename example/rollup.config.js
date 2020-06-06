@@ -54,6 +54,7 @@ export default {
     useLiveReload && livereload('public'),
 
     hmr({
+      host: '0.0.0.0',
       public: 'public',
       inMemory: true,
       compatModuleHot: !hot, // for terser
