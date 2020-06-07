@@ -1,8 +1,11 @@
 <script>
+  import { tick } from 'svelte'
   import Unique from 'svelte-key'
   import ComponentContext from './ComponentContext.svelte'
   import RouterError from './RouterError.svelte'
-  import { getContext } from './util.js'
+  import { getContext, shallowEquals } from './util.js'
+
+  export let scrollNav
 
   // bind:focus
   export let focus
@@ -16,9 +19,11 @@
   $: focus = !fallback && view !== null
 
   let last
-  $: if ($current !== last) {
+  $: if (!shallowEquals($current, last)) {
     last = $current
-    document.body.scrollTo({ top: 0 })
+    if ($current) {
+      tick().then(scrollNav($current))
+    }
   }
 </script>
 

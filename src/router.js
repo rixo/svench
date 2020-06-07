@@ -6,13 +6,13 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
   let currentView = null
   let current
 
-  const on404 = path => {
+  const on404 = (path, hash, popState) => {
     if (path === '/' || path === '/index') {
       const route = {
         path,
-        options: {}
+        options: {},
       }
-      setCurrent({ route, cmp: DefaultIndex })
+      setCurrent({ route, cmp: DefaultIndex, hash, popState })
     } else {
       setCurrent(null)
     }
@@ -34,20 +34,28 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
 
   const getView = () => new URLSearchParams(window.location.search).get('view')
 
-  const setCurrent = x => {
-    current = x
-    router.current.set(x)
+  const setCurrent = next => {
+    if (
+      !current ||
+      current.cmp !== next.cmp ||
+      current.route !== next.route ||
+      current.view !== next.view
+      // current.hash !== next.hash
+    ) {
+      current = next
+      router.current.set(next)
+    }
   }
 
   const setError = x => {
     router.error.set(x)
   }
 
-  const loadDir = route => {
-    setCurrent({ route, fallback: true, cmp: Fallback })
+  const loadDir = (route, hash, popState) => {
+    setCurrent({ route, fallback: true, cmp: Fallback, hash, popState })
   }
 
-  const loadComponent = async (_route, _view) => {
+  const loadComponent = async (_route, _view, hash, popState) => {
     try {
       currentRoute = _route
       currentView = _view
@@ -57,15 +65,8 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
       // we've been superseeded while loading
       if (currentRoute !== _route || currentView !== _view) return
 
-      const next = { cmp, route: currentRoute, view: getView() }
-      if (
-        !current ||
-        current.cmp !== next.cmp ||
-        current.route !== next.route ||
-        current.view !== next.view
-      ) {
-        setCurrent(next)
-      }
+      const next = { cmp, route: currentRoute, view: getView(), hash, popState }
+      setCurrent(next)
       setError(null)
     } catch (err) {
       if (currentRoute !== _route) return
@@ -94,17 +95,18 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
     return route
   }
 
-  router.on('*', () => {
+  router.on('*', (params, popState) => {
     const view = getView()
     const routes = getRoutes()
     const path = router.format(location.pathname)
+    const hash = location.hash
     const route = find(path, view == null, routes)
 
     if (route) {
-      if (route.import) loadComponent(route, view)
-      else loadDir(route)
+      if (route.import) loadComponent(route, view, hash, popState)
+      else loadDir(route, hash, popState)
     } else {
-      on404(path)
+      on404(path, hash, popState)
     }
 
     // onMatch: for fallback

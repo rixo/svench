@@ -155,7 +155,9 @@ const stateful = initialOptions => {
       }
       const currentUrl = location.pathname + location.search
       if (url !== currentUrl) {
-        history._replaceState({}, '', url)
+        // NOTE we need to keep the state, because it contains restore scroll
+        // position
+        history._replaceState(history.state, '', url)
       }
     }
   }

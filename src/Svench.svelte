@@ -8,8 +8,8 @@
   import AppContext from './AppContext.svelte'
   import UiResolver from './UiResolver.svelte'
   import addRegister from './register.js'
-  import hmrRestoreScroll from './hmr-restore-scroll.js'
   import createOptions from './Svench.options.js'
+  import Scroll from './scroll.js'
 
   // import test from './test.js'
 
@@ -18,8 +18,6 @@
 
   import routes$ from '../routes.js'
   // import extras$ from '../routes.extras.js'
-
-  hmrRestoreScroll()
 
   export let ui
   export let lightUi = null
@@ -43,6 +41,13 @@
     enabled: !fallback,
     ...$$props,
   })
+
+  const { navigate: scrollNav, ...scroll } = Scroll(
+    document.body,
+    () => $options
+  )
+
+  onDestroy(scroll.dispose)
 
   // $: updateState($options)
 
@@ -178,10 +183,10 @@
     {shadowUi}
     let:current={{ App, error, shadow, css }}>
     {#if single}
-      <Router bind:focus />
+      <Router {scrollNav} bind:focus />
     {:else if !shadow || css}
       <AppContext {focus} {shadow} {App} {error} {css}>
-        <Router bind:focus />
+        <Router {scrollNav} bind:focus />
       </AppContext>
     {/if}
   </UiResolver>
