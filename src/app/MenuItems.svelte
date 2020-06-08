@@ -89,7 +89,7 @@
           style={`padding-left: ${indent * indentWidth}em`}
           href={item.href}>
           <span
-            class="icon"
+            class="icon svench-menu-item-expand-icon"
             class:expand={item.isDirectory}
             on:click|preventDefault={() => toggle(item)}>
             {#if item.isDirectory}
@@ -122,6 +122,9 @@
 {/if}
 
 <style>
+  ul {
+    --svench-menu-expand-handle-color: var(--svench-text-accent);
+  }
   ul :global(*) {
     color: var(--light-2-r);
   }
@@ -182,5 +185,9 @@
     left: 0.1em;
     top: 0.2em;
     transform: rotate(90deg);
+  }
+
+  .svench-menu-item-expand-icon:hover {
+    color: var(--svench-menu-expand-handle-color);
   }
 </style>
