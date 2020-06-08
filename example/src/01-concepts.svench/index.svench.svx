@@ -7,4 +7,4 @@
 ./src/docs.svench/index.svench.svx
 ```
 
-<Render src="*" />
+<Render src="./*" />
