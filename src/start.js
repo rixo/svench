@@ -1,8 +1,11 @@
 import Svench from './Svench.svelte'
 
-const apps = []
+const start = (options, target = document.body, hot) => {
+  if (target && !(target instanceof Element)) {
+    hot = target
+    target = document.body
+  }
 
-const start = (options, target = document.body) => {
   const app = new Svench({
     target,
     props: {
@@ -13,24 +16,17 @@ const start = (options, target = document.body) => {
       ...options,
     },
   })
-  apps.push(app)
-  return app
-}
 
-requestAnimationFrame(() => {
-  if (apps.length > 0) return
-  start()
-})
-
-// recreate the whole app(s) if an HMR update touches this module
-if (import.meta.hot) {
-  import.meta.hot.dispose(() => {
-    for (const app of apps) {
+  // recreate the whole app(s) if an HMR update touches this module
+  if (hot) {
+    hot.dispose(() => {
       app.$destroy()
-    }
-  })
+    })
 
-  import.meta.hot.accept()
+    hot.accept()
+  }
+
+  return app
 }
 
 export default start
