@@ -59,9 +59,10 @@ export default (el, getOptions) => {
     }
 
     const after = () => {
-      requestAnimationFrame(() => {
-        el.scrollTop = scrollTopBefore
-      })
+      trackScroll(() => ({
+        top: scrollTopBefore,
+        value: el.offsetHeight,
+      }))
     }
 
     if (import.meta.hot && import.meta.hot.beforeUpdate) {

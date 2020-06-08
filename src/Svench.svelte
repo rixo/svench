@@ -43,7 +43,7 @@
   })
 
   const { navigate: scrollNav, ...scroll } = Scroll(
-    document.body,
+    document.scrollingElement || document.body,
     () => $options
   )
 
