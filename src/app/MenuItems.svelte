@@ -10,7 +10,8 @@
 
   const indentWidth = 1.2
 
-  const expandLocks = {}
+  let expandLocks
+  expandLocks = {}
 
   const toggle = item => {
     if (autofold) return
@@ -33,17 +34,11 @@
       ? Object.fromEntries(
           items
             .filter(
-              item => expandLocks[item.id] || route.path.startsWith(item.path)
+              item => expandLocks[item.id] // || route.path.startsWith(item.path)
             )
             .map(x => [x.id, true])
         )
       : {}
-
-  $: isActivePath = item => {
-    if (!route) return false
-    if (!$current) return false
-    return route.path.startsWith(item.path)
-  }
 
   $: getActiveView = item => {
     if (!$current) return false
@@ -54,6 +49,11 @@
 
   const autoexpand = item => {
     expandLocks[item.id] = true
+    // bug in svelte (3.23)? need to repeat the assignement for the `expanded`
+    // reactive block to rerun
+    requestAnimationFrame(() => {
+      expandLocks[item.id] = true
+    })
   }
 
   $: !autofold && activeItem && autoexpand(activeItem)
@@ -187,6 +187,9 @@
     transform: rotate(90deg);
   }
 
+  .svench-menu-item-expand-icon {
+    position: relative; /* ensures above :before mask */
+  }
   .svench-menu-item-expand-icon:hover {
     color: var(--svench-menu-expand-handle-color);
   }
