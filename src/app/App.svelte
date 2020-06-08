@@ -104,6 +104,15 @@
 </div>
 
 <style>
+  /* compensate for fixed toolbar when clicking on #anchor */
+  /* https://stackoverflow.com/a/28824157/1387519 */
+  :global(:target::before) {
+    content: '';
+    display: block;
+    height: calc(var(--toolbar-height) + 12px);
+    margin-top: calc(-1 * var(--toolbar-height) - 12px);
+  }
+
   h1 {
     margin: 0.5em 1em 1.5em;
     padding: 0;
@@ -130,7 +139,7 @@
   } */
 
   .svench-app {
-    --toolbar-height: 3em;
+    --toolbar-height: 48px;
     --extras-height: 15em;
   }
   .menu {
