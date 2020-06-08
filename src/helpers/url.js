@@ -6,7 +6,16 @@ const resolveRaw = route =>
   function _resolveRaw(path) {
     if (path.startsWith('.')) return ['', route.dir, path].join('/')
     if (path.startsWith('/')) return path
-    return ['', ...route.canonical.split('/').slice(0, -1), path].join('/')
+    const segments = route.canonical.split('/')
+    // NOTE index routes "canonical" paths is /path/to/index, but they are
+    // stored either as /path/to or /path/to/index; the base must be /path/to
+    // in every case
+    // NOTE /path/to OR (not xor) /path/to/index (because of auto index)
+    if (segments[segments.length - 1] === 'index') {
+      segments.pop()
+    }
+    const base = segments.slice(0, -1)
+    return ['', base, path].join('/')
   }
 
 const dropDefaultSection = path =>
@@ -19,12 +28,24 @@ const resolveUp = pipe(
   reduce((lead, next) => lead.replace(/[^/]+\/$/, next))
 )
 
-const clean = path =>
+// /./ => /
+// // => /
+const normalize = path =>
   path.replace(/(?:\/|^)\.(?=\/|$)/g, '/').replace(/\/{2,}/g, '/')
+
+// replace . with /
+const replaceVirtuals = path => path.replace(/\./g, '/')
 
 // route => path => resolvedPath
 export const urlResolver = route =>
-  pipe(resolveRaw(route), clean, dropDefaultSection, resolveUp, clean)
+  pipe(
+    resolveRaw(route),
+    normalize,
+    replaceVirtuals,
+    dropDefaultSection,
+    resolveUp,
+    normalize
+  )
 
 export const url = {
   subscribe: listener => {
