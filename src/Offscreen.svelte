@@ -43,6 +43,8 @@
   onMount(() => {
     parent = offscreen.parentNode
     anchor = offscreen.nextSibling
+    // TODO this can happen on HMR... but why?
+    if (!parent) return
     while (views.length > 0) {
       const [view, callback] = views.shift()
       parent.insertBefore(view, anchor)
