@@ -88,6 +88,11 @@ const parseOptions = ({
       .reverse(),
   ],
   canvasBackgrounds = backgrounds,
+
+  // advanced
+
+  // maximum number of nesting levels of <Render> before throwing an error
+  renderLoopProtection = 12,
 }) => ({
   localStorageKey,
   enabled,
@@ -111,6 +116,8 @@ const parseOptions = ({
   backgroundAliases,
   backgrounds,
   canvasBackgrounds,
+  // advanced
+  renderLoopProtection,
 })
 
 const stateful = initialOptions => {

@@ -14,7 +14,11 @@
     route,
     routes,
     defaultRenderSrc,
+    options,
+    renderNesting = [],
   } = getContext()
+
+  const { renderLoopProtection } = $options
 
   const { RenderBox, shadow, css } = getUi ? getUi() : {}
 
@@ -108,13 +112,22 @@
       ? [src].flat()
       : loadSrcObject(src)
 
-  $: !register && route && resolveSrc(src || defaultRenderSrc || route.indexOf)
+  const loopProtectionError =
+    renderLoopProtection && renderNesting.length > renderLoopProtection
 
-  $: if (!src) {
+  $: !loopProtectionError &&
+    !register &&
+    route &&
+    resolveSrc(src || defaultRenderSrc || route.indexOf)
+
+  $: if (loopProtectionError) {
+    throw new Error(`Maximum render loop: ${renderNesting.join(' -> ')}`)
+  } else if (!src) {
     error = 'Missing src'
   }
 
   updateContext({
+    renderNesting: [...renderNesting, `${route && route.path} (${src})`],
     register: false,
     defaultRenderSrc: src,
   })
