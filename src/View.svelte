@@ -199,7 +199,7 @@
       {@html `<slot name="${slotId}"></slot>`}
     {/if}
     <svench-view bind:this={el} {name} {fill}>
-      {#if naked}
+      {#if naked && focus}
         {#if resolved && onScreen}
           <slot knobs={$knobs || {}} {action} />
         {/if}
