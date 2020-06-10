@@ -13,7 +13,9 @@
 
 /* https://colorpalettes.net/color-palette-4122/ */
 /* https://colorpalettes.net/color-palette-3548/ */
-.svench-app {
+.svench-app,
+svench-component,
+svench-view {
   /* --light-1: rgba(141, 169, 196, 1);
   --light-1-r: white;
   --light-2: #6bc4a6;
@@ -57,7 +59,7 @@
   /* - padding of pages
    * - margin of views
    */
-  --svench-spacing: 1.5em;
+  --svench-spacing: 1.2em;
 }
 
 /* === Prism === */
@@ -80,47 +82,34 @@ body
   background-color: var(--primary);
 }
 
-/* === Markdown / content layout === */
+/* === Layout === */
 
-/* .svench-canvas:not(.focus) > svench-component, */
-/* .svench-canvas:not(.focus) > .svench-render-box-body { */
 .svench-page {
   padding: var(--svench-spacing);
-  padding-bottom: calc(var(--svench-spacing) * 2);
+  padding-bottom: calc(2 * var(--svench-spacing));
 
-  & .svench-page {
-    padding-left: 0;
-    padding-right: 0;
+  &:after,
+  &:before {
+    display: table;
+    content: '';
+  }
+
+  &:after {
+    clear: both;
   }
 
   & > :first-child {
-    margin-top: 0;
+    margin-top: 0 !important;
   }
 
+  & > :last-child {
+    margin-bottom: 0 !important;
+  }
+
+  & .svench-renderbox {
+    margin: calc(1.5 * var(--svench-spacing)) 0;
+  }
   & svench-view {
-    margin: var(--svench-spacing) 0;
+    margin: calc(0.5 * var(--svench-spacing)) 0;
   }
 }
-
-/* .svench-viewbox {
-  margin: 0.5em 0;
-  margin: 1em 0;
-  border-width: 1px;
-} */
-
-/* .svench-canvas:not(.focus) > svench-component {
-  padding: 1.5em 1em;
-  padding-bottom: 2.5em;
-} */
-
-/* svench-component:not(.svench-focus) svench-view {
-  border-width: 1px;
-  // margin-bottom: 1em;
-  // &:not(:first-child) {
-  //   margin-top: 1em;
-  // }
-} */
-
-/* svench-view:not(:first-child) {
-  margin-top: 1em;
-} */

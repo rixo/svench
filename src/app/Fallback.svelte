@@ -6,4 +6,4 @@
   $: src = route.path + '/*'
 </script>
 
-<Render {src} />
+<Render page {src} />

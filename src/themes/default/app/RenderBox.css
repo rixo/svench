@@ -13,7 +13,7 @@
   & a * {
     color: var(--tertiary-r);
 
-    & .icon {
+    & .svench-renderbox-title-icon {
       display: inline-block;
       width: 1.5em;
       text-align: center;

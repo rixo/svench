@@ -25,6 +25,8 @@
       tick().then(scrollNav($current))
     }
   }
+
+  $: props = { page: true, route, focus }
 </script>
 
 {#if $error}
@@ -32,11 +34,11 @@
 {:else if $current}
   <Unique key={$current}>
     {#if fallback}
-      <ComponentContext {route} {focus}>
+      <ComponentContext {...props}>
         <svelte:component this={Fallback} {route} />
       </ComponentContext>
     {:else if cmp}
-      <ComponentContext {route} {focus} component={cmp} {view} />
+      <ComponentContext {...props} component={cmp} {view} />
     {/if}
   </Unique>
 {/if}

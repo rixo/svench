@@ -610,7 +610,7 @@ hr {
   box-shadow: inset 0 -1px 0 #d1d5da;
 }
 
-.svench-page:after,
+/* .svench-page:after,
 .svench-page:before {
   display: table;
   content: '';
@@ -626,7 +626,7 @@ hr {
 
 .svench-page > :last-child {
   margin-bottom: 0 !important;
-}
+} */
 
 a:not([href]) {
   color: inherit;

@@ -14,6 +14,8 @@
   export let component = null
   export let view = null
 
+  // render in "page mode" (with padding & al)
+  export let page
   export let focus
 
   const { raw, makeNamer, getUi, router } = getContext()
@@ -57,7 +59,7 @@
 <PrismApply>
   <!-- NOTE slot is used for fallback component -->
   <slot>
-    <ComponentWrap {raw} {focus}>
+    <ComponentWrap {raw} {page} {focus}>
       {#if raw}
         <svelte:component this={component} />
       {:else if view}

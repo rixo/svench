@@ -25,6 +25,9 @@
   export let src = null
   export let view = null
 
+  // render in "page mode" (with padding & al)
+  export let page = false
+
   const resolveUrl = urlResolver(route)
 
   let error = null
@@ -157,6 +160,8 @@
     // WARNING private slot API
     defaultRenderSrc: $$props.$$slots && $$props.$$slots.default && src,
   })
+
+  $: props = { route, view, page, focus: false }
 </script>
 
 {#if error}
@@ -170,22 +175,14 @@
     <!-- slot for nested <Render> -->
     <slot>
       {#if naked}
-        <ComponentContext {route} component={Component} {view} focus={false} />
+        <ComponentContext {...props} component={Component} />
       {:else if shadow}
         <Shadow {css} {router} Component={RenderBox} props={{ title, href }}>
-          <ComponentContext
-            {route}
-            component={Component}
-            {view}
-            focus={false} />
+          <ComponentContext {...props} component={Component} {view} />
         </Shadow>
       {:else}
         <RenderBox {title} {href}>
-          <ComponentContext
-            {route}
-            component={Component}
-            {view}
-            focus={false} />
+          <ComponentContext {...props} component={Component} />
         </RenderBox>
       {/if}
     </slot>
