@@ -3,6 +3,10 @@ import { svenchify } from 'svench/rollup'
 import postcss from 'rollup-plugin-postcss-hot'
 import del from 'rollup-plugin-delete'
 
+const watch = !!process.env.ROLLUP_WATCH
+const useLiveReload = !!process.env.LIVERELOAD
+const hot = watch && !useLiveReload
+
 export default svenchify('./rollup.config.js', {
   // The root dir that Svench will parse and watch.
   dir: './src',
@@ -35,7 +39,7 @@ export default svenchify('./rollup.config.js', {
       // shadow Nollup's in-memory files
       del({ targets: '.svench/dist/*', runOnce: true }),
       ...plugins,
-      postcss(),
+      postcss({ hot }),
     ],
   },
 

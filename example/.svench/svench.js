@@ -1,2 +1,8 @@
+import { start } from 'svench'
+
+import 'svench/themes/default.css'
+import 'svench/themes/default-markdown.css'
+
 import './svench.css'
-import 'svench/svench.js'
+
+start({}, import.meta.hot)
