@@ -1,0 +1,24 @@
+<script>
+  import { Render } from 'svench'
+</script>
+
+# `<View>`
+
+The `<View>` component is the most fundamental unit in Svench. It describe a specific state -- typically a component in a given state -- you want to illustrate.
+
+```svelte
+<script>
+  import { View } from 'svench'
+  import Child from '../Child.svelte'
+</script>
+
+<View name="foo">
+  <Child name="foo" />
+</View>
+
+<View name="bar">
+  <Child name="bar" />
+</View>
+```
+
+<Render src="*" />

@@ -2,6 +2,7 @@
   import BackgroundSelect from './BackgroundSelect.svelte'
 
   export let options
+  export let commands
 
   const toggleFullscreen = () => {
     $options.fullscreen = !$options.fullscreen
@@ -54,9 +55,17 @@
       Shadow
     </label>
   {/if}
-  <div class="spacer" />
+  <div class="svench-toolbar-spacer" />
   <button aria-label="naked" on:click={goNaked} title="Render naked">↧</button>
   <button aria-label="raw" on:click={goRawNaked} title="Render raw">⇟</button>
+  <div class="svench-toolbar-padder" />
+  <button
+    aria-label="refresh"
+    on:click={commands.refresh}
+    title="Rerender everything">
+    ⟳
+  </button>
+  <div class="svench-toolbar-padder" />
   <button
     aria-label="fullscreen"
     on:click={toggleFullscreen}
@@ -75,8 +84,11 @@
   .wrapper > * {
     margin: 0.25em;
   }
-  .spacer {
+  .svench-toolbar-spacer {
     flex-grow: 100;
+  }
+  .svench-toolbar-padder {
+    width: 0.33em;
   }
 
   .wrapper > label {

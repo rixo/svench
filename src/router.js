@@ -95,6 +95,14 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
     return route
   }
 
+  router.reroute = () => {
+    if (current) {
+      const next = { ...current }
+      current = next
+      router.current.set(next)
+    }
+  }
+
   router.on('*', (params, popState) => {
     const view = getView()
     const routes = getRoutes()

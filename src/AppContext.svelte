@@ -44,11 +44,11 @@
   //
   // $: load(loader)
 
-  const { router, options, tree, extras } = getContext()
+  const { router, options, commands, tree, extras } = getContext()
 
   // $: ({ shadow } = $options)
 
-  $: props = { options, tree, router, focus, extras: $extras }
+  $: props = { options, commands, tree, router, focus, extras: $extras }
 
   // updateContext({
   //   getUi: () => ({ css, ViewBox, RenderBox }),

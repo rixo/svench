@@ -9,6 +9,7 @@
   export let router
   export let focus
   export let extras
+  export let commands
 
   $: ({ fixed, fullscreen } = $options)
 
@@ -82,7 +83,7 @@
   </section>
 
   <section class="svench-ui svench-app-toolbar" style="left: {menuWidth}px">
-    <Toolbar {options} />
+    <Toolbar {options} {commands} />
   </section>
 
   <div class="svench-ui svench-app-toolbar-placeholder" />

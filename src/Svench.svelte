@@ -142,12 +142,19 @@
   //
   // // $: test($pages)
 
+  // --- commands ---
+
+  const commands = {
+    refresh: () => router.reroute(),
+  }
+
   // --- context ---
 
   setContext({
     raw,
     naked,
     options,
+    commands,
     makeNamer,
     router: {
       listen: router.listen,
