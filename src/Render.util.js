@@ -42,8 +42,7 @@ export const matchPath = (resolveUrl, src) => {
   // console.log('regex', srcPath, regex)
 
   return route => {
-    const m = !!route.canonical.match(regex) ? [srcPrefix, route] : false
-    // console.log('>>>', srcPath, route.path, m)
-    return m
+    if (!route.canonical.match(regex)) return false
+    return [srcPrefix, route]
   }
 }

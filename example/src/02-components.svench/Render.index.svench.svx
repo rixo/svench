@@ -101,7 +101,7 @@ Basic globbing (`*`, `**`, and `?`) is available:
 The `src` of `<Render>` defaults to the Svench component of which this file is the index. That is, from the current file, you can render views from `./Render.svench` without specifying the `src`:
 
 ```svelte
-<Render view="Render example" />
+<Render view="example" />
 ```
 
-<Render view="Render example" />
+<Render view="example" />

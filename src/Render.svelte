@@ -42,33 +42,54 @@
     error = err
   }
 
-  const formatTitle = (route, prefix) =>
-    prefix === false
-      ? null
-      : {
-          title: route.title || route.path.slice(prefix.length),
-          href: route.path,
-        }
+  const getTitle = route =>
+    route.indexOf ? getTitle(route.indexOf) : route.title
+
+  const getPath = route => (route.indexOf ? getPath(route.indexOf) : route.path)
+
+  const formatTitle = (route, prefix) => {
+    if (prefix === false) return null
+    const path = getPath(route)
+    return {
+      title: getTitle(route) || path.slice(prefix.length),
+      // href: route.path,
+      href: path,
+    }
+  }
 
   const notSelf = ([, { path }]) => path !== route.path
+
+  const hasImport = ([, route]) => route.import
+
+  const preferIndex = ([srcPrefix, route]) => [srcPrefix, route.index || route]
+
+  const dedupe = () => {
+    const set = new Set()
+    return ([, route]) => {
+      if (set.has(route)) return false
+      set.add(route)
+      return true
+    }
+  }
 
   const loadSrc = async src => {
     try {
       const matchedRoutes = $routes
         .map(matchPath(resolveUrl, src))
         .filter(Boolean)
+        .map(preferIndex)
+        .filter(dedupe())
         .filter(notSelf)
+        .filter(hasImport)
       const _components = await Promise.all(
-        matchedRoutes
-          .filter(([, route]) => route.import)
-          .map(([prefix, route]) =>
-            Promise.resolve(route.import()).then(({ default: Component }) => ({
-              Component,
-              route,
-              prefix,
-              ...formatTitle(route, prefix),
-            }))
-          )
+        matchedRoutes.map(([prefix, route]) =>
+          Promise.resolve(route.import()).then(({ default: Component }) => ({
+            Component,
+            route,
+            prefix,
+            ...formatTitle(route, prefix),
+          }))
+        )
       )
       _components.sort(({ route: a, prefix: ap }, { route: b, prefix: bp }) =>
         (a.sortKey || a.path.slice(ap.length)).localeCompare(
@@ -103,33 +124,38 @@
     return loadSrcRoute(obj)
   }
 
-  const resolveSrc = src =>
-    !src
-      ? null
-      : typeof src === 'string'
-      ? loadSrc(src)
-      : typeof src === 'function' && !src.$$svench_id
-      ? [src].flat()
-      : loadSrcObject(src)
+  const load = src => {
+    if (!src) {
+      error = 'Missing src'
+      return
+    }
+    error = null
+    if (typeof src === 'string') {
+      loadSrc(src)
+    } else {
+      loadSrcObject(src)
+    }
+  }
 
   const loopProtectionError =
     renderLoopProtection && renderNesting.length > renderLoopProtection
 
-  $: !loopProtectionError &&
-    !register &&
-    route &&
-    resolveSrc(src || defaultRenderSrc || route.indexOf)
+  if (loopProtectionError) {
+    error = new Error(`Maximum render loop: ${renderNesting.join(' -> ')}`)
+    // throw it or the stack will explode
+    throw error
+  }
 
-  $: if (loopProtectionError) {
-    throw new Error(`Maximum render loop: ${renderNesting.join(' -> ')}`)
-  } else if (!src) {
-    error = 'Missing src'
+  // route can be resolved async
+  $: if (!loopProtectionError && !register && route) {
+    load(src || defaultRenderSrc || route.indexOf)
   }
 
   updateContext({
     renderNesting: [...renderNesting, `${route && route.path} (${src})`],
     register: false,
-    defaultRenderSrc: src,
+    // WARNING private slot API
+    defaultRenderSrc: $$props.$$slots && $$props.$$slots.default && src,
   })
 </script>
 

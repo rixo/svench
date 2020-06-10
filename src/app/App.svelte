@@ -89,7 +89,7 @@
   <div class="svench-ui svench-app-toolbar-placeholder" />
 
   <main class:focus style={mainStyle}>
-    <div class="svench-app svench-canvas canvas" class:focus>
+    <div class="svench-app svench-app-canvas" class:focus>
       <slot />
     </div>
   </main>
@@ -188,7 +188,7 @@
     display: flex;
     flex-direction: column;
   }
-  main .canvas {
+  main .svench-app-canvas {
     flex: 1;
   }
   main {
@@ -204,7 +204,7 @@
     left: 0;
     right: 0;
   }
-  main.focus .canvas {
+  main.focus .svench-app-canvas {
     display: flex;
     flex-direction: column;
   }

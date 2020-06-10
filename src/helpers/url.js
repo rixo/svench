@@ -4,18 +4,10 @@ const defaultSection = '_'
 
 const resolveRaw = route =>
   function _resolveRaw(path) {
-    if (path.startsWith('.')) return ['', route.dir, path].join('/')
     if (path.startsWith('/')) return path
-    const segments = route.canonical.split('/')
-    // NOTE index routes "canonical" paths is /path/to/index, but they are
-    // stored either as /path/to or /path/to/index; the base must be /path/to
-    // in every case
-    // NOTE /path/to OR (not xor) /path/to/index (because of auto index)
-    if (segments[segments.length - 1] === 'index') {
-      segments.pop()
-    }
-    const base = segments.slice(0, -1)
-    return ['', base, path].join('/')
+    if (path.startsWith('.')) return ['', route.dir, path].join('/')
+    const segments = route.canonical.split('/').slice(0, -1)
+    return [...segments, path].join('/')
   }
 
 const dropDefaultSection = path =>
@@ -34,7 +26,7 @@ const normalize = path =>
   path.replace(/(?:\/|^)\.(?=\/|$)/g, '/').replace(/\/{2,}/g, '/')
 
 // replace . with /
-const replaceVirtuals = path => path.replace(/\./g, '/')
+const replaceVirtuals = path => path.replace(/\.(?![./])/g, '/')
 
 // route => path => resolvedPath
 export const urlResolver = route =>
