@@ -13,12 +13,6 @@
 
   $: ({ fixed, fullscreen } = $options)
 
-  let menuWidth = $options.menuWidth
-  let extrasHeight = $options.extrasHeight
-
-  $: $options.menuWidth = menuWidth
-  $: $options.extrasHeight = extrasHeight
-
   const onKeydown = e => {
     if (e.key === 'Escape') {
       $options.fullscreen = false
@@ -33,11 +27,11 @@
     mainStyle = ''
   } else {
     mainStyle = `
-      left: ${menuWidth}px;
-      min-height: calc(100% - var(--toolbar-height) - ${extrasHeight}px);
+      left: ${$options.menuWidth}px;
+      min-height: calc(100% - var(--toolbar-height) - ${$options.extrasHeight}px);
     `
     if (focus && hasExtras) {
-      mainStyle += `bottom: ${extrasHeight}px;`
+      mainStyle += `bottom: ${$options.extrasHeight}px;`
     }
   }
 
@@ -68,9 +62,9 @@
   class="svench-app"
   class:svench-fixed={fixed}
   class:svench-fullscreen={fullscreen}
-  style={fullscreen ? null : `padding-left: ${menuWidth}px`}>
+  style={fullscreen ? null : `padding-left: ${$options.menuWidth}px`}>
 
-  <section class="svench-ui svench-menu" style="width: {menuWidth}px">
+  <section class="svench-ui svench-menu" style="width: {$options.menuWidth}px">
     <h1 class="svench-app-logo">
       <a href="/">
         <!-- <span class="icon">🔧</span> -->
@@ -79,10 +73,12 @@
       </a>
     </h1>
     <Menu tree={$tree} {router} />
-    <ResizeHandle right bind:width={menuWidth} />
+    <ResizeHandle right bind:width={$options.menuWidth} />
   </section>
 
-  <section class="svench-ui svench-app-toolbar" style="left: {menuWidth}px">
+  <section
+    class="svench-ui svench-app-toolbar"
+    style="left: {$options.menuWidth}px">
     <Toolbar {options} {commands} />
   </section>
 
@@ -100,9 +96,9 @@
   {#if hasExtras}
     <aside
       class="svench-ui svench-extras"
-      style="left: {menuWidth}px; height: {extrasHeight}px">
+      style="left: {$options.menuWidth}px; height: {$options.extrasHeight}px">
       <ExtrasPanel {extras} />
-      <ResizeHandle top bind:width={extrasHeight} />
+      <ResizeHandle top bind:width={$options.extrasHeight} />
     </aside>
   {/if}
 </div>
