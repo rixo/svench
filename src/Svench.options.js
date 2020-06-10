@@ -92,7 +92,7 @@ const parseOptions = ({
   // advanced
 
   // maximum number of nesting levels of <Render> before throwing an error
-  renderLoopProtection = 12,
+  renderLoopProtection = 6,
 }) => ({
   localStorageKey,
   enabled,
