@@ -1,4 +1,4 @@
-<article>
+<article class="svench-content">
   <h1>
     <!-- <span class="icon">🔧</span> -->
     <span class="icon">🔬</span>
