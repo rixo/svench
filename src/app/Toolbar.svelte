@@ -4,27 +4,16 @@
   export let options
   export let commands
 
-  const toggleFullscreen = () => {
-    $options.fullscreen = !$options.fullscreen
-  }
-
-  const goRaw = () => {
-    const sep = location.href.includes('?') ? '&' : '?'
-    location.href = location.href + sep + 'only&raw'
-  }
-
-  const goNaked = () => {
-    const sep = location.href.includes('?') ? '&' : '?'
-    location.href = location.href + sep + 'only&naked'
-  }
-
-  const goRawNaked = () => {
-    const sep = location.href.includes('?') ? '&' : '?'
-    location.href = location.href + sep + 'only&raw&naked'
-  }
+  $: ({ toggleMenu, refresh, goNaked, goRaw, toggleFullscreen } = commands)
 </script>
 
 <div class="svench-ui wrapper">
+  {#if toggleMenu}
+    <button aria-label="menu" on:click={toggleMenu} title="Toggle menu">
+      ☰
+    </button>
+    <div class="svench-toolbar-padder" />
+  {/if}
   <label>
     <input type="checkbox" bind:checked={$options.centered} />
     Centered
@@ -57,12 +46,9 @@
   {/if}
   <div class="svench-toolbar-spacer" />
   <button aria-label="naked" on:click={goNaked} title="Render naked">↧</button>
-  <button aria-label="raw" on:click={goRawNaked} title="Render raw">⇟</button>
+  <button aria-label="raw" on:click={goRaw} title="Render raw">⇟</button>
   <div class="svench-toolbar-padder" />
-  <button
-    aria-label="refresh"
-    on:click={commands.refresh}
-    title="Rerender everything">
+  <button aria-label="refresh" on:click={refresh} title="Rerender everything">
     ⟳
   </button>
   <div class="svench-toolbar-padder" />

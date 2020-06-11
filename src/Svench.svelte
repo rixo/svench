@@ -9,6 +9,7 @@
   import UiResolver from './UiResolver.svelte'
   import addRegister from './register.js'
   import createOptions from './Svench.options.js'
+  import createCommands from './Svench.commands.js'
   import Scroll from './scroll.js'
 
   // import test from './test.js'
@@ -144,9 +145,7 @@
 
   // --- commands ---
 
-  const commands = {
-    refresh: () => router.reroute(),
-  }
+  const commands = createCommands({ options, router })
 
   // --- context ---
 
