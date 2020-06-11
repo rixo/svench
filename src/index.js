@@ -1,7 +1,3 @@
-// we need to do this before anything imports navaid... hope this is not
-// already too late!
-history._replaceState = history.replaceState
-
 export { default as View } from './View.svelte'
 export { default as Render } from './Render.svelte'
 export { default as Register } from './Register.svelte'
