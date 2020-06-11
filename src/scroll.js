@@ -1,6 +1,11 @@
 /**
  * Restore scroll and scroll to hash
  *
+ * - on page load...
+ *   - if stored session => restore stored scroll
+ *   - if hash => track anchor
+ *   - else => nothing (browser's default)
+ *
  * - on navigate...
  *   - if pop state (meaning history nav) => restore last scroll
  *   - if hash (direct nav in new tab session) => track anchor
@@ -25,44 +30,58 @@ const getScrollOffset = () => {
   return h.replace(/px$/, '')
 }
 
-export default (el, getOptions) => {
+export default getOptions => {
+  let el
+
   let trackStart = null
   let canceled = false
 
-  const handleScroll = () => {
-    if (Date.now() - trackStart > 200) {
-      canceled = true
+  const getCurrent = () => el && { top: el.scrollTop, left: el.scrollLeft }
+
+  const registerCancelOnUserScroll = () => {
+    const handleScroll = () => {
+      if (Date.now() - trackStart > 200) {
+        canceled = true
+      }
     }
+
+    el.addEventListener('scroll', handleScroll)
+
+    return () => el.removeEventListener('scroll', handleScroll)
   }
 
-  const registerMonitor = () => {
-    addEventListener('scroll', handleScroll)
-    return () => removeEventListener('scroll', handleScroll)
-  }
+  const registerTrackScrollState = () => {
+    let scrollTimeout
 
-  const handlePopState = ({ state }) => {
-    if (!state) return
-    const { scrollTop } = state
-    if (scrollTop != null) return
-  }
+    const saveScroll = () => {
+      const scroll = getCurrent()
+      history._replaceState({ ...history.state, scroll }, '')
+    }
 
-  const registerPopState = () => {
-    addEventListener('popstate', handlePopState)
-    return () => removeEventListener('popstate', handlePopState)
+    const handleScroll = () => {
+      if (Date.now() - trackStart > 200) {
+        canceled = true
+      }
+      clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(saveScroll, 50)
+    }
+
+    el.addEventListener('scroll', handleScroll)
+
+    return () => el.removeEventListener('scroll', handleScroll)
   }
 
   const registerHmr = () => {
-    let scrollTopBefore = null
+    let restore = null
 
     const before = () => {
-      scrollTopBefore = el.scrollTop
+      if (!el) return
+      restore = getCurrent()
     }
 
     const after = () => {
-      trackScroll(() => ({
-        top: scrollTopBefore,
-        value: el.offsetHeight,
-      }))
+      if (!el) return
+      trackScroll(restore)
     }
 
     if (import.meta.hot && import.meta.hot.beforeUpdate) {
@@ -73,13 +92,13 @@ export default (el, getOptions) => {
     return () => {}
   }
 
-  const registerSession = () => {
+  const registerSessionUnload = () => {
     const onUnload = e => {
       e.preventDefault()
       const { localStorageKey } = getOptions()
       if (!localStorageKey || !window.sessionStorage) return
       const key = `${localStorageKey}.scroll`
-      sessionStorage.setItem(key, el.scrollTop)
+      sessionStorage.setItem(key, JSON.stringify(getCurrent()))
     }
 
     window.addEventListener('unload', onUnload)
@@ -95,7 +114,8 @@ export default (el, getOptions) => {
     getScroll,
     { max = 2000, stableThreshold = 333 } = {}
   ) => {
-    // console.trace('trackScroll')
+    if (!getScroll) return
+
     const start = Date.now()
     let since = null
     let lastValue = VOID
@@ -105,9 +125,10 @@ export default (el, getOptions) => {
 
     const track = () => {
       if (canceled) return
-      const { top, value = top } = getScroll() || {}
+      const { top, left, value = `${el.scrollTop}:${el.scrollLeft}` } =
+        (typeof getScroll === 'function' ? getScroll() : getScroll) || {}
       if (top != null) {
-        el.scrollTo({ top })
+        el.scrollTo({ top, left })
       }
       if (value === lastValue) {
         if (Date.now() - since > stableThreshold) {
@@ -129,20 +150,6 @@ export default (el, getOptions) => {
     track()
   }
 
-  const restoreSession = () => {
-    const { localStorageKey } = getOptions()
-    if (!localStorageKey || !window.sessionStorage) return
-    const key = `${localStorageKey}.scroll`
-    const restore = sessionStorage.getItem(key)
-    sessionStorage.setItem(key, null)
-    if (restore) {
-      trackScroll(() => ({
-        top: restore,
-        value: el.offsetHeight,
-      }))
-    }
-  }
-
   const trackAnchor = hash => {
     const name = hash.replace(/^#/, '')
     const offset = getScrollOffset() || 0
@@ -159,24 +166,57 @@ export default (el, getOptions) => {
   }
 
   const navigate = ({ hash, popState }) => () => {
+    if (!el) return
     if (popState) {
-      return
+      trackScroll(popState.scroll)
     } else if (hash) {
+      // priority to session restore
       if (trackStart !== null) return
       trackAnchor(hash)
     } else {
-      document.body.scrollTo({ top: 0 })
+      el.scrollTo({ top: 0 })
     }
   }
 
-  const dispose = pipe(
-    registerMonitor(),
-    registerHmr(),
-    registerPopState(),
-    registerSession()
-  )
+  const restoreSession = () => {
+    const { localStorageKey } = getOptions()
+    if (!localStorageKey || !window.sessionStorage) return
+    const key = `${localStorageKey}.scroll`
+    const restore = sessionStorage.getItem(key)
+    sessionStorage.setItem(key, null)
+    if (restore) {
+      trackScroll(JSON.parse(restore))
+    }
+  }
 
-  restoreSession()
+  let unregisterTargeted
+  let initial = true
 
-  return { dispose, navigate }
+  const setTarget = target => {
+    el = target
+
+    if (initial) {
+      initial = false
+      restoreSession()
+    } else {
+      unregisterTargeted()
+    }
+
+    unregisterTargeted = pipe(
+      () => {
+        unregisterTargeted = null
+      },
+      registerCancelOnUserScroll(),
+      registerTrackScrollState()
+    )
+  }
+
+  const unregisterMain = pipe(registerHmr(), registerSessionUnload())
+
+  const dispose = () => {
+    unregisterMain()
+    if (unregisterTargeted) unregisterTargeted()
+  }
+
+  return { dispose, navigate, setTarget }
 }

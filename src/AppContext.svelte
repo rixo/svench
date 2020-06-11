@@ -11,6 +11,7 @@
   export let error
   export let css
   export let shadow
+  export let setScrollTarget
 
   // let App, ViewBox, RenderBox
   // let error
@@ -48,7 +49,15 @@
 
   // $: ({ shadow } = $options)
 
-  $: props = { options, commands, tree, router, focus, extras: $extras }
+  $: props = {
+    options,
+    commands,
+    tree,
+    router,
+    focus,
+    extras: $extras,
+    setScrollTarget,
+  }
 
   // updateContext({
   //   getUi: () => ({ css, ViewBox, RenderBox }),

@@ -43,12 +43,13 @@
     ...$$props,
   })
 
-  const { navigate: scrollNav, ...scroll } = Scroll(
-    document.scrollingElement || document.body,
-    () => $options
-  )
+  const {
+    navigate: scrollNav,
+    setTarget: setScrollTarget,
+    dispose: disposeScroll,
+  } = Scroll(() => $options)
 
-  onDestroy(scroll.dispose)
+  onDestroy(disposeScroll)
 
   // $: updateState($options)
 
@@ -67,6 +68,7 @@
   }
 
   // --- router ---
+  // WARNING after scroll! (for pop/push state events precendence)
 
   const router = createRouter({
     base,
@@ -191,7 +193,7 @@
     {#if single}
       <Router {scrollNav} bind:focus />
     {:else if !shadow || css}
-      <AppContext {focus} {shadow} {App} {error} {css}>
+      <AppContext {focus} {shadow} {App} {error} {css} {setScrollTarget}>
         <Router {scrollNav} bind:focus />
       </AppContext>
     {/if}

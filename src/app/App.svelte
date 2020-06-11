@@ -11,6 +11,7 @@
   export let focus
   export let extras
   export let commands
+  export let setScrollTarget
 
   $: ({ fixed, fullscreen, menuVisible } = $options)
 
@@ -102,7 +103,7 @@
     <Menu tree={$tree} {router} />
   </section>
 
-  <div class="svench-app-body" style={bodyStyle}>
+  <div use:setScrollTarget class="svench-app-body" style={bodyStyle}>
     <ResizeHandle left bind:width={$options.menuWidth} />
 
     <section class="svench-ui svench-app-toolbar" style="left: {menuOffset}px">

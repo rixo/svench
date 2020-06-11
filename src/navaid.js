@@ -95,12 +95,12 @@ export default function Navaid(base, on404) {
 
 function wrap(type, fn) {
 	if (history[type]) return;
-	history[type] = type;
+	// history[type] = type;
 	fn = history[type += 'State'];
 	history[type] = function (uri, ...args) {
 		const ev = new Event(type.toLowerCase());
 		ev.uri = uri;
-		fn.call(this, { uri, scrollTop: document.body.scrollTop }, ...args);
+		fn.call(this, { uri }, ...args);
 		return dispatchEvent(ev);
 	}
 }
