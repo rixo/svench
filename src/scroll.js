@@ -112,7 +112,7 @@ export default getOptions => {
 
   const trackScroll = (
     getScroll,
-    { max = 2000, stableThreshold = 500 } = {}
+    { max = 3100, stableThreshold = 500 } = {}
   ) => {
     if (!getScroll) return
 
