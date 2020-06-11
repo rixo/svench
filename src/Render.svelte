@@ -161,7 +161,7 @@
     defaultRenderSrc: $$props.$$slots && $$props.$$slots.default && src,
   })
 
-  $: props = { route, view, page, focus: false }
+  $: props = { view, page, focus: false }
 </script>
 
 {#if error}
@@ -175,14 +175,14 @@
     <!-- slot for nested <Render> -->
     <slot>
       {#if naked}
-        <ComponentContext {...props} component={Component} />
+        <ComponentContext {...props} {route} component={Component} />
       {:else if shadow}
         <Shadow {css} {router} Component={RenderBox} props={{ title, href }}>
-          <ComponentContext {...props} component={Component} {view} />
+          <ComponentContext {...props} {route} component={Component} />
         </Shadow>
       {:else}
         <RenderBox {title} {href}>
-          <ComponentContext {...props} component={Component} />
+          <ComponentContext {...props} {route} component={Component} />
         </RenderBox>
       {/if}
     </slot>
