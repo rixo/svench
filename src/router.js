@@ -67,8 +67,7 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
       // we've been superseeded while loading
       if (currentRoute !== _route || currentView !== _view) return
 
-      const next = { cmp, route: currentRoute, view: getView(), hash, popState }
-      setCurrent(next)
+      setCurrent({ cmp, route: currentRoute, view: getView(), hash, popState })
       setError(null)
     } catch (err) {
       if (currentRoute !== _route) return
