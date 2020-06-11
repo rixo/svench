@@ -20,7 +20,7 @@ const hiddenOptionValues = {
   dev: false,
 }
 
-const localOptions = ['menuWidth', 'extrasHeight']
+const localOptions = ['menuWidth', 'menuVisible', 'extrasHeight']
 
 const readParamsOptions = () => {
   const q = new URLSearchParams(window.location.search)
@@ -54,8 +54,9 @@ const parseOptions = ({
   // dev mode
   dev = false,
 
-  // app
+  // state
   menuWidth = 200,
+  menuVisible = true,
   extrasHeight = 200,
 
   // ui
@@ -102,6 +103,7 @@ const parseOptions = ({
   registerTimeout,
   renderTimeout,
   menuWidth,
+  menuVisible,
   extrasHeight,
   // dev mode
   dev,

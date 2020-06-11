@@ -24,6 +24,10 @@ const wrapStore = (store, onDispose = onDestroy) => {
 export default ({ router, options }) => {
   const $options = wrapStore(options)
 
+  const toggleMenu = () => {
+    $options.menuVisible = !$options.menuVisible
+  }
+
   const refresh = () => router.reroute()
 
   const toggleFullscreen = () => {
@@ -45,5 +49,5 @@ export default ({ router, options }) => {
     location.href = location.href + sep + 'only&raw&naked'
   }
 
-  return { refresh, goNaked, goRaw: goRawNaked, toggleFullscreen }
+  return { toggleMenu, refresh, goNaked, goRaw: goRawNaked, toggleFullscreen }
 }
