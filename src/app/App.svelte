@@ -1,4 +1,5 @@
 <script>
+  import { tweened } from 'svelte/motion'
   import Menu from './Menu.svelte'
   import ResizeHandle from './ResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
@@ -11,7 +12,7 @@
   export let extras
   export let commands
 
-  $: ({ fixed, fullscreen } = $options)
+  $: ({ fixed, fullscreen, menuVisible } = $options)
 
   const onKeydown = e => {
     if (e.key === 'Escape') {
@@ -21,14 +22,40 @@
 
   $: hasExtras = extras && extras.source
 
+  const menuOffset$ = tweened($options.menuVisible ? $options.menuWidth : 0, {
+    duration: (x0, x1) => Math.abs(x0 - x1) * 0.5,
+  })
+
+  let lastMenuVisible = $options.menuVisible
+  let lastMenuWidth = $options.menuWidth
+
+  // $: $menuOffset$ = menuVisible ? $options.menuWidth : 0
+  $: {
+    if (lastMenuVisible !== $options.menuVisible) {
+      menuOffset$.set(menuVisible ? $options.menuWidth : 0)
+    } else if (lastMenuWidth !== $options.menuWidth) {
+      menuOffset$.set(menuVisible ? $options.menuWidth : 0, { duration: 0 })
+    }
+    lastMenuVisible = $options.menuVisible
+    lastMenuWidth = $options.menuWidth
+  }
+
+  $: menuOffset = $menuOffset$
+
+  let bodyStyle
   let mainStyle
 
   $: if (fullscreen) {
+    bodyStyle = ''
     mainStyle = ''
   } else {
+    bodyStyle = `
+      // left: ${focus ? menuOffset : 0}px;
+      margin-left: ${menuOffset}px;
+      min-height: 100%;
+    `
     mainStyle = `
-      left: ${$options.menuWidth}px;
-      min-height: calc(100% - var(--toolbar-height) - ${$options.extrasHeight}px);
+      min-height: calc(100% - 48px - ${$options.extrasHeight}px);
     `
     if (focus && hasExtras) {
       mainStyle += `bottom: ${$options.extrasHeight}px;`
@@ -60,9 +87,9 @@
 <div
   on:mousemove={mousemove}
   class="svench-app"
-  class:svench-fixed={fixed}
-  class:svench-fullscreen={fullscreen}
-  style={fullscreen ? null : `padding-left: ${$options.menuWidth}px`}>
+  class:svench-app-focus={focus}
+  class:svench-fullscreen={fullscreen}>
+  <!-- style={fullscreen ? null : `padding-left: ${menuOffset}px`}> -->
 
   <section class="svench-ui svench-menu" style="width: {$options.menuWidth}px">
     <h1 class="svench-app-logo">
@@ -73,32 +100,33 @@
       </a>
     </h1>
     <Menu tree={$tree} {router} />
-    <ResizeHandle right bind:width={$options.menuWidth} />
   </section>
 
-  <section
-    class="svench-ui svench-app-toolbar"
-    style="left: {$options.menuWidth}px">
-    <Toolbar {options} {commands} />
-  </section>
+  <div class="svench-app-body" style={bodyStyle}>
+    <ResizeHandle left bind:width={$options.menuWidth} />
 
-  <div class="svench-ui svench-app-toolbar-placeholder" />
+    <section class="svench-ui svench-app-toolbar" style="left: {menuOffset}px">
+      <Toolbar {options} {commands} />
+    </section>
 
-  <main
-    class="svench-app-main"
-    class:svench-app-focus={focus}
-    style={mainStyle}>
-    <div class="svench-app svench-app-canvas">
-      <slot />
-    </div>
-  </main>
+    <div class="svench-ui svench-app-toolbar-placeholder" />
 
-  {#if hasExtras}
-    <aside
-      class="svench-ui svench-extras"
-      style="left: {$options.menuWidth}px; height: {$options.extrasHeight}px">
-      <ExtrasPanel {extras} />
-      <ResizeHandle top bind:width={$options.extrasHeight} />
-    </aside>
-  {/if}
+    <main
+      class="svench-app-main"
+      class:svench-app-focus={focus}
+      style={mainStyle}>
+      <div class="svench-app svench-app-canvas">
+        <slot />
+      </div>
+    </main>
+
+    {#if hasExtras}
+      <section
+        class="svench-ui svench-extras"
+        style="left: {menuOffset}px; height: {$options.extrasHeight}px">
+        <ExtrasPanel {extras} />
+        <ResizeHandle top shrink bind:width={$options.extrasHeight} />
+      </section>
+    {/if}
+  </div>
 </div>

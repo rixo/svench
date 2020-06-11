@@ -43,7 +43,7 @@
 
 .svench-menu {
   background-color: var(--light-2);
-  box-shadow: inset -16px 0 12px -16px rgba(0, 0, 0, 0.2);
+  /* box-shadow: inset -16px 0 12px -16px rgba(0, 0, 0, 0.2); */
   overflow: auto;
 }
 
@@ -53,6 +53,15 @@
   bottom: 0;
   left: 0;
   margin: 0;
+}
+
+.svench-app-body {
+  position: relative;
+  z-index: 1;
+
+  background-color: var(--white);
+  /* box-shadow: 0 0 12px 6px rgba(0, 0, 0, 0.2); */
+  box-shadow: -0px 0 12px 2px rgba(0, 0, 0, 0.2);
 }
 
 .svench-app-toolbar {
@@ -76,38 +85,49 @@
   z-index: 2;
 }
 
-.svench-app.svench-fullscreen .svench-ui {
-  display: none;
-}
-.svench-app.svench-fullscreen .svench-app-main,
-.svench-app.svench-fullscreen .svench-app-main.svench-app-focus {
-  top: 0;
-  bottom: 0;
+.svench-app.svench-fullscreen {
+  & .svench-ui {
+    display: none;
+  }
+  & .svench-app-main,
+  &.svench-app-focus .svench-app-main {
+    top: 0;
+    bottom: 0;
+  }
 }
 
 .svench-app-main {
   display: flex;
   flex-direction: column;
 }
-.svench-app-main .svench-app-canvas {
-  flex: 1;
-}
 .svench-app-main {
   /* NOTE we want the canvas to fill available space, or it is hard to pick
      in dev tools (which end users might want to do to find missing cmp) */
   min-height: calc(100% - var(--toolbar-height) - var(--extras-height));
 }
-.svench-app-main.svench-app-focus {
+
+.svench-app-focus .svench-app-body {
   position: fixed;
-  overflow: auto;
-  top: var(--toolbar-height);
+  top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  & .svench-app-main {
+    position: absolute;
+    top: var(--toolbar-height);
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: auto;
+    & .svench-app-canvas {
+      display: flex;
+      flex-direction: column;
+    }
+  }
 }
-.svench-app-main.svench-app-focus .svench-app-canvas {
-  display: flex;
-  flex-direction: column;
+
+.svench-app-canvas {
+  flex: 1;
 }
 
 /*--- theme ---*/
