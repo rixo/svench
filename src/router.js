@@ -34,13 +34,15 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
 
   const getView = () => new URLSearchParams(window.location.search).get('view')
 
-  const setCurrent = next => {
+  const setCurrent = (next, force = false) => {
     if (
-      !current ||
-      current.cmp !== next.cmp ||
-      current.route !== next.route ||
-      current.view !== next.view
-      // current.hash !== next.hash
+      (current !== next || force) &&
+      (!current ||
+        !next ||
+        current.cmp !== next.cmp ||
+        current.route !== next.route ||
+        current.view !== next.view)
+      // || current.hash !== next.hash
     ) {
       current = next
       router.current.set(next)
