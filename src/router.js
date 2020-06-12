@@ -1,6 +1,10 @@
 import { writable } from 'svelte/store'
 import navaid from './navaid.js'
 
+const normalize = path => path.replace(/\/{2,}/g, '/')
+
+const join = (...parts) => normalize(parts.join('/'))
+
 export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
   let currentRoute = null
   let currentView = null
@@ -78,7 +82,7 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
   const find = (path, indexFirst, routes) => {
     let actual = null
     for (const route of routes) {
-      if (indexFirst && path + '/index' === route.path) return route
+      if (indexFirst && join(path, 'index') === route.path) return route
       if (path === route.path) {
         if (!indexFirst) return route
         actual = route
