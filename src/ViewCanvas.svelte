@@ -26,67 +26,6 @@
     background
 </script>
 
-<!-- <style>
-  svench-view-canvas {
-    /* min-height: 100%; */
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-  }
-
-  svench-view-canvas.svench-center {
-    /* align-items: center; */
-    justify-content: center;
-  }
-
-  svench-view-canvas.svench-center:not(.svench-fill) {
-    justify-content: center;
-    align-items: center;
-  }
-  svench-view-canvas.svench-center.svench-fill {
-    text-align: center;
-  }
-
-  svench-view-canvas.padding {
-    padding: 1em;
-  }
-
-  svench-view-canvas .svench-outline {
-    position: relative;
-  }
-  svench-view-canvas:not(.svench-fill) .svench-outline-outer {
-    display: inline-block;
-  }
-  svench-view-canvas:not(.svench-fill):not(.svench-center) .svench-outline {
-    display: inline-block;
-  }
-  svench-view-canvas.svench-fill .svench-outline {
-    position: relative;
-  }
-
-  svench-view-canvas.svench-outline .svench-outline-outer {
-    /* background-color: rgba(255, 0, 255, 0.2); */
-    background-color: rgba(0, 0, 255, 0.2);
-  }
-  svench-view-canvas.svench-outline .svench-outline:before {
-    content: ' ';
-    display: block;
-    border: 2px solid magenta;
-    /* border: 2px solid blue; */
-    position: absolute;
-    z-index: 1;
-    left: -2px;
-    right: -2px;
-    top: -2px;
-    bottom: -2px;
-    pointer-events: none;
-  }
-
-  svench-view-canvas.focus {
-    flex: 1;
-  }
-</style> -->
-
 <svench-view-canvas
   style="background: {canvasBg}"
   class:focus
