@@ -10,7 +10,7 @@
 </script>
 
 {#each $views as name}
-  <li class:active={name === active}>
+  <li class:svench-menu-active={name === active}>
     <a
       class="text"
       style={`padding-left: ${indent * indentWidth}em`}

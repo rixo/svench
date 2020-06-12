@@ -1,4 +1,5 @@
 <script>
+  import { findCurrentItem } from './Menu.util.js'
   import MenuViewsList from './MenuViewsList.svelte'
 
   export let router
@@ -20,14 +21,8 @@
 
   $: route = $current && $current.route
 
-  const findCurrentItem = () => {
-    const targetPath = route.path.endsWith('/index')
-      ? route.path.slice(0, -'/index'.length)
-      : route.path
-    return items.find(item => item.path === targetPath)
-  }
-
-  $: activeItem = route && $current && !$current.view && findCurrentItem()
+  $: activeItem =
+    route && $current && !$current.view && findCurrentItem(route, items)
 
   $: expanded =
     route && $current
@@ -82,7 +77,7 @@
   <ul class:nested={indent > 0}>
     {#each _items as item, i (item.path)}
       <li
-        class:active={activeItem && item.id === activeItem.id}
+        class:svench-menu-active={activeItem && item.id === activeItem.id}
         class:expanded={expanded[item.id]}>
         <a
           class="text"
@@ -122,12 +117,6 @@
 {/if}
 
 <style>
-  ul {
-    --svench-menu-expand-handle-color: var(--svench-text-accent);
-  }
-  ul :global(*) {
-    color: var(--light-2-r);
-  }
   ul,
   li {
     margin: 0;
@@ -137,7 +126,7 @@
     list-style: none;
   }
   ul:not(.nested) {
-    padding: 0.5em;
+    padding: 0.25em 0.5em 0.75em;
   }
   /* ul:not(.nested) > :global(li .text) {
     padding-right: 8px;
@@ -146,19 +135,8 @@
   ul :global(li .text) {
     position: relative;
     display: block;
-    padding: 2px;
+    padding: 0.2em;
     white-space: nowrap;
-  }
-  ul :global(li.active > .text:before) {
-    content: ' ';
-    display: block;
-    position: absolute;
-    left: -0.5em;
-    right: -0.5em;
-    top: 0;
-    bottom: 0;
-    background-color: var(--gray);
-    opacity: 0.3;
   }
   ul :global(a) {
     text-decoration: none;
@@ -173,6 +151,7 @@
     text-align: center;
     width: 1.1em;
     height: 1.1em;
+    transform: scale(var(--icon-size));
     /* border: 1px solid red; */
   }
 
