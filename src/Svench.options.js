@@ -54,6 +54,9 @@ const parseOptions = ({
   // dev mode
   dev = false,
 
+  // hmr
+  hmrScrollStickBottom = true,
+
   // state
   menuWidth = 200,
   menuVisible = true,
@@ -102,6 +105,7 @@ const parseOptions = ({
   // time before which view index is reset (for HMR)
   registerTimeout,
   renderTimeout,
+  hmrScrollStickBottom,
   menuWidth,
   menuVisible,
   extrasHeight,

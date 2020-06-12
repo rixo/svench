@@ -38,6 +38,17 @@ export default getOptions => {
 
   const getCurrent = () => el && { top: el.scrollTop, left: el.scrollLeft }
 
+  const isStickBottom = restore =>
+    getOptions().hmrScrollStickBottom &&
+    Math.abs(el.scrollHeight - el.clientHeight - restore.top) < 1
+
+  const getCurrentWithSticky = () => {
+    const scroll = getCurrent()
+    if (!scroll) return
+    scroll.stickBottom = isStickBottom(scroll)
+    return scroll
+  }
+
   const registerCancelOnUserScroll = () => {
     const handleScroll = () => {
       if (Date.now() - trackStart > 200) {
@@ -76,7 +87,7 @@ export default getOptions => {
 
     const before = () => {
       if (!el) return
-      restore = getCurrent()
+      restore = getCurrentWithSticky()
     }
 
     const after = () => {
@@ -98,13 +109,29 @@ export default getOptions => {
       const { localStorageKey } = getOptions()
       if (!localStorageKey || !window.sessionStorage) return
       const key = `${localStorageKey}.scroll`
-      sessionStorage.setItem(key, JSON.stringify(getCurrent()))
+      const scroll = getCurrent()
+      if (scroll) {
+        sessionStorage.setItem(key, JSON.stringify(scroll))
+      } else {
+        sessionStorage.removeItem(key)
+      }
     }
 
     window.addEventListener('unload', onUnload)
 
     return () => {
       removeEventListener('unload', onUnload)
+    }
+  }
+
+  const restoreSession = () => {
+    const { localStorageKey } = getOptions()
+    if (!localStorageKey || !window.sessionStorage) return
+    const key = `${localStorageKey}.scroll`
+    const restore = sessionStorage.getItem(key)
+    sessionStorage.setItem(key, null)
+    if (restore) {
+      trackScroll(JSON.parse(restore))
     }
   }
 
@@ -125,8 +152,9 @@ export default getOptions => {
 
     const track = () => {
       if (canceled) return
-      const { top, left, value = `${el.scrollTop}:${el.scrollLeft}` } =
+      const { top: _top, left, stickBottom = false, value = el.scrollHeight } =
         (typeof getScroll === 'function' ? getScroll() : getScroll) || {}
+      const top = stickBottom ? el.scrollHeight : _top
       if (top != null) {
         el.scrollTo({ top, left })
       }
@@ -175,17 +203,6 @@ export default getOptions => {
       trackAnchor(hash)
     } else {
       el.scrollTo({ top: 0 })
-    }
-  }
-
-  const restoreSession = () => {
-    const { localStorageKey } = getOptions()
-    if (!localStorageKey || !window.sessionStorage) return
-    const key = `${localStorageKey}.scroll`
-    const restore = sessionStorage.getItem(key)
-    sessionStorage.setItem(key, null)
-    if (restore) {
-      trackScroll(JSON.parse(restore))
     }
   }
 
