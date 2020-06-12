@@ -92,12 +92,10 @@
     border: 2px solid magenta;
     position: absolute;
     z-index: 1;
-    /* left: 0;
-    right: 0; */
-    left: -2px;
-    right: -2px;
-    top: -2px;
-    bottom: -2px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     pointer-events: none;
   }
 </style>
