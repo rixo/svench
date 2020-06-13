@@ -3,8 +3,10 @@ const path = require('path')
 const isSvench = !!process.env.SVENCH
 
 module.exports = {
-  config: path.resolve(isSvench ? `rollup.config.svench.js` : `rollup.config.js`),
+  config: path.resolve(
+    isSvench ? `rollup.config.svench.js` : `rollup.config.js`
+  ),
   hot: true,
   port: 42421,
-  watch: ['src', '.svench', 'node_modules/svench'],
+  watch: ['src', '.svench', 'node_modules/svench', '../src', '../themes'],
 }
