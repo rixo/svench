@@ -2,8 +2,6 @@
 const escapeRe = x => x
 
 export const matchPath = (resolveUrl, src) => {
-  // const match = /^(.*?)(\/\*+)?$/.exec(src)
-  // const [, prefix = '', suffix = ''] = match
   const srcPath = resolveUrl(src)
 
   // TODO real glob / wildcard support...
