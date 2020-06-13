@@ -2,7 +2,7 @@
   import { updateContext, getContext } from './util.js'
   import ComponentContext from './ComponentContext.svelte'
   import Shadow from './Shadow.svelte'
-  import { urlResolver } from './helpers/url.js'
+  import { canonicalResolver } from './helpers/url.js'
 
   import { matchPath } from './Render.util.js'
 
@@ -28,7 +28,7 @@
   // render in "page mode" (with padding & al)
   export let page = false
 
-  const resolveUrl = urlResolver(route)
+  const resolveUrl = canonicalResolver(route)
 
   let error = null
 

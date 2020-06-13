@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store'
 import navaid from './navaid.js'
+import { rootSection } from './constants'
 
 const normalize = path => path.replace(/\/{2,}/g, '/')
 
@@ -79,14 +80,37 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
     }
   }
 
-  const find = (path, indexFirst, routes) => {
+  const normalizeCache = {}
+
+  const doNormalize = path =>
+    String(path)
+      .toLowerCase() // TODO case-sensitive URL option
+      .replace(/ /g, '_')
+
+  const normalize = path => {
+    if (normalizeCache[path] == null) {
+      normalizeCache[path] = doNormalize(path)
+    }
+    return normalizeCache[path]
+  }
+
+  const find = (_path, indexFirst, routes) => {
     let actual = null
+    const path = normalize(_path)
     for (const route of routes) {
-      if (indexFirst && join(path, 'index') === route.path) return route
-      if (path === route.path) {
+      const p = normalize(route.path)
+      if (indexFirst && join(path, 'index') === p) return route
+      if (path === p) {
         if (!indexFirst) return route
         actual = route
       }
+    }
+    if (
+      !actual &&
+      path !== rootSection &&
+      !path.startsWith(rootSection + '/')
+    ) {
+      return find(rootSection + path, indexFirst, routes)
     }
     return actual
   }

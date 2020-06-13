@@ -1,8 +1,8 @@
 // TODO escape regex
 const escapeRe = x => x
 
-export const matchPath = (resolveUrl, src) => {
-  const srcPath = resolveUrl(src)
+export const matchPath = (resolveCanonical, src) => {
+  const srcPath = resolveCanonical(src)
 
   // TODO real glob / wildcard support...
   let srcPrefix = false

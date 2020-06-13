@@ -1,19 +1,37 @@
 import { getContext, noop, pipe, split, reduce } from '../util.js'
+import { rootSection } from '../constants'
 
-const defaultSection = '_'
+const inRootSection = ({ path }) => path.startsWith(rootSection)
 
-const resolveRaw = route =>
-  function _resolveRaw(path) {
-    if (path.startsWith('/')) return path
-    if (path.startsWith('.')) return ['', route.dir, path].join('/')
-    const segments = route.canonical.split('/').slice(0, -1)
+const isRootIndex = ({ path }) => path === '/' || path === '/index'
+
+// ensure /_/... and /index routes resolve to /_/... urls
+const resolveRelativeDir = (route, canonical) => {
+  if (!canonical && (inRootSection(route) || isRootIndex(route))) {
+    return rootSection + route.dir
+  }
+  return route.dir
+}
+
+const resolveRaw = (route, canonical) => {
+  const atRoot = !canonical && (inRootSection(route) || isRootIndex(route))
+  // const rootPrefix = atRoot ? rootSection : ''
+  const rootPrefix = ''
+  return function _resolveRaw(path) {
+    if (path.startsWith('/')) return rootPrefix + path
+    if (path.startsWith('.'))
+      // return ['', resolveRelativeDir(route, canonical), path].join('/')
+      return ['', rootPrefix + route.dir, path].join('/')
+    const segments = (rootPrefix + route.canonical).split('/').slice(0, -1)
+    // if (atRoot) {
+    //   segments.unshift(rootSection)
+    // }
     return [...segments, path].join('/')
   }
+}
 
 const dropDefaultSection = path =>
-  path.startsWith('/' + defaultSection)
-    ? path.slice(defaultSection.length + 1)
-    : path
+  path.startsWith(rootSection) ? path.slice(rootSection.length) : path
 
 const resolveUp = pipe(
   split('../'),
@@ -29,15 +47,17 @@ const normalize = path =>
 const replaceVirtuals = path => path.replace(/\.(?![./])/g, '/')
 
 // route => path => resolvedPath
-export const urlResolver = route =>
-  pipe(
-    resolveRaw(route),
+const urlResolver = (route, canonical = false) =>
+  pipe.safe(
+    resolveRaw(route, canonical),
     normalize,
     replaceVirtuals,
-    dropDefaultSection,
+    canonical && dropDefaultSection,
     resolveUp,
     normalize
   )
+
+export const canonicalResolver = route => pipe(urlResolver(route, true))
 
 export const url = {
   subscribe: listener => {
