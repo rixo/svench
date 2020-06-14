@@ -108,6 +108,13 @@
     return routes
   })
 
+  const barbaricPrefetch = routes => {
+    clearTimeout(barbaricPrefetch.timeout)
+    barbaricPrefetch.timeout = setTimeout(() => {
+      routes.forEach(({ import: x }) => x && x())
+    }, 2000)
+  }
+
   let lastRoutes = null
 
   // fix HMR when a Svench component has been renamed (hence we have a stale
@@ -118,6 +125,7 @@
     if (previous !== null) {
       router.run()
     }
+    barbaricPrefetch($_routes)
   }
 
   // --- tree ---
