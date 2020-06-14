@@ -70,6 +70,10 @@ export const pipe = (...fns) => {
       _log('=>', '=')
     )
   }
+
+  pipe.safe = (...fns) => pipe(...fns.filter(Boolean))
+
+  pipe.safe.peep = (...fns) => pipe.peep(...fns.filter(Boolean))
 }
 
 export const split = (...args) =>
@@ -158,11 +162,11 @@ export const shallowEquals = (a, b) => {
   if (a === b) return true
   if (!a || !b) return false
   if (Array.isArray(a) && Array.isArray(b)) {
-    return a.length === b.length && a.every((x, i) => (x === b[i]))
+    return a.length === b.length && a.every((x, i) => x === b[i])
   }
   const ka = Object.keys(a)
   return (
     // ka.length === Object.keys(b).length && ka.every(k => shallowEquals(a[k], b[k]))
-    ka.length === Object.keys(b).length && ka.every(k => (a[k] === b[k]))
+    ka.length === Object.keys(b).length && ka.every(k => a[k] === b[k])
   )
 }
