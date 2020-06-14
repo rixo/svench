@@ -107,9 +107,28 @@ body
   }
 
   & .svench-renderbox {
-    margin: calc(1.5 * var(--svench-spacing)) 0;
+    margin: calc(1 * var(--svench-spacing)) 0;
   }
   & svench-view {
     margin: calc(0.5 * var(--svench-spacing)) 0;
+  }
+}
+
+/* ensures > viewboxes' margins collapse */
+svench-component.svench-page {
+  display: block;
+}
+
+.svench-app.svench-small-screen {
+  /* smaller spacing on small screens */
+  & .svench-page {
+    padding: calc(0.5 * var(--svench-spacing));
+    padding-bottom: calc(1 * var(--svench-spacing));
+  }
+
+  & .svench-menu {
+    font-size: 115%;
+    /* --icon-size: var(--svench-menu-icon-size, 1.2); */
+    /* --font-size: var(--svench-menu-font-size, 1.04em); */
   }
 }

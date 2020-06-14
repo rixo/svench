@@ -87,9 +87,11 @@
             class="icon svench-menu-item-expand-icon"
             class:expand={item.isDirectory}
             on:click|preventDefault={() => toggle(item)}>
-            {#if item.isDirectory}
-              ▶
-            {:else if item.views && item.views.length > 0}❖{:else}🞛{/if}
+            <span class="svench-menu-item-expand-icon-icon">
+              {#if item.isDirectory}
+                ▶
+              {:else if item.views && item.views.length > 0}❖{:else}🞛{/if}
+            </span>
           </span>
           {item.title}
         </a>
@@ -168,6 +170,11 @@
 
   .svench-menu-item-expand-icon {
     position: relative; /* ensures above :before mask */
+    top: 0.1em;
+  }
+  .svench-menu-item-expand-icon-icon {
+    position: relative;
+    top: -0.1em;
   }
   .svench-menu-item-expand-icon:hover {
     color: var(--svench-menu-expand-handle-color);
