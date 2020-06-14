@@ -1,9 +1,13 @@
 <script>
+  /* global OverlayScrollbars */
+
   import { tweened } from 'svelte/motion'
   import Menu from './Menu.svelte'
   import ResizeHandle from './ResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
   import ExtrasPanel from './ExtrasPanel.svelte'
+  import 'overlayscrollbars'
+  import { swipeMenu } from './App.touch.js'
 
   export let options
   export let tree
@@ -13,7 +17,15 @@
   export let commands
   export let setScrollTarget
 
-  $: ({ fixed, fullscreen, menuVisible } = $options)
+  const toolbarHeight = 48 // hmm
+
+  $: ({
+    fixed,
+    fullscreen,
+    menuVisible,
+    menuWidth: _menuWidth,
+    extrasHeight,
+  } = $options)
 
   const onKeydown = e => {
     if (e.key === 'Escape') {
@@ -23,8 +35,19 @@
 
   $: hasExtras = extras && extras.source
 
+  let outerWidth
+  let innerWidth
+
+  // when isPhone, menu autocloses and sizes to width
+  $: isPhone = outerWidth <= 640
+
+  // let menuWidth = getMenuWidth(window.innerWidth)
+  $: menuWidth = isPhone
+    ? Math.max(innerWidth - Math.max(toolbarHeight, 0.95 * innerWidth), 320)
+    : _menuWidth
+
   const menuOffset$ = tweened($options.menuVisible ? $options.menuWidth : 0, {
-    duration: (x0, x1) => Math.abs(x0 - x1) * 0.5,
+    duration: (x0, x1) => Math.abs(x0 - x1) * 0.33,
   })
 
   let lastMenuVisible = $options.menuVisible
@@ -33,9 +56,9 @@
   // $: $menuOffset$ = menuVisible ? $options.menuWidth : 0
   $: {
     if (lastMenuVisible !== $options.menuVisible) {
-      menuOffset$.set(menuVisible ? $options.menuWidth : 0)
+      menuOffset$.set(menuVisible ? menuWidth : 0)
     } else if (lastMenuWidth !== $options.menuWidth) {
-      menuOffset$.set(menuVisible ? $options.menuWidth : 0, { duration: 0 })
+      menuOffset$.set(menuVisible ? menuWidth : 0, { duration: 0 })
     }
     lastMenuVisible = $options.menuVisible
     lastMenuWidth = $options.menuWidth
@@ -53,15 +76,27 @@
     bodyStyle = `
       // left: ${focus ? menuOffset : 0}px;
       margin-left: ${menuOffset}px;
+      margin-right: ${isPhone ? -menuOffset : 0}px;
       min-height: 100%;
     `
     mainStyle = `
-      min-height: calc(100% - 48px - ${$options.extrasHeight}px);
+      min-height: calc(100% - ${toolbarHeight}px - ${extrasHeight}px);
     `
     if (focus && hasExtras) {
-      mainStyle += `bottom: ${$options.extrasHeight}px;`
+      mainStyle += `bottom: ${extrasHeight}px;`
     }
   }
+
+  $: ({ current } = router)
+  let lastCurrent
+  $: if ($current !== lastCurrent) {
+    lastCurrent = $current
+    if (isPhone) {
+      $options.menuVisible = false
+    }
+  }
+
+  // --- preload ---
 
   const mousemove = e => {
     if (e.target.tagName !== 'A') return
@@ -81,18 +116,32 @@
         e.target.dataset.prefetched = false
       })
   }
+
+  const overlayscrollbars = el => {
+    OverlayScrollbars(el, {
+      scrollbars: {
+        autoHide: 'move',
+      },
+    })
+  }
 </script>
 
-<svelte:window on:keydown={onKeydown} />
+<svelte:window on:keydown={onKeydown} bind:outerWidth bind:innerWidth />
 
 <div
+  use:swipeMenu={x => {
+    $options.menuVisible = x
+  }}
   on:mousemove={mousemove}
   class="svench-app"
-  class:svench-app-focus={focus}
+  class:svench-small-screen={isPhone}
+  class:svench-focus={focus}
   class:svench-fullscreen={fullscreen}>
-  <!-- style={fullscreen ? null : `padding-left: ${menuOffset}px`}> -->
 
-  <section class="svench-ui svench-menu" style="width: {$options.menuWidth}px">
+  <section
+    class="svench-ui svench-app-menu"
+    style="width: {menuWidth}px"
+    use:overlayscrollbars>
     <h1 class="svench-app-logo">
       <a href="/">
         <!-- <span class="icon">🔧</span> -->
@@ -103,28 +152,27 @@
     <Menu tree={$tree} {router} />
   </section>
 
-  <div use:setScrollTarget class="svench-app-body" style={bodyStyle}>
+  <div class="svench-app-body" style={bodyStyle}>
     <ResizeHandle left bind:width={$options.menuWidth} />
 
     <section class="svench-ui svench-app-toolbar" style="left: {menuOffset}px">
       <Toolbar {options} {commands} />
     </section>
 
-    <div class="svench-ui svench-app-toolbar-placeholder" />
-
     <main
+      use:setScrollTarget
       class="svench-app-main"
       class:svench-app-focus={focus}
       style={mainStyle}>
-      <div class="svench-app svench-app-canvas">
+      <div class="svench-app-canvas">
         <slot />
       </div>
     </main>
 
     {#if hasExtras}
       <section
-        class="svench-ui svench-extras"
-        style="left: {menuOffset}px; height: {$options.extrasHeight}px">
+        class="svench-ui svench-app-extras"
+        style="height: {extrasHeight}px">
         <ExtrasPanel {extras} />
         <ResizeHandle top shrink bind:width={$options.extrasHeight} />
       </section>
