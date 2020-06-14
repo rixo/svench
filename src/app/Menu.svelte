@@ -50,7 +50,7 @@
     display: block;
     color: var(--gray-dark);
     margin-bottom: 0;
-    text-transform: capitalize;
+    /* text-transform: capitalize; */
     opacity: 0.9;
   }
   h2 > a {
