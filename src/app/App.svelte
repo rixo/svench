@@ -52,16 +52,18 @@
 
   let lastMenuVisible = $options.menuVisible
   let lastMenuWidth = $options.menuWidth
+  let lastIsPhone = null
 
   // $: $menuOffset$ = menuVisible ? $options.menuWidth : 0
   $: {
-    if (lastMenuVisible !== $options.menuVisible) {
-      menuOffset$.set(menuVisible ? menuWidth : 0)
-    } else if (lastMenuWidth !== $options.menuWidth) {
+    if (isPhone !== lastIsPhone || lastMenuWidth !== $options.menuWidth) {
       menuOffset$.set(menuVisible ? menuWidth : 0, { duration: 0 })
+    } else if (lastMenuVisible !== $options.menuVisible) {
+      menuOffset$.set(menuVisible ? menuWidth : 0)
     }
     lastMenuVisible = $options.menuVisible
     lastMenuWidth = $options.menuWidth
+    lastIsPhone = isPhone
   }
 
   $: menuOffset = $menuOffset$
