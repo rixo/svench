@@ -176,7 +176,7 @@
     position: relative;
     top: -0.1em;
   }
-  .svench-menu-item-expand-icon:hover {
+  .svench-menu-item-expand-icon:hover .svench-menu-item-expand-icon-icon {
     color: var(--svench-menu-expand-handle-color);
   }
 </style>
