@@ -16,6 +16,20 @@
     route && $current && !$current.view && findCurrentItem(route, sections)
 </script>
 
+<!-- <div class="svench-menu">
+  {#each sections as s (s.id)}
+    {#if s.path !== '/_'}
+      <h2 class:svench-menu-active={activeItem && s.id === activeItem.id}>
+        {#if (s.href = router.resolve(s.path))}
+          <a href={s.href}>{s.title}</a>
+        {:else}
+          <span>{s.title}</span>
+        {/if}
+      </h2>
+    {/if}
+    <MenuItems {router} items={s.children} {autofold} />
+  {/each}
+</div> -->
 <div class="svench-menu">
   {#each sections as { id, path, title, children: items, href } (id)}
     {#if path !== '/_'}

@@ -39,7 +39,7 @@
   let innerWidth
 
   // when isPhone, menu autocloses and sizes to width
-  $: isPhone = outerWidth <= 640
+  $: isPhone = outerWidth <= 720
 
   // let menuWidth = getMenuWidth(window.innerWidth)
   $: menuWidth = isPhone

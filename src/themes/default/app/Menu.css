@@ -1,0 +1,17 @@
+.svench-app.svench-small-screen {
+  & .svench-menu {
+    font-size: 115%;
+    --icon-size: var(--svench-menu-icon-size, 1);
+    /* --font-size: var(--svench-menu-font-size, 1.04em); */
+    & .svench-menu-item-icon {
+      width: 2.6em;
+      padding: 0.2em;
+      & .svench-menu-item-icon-icon {
+        display: none;
+      }
+    }
+    & .svench-menu-item-text {
+      margin-left: -0.8em;
+    }
+  }
+}

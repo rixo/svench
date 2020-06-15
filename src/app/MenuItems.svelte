@@ -84,7 +84,7 @@
           style={`padding-left: ${indent * indentWidth}em`}
           href={item.href}>
           <span
-            class="icon svench-menu-item-expand-icon"
+            class="svench-menu-item-icon svench-menu-item-expand-icon"
             class:expand={item.isDirectory}
             on:click|preventDefault={() => toggle(item)}>
             <span class="svench-menu-item-expand-icon-icon">
@@ -93,7 +93,7 @@
               {:else if item.views && item.views.length > 0}❖{:else}🞛{/if}
             </span>
           </span>
-          {item.title}
+          <span class="svench-menu-item-text">{item.title}</span>
         </a>
         {#if expanded[item.id]}
           {#if item.views$}
@@ -130,10 +130,6 @@
   ul:not(.nested) {
     padding: 0.25em 0.5em 0.75em;
   }
-  /* ul:not(.nested) > :global(li .text) {
-    padding-right: 8px;
-    padding-left: 8px;
-  } */
   ul :global(li .text) {
     position: relative;
     display: block;
@@ -148,33 +144,33 @@
     opacity: 1;
   }
 
-  ul :global(li .icon) {
+  ul :global(.svench-menu-item-icon) {
     display: inline-block;
     text-align: center;
     width: 1.1em;
     height: 1.1em;
     transform: scale(var(--icon-size));
-    /* border: 1px solid red; */
   }
 
-  li > .text > .expand.icon {
-    /* display: inline-block; */
+  li
+    > .text
+    > .expand.svench-menu-item-icon
+    .svench-menu-item-expand-icon-icon {
+    display: inline-block;
     transform-origin: center;
     position: relative;
   }
-  li.expanded > .text > .expand.icon {
+  li.expanded
+    > .text
+    > .expand.svench-menu-item-icon
+    .svench-menu-item-expand-icon-icon {
     left: 0.1em;
-    top: 0.2em;
+    top: 0.1em;
     transform: rotate(90deg);
   }
 
   .svench-menu-item-expand-icon {
-    position: relative; /* ensures above :before mask */
-    top: 0.1em;
-  }
-  .svench-menu-item-expand-icon-icon {
     position: relative;
-    top: -0.1em;
   }
   .svench-menu-item-expand-icon:hover .svench-menu-item-expand-icon-icon {
     color: var(--svench-menu-expand-handle-color);
