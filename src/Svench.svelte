@@ -11,6 +11,7 @@
   import createOptions from './Svench.options.js'
   import createCommands from './Svench.commands.js'
   import Scroll from './scroll.js'
+  import Busy from './Svench.busy.js'
 
   // import test from './test.js'
 
@@ -43,11 +44,13 @@
     ...$$props,
   })
 
+  const busy = Busy()
+
   const {
     navigate: scrollNav,
     setTarget: setScrollTarget,
     dispose: disposeScroll,
-  } = Scroll(() => $options)
+  } = Scroll(() => $options, busy.hasBeenIdle)
 
   onDestroy(disposeScroll)
 
@@ -120,14 +123,24 @@
     return routes
   })
 
-  const barbaricPrefetch = routes => {
-    clearTimeout(barbaricPrefetch.timeout)
-    barbaricPrefetch.timeout = setTimeout(() => {
-      routes.forEach(({ import: x }) => x && x())
-    }, 2000)
+  const prefetchWhenIdle = async (routes, isCurrent) => {
+    await busy.idle()
+    for (const { import: fn } of routes) {
+      if (!isCurrent()) return
+      if (!fn) continue
+      try {
+        await busy.idle()
+        await fn()
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err)
+      }
+    }
   }
 
   let lastRoutes = null
+
+  const isCurrentRoutes = () => $_routes === lastRoutes
 
   // fix HMR when a Svench component has been renamed (hence we have a stale
   // component in the route)
@@ -137,7 +150,7 @@
     if (previous !== null) {
       router.run()
     }
-    barbaricPrefetch($_routes)
+    prefetchWhenIdle($_routes, isCurrentRoutes)
   }
 
   // --- tree ---
@@ -172,6 +185,8 @@
   // --- context ---
 
   setContext({
+    busy,
+
     raw,
     naked,
     options,

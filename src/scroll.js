@@ -30,7 +30,17 @@ const getScrollOffset = () => {
   return h.replace(/px$/, '')
 }
 
-export default getOptions => {
+export default (getOptions, hasBeenIdle) => {
+  const {
+    // max tracking time
+    max = 3100,
+    // time no change before stable (and stop tracking)
+    stableThreshold = 500,
+    // time after idle when another scroll will cancel tracking (stop tracking
+    // on user interaction)
+    cancelableAfter = 100,
+  } = {}
+
   let el
 
   let trackStart = null
@@ -51,7 +61,7 @@ export default getOptions => {
 
   const registerCancelOnUserScroll = () => {
     const handleScroll = () => {
-      if (Date.now() - trackStart > 200) {
+      if (hasBeenIdle(cancelableAfter)) {
         canceled = true
       }
     }
@@ -70,9 +80,6 @@ export default getOptions => {
     }
 
     const handleScroll = () => {
-      if (Date.now() - trackStart > 200) {
-        canceled = true
-      }
       clearTimeout(scrollTimeout)
       scrollTimeout = setTimeout(saveScroll, 50)
     }
@@ -137,10 +144,7 @@ export default getOptions => {
 
   const VOID = Symbol('Svench.scroll.VOID')
 
-  const trackScroll = (
-    getScroll,
-    { max = 3100, stableThreshold = 500 } = {}
-  ) => {
+  const trackScroll = getScroll => {
     if (!getScroll) return
 
     const start = Date.now()
@@ -150,6 +154,8 @@ export default getOptions => {
     canceled = false
     trackStart = start
 
+    const isIdle = () => hasBeenIdle(50)
+
     const track = () => {
       if (canceled) return
       const { top: _top, left, stickBottom = false, value = el.scrollHeight } =
@@ -158,7 +164,7 @@ export default getOptions => {
       if (top != null) {
         el.scrollTo({ top, left })
       }
-      if (value === lastValue) {
+      if (isIdle() && value === lastValue) {
         if (Date.now() - since > stableThreshold) {
           trackStart = null
           return
@@ -167,7 +173,7 @@ export default getOptions => {
         lastValue = value
         since = Date.now()
       }
-      if (Date.now() - start > max) {
+      if (isIdle && Date.now() - start > max) {
         // give up
         trackStart = null
         return

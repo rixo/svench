@@ -170,3 +170,12 @@ export const shallowEquals = (a, b) => {
     ka.length === Object.keys(b).length && ka.every(k => a[k] === b[k])
   )
 }
+
+export const Deferred = () => {
+  let resolve, reject
+  const promise = new Promise((res, rej) => {
+    resolve = res
+    reject = rej
+  })
+  return { promise, resolve, reject }
+}

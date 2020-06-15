@@ -1,5 +1,4 @@
 <script>
-  import { tick } from 'svelte'
   import { updateContext, getContext } from './util.js'
   import ComponentContext from './ComponentContext.svelte'
   import Shadow from './Shadow.svelte'
@@ -8,6 +7,7 @@
   import { matchPath } from './Render.util.js'
 
   const {
+    busy,
     router,
     getUi,
     naked,
@@ -53,9 +53,8 @@
         if (epoch !== myEpoch) return
         components.push(await resolveComponent(remaining.shift()))
         components = components
-        await tick()
         if (epoch !== myEpoch) return
-        if (remaining.length > 0) requestAnimationFrame(push)
+        if (remaining.length > 0) push()
       }
       components = []
       await push()
@@ -66,7 +65,7 @@
 
   const setComponents = specs => {
     error = null
-    setComponentsAsync(specs).catch(setError)
+    return setComponentsAsync(specs).catch(setError)
   }
 
   const setError = err => {
@@ -119,7 +118,7 @@
           b.sortKey || b.path.slice(bp.length)
         )
       )
-      setComponents(matchedRoutes)
+      await setComponents(matchedRoutes)
     } catch (err) {
       setError(err)
     }
@@ -128,7 +127,7 @@
   const loadSrcRoute = async route => {
     try {
       if (!route.import) return
-      setComponents([false, route])
+      await setComponents([false, route])
     } catch (err) {
       setError(err)
     }
@@ -147,16 +146,16 @@
     return loadSrcRoute(obj)
   }
 
-  const load = src => {
+  const load = async src => {
     if (!src) {
       error = 'Missing src'
       return
     }
     error = null
     if (typeof src === 'string') {
-      loadSrc(src)
+      await loadSrc(src)
     } else {
-      loadSrcObject(src)
+      await loadSrcObject(src)
     }
   }
 
@@ -171,7 +170,8 @@
 
   // route can be resolved async
   $: if (!loopProtectionError && !register && route) {
-    load(src || defaultRenderSrc || route.indexOf)
+    const ready = busy.enter()
+    load(src || defaultRenderSrc || route.indexOf).finally(ready)
   }
 
   updateContext({

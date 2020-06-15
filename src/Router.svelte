@@ -10,7 +10,7 @@
   // bind:focus
   export let focus
 
-  const { router, Fallback } = getContext()
+  const { busy, router, Fallback } = getContext()
 
   const { current, error } = router
 
@@ -27,6 +27,8 @@
   }
 
   $: props = { page: true, route, focus }
+
+  busy.trackUpdate()
 </script>
 
 {#if $error}
