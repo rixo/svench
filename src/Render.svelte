@@ -55,7 +55,7 @@
         components = components
         await tick()
         if (epoch !== myEpoch) return
-        if (remaining.length > 0) push()
+        if (remaining.length > 0) requestAnimationFrame(push)
       }
       components = []
       await push()
