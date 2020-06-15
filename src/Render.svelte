@@ -1,4 +1,5 @@
 <script>
+  import { tick } from 'svelte'
   import { updateContext, getContext } from './util.js'
   import ComponentContext from './ComponentContext.svelte'
   import Shadow from './Shadow.svelte'
@@ -33,10 +34,39 @@
   let error = null
 
   let components = []
+  const progressive = true
+  let epoch = 0
 
-  const setComponents = x => {
+  const resolveComponent = ([prefix, route]) =>
+    Promise.resolve(route.import()).then(({ default: Component }) => ({
+      Component,
+      route,
+      prefix,
+      ...formatTitle(route, prefix),
+    }))
+
+  const setComponentsAsync = async specs => {
+    if (progressive) {
+      const myEpoch = ++epoch
+      const remaining = [...specs]
+      const push = async () => {
+        if (epoch !== myEpoch) return
+        components.push(await resolveComponent(remaining.shift()))
+        components = components
+        await tick()
+        if (epoch !== myEpoch) return
+        if (remaining.length > 0) push()
+      }
+      components = []
+      await push()
+    } else {
+      components = await Promise.all(specs.map(resolveComponent))
+    }
+  }
+
+  const setComponents = specs => {
     error = null
-    components = x
+    setComponentsAsync(specs).catch(setError)
   }
 
   const setError = err => {
@@ -84,22 +114,12 @@
         .filter(dedupe())
         .filter(notSelf)
         .filter(hasImport)
-      const _components = await Promise.all(
-        matchedRoutes.map(([prefix, route]) =>
-          Promise.resolve(route.import()).then(({ default: Component }) => ({
-            Component,
-            route,
-            prefix,
-            ...formatTitle(route, prefix),
-          }))
-        )
-      )
-      _components.sort(({ route: a, prefix: ap }, { route: b, prefix: bp }) =>
+      matchedRoutes.sort(([ap, a], [bp, b]) =>
         (a.sortKey || a.path.slice(ap.length)).localeCompare(
           b.sortKey || b.path.slice(bp.length)
         )
       )
-      setComponents(_components)
+      setComponents(matchedRoutes)
     } catch (err) {
       setError(err)
     }
@@ -107,8 +127,8 @@
 
   const loadSrcRoute = async route => {
     try {
-      const { default: Component } = await route.import()
-      setComponents([{ Component, route, ...formatTitle(route, false) }])
+      if (!route.import) return
+      setComponents([false, route])
     } catch (err) {
       setError(err)
     }
@@ -162,6 +182,11 @@
   })
 
   $: props = { view, page, focus: false }
+
+  // for now, we only have single views
+  $: isSingleView = !!view
+
+  $: noBox = naked || isSingleView
 </script>
 
 {#if error}
@@ -171,10 +196,10 @@
     <RenderBox {error} />
   {/if}
 {:else if components}
-  {#each components as { Component, route, title, href } (Component)}
-    <!-- slot for nested <Render> -->
-    <slot>
-      {#if naked}
+  <!-- slot for nested <Render> -->
+  <slot>
+    {#each components as { Component, route, title, href } (Component)}
+      {#if noBox}
         <ComponentContext {...props} {route} component={Component} />
       {:else if shadow}
         <Shadow {css} {router} Component={RenderBox} props={{ title, href }}>
@@ -185,8 +210,8 @@
           <ComponentContext {...props} {route} component={Component} />
         </RenderBox>
       {/if}
-    </slot>
-  {/each}
+    {/each}
+  </slot>
 {:else}
   <h2>Not found: {src}</h2>
 {/if}
