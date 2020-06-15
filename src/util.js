@@ -179,3 +179,5 @@ export const Deferred = () => {
   })
   return { promise, resolve, reject }
 }
+
+export const trimTrailingSlash = x => x.replace(/^\/$/, '')

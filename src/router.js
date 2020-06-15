@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store'
 import navaid from './navaid.js'
-import { sectionPrefix } from './constants'
+import { sectionPrefix } from './constants.js'
+import { trimTrailingSlash } from './util.js'
 
 const normalize = path => path.replace(/\/{2,}/g, '/')
 
@@ -104,15 +105,6 @@ export default ({
     return actual
   }
 
-  router.findRoute = href => {
-    const view = getView()
-    const routes = getRoutes()
-    const url = new URL(href)
-    const path = router.format(url.pathname)
-    const route = find(path.replace(/^\/$/, ''), view == null, routes)
-    return route
-  }
-
   router.reroute = () => {
     if (current) {
       const next = { ...current }
@@ -121,12 +113,25 @@ export default ({
     }
   }
 
+  router.findRoute = href => {
+    const view = getView()
+    const routes = getRoutes()
+    const url = new URL(href)
+    const path = trimTrailingSlash(router.format(url.pathname))
+    const focus = view != null
+    const indexFirst = !focus
+    const route = find(path, indexFirst, routes)
+    return route
+  }
+
   router.on('*', (params, popState) => {
     const view = getView()
     const routes = getRoutes()
     const path = router.format(location.pathname)
     const hash = location.hash
-    const route = find(path, view == null, routes)
+    const focus = view != null
+    const indexFirst = !focus
+    const route = find(path, indexFirst, routes)
 
     if (route) {
       if (route.import) loadComponent(route, view, hash, popState)
