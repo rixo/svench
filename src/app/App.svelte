@@ -135,7 +135,9 @@
   <div class="svench-app-body" style={bodyStyle}>
     <ResizeHandle left bind:width={$options.menuWidth} />
 
-    <section class="svench-ui svench-app-toolbar" style="left: {menuOffset}px">
+    <section
+      class="svench-ui svench-app-toolbar"
+      style="left: {menuOffset}px; right: {isPhone ? -menuOffset : 0}px">
       <Toolbar {options} {commands} />
     </section>
 
