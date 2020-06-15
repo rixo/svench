@@ -42,10 +42,10 @@ We can render from `.svench` files by passing a path to a Svench component:
 Only trailing `/*` and `/**` are supported.
 
 ```svelte
-<Render src="./other_dir/*" />
+<Render src="./nested/*" />
 ```
 
-<Render src="./other_dir/*" />
+<Render src="./nested/*" />
 
 ```svelte
 <Render src="./nested/**" />
