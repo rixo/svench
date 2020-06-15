@@ -70,9 +70,15 @@
   // --- router ---
   // WARNING after scroll! (for pop/push state events precendence)
 
+  const normalizePath = path =>
+    String(path)
+      .toLowerCase() // TODO case-sensitive URL option
+      .replace(/ /g, '_')
+
   const router = createRouter({
     base,
     getRoutes: () => $_routes,
+    normalizePath,
     DefaultIndex,
   })
 
@@ -86,7 +92,13 @@
   //   route.extra = derived(extras$, extras => extras[route.id] || {})
   // }
 
+  const addNormalized = route => {
+    route.normalPath = normalizePath(route.path)
+  }
+
   const _routes = derived(routes$, ({ routes }) => {
+    routes.forEach(addNormalized)
+
     const files = routes.filter(x => x.import)
     files.forEach(addRegister({ makeNamer, router, routes: _routes }))
     // files.forEach(addSource)

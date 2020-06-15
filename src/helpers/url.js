@@ -1,6 +1,5 @@
 import { getContext, noop, pipe, split, reduce } from '../util.js'
-
-const defaultSection = '_'
+import { sectionPrefix } from '../constants'
 
 const resolveRaw = route =>
   function _resolveRaw(path) {
@@ -10,10 +9,8 @@ const resolveRaw = route =>
     return [...segments, path].join('/')
   }
 
-const dropDefaultSection = path =>
-  path.startsWith('/' + defaultSection)
-    ? path.slice(defaultSection.length + 1)
-    : path
+const dropSectionPrefix = path =>
+  path.startsWith(sectionPrefix) ? path.slice(sectionPrefix.length) : path
 
 const resolveUp = pipe(
   split('../'),
@@ -29,15 +26,21 @@ const normalize = path =>
 const replaceVirtuals = path => path.replace(/\.(?![./])/g, '/')
 
 // route => path => resolvedPath
-export const urlResolver = route =>
-  pipe(
-    resolveRaw(route),
+//
+// canonical: used by Render, to resolve real FS (whereas non canonical
+// resolves virtual section URLs /_/section/...)
+//
+const urlResolver = (route, canonical = false) =>
+  pipe.safe(
+    resolveRaw(route, canonical),
     normalize,
     replaceVirtuals,
-    dropDefaultSection,
+    canonical && dropSectionPrefix,
     resolveUp,
     normalize
   )
+
+export const canonicalResolver = route => pipe(urlResolver(route, true))
 
 export const url = {
   subscribe: listener => {

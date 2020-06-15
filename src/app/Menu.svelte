@@ -1,6 +1,7 @@
 <script>
   import { findCurrentItem } from './Menu.util.js'
   import MenuItems from './MenuItems.svelte'
+  import { sectionPrefix } from '../constants.js'
 
   export let tree
   export let router
@@ -8,7 +9,32 @@
 
   const { current } = router
 
-  $: sections = tree.children
+  const splitSections = tree => {
+    const items = tree && tree.children
+    if (!items) return items
+    let sectionItem
+    const rootItems = items.filter(x => {
+      if (x.path === sectionPrefix) {
+        sectionItem = x
+        return false
+      }
+      return true
+    })
+    const sections = [
+      {
+        ...tree,
+        children: rootItems,
+      },
+    ]
+    if (sectionItem) {
+      for (const route of sectionItem.children) {
+        sections.push(route)
+      }
+    }
+    return sections
+  }
+
+  $: sections = splitSections(tree) || []
 
   $: route = $current && $current.route
 
@@ -16,9 +42,9 @@
     route && $current && !$current.view && findCurrentItem(route, sections)
 </script>
 
-<!-- <div class="svench-menu">
+<div class="svench-menu">
   {#each sections as s (s.id)}
-    {#if s.path !== '/_'}
+    {#if !s.isRoot}
       <h2 class:svench-menu-active={activeItem && s.id === activeItem.id}>
         {#if (s.href = router.resolve(s.path))}
           <a href={s.href}>{s.title}</a>
@@ -28,20 +54,6 @@
       </h2>
     {/if}
     <MenuItems {router} items={s.children} {autofold} />
-  {/each}
-</div> -->
-<div class="svench-menu">
-  {#each sections as { id, path, title, children: items, href } (id)}
-    {#if path !== '/_'}
-      <h2 class:svench-menu-active={activeItem && id === activeItem.id}>
-        {#if (href = router.resolve(path))}
-          <a {href}>{title}</a>
-        {:else}
-          <span>{title}</span>
-        {/if}
-      </h2>
-    {/if}
-    <MenuItems {router} {items} {autofold} />
   {/each}
 </div>
 

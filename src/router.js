@@ -1,11 +1,18 @@
 import { writable } from 'svelte/store'
 import navaid from './navaid.js'
+import { sectionPrefix } from './constants'
 
 const normalize = path => path.replace(/\/{2,}/g, '/')
 
 const join = (...parts) => normalize(parts.join('/'))
 
-export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
+export default ({
+  base = '/',
+  getRoutes,
+  normalizePath,
+  DefaultIndex,
+  Fallback,
+}) => {
   let currentRoute = null
   let currentView = null
   let current
@@ -79,14 +86,20 @@ export default ({ base = '/', getRoutes, DefaultIndex, Fallback }) => {
     }
   }
 
-  const find = (path, indexFirst, routes) => {
+  const find = (_path, indexFirst, routes) => {
     let actual = null
+    const path = normalizePath(_path)
     for (const route of routes) {
-      if (indexFirst && join(path, 'index') === route.path) return route
-      if (path === route.path) {
+      const p = route.normalPath
+      if (indexFirst && join(path, 'index') === p) return route
+      if (path === p) {
         if (!indexFirst) return route
         actual = route
       }
+    }
+    // fallback to fully qualified /_/section_name
+    if (!actual && !path.startsWith(sectionPrefix + '/')) {
+      return find(sectionPrefix + path, indexFirst, routes)
     }
     return actual
   }
