@@ -30,7 +30,7 @@ const replaceVirtuals = path => path.replace(/\.(?![./])/g, '/')
 // canonical: used by Render, to resolve real FS (whereas non canonical
 // resolves virtual section URLs /_/section/...)
 //
-const urlResolver = (route, canonical = false) =>
+export const urlResolver = (route, canonical = false) =>
   pipe.safe(
     resolveRaw(route, canonical),
     normalize,
