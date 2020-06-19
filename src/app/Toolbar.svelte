@@ -15,15 +15,15 @@
     <div class="svench-toolbar-padder" />
   {/if}
   <div class="svench-toolbar-wrapper svench-toolbar-scroller">
-    <label>
+    <label class="svench-toolbar-checkbox">
       <input type="checkbox" bind:checked={$options.centered} />
       Centered
     </label>
-    <label>
+    <label class="svench-toolbar-checkbox">
       <input type="checkbox" bind:checked={$options.padding} />
       Padding
     </label>
-    <label>
+    <label class="svench-toolbar-checkbox">
       <input type="checkbox" bind:checked={$options.outline} />
       Outline
     </label>
@@ -101,5 +101,13 @@
     line-height: 0.8em;
     margin: 0 0.25em;
     padding: 0.4em;
+  }
+
+  /* label.svench-toolbar-checkbox { */
+  label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 90%;
   }
 </style>
