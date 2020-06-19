@@ -21,30 +21,34 @@ const whenTouch = new Promise(resolve => {
   addEventListener('touchstart', handleTouch)
 })
 
-export const swipeMenu = (el, cb) => {
+export const swipeMenu = el => {
   const tolerance = 45
   let region
 
-  whenTouch.then(() => {
-    region = ZingTouch.Region(el, false, false)
-    region.bind(el, 'swipe', e => {
-      const {
-        detail: {
-          data: [{ currentDirection: dir } = {}],
-        },
-      } = e
-      if (dir >= 360 - tolerance || dir <= tolerance) {
-        cb(true)
-      } else if (dir >= 180 - tolerance && dir <= 180 + tolerance) {
-        cb(false)
-      }
-    })
-  })
+  const destroy = () => {
+    if (!region) return
+    region.unbind(el, 'swipe')
+  }
 
   return {
-    destroy: () => {
-      if (!region) return
-      region.unbind(el, 'swipe')
+    destroy,
+    update({ regionEl, run }) {
+      destroy()
+      whenTouch.then(() => {
+        region = ZingTouch.Region(regionEl, false, false)
+        region.bind(el, 'swipe', e => {
+          const {
+            detail: {
+              data: [{ currentDirection: dir } = {}],
+            },
+          } = e
+          if (dir >= 360 - tolerance || dir <= tolerance) {
+            run(true)
+          } else if (dir >= 180 - tolerance && dir <= 180 + tolerance) {
+            run(false)
+          }
+        })
+      })
     },
   }
 }
