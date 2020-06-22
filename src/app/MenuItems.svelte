@@ -71,6 +71,23 @@
       isDirectory: !x.import,
     }))
   )
+
+  const has = x => x && x.length > 0
+
+  const renderIcon = ({ isDirectory, index, views, children }) =>
+    isDirectory
+      ? index
+        ? has(children) || has(views)
+          ? '🞛'
+          : '◇'
+        : has(children)
+        ? '▶'
+        : '▪'
+      : has(children)
+      ? '🞛'
+      : has(views)
+      ? '❖'
+      : '◇'
 </script>
 
 {#if _items.length > 0}
@@ -85,12 +102,10 @@
           href={item.href}>
           <span
             class="svench-menu-item-icon svench-menu-item-expand-icon"
-            class:expand={item.isDirectory}
+            class:expand={item.isDirectory && !item.index && has(item.children)}
             on:click|preventDefault={() => toggle(item)}>
             <span class="svench-menu-item-expand-icon-icon">
-              {#if item.isDirectory}
-                ▶
-              {:else if item.views && item.views.length > 0}❖{:else}🞛{/if}
+              {renderIcon(item)}
             </span>
           </span>
           <span class="svench-menu-item-text">{item.title}</span>
