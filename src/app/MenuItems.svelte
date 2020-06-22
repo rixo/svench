@@ -51,7 +51,7 @@
     })
   }
 
-  $: !autofold && activeItem && autoexpand(activeItem)
+  $: if (!autofold && activeItem) autoexpand(activeItem)
 
   const sorter = (a, b) => a.sortKey.localeCompare(b.sortKey)
 
