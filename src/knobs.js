@@ -3,12 +3,15 @@ import { get, writable } from 'svelte/store'
 const parseValueType = value => {
   let type = typeof value
   if (typeof value === 'string') {
-    const match = /^(\d+)-(\d+)$/.exec(value)
+    const match = /^([\d.]+)-([\d.]+)(?:;([\d.]+))?$/.exec(value)
     if (match) {
-      const [, a, z] = match
-      value = a / z
+      const [, min, max, x] = match
+      value = x != null ? x : (max - min) / 2
       type = 'range'
+      return { default: value, type, min, max }
     }
+  } else if (type === 'object') {
+    return value
   }
   return { default: value, type }
 }
