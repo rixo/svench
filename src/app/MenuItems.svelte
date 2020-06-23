@@ -29,7 +29,7 @@
       ? Object.fromEntries(
           items
             .filter(
-              item => expandLocks[item.id] // || route.path.startsWith(item.path)
+              item => expandLocks[item.id] || route.path.startsWith(item.path)
             )
             .map(x => [x.id, true])
         )
