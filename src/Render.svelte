@@ -46,12 +46,15 @@
     }))
 
   const setComponentsAsync = async specs => {
+    // guard: empty
+    if (!specs.length) return
     if (progressive) {
       const myEpoch = ++epoch
       const remaining = [...specs]
       const push = async () => {
         if (epoch !== myEpoch) return
-        components.push(await resolveComponent(remaining.shift()))
+        const cmpSpec = await resolveComponent(remaining.shift())
+        components.push(cmpSpec)
         components = components
         if (epoch !== myEpoch) return
         if (remaining.length > 0) push()
@@ -127,7 +130,7 @@
   const loadSrcRoute = async route => {
     try {
       if (!route.import) return
-      await setComponents([false, route])
+      await setComponents([[false, route]])
     } catch (err) {
       setError(err)
     }
