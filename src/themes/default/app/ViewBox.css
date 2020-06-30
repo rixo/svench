@@ -14,8 +14,7 @@
 }
 .svench-viewbox-title a,
 .svench-viewbox-title a * {
-  background: var(--secondary, #aaa);
-  color: var(--secondary-r, #fff);
+  color: var(--secondary);
 }
 
 .svench-viewbox-title a .icon {
@@ -25,7 +24,6 @@
 }
 
 .svench-viewbox {
-  border: 1px solid var(--secondary);
   background-color: #fff;
 
   display: flex;
@@ -44,13 +42,12 @@
   background: none;
   border: none;
   font-weight: bold;
-  color: #fff;
-  border: 2px solid;
   border-radius: 2px;
-  font-size: 0.8em;
-  padding: 0.1em 0.2em;
+  font-family: var(--svench-monospace);
+  padding: 0.2em 0.4em;
   margin: 0.33em 0.5em;
   opacity: 0.9;
+  color: var(--secondary);
 }
 .svench-viewbox-toolbar button:hover {
   cursor: pointer;

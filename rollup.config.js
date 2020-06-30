@@ -10,6 +10,7 @@ import svelte from 'rollup-plugin-svelte-hot'
 import postcssNesting from 'postcss-nesting'
 import prefixer from 'postcss-prefix-selector'
 import atImport from 'postcss-import'
+import colorFunction from 'postcss-color-function'
 
 const production = !process.env.ROLLUP_WATCH
 // const hot = !production
@@ -20,7 +21,7 @@ const postcss = opts =>
     ...opts,
   })
 
-const postcssPlugins = [atImport(), postcssNesting()]
+const postcssPlugins = [atImport(), postcssNesting(), colorFunction()]
 
 const postcssMarkdownPlugins = [
   ...postcssPlugins,

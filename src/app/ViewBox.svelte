@@ -21,7 +21,7 @@
   <h3 class="svench-viewbox-title svench-ui">
     <div class="svench-viewbox-toolbar">
       {#if source}
-        <button class="code" on:click={toggleSource}>{'</>'}</button>
+        <button class="code" on:click={toggleSource}>{'< >'}</button>
       {/if}
     </div>
     <a {href}>

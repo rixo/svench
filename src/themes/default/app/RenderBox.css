@@ -11,7 +11,7 @@
 
   & a,
   & a * {
-    color: var(--tertiary-r);
+    color: var(--tertiary);
 
     & .svench-renderbox-title-icon {
       display: inline-block;
@@ -26,6 +26,8 @@
       opacity: 1;
     }
   }
+
+  border-bottom: 1px solid var(--tertiary-light);
 }
 
 .svench-renderbox-title.svench-error,
@@ -34,6 +36,5 @@
   display: block;
   padding: 0.5em 1em;
   padding-left: 0.5em;
-  background-color: var(--tertiary);
   opacity: 0.95;
 }

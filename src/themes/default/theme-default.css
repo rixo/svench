@@ -50,6 +50,9 @@ svench-view {
   --secondary-r: #fff;
   --secondary-light: #e4ecf1;
   --tertiary: #b4b4af;
+  --tertiary-light: color(#b4b4af tint(25%));
+  --tertiary-lighter: color(#b4b4af tint(50%));
+  --tertiary-lightest: color(#b4b4af tint(75%));
   --tertiary-r: #e3e8ee;
 
   --gray: #a5b4b9;
@@ -60,14 +63,16 @@ svench-view {
    * - margin of views
    */
   --svench-spacing: 1.2em;
+
+  --svench-monospace: 'Fira Code', Consolas, Monaco, 'Andale Mono',
+    'Ubuntu Mono', monospace;
 }
 
 /* === Prism === */
 
 code[class*='language-'],
 .svench-ui code[class*='language-'] * {
-  font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono',
-    monospace;
+  font-family: var(--svench-monospace);
 }
 
 /* === OverlayScrollbars === */
