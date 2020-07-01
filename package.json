@@ -69,10 +69,10 @@
     "sirv": "^0.4.2",
     "source-map-support": "^0.5.19",
     "svelte": "^3.0.0",
+    "zingtouch": "^1.0.6",
     "zoar": "^0.0.3",
     "zora-node-reporter": "rixo/zora-reporters#zora-node-reporter-v0.0.1-rixo.3-gitpkg",
-    "zorax": "^0.0.8",
-    "zingtouch": "^1.0.6"
+    "zorax": "^0.0.8"
   },
   "np": {
     "releaseDraft": false

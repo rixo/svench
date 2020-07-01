@@ -43,7 +43,7 @@
 
   // let menuWidth = getMenuWidth(window.innerWidth)
   $: menuWidth = isPhone
-    ? Math.max(innerWidth - Math.max(toolbarHeight, 0.95 * innerWidth), 320)
+    ? Math.min(innerWidth - toolbarHeight, 0.95 * innerWidth, 320)
     : _menuWidth
 
   const menuOffset$ = tweened($options.menuVisible ? $options.menuWidth : 0, {
@@ -98,6 +98,8 @@
     }
   }
 
+  let regionEl
+
   const overlayscrollbars = el => {
     OverlayScrollbars(el, {
       scrollbars: {
@@ -105,23 +107,26 @@
       },
     })
   }
+
+  const toggleMenu = x => {
+    $options.menuVisible = x
+  }
 </script>
 
 <svelte:window on:keydown={onKeydown} bind:outerWidth bind:innerWidth />
 
 <div
-  use:swipeMenu={x => {
-    $options.menuVisible = x
-  }}
+  bind:this={regionEl}
   class="svench-app"
   class:svench-small-screen={isPhone}
   class:svench-focus={focus}
   class:svench-fullscreen={fullscreen}>
 
   <section
+    use:swipeMenu={{ run: toggleMenu, regionEl }}
+    use:overlayscrollbars
     class="svench-ui svench-app-menu"
-    style="width: {menuWidth}px"
-    use:overlayscrollbars>
+    style="width: {menuWidth}px">
     <h1 class="svench-app-logo">
       <a href="/">
         <!-- <span class="icon">🔧</span> -->
@@ -143,6 +148,7 @@
 
     <main
       use:setScrollTarget
+      use:swipeMenu={{ run: toggleMenu, regionEl }}
       class="svench-app-main"
       class:svench-app-focus={focus}
       style={mainStyle}>
