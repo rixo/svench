@@ -17,6 +17,15 @@
   export let jailbreak = false
 
   export let fill = false
+  export let block = false
+
+  $: if (fill) {
+    // eslint-disable-next-line no-console
+    console.warn('<View fill /> is deprecated, use <View block />')
+    block = true
+  }
+
+  const { 'actions.auto': autoActions = true } = $$restProps
 
   const {
     raw,
@@ -167,7 +176,8 @@
 
   // $: props = { options: $options, name, href, source, error }
   $: props = { name, href, source }
-  $: canvasProps = { error, options: $options, focus, fill }
+  // DEBUG DEBUG DEBUG proper block implem (remove fill)
+  $: canvasProps = { error, options: $options, focus, fill: block }
 </script>
 
 {#if isActive}
