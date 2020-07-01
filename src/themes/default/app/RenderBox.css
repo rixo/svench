@@ -27,7 +27,7 @@
     }
   }
 
-  border-bottom: 1px solid var(--tertiary-light);
+  border-bottom: 1px solid var(--tertiary-lighter);
 }
 
 .svench-renderbox-title.svench-error,
