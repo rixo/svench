@@ -14,12 +14,12 @@
 
   const names = ['source', 'knobs', 'actions']
 
-  let actionsVisible = false
+  let actionsEnabled = false
 
   $: tabs = Object.fromEntries(
     names
       .map(x => {
-        if (x === 'actions' && !actionsVisible) return false
+        if (x === 'actions' && !actionsEnabled) return false
         return extras[x] && titles[x] && [x, titles[x]]
       })
       .filter(Boolean)
@@ -30,23 +30,55 @@
 
   $: ({ actions } = extras)
 
+  // $: autoShowActions = $actions && $actions.autoShow
+  $: ({ autoShow: autoShowActions } = $actions || {})
+
+  const showActions = () => {
+    activeTab = 'actions'
+  }
+
+  const disableActions = () => {
+    // setTimeout to break circular dep with actionsVisible (otherwise this
+    // reactive block doesn't run -- bug in Svelte probably)
+    setTimeout(() => {
+      actionsEnabled = false
+    })
+  }
+
   const enableActions = () => {
-    actionsVisible = true
-    // NOTE when not $actions.enabled, this means we show because of new event
-    if (!$actions.enabled) {
-      activeTab = 'actions'
+    // setTimeout to break circular dep with actionsVisible (otherwise this
+    // reactive block doesn't run -- bug in Svelte probably)
+    setTimeout(() => {
+      actionsEnabled = true
+      // NOTE when not $actions.enabled, this means we show because of new event
+      if (!$actions.enabled) {
+        showActions()
+      }
+    })
+  }
+
+  let lastActionsCount = 0
+
+  const maybeAutoShowActions = $actions => {
+    if (!$actions) return
+    if ($actions.events.length > lastActionsCount) {
+      showActions()
     }
+    lastActionsCount = $actions.events.length
   }
 
   $: if (
-    !actionsVisible &&
+    !actionsEnabled &&
     $actions &&
     ($actions.enabled || $actions.events.length === 1)
   ) {
-    // setTimeout to break circular dep with actionsVisible (otherwise this
-    // reactive block doesn't run -- bug in Svelte probably)
-    setTimeout(enableActions)
+    enableActions()
   }
+  $: if (actionsEnabled && (!$actions || $actions.enabled === false)) {
+    disableActions()
+  }
+
+  $: if (autoShowActions) maybeAutoShowActions($actions)
 
   $: hasExtras = Object.keys(tabs).length > 0
 </script>

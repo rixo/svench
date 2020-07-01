@@ -98,6 +98,7 @@
       actions: writable({
         enabled: !!actions,
         events: [],
+        autoShow: autoActions,
       }),
     }
 
