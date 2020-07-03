@@ -13,6 +13,8 @@
  */
 import { pipe } from './util.js'
 
+// history.scrollRestoration = 'manual'
+
 const getScrollOffset = () => {
   const el = document.querySelector('.svench-ui')
   if (!el) return 0
@@ -173,7 +175,7 @@ export default (getOptions, hasBeenIdle) => {
         lastValue = value
         since = Date.now()
       }
-      if (isIdle && Date.now() - start > max) {
+      if (isIdle() && Date.now() - hasBeenIdle() - start > max) {
         // give up
         trackStart = null
         return

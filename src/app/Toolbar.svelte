@@ -17,15 +17,15 @@
   <div class="svench-toolbar-wrapper svench-toolbar-scroller">
     <label class="svench-toolbar-checkbox">
       <input type="checkbox" bind:checked={$options.centered} />
-      Centered
+      <span>Centered</span>
     </label>
     <label class="svench-toolbar-checkbox">
       <input type="checkbox" bind:checked={$options.padding} />
-      Padding
+      <span>Padding</span>
     </label>
     <label class="svench-toolbar-checkbox">
       <input type="checkbox" bind:checked={$options.outline} />
-      Outline
+      <span>Outline</span>
     </label>
     <label>
       Canvas
@@ -63,51 +63,3 @@
     ⛶
   </button>
 </div>
-
-<style>
-  .svench-toolbar-wrapper {
-    display: flex;
-    align-items: center;
-    padding: 0 0.5em;
-    height: var(--toolbar-height);
-    flex-wrap: nowrap;
-  }
-  .svench-toolbar-wrapper > * {
-    margin: 0.25em;
-  }
-  .svench-toolbar-spacer {
-    flex-grow: 100;
-  }
-  .svench-toolbar-padder {
-    width: 0.33em;
-  }
-
-  .svench-toolbar-scroller {
-    flex: 1;
-    padding: 0;
-    margin: 0;
-    overflow: auto;
-  }
-
-  .svench-toolbar-wrapper > label {
-    margin: 0 0.5em;
-  }
-  label > input[type='checkbox'] {
-    position: relative;
-    top: 2px;
-  }
-
-  button {
-    line-height: 0.8em;
-    margin: 0 0.25em;
-    padding: 0.4em;
-  }
-
-  /* label.svench-toolbar-checkbox { */
-  label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 90%;
-  }
-</style>

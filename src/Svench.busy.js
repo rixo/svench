@@ -47,7 +47,10 @@ export default () => {
     }
   }
 
-  const hasBeenIdle = duration => idle && Date.now() - idleSince > duration
+  const hasBeenIdle = duration =>
+    duration == null
+      ? idle && Date.now() - idleSince
+      : idle && Date.now() - idleSince > duration
 
   const trackUpdate = () => {
     let ready

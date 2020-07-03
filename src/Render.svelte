@@ -57,7 +57,7 @@
         components.push(cmpSpec)
         components = components
         if (epoch !== myEpoch) return
-        if (remaining.length > 0) push()
+        if (remaining.length > 0) await push()
       }
       components = []
       await push()
