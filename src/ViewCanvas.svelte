@@ -46,6 +46,10 @@
 </svench-view-canvas>
 
 <style>
+  svench-view-canvas {
+    overflow: auto;
+  }
+
   svench-view-canvas.focus {
     flex: 1;
   }
