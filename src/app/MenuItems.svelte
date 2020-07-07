@@ -18,7 +18,7 @@
     if (autofold) return
     // item in the active path can't be toggled (to show active item); if they
     // were, they would auto collapse when active item change, which is weird
-    if (activeItem && item.path === activeItem.path) return
+    if (route.path.startsWith(item.path)) return
     expandLocks[item.id] = !expandLocks[item.id]
   }
 
