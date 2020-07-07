@@ -28,16 +28,16 @@
       <span>Outline</span>
     </label>
     <label>
-      Canvas
       <BackgroundSelect
         colors={$options.canvasBackgrounds}
         bind:value={$options.canvasBackground} />
+      Canvas
     </label>
     <label>
-      Background
       <BackgroundSelect
         colors={$options.backgrounds}
         bind:value={$options.background} />
+      Background
     </label>
     {#if $options.dev}
       <label>

@@ -106,6 +106,7 @@
           <span
             class="svench-menu-item-icon svench-menu-item-expand-icon"
             class:expand={item.isDirectory && !item.index && has(item.children)}
+            class:svench-menu-item-active={route && route.path.startsWith(item.path)}
             on:click|preventDefault={() => toggle(item)}>
             <span class="svench-menu-item-expand-icon-icon">
               {renderIcon(item)}
@@ -190,7 +191,8 @@
   .svench-menu-item-expand-icon {
     position: relative;
   }
-  .svench-menu-item-expand-icon:hover .svench-menu-item-expand-icon-icon {
+  .svench-menu-item-expand-icon:not(.svench-menu-item-active):hover
+    .svench-menu-item-expand-icon-icon {
     color: var(--svench-menu-expand-handle-color);
   }
 </style>
