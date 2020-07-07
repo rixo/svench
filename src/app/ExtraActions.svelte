@@ -1,4 +1,5 @@
 <script>
+  import { fade } from 'svelte/transition'
   import Prism from '../Prism.svelte'
   export let actions
 </script>
@@ -10,7 +11,7 @@
     <col style="width: auto" />
   </colgroup>
   {#each actions.events as e (e.date)}
-    <tr>
+    <tr transition:fade|local>
       <td>{new Date(e.date).toLocaleTimeString()}</td>
       <td class="main">{e.event || ''}</td>
       <td>
