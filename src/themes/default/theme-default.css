@@ -43,13 +43,25 @@ svench-view {
   --light-2: #e3e8ee;
   --light-2-r: #79889a;
 
-  --primary: rgba(19, 64, 116, 0.8);
+  /* --primary: rgba(19, 64, 116, 0.8);
+  --primary-strong: rgba(19, 64, 116, 1);
+  --primary-r: var(--light-1); */
+  --primary: #666;
   --primary-strong: rgba(19, 64, 116, 1);
   --primary-r: var(--light-1);
+  --primary-light: color(#666 tint(25%));
+  --primary-lighter: color(#666 tint(50%));
+  --primary-lightest: color(#666 tint(75%));
+
   --secondary: #bad5dc;
   --secondary-r: #fff;
   --secondary-light: #e4ecf1;
-  --tertiary: #b4b4af;
+
+  --tertiary-darkest: color(#b4b4af fade(75%));
+  --tertiary-darker: color(#b4b4af fade(50%));
+  --tertiary-dark: color(#b4b4af fade(25%));
+  --tertiary: #c6c6be;
+  --tertiary: color(#b4b4af);
   --tertiary-light: color(#b4b4af tint(25%));
   --tertiary-lighter: color(#b4b4af tint(50%));
   --tertiary-lightest: color(#b4b4af tint(75%));
@@ -66,6 +78,12 @@ svench-view {
 
   --svench-monospace: 'Fira Code', Consolas, Monaco, 'Andale Mono',
     'Ubuntu Mono', monospace;
+
+  /* magic checkbox */
+
+  --svench-check-color: #3e97eb; /* original */
+  --svench-check-color: #8891cf;
+  --svench-check-color: var(--tertiary);
 }
 
 /* === Prism === */

@@ -1,0 +1,143 @@
+/*
+ * https://github.com/forsigner/svench-check/blob/master/css/svench-check& .css
+ */
+
+.svench-toolbar-checkbox {
+  & @keyframes svench-svench-magic-hover-color {
+    from {
+      border-color: #c0c0c0;
+    }
+    to {
+      border-color: var(--svench-check-color);
+    }
+  }
+
+  & > input[type='radio'],
+  & > input[type='checkbox'] {
+    position: absolute;
+    display: none;
+  }
+
+  & > input[type='radio'][disabled],
+  & > input[type='checkbox'][disabled] {
+    cursor: not-allowed;
+  }
+
+  & > input[type='radio'] + span,
+  & > input[type='checkbox'] + span {
+    position: relative;
+    display: block;
+    padding-left: 30px;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+  & > input[type='radio'] + span:hover:before,
+  & > input[type='checkbox'] + span:hover:before {
+    animation-duration: 0.4s;
+    animation-fill-mode: both;
+    animation-name: svench-magic-hover-color;
+  }
+  & > input[type='radio'] + span:before,
+  & > input[type='checkbox'] + span:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    content: '';
+    border: 1px solid #c0c0c0;
+  }
+  & > input[type='radio'] + span:after,
+  & > input[type='checkbox'] + span:after {
+    position: absolute;
+    display: none;
+    content: '';
+  }
+
+  & > input[type='radio'][disabled] + span,
+  & > input[type='checkbox'][disabled] + span {
+    cursor: not-allowed;
+    color: #e4e4e4;
+  }
+  & > input[type='radio'][disabled] + span:hover,
+  & > input[type='radio'][disabled] + span:before,
+  & > input[type='radio'][disabled] + span:after,
+  & > input[type='checkbox'][disabled] + span:hover,
+  & > input[type='checkbox'][disabled] + span:before,
+  & > input[type='checkbox'][disabled] + span:after {
+    cursor: not-allowed;
+  }
+  & > input[type='radio'][disabled] + span:hover:before,
+  & > input[type='checkbox'][disabled] + span:hover:before {
+    border: 1px solid #e4e4e4;
+    animation-name: none;
+  }
+  & > input[type='radio'][disabled] + span:before,
+  & > input[type='checkbox'][disabled] + span:before {
+    border-color: #e4e4e4;
+  }
+
+  & > input[type='radio']:checked + span:before,
+  & > input[type='checkbox']:checked + span:before {
+    animation-name: none;
+  }
+
+  & > input[type='radio']:checked + span:after,
+  & > input[type='checkbox']:checked + span:after {
+    display: block;
+  }
+
+  & > input[type='radio'] + span:before {
+    border-radius: 50%;
+  }
+
+  & > input[type='radio'] + span:after {
+    top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--svench-check-color);
+  }
+
+  & > input[type='radio']:checked + span:before {
+    border: 1px solid var(--svench-check-color);
+  }
+
+  & > input[type='radio']:checked[disabled] + span:before {
+    border: 1px solid #c9e2f9;
+  }
+
+  & > input[type='radio']:checked[disabled] + span:after {
+    background: #c9e2f9;
+  }
+
+  & > input[type='checkbox'] + span:before {
+    /* border-radius: 3px; */
+  }
+
+  & > input[type='checkbox'] + span:after {
+    top: 2px;
+    left: 7px;
+    box-sizing: border-box;
+    width: 6px;
+    height: 12px;
+    transform: rotate(45deg);
+    border-width: 2px;
+    border-style: solid;
+    border-color: #fff;
+    border-top: 0;
+    border-left: 0;
+  }
+
+  & > input[type='checkbox']:checked + span:before {
+    border: var(--svench-check-color);
+    background: var(--svench-check-color);
+  }
+
+  & > input[type='checkbox']:checked[disabled] + span:before {
+    border: #c9e2f9;
+    background: #c9e2f9;
+  }
+}
