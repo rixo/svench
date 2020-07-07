@@ -2,6 +2,6 @@
   import { View } from 'svench'
 </script>
 
-<View name="default" fill>
+<View name="default" block>
   <div>I am the default view</div>
 </View>
