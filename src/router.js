@@ -105,11 +105,13 @@ export default ({
     return actual
   }
 
-  const find = (...args) => {
-    let route = _find(...args)
+  const find = (_path, indexFirst, routes) => {
+    let route = _find(_path, indexFirst, routes)
     // resolve terminal index (e.g. / -> /index -> /index/index)
-    while (route && route.index) {
-      route = route.index
+    if (indexFirst) {
+      while (route && route.index) {
+        route = route.index
+      }
     }
     return route
   }
