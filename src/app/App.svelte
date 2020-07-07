@@ -127,13 +127,12 @@
     use:overlayscrollbars
     class="svench-ui svench-app-menu"
     style="width: {menuWidth}px">
-    <h1 class="svench-app-logo">
+    <!-- <h1 class="svench-app-logo">
       <a href="/">
-        <!-- <span class="icon">🔧</span> -->
         <span class="svench-icon">🔬</span>
         Svench
       </a>
-    </h1>
+    </h1> -->
     <Menu tree={$tree} {router} />
   </section>
 
