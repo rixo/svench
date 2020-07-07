@@ -8,6 +8,14 @@ overrides:
   - files: ["**/*.svelte", "**/*.svench"]
     rules:
       no-unused-expressions: off
+  - files: ["test/**/*"]
+    env:
+      node: true
+    globals:
+      test: true
+      fixture: true
+    rules:
+      no-unused-expressions: off
 
 # settings:
 #   svelte3/compiler-options:

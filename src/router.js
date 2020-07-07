@@ -87,22 +87,31 @@ export default ({
     }
   }
 
-  const find = (_path, indexFirst, routes) => {
+  // indexFirst: must not resolve index when a view is focused
+  const _find = (_path, indexFirst, routes) => {
     let actual = null
     const path = normalizePath(_path)
     for (const route of routes) {
-      const p = route.normalPath
-      if (indexFirst && join(path, 'index') === p) return route
-      if (path === p) {
+      if (indexFirst && join(path, 'index') === route.normalPath) return route
+      if (path === route.normalPath) {
         if (!indexFirst) return route
         actual = route
       }
     }
     // fallback to fully qualified /_/section_name
     if (!actual && !path.startsWith(sectionPrefix + '/')) {
-      return find(sectionPrefix + path, indexFirst, routes)
+      return _find(sectionPrefix + path, indexFirst, routes)
     }
     return actual
+  }
+
+  const find = (...args) => {
+    let route = _find(...args)
+    // resolve terminal index (e.g. / -> /index -> /index/index)
+    while (route && route.index) {
+      route = route.index
+    }
+    return route
   }
 
   router.reroute = () => {

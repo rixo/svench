@@ -97,6 +97,7 @@
 
   const addNormalized = route => {
     route.normalPath = normalizePath(route.path)
+    // route.indexPath = route.path.replace(/(?:\/index)*$/, '') || '/'
   }
 
   const _routes = derived(routes$, ({ routes }) => {
@@ -144,7 +145,7 @@
 
   // fix HMR when a Svench component has been renamed (hence we have a stale
   // component in the route)
-  $: if ($_routes !== lastRoutes) {
+  $: if (!single && $_routes !== lastRoutes) {
     const previous = lastRoutes
     lastRoutes = $_routes
     if (previous !== null) {

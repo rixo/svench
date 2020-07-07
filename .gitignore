@@ -11,3 +11,5 @@ yarn-error.log
 /app.*
 /src/util-esm.js
 /src/util-esm.js.map
+
+/test/fixtures/**/tmp/

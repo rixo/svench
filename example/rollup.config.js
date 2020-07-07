@@ -9,8 +9,9 @@ import hmr from 'rollup-plugin-hot'
 const watch = !!process.env.ROLLUP_WATCH
 const useLiveReload = !!process.env.LIVERELOAD
 
+const isTest = process.env.NODE_ENV === 'test'
 const dev = watch || useLiveReload
-const production = !dev
+const production = !dev && !isTest
 
 const hot = watch && !useLiveReload
 const isSvench = !!process.env.SVENCH
@@ -53,12 +54,14 @@ export default {
 
     useLiveReload && livereload('public'),
 
-    hmr({
-      host: '0.0.0.0',
-      public: 'public',
-      inMemory: true,
-      compatModuleHot: !hot, // for terser
-    }),
+    !isTest &&
+      hmr({
+        hot: !isTest,
+        host: '0.0.0.0',
+        public: 'public',
+        inMemory: true,
+        compatModuleHot: !hot, // for terser
+      }),
 
     production && terser(),
   ],
