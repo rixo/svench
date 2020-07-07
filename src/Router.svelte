@@ -14,7 +14,14 @@
 
   const { current, error } = router
 
-  $: ({ fallback, route, cmp, view } = $current || {})
+  // prettier-ignore
+  $: ({
+    fallback,
+    route,
+    route: { options: { page = true } = {} } = {},
+    cmp,
+    view,
+  } = $current || {})
 
   $: focus = !fallback && view !== null
 
@@ -26,7 +33,7 @@
     }
   }
 
-  $: props = { page: true, route, focus }
+  $: props = { page, route, focus }
 
   busy.trackUpdate()
 </script>
