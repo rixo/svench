@@ -5,3 +5,5 @@
 /.svench/dist/
 
 .DS_Store
+
+/src/tmp/
