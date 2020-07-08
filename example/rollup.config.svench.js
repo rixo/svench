@@ -9,7 +9,7 @@ const watch = !!process.env.ROLLUP_WATCH
 const useLiveReload = !!process.env.LIVERELOAD
 const hot = watch && !useLiveReload
 
-const dir = path.resolve(process.env.SVENCH_DIR || 'src')
+const dir = path.resolve(process.env.SVENCH_DIR || '')
 const port = process.env.SVENCH_PORT || 4242
 const manifestDir = dir && path.join(dir, 'tmp')
 const svenchDist = process.env.SVENCH_DIR
