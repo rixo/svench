@@ -69,7 +69,7 @@
   }
   h2 {
     margin: 0;
-    padding: 0.25em;
+    padding: 0.25em 0.5em;
   }
   h2 > span,
   h2 > a {
@@ -78,6 +78,9 @@
     margin-bottom: 0;
     /* text-transform: capitalize; */
     opacity: 0.9;
+  }
+  .svench-menu h2 > a {
+    font-size: 125%;
   }
   h2 > a {
     text-decoration: none;

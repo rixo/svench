@@ -5,7 +5,7 @@
     /* --font-size: var(--svench-menu-font-size, 1.04em); */
     & .svench-menu-item-icon {
       width: 2.6em;
-      padding: 0.2em;
+      padding: 0.2em 0.1em 0;
       & .svench-menu-item-icon-icon {
         display: none;
       }

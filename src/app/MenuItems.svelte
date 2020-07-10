@@ -1,6 +1,7 @@
 <script>
   import { findCurrentItem } from './Menu.util.js'
   import MenuViewsList from './MenuViewsList.svelte'
+  import MenuItemIcon from './MenuItemIcon.svelte'
 
   export let router
   export let items = []
@@ -76,21 +77,6 @@
   )
 
   const has = x => x && x.length > 0
-
-  const renderIcon = ({ isDirectory, index, views, children }) =>
-    isDirectory
-      ? index
-        ? has(children) || has(views)
-          ? '🞛'
-          : '◇'
-        : has(children)
-        ? '▶'
-        : '▪'
-      : has(children)
-      ? '🞛'
-      : has(views)
-      ? '❖'
-      : '◇'
 </script>
 
 {#if _items.length > 0}
@@ -108,9 +94,12 @@
             class:expand={item.isDirectory && !item.index && has(item.children)}
             class:svench-menu-item-active={route && route.path.startsWith(item.path)}
             on:click|preventDefault={() => toggle(item)}>
-            <span class="svench-menu-item-expand-icon-icon">
-              {renderIcon(item)}
-            </span>
+            <MenuItemIcon
+              class="svench-menu-item-expand-icon-icon"
+              isIndex={item.index}
+              isDirectory={item.isDirectory}
+              hasChildren={has(item.children)}
+              hasViews={has(item.views)} />
           </span>
           <span class="svench-menu-item-text">{item.title}</span>
         </a>
@@ -171,28 +160,20 @@
     transform: scale(var(--icon-size));
   }
 
-  li
-    > .text
-    > .expand.svench-menu-item-icon
-    .svench-menu-item-expand-icon-icon {
-    display: inline-block;
-    transform-origin: center;
-    position: relative;
-  }
-  li.expanded
-    > .text
-    > .expand.svench-menu-item-icon
-    .svench-menu-item-expand-icon-icon {
-    left: 0.1em;
-    top: 0.1em;
-    transform: rotate(90deg);
-  }
-
   .svench-menu-item-expand-icon {
     position: relative;
   }
+
   .svench-menu-item-expand-icon:not(.svench-menu-item-active):hover
-    .svench-menu-item-expand-icon-icon {
+    :global(svg *) {
     color: var(--svench-menu-expand-handle-color);
+  }
+
+  ul :global(svg.svench-menu-item-icon),
+  .svench-menu-item-icon :global(svg) {
+    width: 0.75em;
+    height: 0.75em;
+    position: relative;
+    top: 0.05em;
   }
 </style>

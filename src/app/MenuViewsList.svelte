@@ -1,4 +1,6 @@
 <script>
+  import MenuViewItemIcon from './MenuViewItemIcon.svelte'
+
   export let router
   export let item
   export let views
@@ -15,7 +17,7 @@
       class="text"
       style={`padding-left: ${indent * indentWidth}em`}
       href={router.resolve(`${path}?view=${name}`)}>
-      <span class="svench-menu-item-icon">⟡</span>
+      <MenuViewItemIcon class="svench-menu-item-icon" />
       <span class="svench-menu-item-text">{name}</span>
     </a>
   </li>
