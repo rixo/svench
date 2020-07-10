@@ -1,3 +1,29 @@
+<script context="module">
+  const scrollOverflow = el => {
+    let raf
+
+    const toggleClass = (cls, on) => {
+      const method = on ? 'add' : 'remove'
+      el.classList[method](cls)
+    }
+
+    const update = () => {
+      raf = null
+      const scroll = el.scrollLeft
+      toggleClass('svench--left-overflow', scroll > 0)
+      toggleClass(
+        'svench--right-overflow',
+        el.scrollWidth - (scroll + el.clientWidth) > 0.2
+      )
+      console.log(el.scrollWidth - (scroll + el.clientWidth))
+    }
+
+    el.addEventListener('scroll', () => {
+      if (!raf) requestAnimationFrame(update)
+    })
+  }
+</script>
+
 <script>
   import BackgroundSelect from './BackgroundSelect.svelte'
 
@@ -14,7 +40,9 @@
     </button>
     <div class="svench-toolbar-padder" />
   {/if}
-  <div class="svench-toolbar-wrapper svench-toolbar-scroller">
+  <div
+    use:scrollOverflow
+    class="svench-toolbar-wrapper svench-toolbar-scroller">
     <label class="svench-toolbar-checkbox">
       <input type="checkbox" bind:checked={$options.centered} />
       <span>Centered</span>

@@ -21,6 +21,21 @@
     padding: 0;
     margin: 0;
     overflow: auto;
+
+    &.svench--left-overflow {
+      box-shadow: inset 6px 0 7px -9px rgba(0, 0, 0, 0.2),
+        inset 4px 0 4px -4px rgba(0, 0, 0, 0.2);
+    }
+    &.svench--right-overflow {
+      box-shadow: inset -9px 0 7px -9px rgba(0, 0, 0, 0.2),
+        inset -4px 0 4px -4px rgba(0, 0, 0, 0.2);
+    }
+    &.svench--left-overflow.svench--right-overflow {
+      box-shadow: inset 6px 0 7px -9px rgba(0, 0, 0, 0.2),
+        inset 4px 0 4px -4px rgba(0, 0, 0, 0.2),
+        inset -9px 0 7px -9px rgba(0, 0, 0, 0.2),
+        inset -4px 0 4px -4px rgba(0, 0, 0, 0.2);
+    }
   }
 
   & .svench-toolbar-wrapper > label {
