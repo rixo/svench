@@ -25,6 +25,9 @@
 
   & .svench-toolbar-wrapper > label {
     margin: 0 0.5em;
+    & > span {
+      font-size: 90%;
+    }
   }
 
   & .svench-toolbar-wrapper {
@@ -40,15 +43,22 @@
     }
 
     /* label.svench-toolbar-checkbox { */
-    & label {
+    & label:not(.svench-toolbar-checkbox) {
       display: flex;
       flex-direction: column;
       align-items: center;
-      font-size: 90%;
+    }
+
+    & label.svench-toolbar-checkbox > span {
+      padding-top: 0.1em;
     }
   }
 
-  select {
+  & select {
     line-height: 1;
+    margin: 0;
+    margin-bottom: 4px;
+    padding: 4px 4px 0 0;
+    border-radius: 0;
   }
 }
