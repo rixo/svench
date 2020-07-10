@@ -1,6 +1,8 @@
 .svench-app.svench-small-screen {
   & .svench-menu {
-    font-size: 115%;
+    /* font-size: 115%; */
+    /* font-size: var(--svench-font-size-big); */
+    --svench-menu-font-size: var(--svench-font-size-big);
     --icon-size: var(--svench-menu-icon-size, 1);
     /* --font-size: var(--svench-menu-font-size, 1.04em); */
     & .svench-menu-item-icon {

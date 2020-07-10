@@ -3,19 +3,15 @@
 
 @import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@2/distr/fira_code.css);
 
-.svench-ui *,
-.svench-ui {
-  font-size: 16px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
-  color: var(--text-primary);
-}
-
 /* https://colorpalettes.net/color-palette-4122/ */
 /* https://colorpalettes.net/color-palette-3548/ */
 .svench-app,
 svench-component,
 svench-view {
+  --svench-font-size-big: 18px;
+  --svench-font-size: 16px;
+  --svench-font-size-small: 14px;
+
   /* --light-1: rgba(141, 169, 196, 1);
   --light-1-r: white;
   --light-2: #6bc4a6;
@@ -84,6 +80,20 @@ svench-view {
   --svench-check-color: #3e97eb; /* original */
   --svench-check-color: #8891cf;
   --svench-check-color: var(--tertiary);
+
+  /* menu */
+
+  --svench-menu-font-size: var(--svench-font-size-small);
+  /* --svench-menu-font-size-smaller: 12px; */
+  /* --svench-menu-font-size-smallest: 10px; */
+}
+
+.svench-ui *,
+.svench-ui {
+  font-size: var(--svench-font-size);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  color: var(--text-primary);
 }
 
 /* === Prism === */
