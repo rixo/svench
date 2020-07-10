@@ -6301,9 +6301,10 @@ rollup@^2.0.5:
   optionalDependencies:
     fsevents "~2.1.2"
 
-routix@^0.0.3-1:
-  version "0.0.3-1"
-  resolved "https://registry.yarnpkg.com/routix/-/routix-0.0.3-1.tgz#28fd6db0dd1f8633f54cf1218ff925d4f96b13d9"
+routix@^0.0.3-3:
+  version "0.0.3-3"
+  resolved "https://registry.yarnpkg.com/routix/-/routix-0.0.3-3.tgz#6c437c3f5d04e3da144236e48cf554f29c08e25b"
+  integrity sha512-1d0gAdjp8gplSz8pLRRK0+rp9733EAXMvVRhWmn9k0QP8QJxAaoY6CG+W9ds8qAPiBIg+ZX9iDvCw512sFWetA==
 
 run-async@^2.2.0, run-async@^2.4.0:
   version "2.4.0"
