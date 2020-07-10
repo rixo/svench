@@ -77,20 +77,79 @@
 
   const has = x => x && x.length > 0
 
+  // const renderIcon = ({ isDirectory, index, views, children }) =>
+  //   isDirectory
+  //     ? index
+  //       ? has(children) || has(views)
+  //         ? '🞛'
+  //         : '◇'
+  //       : has(children)
+  //       ? '▶'
+  //       : '▪'
+  //     : has(children)
+  //     ? '🞛'
+  //     : has(views)
+  //     ? '❖'
+  //     : '◇'
   const renderIcon = ({ isDirectory, index, views, children }) =>
     isDirectory
       ? index
         ? has(children) || has(views)
           ? '🞛'
-          : '◇'
+          : // : '◇'
+            `<?xml version="1.0" encoding="UTF-8"?>
+            <svg width="1563" height="1568" version="1.1" viewBox="0 -492 1563 1568" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <metadata>
+            <rdf:RDF>
+            <cc:Work rdf:about="">
+            <dc:format>image/svg+xml</dc:format>
+            <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+            <dc:title/>
+            </cc:Work>
+            </rdf:RDF>
+            </metadata>
+            <g transform="matrix(1,0,0,-1,-6,824)">
+            <path d="m158 532 629-632 630 632-630 632zm-152 0 781 784 782-784-782-784z" fill="currentColor"/>
+            </g>
+            </svg>`
         : has(children)
-        ? '▶'
+        ? // ? '▶'
+          `<?xml version="1.0" encoding="UTF-8"?>
+          <svg version="1.1" viewBox="0 0 1568 1568" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+          <metadata>
+          <rdf:RDF>
+          <cc:Work rdf:about="">
+          <dc:format>image/svg+xml</dc:format>
+          <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+          <dc:title/>
+          </cc:Work>
+          </rdf:RDF>
+          </metadata>
+          <g transform="matrix(.54516 0 0 -1 402.73 1316)">
+          <path d="m6-252v1568l1563-784z" fill="currentColor"/>
+          </g>
+          </svg>`
         : '▪'
       : has(children)
       ? '🞛'
       : has(views)
       ? '❖'
-      : '◇'
+      : // : '◇'
+        `<?xml version="1.0" encoding="UTF-8"?>
+        <svg width="1563" height="1568" version="1.1" viewBox="0 -492 1563 1568" xmlns="http://www.w3.org/2000/svg" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        <metadata>
+        <rdf:RDF>
+        <cc:Work rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+        <dc:title/>
+        </cc:Work>
+        </rdf:RDF>
+        </metadata>
+        <g transform="matrix(1,0,0,-1,-6,824)">
+        <path d="m158 532 629-632 630 632-630 632zm-152 0 781 784 782-784-782-784z" fill="currentColor"/>
+        </g>
+        </svg>`
 </script>
 
 {#if _items.length > 0}
@@ -109,7 +168,7 @@
             class:svench-menu-item-active={route && route.path.startsWith(item.path)}
             on:click|preventDefault={() => toggle(item)}>
             <span class="svench-menu-item-expand-icon-icon">
-              {renderIcon(item)}
+              {@html renderIcon(item)}
             </span>
           </span>
           <span class="svench-menu-item-text">{item.title}</span>
@@ -194,5 +253,12 @@
   .svench-menu-item-expand-icon:not(.svench-menu-item-active):hover
     .svench-menu-item-expand-icon-icon {
     color: var(--svench-menu-expand-handle-color);
+  }
+
+  .svench-menu-item-expand-icon :global(svg) {
+    width: 0.75em;
+    height: 0.75em;
+    position: relative;
+    top: 0.05em;
   }
 </style>
