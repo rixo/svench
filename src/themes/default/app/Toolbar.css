@@ -1,19 +1,50 @@
 .svench-app-toolbar {
-  & .svench-toolbar-wrapper {
+  &.svench-ui .svench-toolbar-wrapper {
     display: flex;
     align-items: center;
     padding: 0 0.5em;
     height: var(--toolbar-height);
     flex-wrap: nowrap;
+
+    & > label {
+      margin: 0 0.5em;
+      & > span {
+        font-size: 90%;
+      }
+    }
+
+    & button {
+      line-height: 0.8em;
+      margin: 0 0.25em;
+      padding: 0.4em;
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+    }
+
+    & label:not(.svench-toolbar-checkbox) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    & label.svench-toolbar-checkbox > span {
+      padding-top: 0.1em;
+    }
   }
-  & .svench-toolbar-wrapper > * {
-    margin: 0.25em;
+
+  svench-small-screen& {
+    display: none;
   }
+
   & .svench-toolbar-spacer {
+    min-width: 8px;
     flex-grow: 100;
   }
   & .svench-toolbar-padder {
     width: 0.33em;
+    overflow: hidden;
+    flex-shrink: 0 !important;
   }
 
   & .svench-toolbar-scroller {
@@ -35,37 +66,6 @@
         inset 4px 0 4px -4px rgba(0, 0, 0, 0.2),
         inset -9px 0 7px -9px rgba(0, 0, 0, 0.2),
         inset -4px 0 4px -4px rgba(0, 0, 0, 0.2);
-    }
-  }
-
-  & .svench-toolbar-wrapper > label {
-    margin: 0 0.5em;
-    & > span {
-      font-size: 90%;
-    }
-  }
-
-  & .svench-toolbar-wrapper {
-    /* & label > input[type='checkbox'] {
-      position: relative;
-      top: 2px;
-    } */
-
-    & button {
-      line-height: 0.8em;
-      margin: 0 0.25em;
-      padding: 0.4em;
-    }
-
-    /* label.svench-toolbar-checkbox { */
-    & label:not(.svench-toolbar-checkbox) {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    & label.svench-toolbar-checkbox > span {
-      padding-top: 0.1em;
     }
   }
 

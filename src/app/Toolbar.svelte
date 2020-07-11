@@ -15,7 +15,6 @@
         'svench--right-overflow',
         el.scrollWidth - (scroll + el.clientWidth) > 0.2
       )
-      console.log(el.scrollWidth - (scroll + el.clientWidth))
     }
 
     el.addEventListener('scroll', () => {
@@ -40,6 +39,7 @@
     </button>
     <div class="svench-toolbar-padder" />
   {/if}
+
   <div
     use:scrollOverflow
     class="svench-toolbar-wrapper svench-toolbar-scroller">
@@ -80,8 +80,10 @@
       ↧
     </button>
     <button aria-label="raw" on:click={goRaw} title="Render raw">⇟</button>
+    <div class="svench-toolbar-padder">&nbsp;</div>
   </div>
-  <div class="svench-toolbar-padder" />
+  <!-- scroller -->
+
   <button aria-label="refresh" on:click={refresh} title="Rerender everything">
     ⟳
   </button>
