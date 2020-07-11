@@ -3,11 +3,10 @@
   padding: 0;
 }
 .svench-viewbox-title a {
-  display: block;
   padding: 0.33em 1em;
   padding-left: 0.5em;
   text-decoration: none;
-  opacity: 0.95;
+  opacity: 0.75;
 }
 .svench-viewbox-title a[href]:hover {
   opacity: 1;
@@ -31,23 +30,24 @@
 }
 
 .svench-viewbox-title {
-  position: relative;
+  flex: 1;
 }
 .svench-viewbox-toolbar {
-  position: absolute;
-  right: 0;
-  z-index: 1;
+  display: flex;
+  align-items: baseline;
 }
 .svench-viewbox-toolbar button {
   background: none;
   border: none;
   font-weight: bold;
   border-radius: 2px;
+  font-size: var(--svench-font-size-big);
+  line-height: var(--svench-font-size);
   font-family: var(--svench-monospace);
   padding: 0.2em 0.4em;
   margin: 0.33em 0.5em;
-  opacity: 0.9;
   color: var(--secondary);
+  opacity: 0.75;
 }
 .svench-viewbox-toolbar button:hover {
   cursor: pointer;

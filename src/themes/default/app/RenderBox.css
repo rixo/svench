@@ -9,8 +9,8 @@
   margin: 0;
   padding: 0;
 
-  & a,
-  & a * {
+  & a {
+    font-size: var(--svench-font-size-big);
     color: var(--primary-light);
 
     & .svench-renderbox-title-icon {
@@ -22,6 +22,7 @@
 
     text-decoration: none;
 
+    opacity: 0.75;
     &:hover {
       opacity: 1;
     }
@@ -31,10 +32,8 @@
 }
 
 .svench-renderbox-title.svench-error,
-.svench-renderbox-title a {
-  font-size: 1.2em;
+.svench-renderbox-title {
   display: block;
   padding: 0.5em 1em;
   padding-left: 0.5em;
-  opacity: 0.95;
 }

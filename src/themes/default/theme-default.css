@@ -8,6 +8,8 @@
 .svench-app,
 svench-component,
 svench-view {
+  --svench-font-size-biggest: 24px;
+  --svench-font-size-bigger: 20px;
   --svench-font-size-big: 18px;
   --svench-font-size: 16px;
   --svench-font-size-small: 14px;
@@ -50,6 +52,7 @@ svench-view {
   --primary-lightest: color(#666 tint(75%));
 
   --secondary: #bad5dc;
+  --secondary: hsl(168, 33%, 75%);
   --secondary-r: #fff;
   --secondary-light: #e4ecf1;
 
