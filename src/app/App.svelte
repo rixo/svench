@@ -111,6 +111,11 @@
   const toggleMenu = x => {
     $options.menuVisible = x
   }
+
+  const toggleVisibleMenu = x => {
+    if (!$options.menuVisible) return
+    toggleMenu(x)
+  }
 </script>
 
 <svelte:window on:keydown={onKeydown} bind:outerWidth bind:innerWidth />
@@ -123,7 +128,7 @@
   class:svench-fullscreen={fullscreen}>
 
   <section
-    use:swipeMenu={{ run: toggleMenu, regionEl }}
+    use:swipeMenu={{ run: toggleVisibleMenu, regionEl }}
     use:overlayscrollbars
     class="svench-ui svench-app-menu"
     style="width: {menuWidth}px">
