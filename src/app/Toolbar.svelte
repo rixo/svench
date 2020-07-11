@@ -20,6 +20,8 @@
     el.addEventListener('scroll', () => {
       if (!raf) requestAnimationFrame(update)
     })
+
+    update()
   }
 </script>
 
