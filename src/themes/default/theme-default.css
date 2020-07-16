@@ -86,7 +86,7 @@ svench-view {
 
   /* menu */
 
-  --svench-menu-font-size: var(--svench-font-size-small);
+  --svench-menu-font-size: var(--svench-font-size);
   /* --svench-menu-font-size-smaller: 12px; */
   /* --svench-menu-font-size-smallest: 10px; */
 }
