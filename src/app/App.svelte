@@ -2,6 +2,8 @@
   /* global OverlayScrollbars */
 
   import { tweened } from 'svelte/motion'
+  import { circOut } from 'svelte/easing'
+  import { fade } from 'svelte/transition'
   import Menu from './Menu.svelte'
   import ResizeHandle from './ResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
@@ -43,12 +45,16 @@
 
   // let menuWidth = getMenuWidth(window.innerWidth)
   $: menuWidth = isPhone
-    ? Math.min(innerWidth - toolbarHeight, 0.95 * innerWidth, 320)
-    : _menuWidth
+    ? Math.min(innerWidth - toolbarHeight, 0.95 * innerWidth)
+    : _menuWidth || 200
 
-  const menuOffset$ = tweened($options.menuVisible ? $options.menuWidth : 0, {
-    duration: (x0, x1) => Math.abs(x0 - x1) * 0.33,
-  })
+  const menuOffset$ = tweened(
+    $options.menuVisible ? $options.menuWidth || 200 : 0,
+    {
+      duration: (x0, x1) => Math.abs(x0 - x1) * 0.33,
+      easing: circOut,
+    }
+  )
 
   let lastMenuVisible = $options.menuVisible
   let lastMenuWidth = $options.menuWidth
@@ -143,6 +149,13 @@
 
   <div class="svench-app-body" style={bodyStyle}>
     <ResizeHandle left bind:width={$options.menuWidth} />
+
+    {#if isPhone && menuOffset === menuWidth}
+      <div
+        class="svench-app-body-mask"
+        in:fade={{ duration: 100 }}
+        on:click={commands.toggleMenu} />
+    {/if}
 
     <section
       class="svench-ui svench-app-toolbar"

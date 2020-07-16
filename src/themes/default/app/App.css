@@ -34,6 +34,17 @@
   bottom: 0;
 }
 
+.svench-app-body-mask {
+  background-color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+  opacity: 0.33;
+}
+
 .svench-app-main {
   position: absolute;
   top: var(--toolbar-height);
@@ -143,7 +154,7 @@
 
 .svench-app-body {
   background-color: var(--white);
-  box-shadow: -0px 0 8px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: -0px 0 2px rgba(0, 0, 0, 0.1);
 }
 
 .svench-app-toolbar {
