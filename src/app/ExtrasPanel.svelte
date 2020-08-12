@@ -9,10 +9,11 @@
     knobs: 'Knobs',
     actions: 'Actions',
     source: 'Source',
+    styles: '<style>',
     // test: 'Test',
   }
 
-  const names = ['source', 'knobs', 'actions']
+  const names = ['source', 'styles', 'knobs', 'actions']
 
   let actionsEnabled = false
 
@@ -99,6 +100,8 @@
   <div class="content">
     {#if activeTab === 'source'}
       <ExtraSource code={extras.source} />
+    {:else if activeTab === 'styles'}
+      <ExtraSource code={extras.styles} language="css" />
     {:else if activeTab === 'actions'}
       <ExtraActions actions={$actions} />
     {:else if activeTab === 'knobs'}

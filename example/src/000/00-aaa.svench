@@ -5,3 +5,9 @@
 <View name="default" block>
   <div>I am the default view</div>
 </View>
+
+<style>
+  div {
+    color: red;
+  }
+</style>

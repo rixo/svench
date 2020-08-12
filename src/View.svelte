@@ -55,6 +55,7 @@
   const name = getViewName(providedName, onDestroy)
 
   export let source
+  export let styles = null
 
   let knobsConfig = null
   export { knobsConfig as knobs }
@@ -103,6 +104,7 @@
     $extras = {
       id: componentContextId,
       source,
+      styles,
       knobs,
       actions: writable({
         enabled: !!actions,
