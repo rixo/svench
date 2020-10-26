@@ -193,6 +193,15 @@
     estree-walker "^1.0.1"
     micromatch "^4.0.2"
 
+"@rollup/pluginutils@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@rollup/pluginutils/-/pluginutils-3.1.0.tgz#706b4524ee6dc8b103b3c995533e5ad680c02b9b"
+  integrity sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==
+  dependencies:
+    "@types/estree" "0.0.39"
+    estree-walker "^1.0.1"
+    picomatch "^2.2.2"
+
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@samverschueren/stream-to-observable/-/stream-to-observable-0.3.0.tgz#ecdf48d532c58ea477acfcab80348424f8d0662f"
@@ -5255,7 +5264,7 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-picomatch@^2.0.5, picomatch@^2.2.1:
+picomatch@^2.0.5, picomatch@^2.2.1, picomatch@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.2.2.tgz#21f333e9b6b8eaff02468f5146ea406d345f4dad"
 
@@ -6229,6 +6238,13 @@ rollup-plugin-copy@^3.3.0:
     globby "10.0.1"
     is-plain-object "^3.0.0"
 
+rollup-plugin-hot-nollup@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-hot-nollup/-/rollup-plugin-hot-nollup-0.1.2.tgz#a892952e94c76ac0e99d63be988c700d33e4e721"
+  integrity sha512-QE4/CO7CFWSwZDmp/K+bMEOdP+i9aZiEw2u1sF+BiYE+0VQTu/FfzhJUxI0PDthBjzLZfEW31rwQJhVueuSL8w==
+  dependencies:
+    "@rollup/pluginutils" "^3.1.0"
+
 rollup-plugin-hot@^0.0.22-0:
   version "0.0.22-0"
   resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.22-0.tgz#e656bef64fdbfc0a757f113144c1e4b133d3f4e3"
@@ -6237,15 +6253,6 @@ rollup-plugin-hot@^0.0.22-0:
     cors "^2.8.5"
     express "^4.17.1"
     mime-types "^2.1.26"
-    rollup-pluginutils "^2.8.2"
-    ws "^7.1.2"
-
-rollup-plugin-hot@^0.0.9-0:
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.9.tgz#036897c271428e4b687efd2c62a3db700316c45b"
-  dependencies:
-    cors "^2.8.5"
-    express "^4.17.1"
     rollup-pluginutils "^2.8.2"
     ws "^7.1.2"
 
@@ -6268,15 +6275,16 @@ rollup-plugin-postcss-hot@^0.0.4:
     safe-identifier "^0.4.1"
     style-inject "^0.3.0"
 
-rollup-plugin-svelte-hot@^0.4.1:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.4.2.tgz#e876144876ef41547acb684184113bb7f3373000"
+rollup-plugin-svelte-hot@^0.11.0-1:
+  version "0.11.0-1"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.11.0-1.tgz#c834a8b883e0f11baafb7c04e54fd97d0027fb96"
+  integrity sha512-+8Q5jpv7Fa7WcWeO58cFbodaueqb8XEf1ptqHaS24ZNRGCnxQYFGaWjJV60jwib9KkzxWTZOrZopEhM+HCBgSg==
   dependencies:
     require-relative "^0.8.7"
-    rollup-plugin-hot "^0.0.9-0"
+    rollup-plugin-hot-nollup "^0.1.2"
     rollup-pluginutils "^2.8.2"
-    sourcemap-codec "^1.4.4"
-    svelte-hmr "^0.5.0"
+    sourcemap-codec "^1.4.8"
+    svelte-hmr "^0.11.0"
   optionalDependencies:
     nollup ">=0.8.4"
 
@@ -6856,17 +6864,19 @@ supports-hyperlinks@^2.0.0:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
 
-svelte-hmr@^0.5.0:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.5.1.tgz#4f19a8c2635c6b71014784afcc5a6ae90f818caa"
+svelte-hmr@^0.11.0:
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.11.2.tgz#741426f26d1b799670f16e36d1b59d04c5d6ca8b"
+  integrity sha512-KbzQESDdREGwKbu39xFrHonuUWitE61gKSNYJRjibS2djTxsRYFNCNf/nkKsJBcueU8k+9czrjfiYx22KgXZQw==
 
 svelte-key@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/svelte-key/-/svelte-key-1.0.0.tgz#8c570667d52b58423a0b0d543cc5323b3db356e8"
 
-svelte@^3.0.0:
-  version "3.20.1"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.20.1.tgz#8417fcd883a2f534b642a0737368272e651cf3ac"
+svelte@^3.29.0:
+  version "3.29.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.29.0.tgz#80acac4254341ad8f3301e5ef03f4127ea967d96"
+  integrity sha512-f+A65eyOQ5ujETLy+igNXtlr6AEjAQLYd1yJE1VwNiXMQO5Z/Vmiy3rL+zblV/9jd7rtTTWqO1IcuXsP2Qv0OA==
 
 svgo@^1.0.0:
   version "1.3.2"
