@@ -17,10 +17,7 @@ const entry = {
   shadowLight: path.resolve(__dirname, 'svench.shadow-light.js'),
 }
 
-const tap = fn => x => {
-  fn(x)
-  return x
-}
+const tap = fn => x => (fn(x), x)
 
 const overrideInput = (override, addInput) => original => {
   const options = { ...original }
