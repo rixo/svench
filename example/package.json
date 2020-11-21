@@ -4,7 +4,7 @@
   "devDependencies": {
     "@rixo/eslint-config-svelte": "^0.8.1",
     "@rollup/plugin-commonjs": "11.0.2",
-    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@rollup/plugin-node-resolve": "^10.0.0",
     "@rollup/plugin-replace": "^2.3.3",
     "cross-env": "^6.0.3",
     "nollup": "rixo/nollup#next",
