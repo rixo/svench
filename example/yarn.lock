@@ -222,6 +222,11 @@ acorn@^7.0.0, acorn@^7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.1.1.tgz#e35668de0b402f359de515c5482a1ab9f89a69bf"
 
+acorn@^7.3.1:
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
+  integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
+
 ajv@^6.10.0, ajv@^6.10.2:
   version "6.12.1"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.12.1.tgz#cce4d7dfcd62d3c57b1cd772e688eff5f5cd3839"
@@ -2402,7 +2407,7 @@ magic-string@^0.24.0:
   dependencies:
     sourcemap-codec "^1.4.1"
 
-magic-string@^0.25.2, magic-string@^0.25.5:
+magic-string@^0.25.2, magic-string@^0.25.5, magic-string@^0.25.7:
   version "0.25.7"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.25.7.tgz#3f497d6fd34c669c6798dcb821f2ef31f5445051"
   dependencies:
@@ -2656,21 +2661,23 @@ nollup@>=0.8.4:
     mime-types "^2.1.24"
     source-map "^0.5.6"
 
-nollup@rixo/nollup#next:
-  version "0.11.1"
-  resolved "https://codeload.github.com/rixo/nollup/tar.gz/33d551782d81ab4cadd1176748d0245acdad3541"
+nollup@^0.13.13:
+  version "0.13.13"
+  resolved "https://registry.yarnpkg.com/nollup/-/nollup-0.13.13.tgz#5e55f9892a11e397845c6cf8e6c4efe57eebe23a"
+  integrity sha512-A8yS3lXE36OKfDpCWAu73ulptQn5PMQ9aAGyHLgbLDPdGD+MQYOZL0H5/onH/EDICPnRO29vt5wLi757llGglA==
   dependencies:
     "@rollup/pluginutils" "^3.0.8"
-    acorn "^7.0.0"
+    acorn "^7.3.1"
     chokidar "^3.0.0"
     convert-source-map "^1.5.1"
     express "^4.16.3"
     express-history-api-fallback "^2.2.1"
     express-http-proxy "^1.5.1"
     express-ws "^4.0.0"
-    magic-string "^0.24.0"
+    magic-string "^0.25.7"
     mime-types "^2.1.24"
     source-map "^0.5.6"
+    source-map-fast "npm:source-map@0.7.3"
 
 normalize-package-data@^2.3.2:
   version "2.5.0"
@@ -3875,6 +3882,11 @@ snapdragon@^0.8.1:
     source-map "^0.5.6"
     source-map-resolve "^0.5.0"
     use "^3.1.0"
+
+"source-map-fast@npm:source-map@0.7.3":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
+  integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
 source-map-resolve@^0.5.0:
   version "0.5.3"
