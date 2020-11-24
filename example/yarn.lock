@@ -3599,19 +3599,16 @@ rollup-plugin-delete@^1.2.0:
   dependencies:
     del "^4.1.1"
 
+rollup-plugin-hot-nollup@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-hot-nollup/-/rollup-plugin-hot-nollup-0.1.2.tgz#a892952e94c76ac0e99d63be988c700d33e4e721"
+  integrity sha512-QE4/CO7CFWSwZDmp/K+bMEOdP+i9aZiEw2u1sF+BiYE+0VQTu/FfzhJUxI0PDthBjzLZfEW31rwQJhVueuSL8w==
+  dependencies:
+    "@rollup/pluginutils" "^3.1.0"
+
 rollup-plugin-hot@^0.0.23:
   version "0.0.23"
   resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.23.tgz#84693cd7e3aafbac5a6b126ba45fad8330832bdc"
-  dependencies:
-    cors "^2.8.5"
-    express "^4.17.1"
-    mime-types "^2.1.26"
-    rollup-pluginutils "^2.8.2"
-    ws "^7.1.2"
-
-rollup-plugin-hot@^0.0.25:
-  version "0.0.25"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-hot/-/rollup-plugin-hot-0.0.25.tgz#2ae6bf00fc41fcb2df9a5dd2afa9580734c3783d"
   dependencies:
     cors "^2.8.5"
     express "^4.17.1"
@@ -3644,15 +3641,16 @@ rollup-plugin-postcss-hot@^0.0.4:
     safe-identifier "^0.4.1"
     style-inject "^0.3.0"
 
-rollup-plugin-svelte-hot@^0.7.1-0:
-  version "0.7.1-0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.7.1-0.tgz#4bf18cfccbcd0fe2226bf3933eb13b4048fdd449"
+rollup-plugin-svelte-hot@^0.12.0-0:
+  version "0.12.0-0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.12.0-0.tgz#7c36b9d3c42030df5162671a0f6046b1aa45e89b"
+  integrity sha512-3MMaktU7xUn9Aqn3oFytgF4xup6CIpXPFDb62U8t3nJtvI2H0rkRODe39z/NU5mV3IOyGFNfx5HPYBm+JkI2Dg==
   dependencies:
     require-relative "^0.8.7"
-    rollup-plugin-hot "^0.0.25"
+    rollup-plugin-hot-nollup "^0.1.2"
     rollup-pluginutils "^2.8.2"
     sourcemap-codec "^1.4.8"
-    svelte-hmr "^0.8.0"
+    svelte-hmr "^0.12.0-0"
   optionalDependencies:
     nollup ">=0.8.4"
 
@@ -4103,9 +4101,10 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-hmr@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.8.0.tgz#c02c9b5bbe2e8fa23f6f7e221aef4d00495d9e39"
+svelte-hmr@^0.12.0-0:
+  version "0.12.0-0"
+  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.12.0-0.tgz#c793cb046ff5ce423b4c9d1979b60f80615e4459"
+  integrity sha512-M7WytvXLIz2QLebtMbn0m0krhlMGjVApa7/vLG87g4HvaTg8THwDRl4I78Wn/4KoriLT1rXH//s0Xozny+1LeA==
 
 svelte-key@^1.0.0:
   version "1.0.0"
