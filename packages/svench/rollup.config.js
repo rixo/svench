@@ -211,9 +211,9 @@ const configs = {
       commonjs(),
       {
         async writeBundle() {
-          const sources = ['app.css', 'app.vendor.css'].map(x =>
-            path.resolve(__dirname, x)
-          )
+          const sources = ['app.css', 'app.vendor.css']
+            .map(x => path.resolve(__dirname, x))
+            .filter(x => fs.existsSync(x))
           const dest = path.resolve(__dirname, 'app.css.js')
           const css = (
             await Promise.all(sources.map(x => fs.promises.readFile(x, 'utf8')))
