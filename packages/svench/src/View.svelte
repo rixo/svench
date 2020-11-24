@@ -113,14 +113,21 @@
       }),
     }
 
+    const parseEvent = event =>
+      (typeof event === 'function' && event.name) || event
+
     action = (event, ...args) => {
       const handler = (...args) => {
         $actionsStore.events.unshift({
           date: new Date(),
-          event,
+          event: parseEvent(event),
           data: args.shift(),
         })
         $actionsStore = $actionsStore
+        // run callback
+        if (typeof event === 'function') {
+          event()
+        }
       }
       if (args.length > 0) {
         return handler(...args)

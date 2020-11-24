@@ -2,6 +2,10 @@
   import { View } from 'svench'
 
   let value = 'lorem'
+
+  function click() {
+    alert('clicked')
+  }
 </script>
 
 <View name="default" let:action>
@@ -13,4 +17,8 @@
 
 <View name="curried" let:action>
   <button on:click={action('click')}>Click me!</button>
+</View>
+
+<View name="with handler" let:action>
+  <button on:click={action(click)}>Click me!</button>
 </View>
