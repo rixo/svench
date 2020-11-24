@@ -84,6 +84,6 @@
     "dev": "rollup -c -w",
     "build": "rollup -c",
     "prepublish": "yarn build",
-    "test": "echo TODO"
+    "test": "yarn zoar"
   }
 }
