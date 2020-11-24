@@ -8,5 +8,11 @@ module.exports = {
   ),
   hot: true,
   port: 42421,
-  watch: ['src', '.svench', 'node_modules/svench', '../src', '../themes'],
+  watch: [
+    'src',
+    '.svench',
+    'node_modules/svench',
+    '../packages/svench/src',
+    '../packages/svench/themes',
+  ],
 }
