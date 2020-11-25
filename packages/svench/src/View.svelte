@@ -54,7 +54,7 @@
 
   const name = getViewName(providedName, onDestroy)
 
-  export let source
+  export let source = null
   export let styles = null
 
   let knobsConfig = null
