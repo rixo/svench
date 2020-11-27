@@ -45,6 +45,7 @@ export default ({
     mdEnabled &&
       mdsvex({
         extension: maybeCustomExtension('.md', mdEnabled),
+        smartypants: false,
         rehypePlugins,
       }),
 
