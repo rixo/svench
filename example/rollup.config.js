@@ -32,9 +32,7 @@ export default {
     // svenchify.svelte(svelte, {
     svelte({
       dev: !production,
-      css: css => {
-        css.write('public/build/bundle.css')
-      },
+      css: false,
       hot: hot && {
         optimistic: true,
         noPreserveState: false,
