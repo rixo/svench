@@ -201,6 +201,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/unist@^2.0.0", "@types/unist@^2.0.2", "@types/unist@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.3.tgz#9c088679876f374eb5983f150d4787aa6fb32d7e"
+  integrity sha512-FvUupuM3rlRsRtCN+fDudtmytGO6iHJuuRKS1Ss0pG5z8oX0diNEw94UEL7hgDbpN94rgaK5R7sWm6RrSkZuAQ==
+
 "@zorax/plug@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@zorax/plug/-/plug-0.0.1.tgz#eca166b4ec1c5d0fa929b02e7e736e29c9e03961"
@@ -2499,6 +2504,15 @@ mdn-data@2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.6.tgz#852dc60fcaa5daa2e8cf6c9189c440ed3e042978"
 
+mdsvex@^0.8.8:
+  version "0.8.8"
+  resolved "https://registry.yarnpkg.com/mdsvex/-/mdsvex-0.8.8.tgz#1d7d7a9fd681a7d0f9418a24a0c282ff9f2e828d"
+  integrity sha512-T496FO26UdKs6R7oD8GkuMgFyd37M4QZmePm4mOvT5judvF5fxes7xfICIiTSKz3If1iieXVmI6XEhNI0qqi5A==
+  dependencies:
+    "@types/unist" "^2.0.3"
+    prismjs "^1.17.1"
+    vfile-message "^2.0.4"
+
 media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
@@ -3394,6 +3408,13 @@ prism-svelte@^0.4.6:
   version "0.4.6"
   resolved "https://registry.yarnpkg.com/prism-svelte/-/prism-svelte-0.4.6.tgz#37cb372266e482882770c62cdca9eb9da960b13b"
 
+prismjs@^1.17.1:
+  version "1.22.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.22.0.tgz#73c3400afc58a823dd7eed023f8e1ce9fd8977fa"
+  integrity sha512-lLJ/Wt9yy0AiSYBf212kK3mM5L8ycwlyTlSxHBAneXLR0nzFMlZ5y7riFPF3E33zXOF2IH95xdY5jIyZbM9z/w==
+  optionalDependencies:
+    clipboard "^2.0.0"
+
 prismjs@^1.20.0:
   version "1.21.0"
   resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.21.0.tgz#36c086ec36b45319ec4218ee164c110f9fc015a3"
@@ -3736,16 +3757,16 @@ rollup-plugin-postcss-hot@^0.0.4:
     safe-identifier "^0.4.1"
     style-inject "^0.3.0"
 
-rollup-plugin-svelte-hot@^0.12.0-0:
-  version "0.12.0-0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.12.0-0.tgz#7c36b9d3c42030df5162671a0f6046b1aa45e89b"
-  integrity sha512-3MMaktU7xUn9Aqn3oFytgF4xup6CIpXPFDb62U8t3nJtvI2H0rkRODe39z/NU5mV3IOyGFNfx5HPYBm+JkI2Dg==
+rollup-plugin-svelte-hot@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte-hot/-/rollup-plugin-svelte-hot-0.13.0.tgz#7a2ae6208be585fe4da29bf879f2397368739c66"
+  integrity sha512-ZSccLQKVe3vhmnHOORjS5N7hZQi2HX20d+/ime5qYWQqL2DVx8JL/LCXgDAds1+84/UUi45LU8QdiN1aDZ+CUg==
   dependencies:
     require-relative "^0.8.7"
     rollup-plugin-hot-nollup "^0.1.2"
     rollup-pluginutils "^2.8.2"
     sourcemap-codec "^1.4.8"
-    svelte-hmr "^0.12.0-0"
+    svelte-hmr "^0.12.0"
   optionalDependencies:
     nollup ">=0.8.4"
 
@@ -4206,10 +4227,10 @@ supports-color@^7.1.0:
   dependencies:
     has-flag "^4.0.0"
 
-svelte-hmr@^0.12.0-0:
-  version "0.12.0-0"
-  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.12.0-0.tgz#c793cb046ff5ce423b4c9d1979b60f80615e4459"
-  integrity sha512-M7WytvXLIz2QLebtMbn0m0krhlMGjVApa7/vLG87g4HvaTg8THwDRl4I78Wn/4KoriLT1rXH//s0Xozny+1LeA==
+svelte-hmr@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.12.0.tgz#de3616d09a902fb7b0a014f1b3acdded1da352f6"
+  integrity sha512-NYpzqME/jlTBL+JLilznH2QnQbREJvwikWjLNpJuekhcCqIWbnO7hrNnMZCgAKiQHAKEdiohtjARJhO7nMZGbg==
 
 svelte-key@^1.0.0:
   version "1.0.0"
@@ -4409,6 +4430,13 @@ uniqs@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/uniqs/-/uniqs-2.0.0.tgz#ffede4b36b25290696e6e165d4a59edb998e6b02"
 
+unist-util-stringify-position@^2.0.0:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/unist-util-stringify-position/-/unist-util-stringify-position-2.0.3.tgz#cce3bfa1cdf85ba7375d1d5b17bdc4cada9bd9da"
+  integrity sha512-3faScn5I+hy9VleOq/qNbAd6pAx7iH5jYBMS9I1HgQVijz/4mv5Bvw5iw1sC/90CODiKo81G/ps8AJrISn687g==
+  dependencies:
+    "@types/unist" "^2.0.2"
+
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/unpipe/-/unpipe-1.0.0.tgz#b2bf4ee8514aae6165b4817829d21b2ef49904ec"
@@ -4496,6 +4524,14 @@ vary@^1, vary@~1.1.2:
 vendors@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/vendors/-/vendors-1.0.4.tgz#e2b800a53e7a29b93506c3cf41100d16c4c4ad8e"
+
+vfile-message@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/vfile-message/-/vfile-message-2.0.4.tgz#5b43b88171d409eae58477d13f23dd41d52c371a"
+  integrity sha512-DjssxRGkMvifUOJre00juHoP9DPWuzjxKuMDrhNbk2TdaYYBNMStsNhEOt3idrtI12VQYM/1+iM0KOzXi4pxwQ==
+  dependencies:
+    "@types/unist" "^2.0.0"
+    unist-util-stringify-position "^2.0.0"
 
 vm-browserify@^1.0.1:
   version "1.1.2"
