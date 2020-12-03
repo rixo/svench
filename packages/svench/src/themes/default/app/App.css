@@ -1,0 +1,171 @@
+@import '../../../../node_modules/overlayscrollbars/css/OverlayScrollbars.css';
+
+.svench-app {
+  --toolbar-height: 48px;
+  --extras-height: 15em;
+}
+
+/* === Layout === */
+
+.svench-app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+
+  display: flex;
+
+  /* compensate for fixed toolbar when clicking on #anchor */
+  /* https://stackoverflow.com/a/28824157/1387519 */
+  & :target::before {
+    content: '';
+    display: block;
+    height: 0.33rem;
+    margin-top: 0.33rem;
+  }
+}
+
+.svench-app-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.svench-app-body-mask {
+  background-color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+  opacity: 0.33;
+}
+
+.svench-app-main {
+  position: absolute;
+  top: var(--toolbar-height);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: auto;
+}
+
+.svench-app-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.svench-app-canvas {
+  display: flex;
+  flex-direction: column;
+}
+
+.svench-app-extras {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+/* --- modifiers --- */
+
+.svench-app {
+  &.svench-focus {
+    /* NOTE we want the canvas to fill available space, or it is hard to pick
+       in dev tools (which end users might want to do to find missing cmp) */
+    & .svench-app-canvas {
+      min-height: 100%;
+    }
+  }
+  &.svench-fullscreen {
+    & .svench-app-menu,
+    & .svench-app-toolbar,
+    & .svench-app-extras {
+      display: none;
+    }
+    & .svench-app-main {
+      top: 0;
+      bottom: 0;
+    }
+  }
+}
+
+.svench-app-focus .svench-app-body {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  & .svench-app-main {
+    position: absolute;
+    top: var(--toolbar-height);
+    left: 0;
+    bottom: 0;
+    right: 0;
+    overflow: auto;
+    & .svench-app-canvas {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+.svench-app-canvas {
+  flex: 1;
+}
+
+/* === Theme === */
+
+.svench-app {
+  background-color: var(--white);
+}
+
+.svench-app-logo {
+  margin: 0.5em 1em 1.5em;
+  padding: 0;
+  white-space: nowrap;
+  & a {
+    text-decoration: none;
+    color: #79889a;
+    font-size: 2em;
+  }
+  & .svench-icon {
+    font-size: 1.2em;
+    opacity: 0.5;
+    display: inline-block;
+    transform: rotateY(180deg) scale(1.25) translateY(-0.12em);
+    font-weight: normal;
+    position: relative;
+    bottom: -0.075em;
+  }
+}
+
+.svench-app-menu {
+  background-color: var(--light-2);
+  overflow: auto;
+  z-index: 0;
+}
+
+.svench-app-body {
+  background-color: var(--white);
+  box-shadow: -0px 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.svench-app-toolbar {
+  background-color: var(--white);
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.svench-app-extras {
+  background-color: var(--white);
+  border-top: 1px solid var(--gray-light);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
