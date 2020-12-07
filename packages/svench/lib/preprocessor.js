@@ -71,7 +71,7 @@ const isDynamicAttr = attr => {
 
       case 'MustacheTag': {
         switch (x.expression.type) {
-          case 'Litteral':
+          case 'Literal':
             return false
           case 'TemplateLiteral':
             return x.expresssion.expressions.length > 0
