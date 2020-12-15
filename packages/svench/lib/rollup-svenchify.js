@@ -46,8 +46,8 @@ export default SvenchPlugin => {
           if (esm) {
             const _require = require('esm')(module)
             const loadConfigFile = _require(PROXYQUIRE_MODULE)
-            return loadConfigFile(wrapSvelteConfig, file, forceSvelteHot)
-              .default
+            const m = loadConfigFile(wrapSvelteConfig, file, forceSvelteHot)
+            return m.default
           } else {
             const loadConfigFile = require(PROXYQUIRE_MODULE)
             return loadConfigFile(wrapSvelteConfig, file, forceSvelteHot)
