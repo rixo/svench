@@ -39,7 +39,13 @@ export const parseOptions = pipe(
       'tmp'
     ),
 
-    override = false,
+    // overrides of Rollup config
+    rollup = false,
+    // deprecated ('cause we aim for support of multiple bundlers)
+    override = rollup,
+
+    // overrides of Svelte plugin options
+    svelte,
 
     mountEntry = '/__svench/svench.js',
 
@@ -74,6 +80,7 @@ export const parseOptions = pipe(
     manifestDir,
     extensions,
     override,
+    svelte,
     mountEntry,
     index,
     serve: serve && {

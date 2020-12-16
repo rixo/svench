@@ -1,11 +1,11 @@
-import svelte from 'rollup-plugin-svelte-hot'
+import _svelte from 'rollup-plugin-svelte-hot'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 import hmr from 'rollup-plugin-hot'
 // import { mdsvex } from 'mdsvex'
-import svench from 'svench/rollup'
+import { withSvench } from 'svench/rollup'
 
 const watch = !!process.env.ROLLUP_WATCH
 const useLiveReload = !!process.env.LIVERELOAD
@@ -24,6 +24,50 @@ const preprocess = [
   // }),
 ]
 
+// NOTE this will do nothing and just return the Svelte plugin you've passed
+// in, if not enabled (based on process.env.SVENCH being set, by default)
+const svelte = withSvench(_svelte, {
+  // The root dir that Svench will parse and watch.
+  dir: './src',
+
+  // The Svench plugins does some code transform, and so it needs to know of
+  // your preprocessors to be able to parse your local Svelte variant.
+  preprocess,
+
+  extensions: ['.svench', '.svench.svelte', '.svench.svx'],
+
+  svelte: {
+    css: true, // CSS in JS
+  },
+
+  // This example writes Svench to a single iife file
+  rollup: {
+    // replace your entry with Svench's one
+    input: true,
+    // inlining `import(...)` from Svench's codebase is required for iife
+    inlineDynamicImports: true,
+    // output to another file
+    output: {
+      file: 'public/build/svench.js',
+    },
+  },
+
+  index: {
+    source: 'public/index.html',
+    replace: {
+      '/build/bundle.js': '/build/svench.js',
+      'Svelte app': 'Svench app',
+    },
+    write: 'public/svench.html',
+  },
+
+  serve: {
+    host: '0.0.0.0',
+    port: 4242,
+    public: 'public',
+  },
+})
+
 export default {
   input: 'src/main.js',
 
@@ -35,55 +79,12 @@ export default {
   },
 
   plugins: [
-    svench({
-      // The root dir that Svench will parse and watch.
-      dir: './src',
-
-      // The Svench plugins does some code transform, and so it needs to know of
-      // your preprocessors to be able to parse your local Svelte variant.
-      preprocess,
-
-      extensions: ['.svench', '.svench.svelte', '.svench.svx'],
-
-      // This example writes Svench to a single iife file
-      override: {
-        // replace your entry with Svench's one
-        input: true,
-        // inlining `import(...)` from Svench's codebase is required for iife
-        inlineDynamicImports: true,
-        // output to another file
-        output: {
-          file: 'public/build/svench.js',
-        },
-      },
-
-      index: {
-        source: 'public/index.html',
-        replace: {
-          '/build/bundle.js': '/build/svench.js',
-          'Svelte app': 'Svench app',
-        },
-        write: 'public/svench.html',
-      },
-
-      serve: {
-        host: '0.0.0.0',
-        port: 4242,
-        public: 'public',
-      },
-    }),
-
     svelte({
-      dev: !production,
       css: css => {
         css.write('public/build/bundle.css')
       },
-      extensions: ['.svelte', '.svench', '.svx', '.svhx'],
-      preprocess,
-      hot: hot && {
-        optimistic: true,
-        noPreserveState: false,
-      },
+      extensions: ['.svelte', '.svench', '.svx'],
+      hot: true,
     }),
 
     resolve({

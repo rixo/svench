@@ -1,6 +1,6 @@
 const INJECTED = Symbol('SVENCH OPTIONS INJECTED')
 
-export default ({ extensions, $$ }) => options => {
+export default ({ extensions, routix }) => options => {
   if (options[INJECTED]) return
 
   options[INJECTED] = true
@@ -22,7 +22,7 @@ export default ({ extensions, $$ }) => options => {
 
       if (!match) throw new Error('Failed to find default export')
 
-      const item = $$.get(id)
+      const item = routix.get(id)
 
       code += `;${match[1]}.$$svench_id = ${JSON.stringify(item.id)};`
 

@@ -1,16 +1,14 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import Routix from 'routix/rollup'
+import { rollupPlugin as Routix } from 'routix/esm'
 
 import { pipe, mkdirp, mkdirpSync } from './util'
-import routixParser from './routix-parser'
-import cachingPreprocess from './caching-preprocess'
-import { parseOptions } from './config'
 import injectTransform from './transform'
 import createServer from './server'
 import { createIndex, _template } from './template'
 import Svenchify from './rollup-svenchify'
 import { ENTRY_PATH } from './const'
+import { createPluginUtils } from './plugin-shared'
 
 const entry = {
   shadow: ENTRY_PATH,
@@ -48,30 +46,27 @@ const overrideInput = (override, addInput) => original => {
 let globalServer
 
 const createPlugin = ({
-  enabled,
-  watch,
-  dir,
-  ignore,
-  manifestDir,
-  extensions,
-  preprocess: preprocessors,
+  options: {
+    enabled,
+    watch,
+    manifestDir,
+    extensions,
 
-  override = null,
-  addInput = false,
-  preserveOutputFileName = true,
+    override = null,
+    addInput = false,
+    preserveOutputFileName = true,
 
-  index: indexCfg,
+    index: indexCfg,
 
-  serve,
-  isNollup,
+    serve,
+    isNollup,
 
-  mountEntry,
-
-  mdsvex,
-  md,
-  autoComponentIndex,
-  autoSections,
+    mountEntry,
+  },
+  routix,
+  preprocess,
 }) => {
+  // NOTE if not enabled, routix & preprocess aren't instanciated
   if (!enabled) {
     return { name: 'svench (disabled)' }
   }
@@ -89,30 +84,6 @@ const createPlugin = ({
   }
 
   mkdirpSync(path.resolve(manifestDir))
-
-  const preprocess = cachingPreprocess({
-    extensions,
-    preprocessors,
-    mdsvex,
-    md,
-  })
-
-  // eslint-disable-next-line no-unused-vars
-  const { $$, ...routix } = Routix({
-    dir,
-    ignore,
-    extensions,
-    write: {
-      routes: path.resolve(manifestDir, 'routes.js'),
-      // extras: path.resolve(root, 'tmp/extras.js'),
-    },
-    merged: true,
-    ...routixParser({
-      preprocess: preprocess.push,
-      autoComponentIndex,
-      autoSections,
-    }),
-  })
 
   let hotPlugin
 
@@ -196,10 +167,11 @@ const createPlugin = ({
   }
 
   return {
-    ...routix,
+    ...Routix(routix),
 
     name: 'svench',
 
+    // TODO remove deps in Svenchify & remove
     $: {
       preprocess: {
         markup: preprocess.pull,
@@ -210,7 +182,7 @@ const createPlugin = ({
       tap(saveOriginalInput),
       tap(findHotPlugin),
       overrideInput(override, addInput),
-      injectTransform({ extensions, $$ }),
+      injectTransform({ extensions, routix }),
       tap(saveInputOptions)
     ),
 
@@ -280,6 +252,51 @@ const createPlugin = ({
   }
 }
 
-export const plugin = pipe(parseOptions, createPlugin)
+export const plugin = pipe(createPluginUtils, createPlugin)
+export const svench = plugin
 
-export const svenchify = Svenchify(createPlugin)
+// export const svenchify = Svenchify(createPlugin)
+export const svenchify = Svenchify(plugin)
+
+export const withSvench = (
+  svelte,
+  { enabled = !!process.env.SVENCH, ...opts }
+) => {
+  if (!enabled) return svelte
+
+  return ({ preprocess, ...svelteOptions }) => {
+    const parts = createPluginUtils({
+      preprocess,
+      ...opts,
+    })
+
+    const svench = createPlugin(parts)
+
+    const {
+      options: { svelte: svelteOverrides },
+    } = parts
+
+    const sveltePlugin = svelte({
+      ...svelteOptions,
+      ...svelteOverrides,
+      preprocess: {
+        markup: parts.preprocess.pull,
+      },
+    })
+
+    const placeholder = {
+      name: 'svelte-svench-placeholder',
+      options(opts) {
+        const index = opts.plugins.indexOf(placeholder)
+        const plugins = [...opts.plugins]
+        plugins.splice(index, 1, svench, sveltePlugin)
+        return svench.options({
+          ...opts,
+          plugins,
+        })
+      },
+    }
+
+    return placeholder
+  }
+}
