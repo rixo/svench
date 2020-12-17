@@ -16,7 +16,8 @@
   },
   "files": [
     "src",
-    "rollup.js",
+    "rollup.js*",
+    "snowpack.js*",
     "main.js",
     "routes.js",
     "routes.extras.js",

@@ -6,6 +6,8 @@ yarn-error.log
 
 /rollup.js
 /rollup.js.map
+/snowpack.js
+/snowpack.js.map
 /prism.js
 /themes/
 /app.*

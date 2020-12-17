@@ -25,7 +25,12 @@ export default ({
 }) => {
   const cache = {}
 
-  const extension = maybeCustomExtension('.svx', mdsvexEnabled)
+  const mdsvexExtension = maybeCustomExtension('.svx', mdsvexEnabled)
+  const mdExtension = maybeCustomExtension('.md', mdEnabled)
+
+  const usedExtensions = [mdsvexExtension, mdExtension].filter(Boolean)
+
+  const matchExtensions = x => usedExtensions.some(ext => x.endsWith(ext))
 
   const rehypePlugins = [
     slug,
@@ -36,7 +41,7 @@ export default ({
   const svenchPreprocessors = [
     mdsvexEnabled &&
       mdsvex({
-        extension,
+        extension: mdsvexExtension,
         smartypants: false,
         // remarkPlugins: [gemojiToEmoji],
         rehypePlugins,
@@ -44,7 +49,7 @@ export default ({
 
     mdEnabled &&
       mdsvex({
-        extension: maybeCustomExtension('.md', mdEnabled),
+        extension: mdExtension,
         smartypants: false,
         rehypePlugins,
       }),
@@ -57,7 +62,7 @@ export default ({
     //     <p><svench:options ... /></p>
     mdsvexEnabled && {
       markup({ content, filename }) {
-        if (!filename.endsWith(extension)) return
+        if (!matchExtensions(filename)) return
         let code = content
         code = code.replace(/<p[^>]*><\/p>/, ' '.repeat('<p></p>'.length))
         return { code }
@@ -78,7 +83,7 @@ export default ({
       delete cache[filename]
       return cached
     }
-    return preprocess(content, preprocessors, { filename })
+    return preprocess(content, svenchPreprocessors, { filename })
   }
 
   return { push, pull }
