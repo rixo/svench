@@ -8,7 +8,7 @@ import createServer from './server'
 import { createIndex, _template } from './template'
 import Svenchify from './rollup-svenchify'
 import { ENTRY_PATH } from './const'
-import { createPluginUtils } from './plugin-shared'
+import { createPluginParts } from './plugin-shared'
 
 const entry = {
   shadow: ENTRY_PATH,
@@ -252,7 +252,7 @@ const createPlugin = ({
   }
 }
 
-export const plugin = pipe(createPluginUtils, createPlugin)
+export const plugin = pipe(createPluginParts, createPlugin)
 export const svench = plugin
 
 // export const svenchify = Svenchify(createPlugin)
@@ -265,7 +265,7 @@ export const withSvench = (
   if (!enabled) return svelte
 
   return ({ preprocess, ...svelteOptions }) => {
-    const parts = createPluginUtils({
+    const parts = createPluginParts({
       preprocess,
       ...opts,
     })

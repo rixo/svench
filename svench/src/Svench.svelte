@@ -1,6 +1,6 @@
 <script>
   import { onDestroy } from 'svelte'
-  import { writable, derived } from 'svelte/store'
+  import { writable, readable, derived } from 'svelte/store'
   import navaid from 'navaid'
   import { setContext, makeNamer as _makeNamer } from './util.js'
   import createRouter from './router.js'
@@ -18,8 +18,8 @@
   import Fallback from './app/Fallback.svelte'
   import DefaultIndex from './app/DefaultIndex.svelte'
 
-  import routes$ from '../routes.js'
-  // import extras$ from '../routes.extras.js'
+  let routes$ = readable({routes: [], tree: {}})
+  export { routes$ as routes }
 
   export let ui
   export let lightUi = null

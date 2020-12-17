@@ -5,12 +5,13 @@ import { parseOptions } from './config'
 import cachingPreprocess from './caching-preprocess'
 import routixParser from './routix-parser'
 
-export const createPluginUtils = arg => {
+export const createPluginParts = arg => {
   const options = parseOptions(arg)
 
   const {
     enabled,
     manifestDir,
+    resolveRouteImport,
     // preprocess: preprocessors,
     mdsvex,
     md,
@@ -37,6 +38,7 @@ export const createPluginUtils = arg => {
       routes: path.resolve(manifestDir, 'routes.js'),
       // extras: path.resolve(root, 'tmp/extras.js'),
     },
+    resolve: resolveRouteImport,
     ...options,
     ...routixParser({
       preprocess: preprocess.push,

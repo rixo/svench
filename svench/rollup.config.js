@@ -101,6 +101,29 @@ const configs = {
     },
   },
 
+  snowpack: {
+    input: 'lib/snowpack-plugin.js',
+    output: {
+      format: 'cjs',
+      file: 'snowpack.js',
+      sourcemap: true,
+      ...(!production && {
+        banner: "require('source-map-support').install();",
+      }),
+    },
+    external: ['svelte/compiler', '@snowpack/plugin-svelte', ...builtins],
+    plugins: [
+      json(), // required by express
+      resolve({
+        preferBuiltins: true,
+      }),
+      commonjs({}),
+    ],
+    watch: {
+      clearScreen: false,
+    },
+  },
+
   theme: [
     {
       input: 'src/themes/default.js',

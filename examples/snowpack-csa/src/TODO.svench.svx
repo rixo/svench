@@ -1,0 +1,19 @@
+# TODO
+
+- [ ] Can't watch from project root (Snowpack doesn't process the event apparently)
+
+- [ ] Automatic `mount` from Svench's `dir`
+
+  - [ ] Auto `resolveRouteImport`
+
+- [ ] routes.js store util
+
+```js
+import wrapper from 'svench/routes'
+import * as routes from './my/routes.js'
+export default hotRoutes(routes, import.meta.hot)
+```
+
+## Svenchify
+
+- [ ] Auto default port (4242)

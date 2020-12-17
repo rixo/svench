@@ -39,10 +39,12 @@ export const parseOptions = pipe(
       'tmp'
     ),
 
-    // overrides of Rollup config
-    rollup = false,
-    // deprecated ('cause we aim for support of multiple bundlers)
-    override = rollup,
+    // Routix route import resolver
+    // (path: string) => (resolvedPath: string)
+    resolveRouteImport,
+
+    // overrides of Rollup / Snowpack config
+    override = false,
 
     // overrides of Svelte plugin options
     svelte,
@@ -55,8 +57,12 @@ export const parseOptions = pipe(
 
     isNollup = !!process.env.NOLLUP,
 
-    mdsvex = true,
-    md = true,
+    // true|false|string
+    // if true, default to '.svx', if string used as the extension
+    mdsvex = '.svx',
+    // true|false|string
+    // if true, default to '.md', if string uses as the extension
+    md = '.md',
     autoComponentIndex = '.svx',
 
     extensions = [
@@ -78,6 +84,7 @@ export const parseOptions = pipe(
     dir,
     ignore,
     manifestDir,
+    resolveRouteImport,
     extensions,
     override,
     svelte,
