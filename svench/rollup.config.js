@@ -5,7 +5,6 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import _postcss from 'rollup-plugin-postcss-hot'
-import builtins from 'builtin-modules'
 import svelte from 'rollup-plugin-svelte-hot'
 import postcssNesting from 'postcss-nesting'
 import prefixer from 'postcss-prefix-selector'
@@ -78,46 +77,28 @@ const configs = {
     plugins: [postcss({}), resolve({ browser: true }), commonjs()],
   },
 
-  rollup: {
-    input: 'lib/rollup-plugin.js',
+  plugins: {
+    input: ['lib/rollup-plugin.js', 'lib/snowpack-plugin.js'],
     output: {
       format: 'cjs',
-      file: 'rollup.js',
+      dir: '.',
+      entryFileNames: ({ facadeModuleId: x }) =>
+        path.basename(x).replace('-plugin', ''),
+      chunkFileNames: 'dist/[name].js',
       sourcemap: true,
       ...(!production && {
         banner: "require('source-map-support').install();",
       }),
     },
-    external: ['svelte/compiler', ...builtins],
+    external: ['svelte/compiler', '@snowpack/plugin-svelte'],
     plugins: [
       json(), // required by express
       resolve({
         preferBuiltins: true,
+        // NOTE there's a build issue with Cheapwatch ESM
+        mainFields: ['main', 'module'],
       }),
       commonjs(),
-    ],
-    watch: {
-      clearScreen: false,
-    },
-  },
-
-  snowpack: {
-    input: 'lib/snowpack-plugin.js',
-    output: {
-      format: 'cjs',
-      file: 'snowpack.js',
-      sourcemap: true,
-      ...(!production && {
-        banner: "require('source-map-support').install();",
-      }),
-    },
-    external: ['svelte/compiler', '@snowpack/plugin-svelte', ...builtins],
-    plugins: [
-      json(), // required by express
-      resolve({
-        preferBuiltins: true,
-      }),
-      commonjs({}),
     ],
     watch: {
       clearScreen: false,
