@@ -1,8 +1,9 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { createPluginParts } from './plugin-shared'
-import { createIndex } from './template'
+import { createPluginParts } from './plugin-shared.js'
+import { createIndex } from './template.js'
+import { mkdirp } from './util.js'
 
 const uniq = arr => [...new Set(arr)]
 
@@ -16,15 +17,25 @@ const resolveSveltePlugin = x => (typeof x === 'function' ? x : require(x))
 
 const initSvench = async (
   // config
-  { options: { index: indexCfg } },
+  { options: { index: indexCfg, manifestDir }, routix },
   // options
   { isDev }
 ) => {
   // --- Index ---
 
-  if (indexCfg) {
-    await createIndex(indexCfg, { watch: isDev })
+  const runIndex = async () => {
+    if (indexCfg) {
+      await createIndex(indexCfg, { watch: isDev })
+    }
   }
+
+  const startRoutix = async () => {
+    await mkdirp(manifestDir)
+    await routix.start({ watch: isDev })
+    await routix.onIdle(100) // report init errors
+  }
+
+  await Promise.all([runIndex(), startRoutix()])
 }
 
 export const plugin = (snowpackConfig, pluginOptions = {}) => {
@@ -90,10 +101,7 @@ export const plugin = (snowpackConfig, pluginOptions = {}) => {
     name: '@svench/snowpack',
 
     async run({ isDev }) {
-      await Promise.all([
-        parts.routix.start({ watch: isDev }),
-        initSvench(parts, { isDev }),
-      ])
+      return await initSvench(parts, { isDev })
     },
   }
 }

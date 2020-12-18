@@ -17,8 +17,8 @@ const wrapSveltePlugin = (x, options) => {
 const resolveConfig = config =>
   typeof config === 'string' ? require(config) : config
 
-export default (config, options) => {
-  config = resolveConfig(config)
+export default (_config, options) => {
+  const config = resolveConfig(_config)
 
   const svenchOptions = {
     enabled: true,
