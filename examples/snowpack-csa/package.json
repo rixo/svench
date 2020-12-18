@@ -16,6 +16,6 @@
     "@web/test-runner": "^0.10.0",
     "chai": "^4.2.0",
     "snowpack": "^2.18.4",
-    "svench": "../../packages/svench"
+    "svench": "../../svench"
   }
 }
