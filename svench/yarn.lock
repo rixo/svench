@@ -6902,10 +6902,6 @@ svelte-hmr@^0.12.0:
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.12.1.tgz#2c124f541a4f0b842f979ecaaaf08d52a9339448"
   integrity sha512-d2lH2W5Rc3IzunTwUYDdZ/hw5T8Z54mIWo+z3OK/+x4v+f64U0S/bgaXW4l4dkoHusuW8qOhpse0hnW1Vpxp4g==
 
-svelte-key@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/svelte-key/-/svelte-key-1.0.0.tgz#8c570667d52b58423a0b0d543cc5323b3db356e8"
-
 svelte@^3.29.0:
   version "3.29.0"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.29.0.tgz#80acac4254341ad8f3301e5ef03f4127ea967d96"
@@ -7656,6 +7652,11 @@ yargs-parser@^18.1.1:
   dependencies:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
+
+yarn.lock@^0.0.1-security:
+  version "0.0.1-security"
+  resolved "https://registry.yarnpkg.com/yarn.lock/-/yarn.lock-0.0.1-security.tgz#8e7117924bfe916671b21f14212ba1bb49dfe0c7"
+  integrity sha512-ZRX6v5zGCJMI1T2aO+BQxJggy1vvorXEwonQhWXIC+brO7lkDB3zWelVNAti183ddH6FmJP8z4UDCJnJlioK4Q==
 
 zingtouch@^1.0.6:
   version "1.0.6"

@@ -1,6 +1,5 @@
 <script>
   import { tick } from 'svelte'
-  import Unique from 'svelte-key'
   import ComponentContext from './ComponentContext.svelte'
   import RouterError from './RouterError.svelte'
   import { getContext, shallowEquals } from './util.js'
@@ -41,7 +40,7 @@
 {#if $error}
   <RouterError error={$error} />
 {:else if $current}
-  <Unique key={$current}>
+  {#key $current}
     {#if fallback}
       <ComponentContext {...props}>
         <svelte:component this={Fallback} {route} />
@@ -49,5 +48,5 @@
     {:else if cmp}
       <ComponentContext {...props} component={cmp} {view} />
     {/if}
-  </Unique>
+  {/key}
 {/if}
