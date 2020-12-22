@@ -12,3 +12,6 @@ export { url } from './helpers/url.js'
 
 // entry points
 export { default as start } from './start.js'
+
+// util
+export { default as hotRoutes } from './hot-routes-store.js'
