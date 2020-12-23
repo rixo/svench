@@ -63,7 +63,6 @@
     <p>
       <a class="App-link" href="https://svelte.dev" target="_blank" rel="noopener noreferrer">
         Learn Svelte
-        Learn Svelte
       </a>
     </p>
   </header>
