@@ -3,7 +3,7 @@
     "start": "snowpack dev",
     "build": "snowpack build",
     "test": "web-test-runner \"src/**/*.test.js\"",
-    "svench": "snowpack dev --config snowpack.config.svench.js"
+    "svench": "svench"
   },
   "dependencies": {
     "svelte": "^3.24.0"

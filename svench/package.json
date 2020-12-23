@@ -16,6 +16,8 @@
   },
   "files": [
     "src",
+    "cli",
+    "cli.bin.js",
     "rollup.js*",
     "snowpack.js*",
     "main.js",
@@ -29,6 +31,9 @@
     "lib/rollup-svenchify.proxyquire.js",
     "lib/rollup-svenchify.require.js"
   ],
+  "bin": {
+    "svench": "./cli.bin.js"
+  },
   "peerDependencies": {
     "rollup-plugin-svelte-hot": "^0.11.0-1",
     "svelte": "^3.0.0"
@@ -43,7 +48,8 @@
     "prism-svelte": "^0.4.6",
     "prismjs": "^1.21.0",
     "proxyquire": "^2.1.3",
-    "routix": "^0.1.0-2",
+    "require-relative": "^0.8.7",
+    "routix": "^0.1.0-3",
     "zingtouch": "^1.0.6"
   },
   "devDependencies": {
@@ -69,6 +75,7 @@
     "rollup-plugin-svelte": "rixo/rollup-plugin-svelte#svelte-hmr",
     "rollup-plugin-svelte-hot": "^0.11.2",
     "rollup-plugin-terser": "^5.3.0",
+    "sade": "^1.7.4",
     "sirv": "^0.4.2",
     "source-map-support": "^0.5.19",
     "svelte": "^3.29.0",

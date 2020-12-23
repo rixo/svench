@@ -1,5 +1,4 @@
 import * as path from 'path'
-import * as fs from 'fs'
 
 import { pipe } from './util.js'
 
@@ -18,12 +17,14 @@ export const parseIndexOptions = ({
   replace = {},
 } = {}) => ({ source, write, encoding, replace })
 
-const resolvePreset = preset =>
-  typeof preset === 'string' ? require.main.require(preset) : preset
+const applyPresets = ({ ...options }) => {
+  const { presets, requirePreset = require.main.require } = options
 
-const applyPresets = options => {
-  const { presets } = options
   if (!presets) return options
+
+  const resolvePreset = preset =>
+    typeof preset === 'string' ? requirePreset(preset) : preset
+
   return Array.isArray(presets)
     ? presets.map(resolvePreset).reduce((opts, fn) => fn(opts), options)
     : resolvePreset(presets)(options)
