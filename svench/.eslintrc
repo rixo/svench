@@ -2,7 +2,7 @@ extends:
   - '@rixo/svelte'
 
 overrides:
-  - files: ["rollup.config.js", "lib/**", "rollup.js", "cli/**"]
+  - files: ["rollup.config.js", "lib/**", "rollup.js", "cli/**", "presets/**"]
     env:
       node: true
   - files: ["**/*.svelte", "**/*.svench"]

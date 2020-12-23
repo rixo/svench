@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import CheapWatch from 'cheap-watch'
 
-import { pipe, escapeRe } from './util'
+import { pipe, escapeRe, mkdirp } from './util'
 import { ENTRY_URL } from './const'
 import { parseIndexOptions } from './config'
 
@@ -41,15 +41,18 @@ const watchFile = async (file, callback) => {
 
 const _createIndex = async (
   { source, write, encoding, replace },
-  { watch, script, onChange } = {}
+  { watch, script, onChange, publicDir } = {}
 ) => {
   const sourceFile = source && path.resolve(source)
-  const outputFile = write && path.resolve(write)
+  const outputFile =
+    write && write === true
+      ? path.resolve(publicDir, 'index.html')
+      : path.resolve(write)
 
   const generate = async () => {
     let contents = sourceFile
       ? await fs.promises.readFile(sourceFile, encoding)
-      : _template({ script })
+      : _template({ script })()
 
     if (replace) {
       if (typeof replace === 'function') {
@@ -68,7 +71,7 @@ const _createIndex = async (
 
     if (outputFile) {
       const dir = path.dirname(outputFile, { recursive: true })
-      if (!fs.existsSync(dir)) await fs.promises.mkdir(dir)
+      await mkdirp(dir)
       await fs.promises.writeFile(outputFile, contents, encoding)
     }
 
@@ -93,4 +96,5 @@ const _createIndex = async (
   return () => contentsPromise
 }
 
-export const createIndex = pipe(parseIndexOptions, _createIndex)
+export const createIndex = (opts, ...args) =>
+  _createIndex(parseIndexOptions(opts), ...args)

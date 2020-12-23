@@ -1,16 +1,19 @@
 import * as path from 'path'
-import { createRoutix } from 'routix/esm'
+import { createRoutix } from 'routix'
 
-import { parseOptions } from './config'
-import cachingPreprocess from './caching-preprocess'
-import routixParser from './routix-parser'
+import { parseOptions } from './config.js'
+import cachingPreprocess from './caching-preprocess.js'
+import routixParser from './routix-parser.js'
+import { mkdirpSync } from './util.js'
 
 export const createPluginParts = arg => {
   const options = parseOptions(arg)
 
   const {
     enabled,
+    svenchDir,
     manifestDir,
+    routesFile,
     resolveRouteImport,
     // preprocess: preprocessors,
     mdsvex,
@@ -32,10 +35,13 @@ export const createPluginParts = arg => {
     md,
   })
 
+  if (svenchDir) mkdirpSync(svenchDir)
+  if (manifestDir) mkdirpSync(manifestDir)
+
   const routix = createRoutix({
     merged: true,
     write: {
-      routes: path.resolve(manifestDir, 'routes.js'),
+      routes: path.resolve(routesFile),
       // extras: path.resolve(root, 'tmp/extras.js'),
     },
     resolve: resolveRouteImport,

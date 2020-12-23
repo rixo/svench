@@ -9,29 +9,22 @@
 const isSveltePlugin = x =>
   Array.isArray(x) ? isSveltePlugin(x[0]) : x === '@snowpack/plugin-svelte'
 
-const wrapSveltePlugin = (x, options) => {
-  const [sveltePlugin, opts] = Array.isArray(x) ? x : [x, {}]
+const wrapSveltePlugin = options => plugin => {
+  if (!isSveltePlugin(plugin)) return plugin
+  const [sveltePlugin, opts] = Array.isArray(plugin) ? plugin : [plugin, {}]
   return ['svench/snowpack', { sveltePlugin, ...opts, svench: options }]
 }
 
-const resolveConfig = config =>
-  typeof config === 'string' ? require(config) : config
+export default (snowpackConfig, svenchOptions = !!+process.env.SVENCH) => {
+  const enabled =
+    svenchOptions === true || (svenchOptions && svenchOptions.enabled)
 
-export default (_config, options) => {
-  const config = resolveConfig(_config)
-
-  const svenchOptions = {
-    enabled: true,
-    ...options,
-  }
+  if (!enabled) return snowpackConfig
 
   return {
-    ...config,
-
-    install: [...config.install, 'svench'],
-
-    plugins: config.plugins.map(x =>
-      isSveltePlugin(x) ? wrapSveltePlugin(x, svenchOptions) : x
+    ...snowpackConfig,
+    plugins: snowpackConfig.plugins.map(
+      wrapSveltePlugin({ enabled, ...svenchOptions })
     ),
   }
 }

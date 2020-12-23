@@ -6,6 +6,7 @@ import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
 
 const production = !process.env.ROLLUP_WATCH;
+const isSvench = !!process.env.SVENCH;
 
 function serve() {
 	let server;
@@ -60,11 +61,11 @@ export default {
 
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
-		!production && serve(),
+		!isSvench && !production && serve(),
 
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
-		!production && livereload('public'),
+		!isSvench && !production && livereload('public'),
 
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify

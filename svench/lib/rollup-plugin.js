@@ -1,30 +1,31 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import { rollupPlugin as Routix } from 'routix/esm'
+import { rollupPlugin as Routix } from 'routix'
 
-import { pipe, mkdirp, mkdirpSync } from './util'
-import injectTransform from './transform'
-import createServer from './server'
-import { createIndex, _template } from './template'
-import Svenchify from './rollup-svenchify'
-import { ENTRY_PATH } from './const'
-import { createPluginParts } from './plugin-shared'
+import { pipe, mkdirp, mkdirpSync } from './util.js'
+import injectTransform from './transform.js'
+import createServer from './server.js'
+import { createIndex, _template } from './template.js'
+import { writeManifestSync } from './service-manifest.js'
+import Svenchify from './rollup-svenchify.js'
+import { createPluginParts } from './plugin-shared.js'
+import { finalizeRollupOptions } from './rollup-options.js'
 
-const entry = {
-  shadow: ENTRY_PATH,
-  shadowLight: path.resolve(__dirname, 'svench.shadow-light.js'),
-}
+// const entry = {
+//   shadow: ENTRY_PATH,
+//   shadowLight: path.resolve(__dirname, 'svench.shadow-light.js'),
+// }
 
 const tap = fn => x => (fn(x), x)
 
-const overrideInput = (override, addInput) => original => {
+const overrideInputOptions = ({ override, entryFile }) => original => {
   const options = { ...original }
   if (override) {
     // eslint-disable-next-line no-unused-vars
     const { output, ...inputOptions } = override
     Object.assign(options, inputOptions)
-    if (options.input === true || options.input === entry) {
-      options.input = ENTRY_PATH
+    if (options.input === true) {
+      options.input = entryFile
     }
     // plugins
     if (override.plugins) {
@@ -35,25 +36,23 @@ const overrideInput = (override, addInput) => original => {
       }
     }
   }
-  if (addInput) {
-    const target =
-      addInput === true || addInput === entry ? ENTRY_PATH : addInput
-    options.input = [original.input, target].flat().filter(Boolean)
-  }
   return options
 }
 
 let globalServer
 
 const createPlugin = ({
+  options,
   options: {
     enabled,
     watch,
-    manifestDir,
     extensions,
 
+    publicDir,
+    entryFile,
+    manifest,
+
     override = null,
-    addInput = false,
     preserveOutputFileName = true,
 
     index: indexCfg,
@@ -71,6 +70,10 @@ const createPlugin = ({
     return { name: 'svench (disabled)' }
   }
 
+  if (manifest) {
+    writeManifestSync(options)
+  }
+
   let server
 
   if (globalServer) {
@@ -82,8 +85,6 @@ const createPlugin = ({
       globalServer = server
     }
   }
-
-  mkdirpSync(path.resolve(manifestDir))
 
   let hotPlugin
 
@@ -100,13 +101,13 @@ const createPlugin = ({
 
   let started = false
 
+  // TODO script resolution etc probably been broken by the big plugin refactor
   const start = async (outputOptions = {}) => {
     if (started) return
 
     started = true
 
     const { file, dir } = outputOptions
-    const publicDir = serve && serve.public
 
     const { input } = inputOptions
     const entryName = Array.isArray(input) ? input[input.length - 1] : input
@@ -146,7 +147,12 @@ const createPlugin = ({
     const getIndex = indexCfg
       ? indexCfg === true
         ? _template({ script })
-        : await createIndex(indexCfg, { watch, script, onChange: hotReload })
+        : await createIndex(indexCfg, {
+            watch,
+            script,
+            onChange: hotReload,
+            publicDir,
+          })
       : null
 
     if (server) {
@@ -181,22 +187,15 @@ const createPlugin = ({
     options: pipe(
       tap(saveOriginalInput),
       tap(findHotPlugin),
-      overrideInput(override, addInput),
+      overrideInputOptions({ override, entryFile }),
       injectTransform({ extensions, routix }),
       tap(saveInputOptions)
     ),
 
     outputOptions(outputOptions) {
-      if (!override) return
-      originalOutputFile = outputOptions && outputOptions.file
-      return { ...outputOptions, ...override.output }
+      originalOutputFile = outputOptions.file
+      return (override && override.output) || outputOptions
     },
-
-    // async renderStart(outputOptions) {
-    //   await start(outputOptions).catch(err => {
-    //     this.error(err)
-    //   })
-    // },
 
     async generateBundle(outputOptions, bundle) {
       if (this.meta.rollupVersion.startsWith('1.')) {
@@ -223,9 +222,9 @@ const createPlugin = ({
       const rewriteOutputFile = async () => {
         // case: user config has input:string and output.file
         //
-        // we will change to output.dir, so Rollup will output the user's original
-        // entry point to `[name].js` or the like... and so we need to rename the
-        // produced file to what the user's system actually expects
+        // we will change to output.dir, so Rollup will output the user's
+        // original entry point to `[name].js` or the like... and so we need to
+        // rename the produced file to what the user's system actually expects
         //
         // NOTE this can't be done via Rollup's ways, because we can't pass a
         // function to entryFileNames
@@ -252,8 +251,14 @@ const createPlugin = ({
   }
 }
 
-export const plugin = pipe(createPluginParts, createPlugin)
-export const svench = plugin
+const createParts = opts =>
+  createPluginParts({
+    presets: 'svench/presets/rollup',
+    ...opts,
+    _finalizeOptions: finalizeRollupOptions,
+  })
+
+export const plugin = pipe(createParts, createPlugin)
 
 // export const svenchify = Svenchify(createPlugin)
 export const svenchify = Svenchify(plugin)
@@ -265,7 +270,7 @@ export const withSvench = (
   if (!enabled) return svelte
 
   return ({ preprocess, ...svelteOptions }) => {
-    const parts = createPluginParts({
+    const parts = createParts({
       preprocess,
       ...opts,
     })

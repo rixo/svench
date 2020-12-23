@@ -17,17 +17,18 @@ const start = (options, target = document.body, hot) => {
     },
   })
 
-  // feat: support for custom routes.js
-  // -- user default routes.js, if not provided
-  if (!options.routes) {
-    import('../routes.js')
-      .then(({ default: routes }) => {
-        app.$set({ routes })
-      })
-      .catch(err => {
-        console.error('Failed to load routes.js', err)
-      })
-  }
+  // TODO Rollup: default routes
+  // // feat: support for custom routes.js
+  // // -- user default routes.js, if not provided
+  // if (!options.routes) {
+  //   import('../routes.js')
+  //     .then(({ default: routes }) => {
+  //       app.$set({ routes })
+  //     })
+  //     .catch(err => {
+  //       console.error('Failed to load routes.js', err)
+  //     })
+  // }
 
   // recreate the whole app(s) if an HMR update touches this module
   if (hot) {

@@ -1,8 +1,7 @@
 import * as path from 'path'
 
-import { parseSvenchifyOptions } from './config'
-import { pipe, isRollupV1 } from './util'
-import { ENTRY_PATH } from './const'
+import { pipe, isRollupV1 } from './util.js'
+import { parseSvenchifyOptions } from './rollup-options.js'
 
 const SVENCH = Symbol('Svench')
 
@@ -106,10 +105,16 @@ export default SvenchPlugin => {
         config = await transform(config)
       }
 
-      {
-        const inputOverride = svench.override && svench.override.input
-        if (inputOverride) {
-          config.input = inputOverride === true ? ENTRY_PATH : inputOverride
+      // NOTE this is not functionnaly necessary because this work is done by
+      // the plugin anyway, however this helps with Rollup logs, or someone
+      // dumping svenchified config for debug purpose
+      if (svench.override) {
+        const { override } = svench
+        if (override.input) {
+          config.input = override.input
+        }
+        if (override.output) {
+          config.output = override.output
         }
       }
 
@@ -135,6 +140,9 @@ export default SvenchPlugin => {
     return configFunction && !isNollup ? getConfig : getConfig()
   }
 
+  // API:
+  //     svenchify('rollup.config.js', {...svenchifyOptions})
+  //     svenchify('rollup.config.js', x => x.client, {...svenchifyOptions})
   const svenchify = (source, transform, options) =>
     typeof transform === 'function'
       ? _svenchify(source, transform, parseSvenchifyOptions(options))

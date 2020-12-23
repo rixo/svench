@@ -11,7 +11,14 @@ const cleanExtensions = exts =>
 const parseExtensions = x =>
   Array.isArray(x) ? cleanExtensions(x) : cleanExtensions(x.split(','))
 
-const defaultExtensions = ['.svench', '.svench.svx', '.svench.svexy']
+// TODO should be in config.js, shouldn't it?
+const defaultExtensions = [
+  '.svench',
+  '.svench.svelte',
+  '.svench.md',
+  '.svench.svx',
+  '.svench.svexy',
+]
 
 const extensionMatcher = _extensions => {
   const extensions = parseExtensions(_extensions)

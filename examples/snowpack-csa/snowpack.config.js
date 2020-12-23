@@ -17,6 +17,7 @@ module.exports = {
   },
   devOptions: {
     open: 'none',
+    output: 'stream',
   },
   buildOptions: {
     /* ... */

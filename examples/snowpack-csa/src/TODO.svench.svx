@@ -6,14 +6,10 @@
 
   - [ ] Auto `resolveRouteImport`
 
-- [ ] routes.js store util
-
-```js
-import wrapper from 'svench/routes'
-import * as routes from './my/routes.js'
-export default hotRoutes(routes, import.meta.hot)
-```
-
 ## Svenchify
 
 - [ ] Auto default port (4242)
+
+## Snowpack HMR
+
+- [ ] Deleting a dynamically imported module triggers an update and causes a 404 
