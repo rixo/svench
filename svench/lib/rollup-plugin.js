@@ -2,7 +2,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import { rollupPlugin as Routix } from 'routix'
 
-import { pipe, mkdirp, mkdirpSync } from './util.js'
+import { pipe, mkdirp } from './util.js'
 import injectTransform from './transform.js'
 import createServer from './server.js'
 import { createIndex, _template } from './template.js'
