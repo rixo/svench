@@ -45,9 +45,10 @@ const _createIndex = async (
 ) => {
   const sourceFile = source && path.resolve(source)
   const outputFile =
-    write && write === true
+    write &&
+    (write === true
       ? path.resolve(publicDir, 'index.html')
-      : path.resolve(write)
+      : path.resolve(write))
 
   const generate = async () => {
     let contents = sourceFile
