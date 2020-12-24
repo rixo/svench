@@ -6,7 +6,8 @@ const wrap = (wrapSvelteConfig, modulePath, forceSvelteHot) => {
       ? 'rollup-plugin-svelte-hot'
       : modulePath
     const sveltePlugin = require(sveltePluginName)
-    return sveltePlugin(wrapSvelteConfig(config))
+    const wrappedConfig = wrapSvelteConfig(config)
+    return sveltePlugin(wrappedConfig)
   }
   plugin._IS_SVENCH_WRAPPED = true
   return {
