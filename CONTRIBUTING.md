@@ -1,4 +1,4 @@
-# Contributin to Svench
+# Contributing to Svench
 
 ## Installation
 
