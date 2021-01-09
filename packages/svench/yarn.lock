@@ -1669,6 +1669,11 @@ cheap-watch@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/cheap-watch/-/cheap-watch-1.0.2.tgz#bfa648aea6bcd15e9fe4dce4ac760ab81cd0133c"
 
+cheap-watch@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/cheap-watch/-/cheap-watch-1.0.3.tgz#3c4265718bcf8f1ae08f5e450f9f4693432e028e"
+  integrity sha512-xC5CruMhLzjPwJ5ecUxGu1uGmwJQykUhqd2QrCrYbwvsFYdRyviu6jG9+pccwDXJR/OpmOTOJ9yLFunVgQu9wg==
+
 check-error@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
@@ -6297,10 +6302,12 @@ rollup@^2.0.5:
   optionalDependencies:
     fsevents "~2.1.2"
 
-routix@^0.0.3-5:
-  version "0.0.3-5"
-  resolved "https://registry.yarnpkg.com/routix/-/routix-0.0.3-5.tgz#b3fbabf1a4912475d96d7faeb48bb685a1c6784a"
-  integrity sha512-G61yPS3qpfZnAjGvnWta0nRDx71h8Wpht6trrj4sA6Jz6S6z/9itFYBnd9M2A846jYAUpOwNhYxPZ6Xe6oZ9Aw==
+routix@^0.1.0-3:
+  version "0.1.0-3"
+  resolved "https://registry.yarnpkg.com/routix/-/routix-0.1.0-3.tgz#c287c1ef17ba65b7681603a782d31eff3256417a"
+  integrity sha512-u1QBtsI744pQwfnvpdSmivSUCXhenF1g9+s8reWi9TSmjGUsCARGhNJiQNSShEvhVzy6n9ro8zLbhjrHlyVdtw==
+  dependencies:
+    cheap-watch "^1.0.3"
 
 run-async@^2.2.0, run-async@^2.4.0:
   version "2.4.0"

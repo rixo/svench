@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { createRoutix } from 'routix/esm'
+import { createRoutix } from 'routix'
 
 import { parseOptions } from './config'
 import cachingPreprocess from './caching-preprocess'

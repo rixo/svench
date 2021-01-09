@@ -1,6 +1,6 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import { rollupPlugin as Routix } from 'routix/esm'
+import { rollupPlugin as Routix } from 'routix'
 
 import { pipe, mkdirp, mkdirpSync } from './util'
 import injectTransform from './transform'
