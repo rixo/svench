@@ -23,7 +23,7 @@
     "sirv-cli": "^0.4.4"
   },
   "scripts": {
-    "clean": "rm -r public/build public/svench",
+    "clean": "rm -r .svench/dist; rm -r tmp",
     "build": "rollup -c",
     "svench": "rollup --config rollup.config.svench.js --watch",
     "svench:nollup": "cross-env SVENCH=1 nollup",
