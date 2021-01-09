@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-git clone
+git clone git@github.com:rixo/svench.git
 cd svench
 git checkout next # development is active on `next` branch currently
 ```
@@ -14,7 +14,7 @@ git checkout next # development is active on `next` branch currently
 cd packages/svench
 yarn link
 yarn
-yarn dev # wathc & rebuild
+yarn dev # watch & rebuild
 
 # watch & rebuild only some parts
 #
@@ -33,7 +33,7 @@ yarn test --help # see all of Zoar's (the test runner) options
 
 #### Sub projects
 
-Svench is composed from multiple parts what have to work together...
+Svench is composed from multiple parts that have to work together...
 
 #### In Node
 
@@ -56,6 +56,7 @@ Svench is composed from multiple parts what have to work together...
 ### Example
 
 ```bash
+# (!) FROM SVENCH DIR
 cd example
 yarn
 yarn link svench
