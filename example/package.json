@@ -16,7 +16,7 @@
     "rollup-plugin-svelte-hot": "^0.7.1-0",
     "rollup-plugin-terser": "^5.1.2",
     "svelte": "^3.23.0",
-    "svench": "^0.0.8",
+    "svench": "^0.0.10-7",
     "zorax": "^0.0.8"
   },
   "dependencies": {
