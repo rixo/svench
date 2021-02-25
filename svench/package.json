@@ -28,8 +28,8 @@
     "app.js",
     "app.css.js",
     "themes",
-    "lib/rollup-svenchify.proxyquire.js",
-    "lib/rollup-svenchify.require.js"
+    "lib/svenchify.proxyquire.js",
+    "lib/svenchify.require.js"
   ],
   "bin": {
     "svench": "./cli.bin.js"
