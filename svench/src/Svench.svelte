@@ -126,7 +126,8 @@
 
   const prefetchWhenIdle = async (routes, isCurrent) => {
     await busy.idle()
-    for (const { import: fn } of routes) {
+    for (const route of routes) {
+      const { import: fn } = route
       if (!isCurrent()) return
       if (!fn) continue
       try {
@@ -134,7 +135,7 @@
         await fn()
       } catch (err) {
         // eslint-disable-next-line no-console
-        console.error(err)
+        console.error("Error prefetching route", route, err)
       }
     }
   }

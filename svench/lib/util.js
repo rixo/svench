@@ -9,15 +9,6 @@ export const noop = () => {}
 export const escapeRe = string =>
   string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&')
 
-export const log = {
-  /* eslint-disable no-console */
-  log: console.log.bind(console, '[svench]'),
-  error: console.error.bind(console, '[svench]'),
-  warn: console.warn.bind(console, '[svench]'),
-  info: console.info.bind(console, '[svench]'),
-  /* eslint-enable no-console */
-}
-
 export const mkdirp = async dir => {
   const parent = path.dirname(dir)
   if (parent === dir) return

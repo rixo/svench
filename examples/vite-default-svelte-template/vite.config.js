@@ -1,17 +1,18 @@
-const svelte = require('@svitejs/vite-plugin-svelte')
-const { defineConfig } = require('vite')
+import svelte from 'rollup-plugin-svelte-hot'
 
-module.exports = defineConfig(({ command, mode }) => {
+export default ({ command, mode }) => {
   const isProduction = mode === 'production'
+  const isServe = command === 'serve'
+  const hot = !isProduction && isServe
   return {
+    root: 'src',
     plugins: [
       svelte({
-        hot: !isProduction,
         emitCss: true
       })
     ],
     build: {
-      minify: isProduction
-    }
+      minify: isProduction,
+    },
   }
-})
+}

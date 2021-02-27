@@ -1,7 +1,6 @@
 import * as path from 'path'
 
 import { pipe, isRollupV1 } from './util.js'
-import { parseOptions } from './config.js'
 
 const serveDefaults = {
   host: 'localhost',
@@ -68,53 +67,13 @@ export const finalizeRollupOptions = pipe(
   })
 )
 
-export const parseSvenchifyOptions = ({
-  noMagic = false,
-  interceptSveltePlugin = !noMagic,
-  esm = !noMagic,
-
-  // force resolving Svelte plugin to rollup-plugin-svelte-hot with Svench,
-  // even if it is rollup-plugin-svelte that is required in the config file
-  //
-  // allows using HMR with Svench only
-  //
-  // 2020-12-22 stop forcing, instead hoping for svelte-hmr to be integrated
-  // into rollup-plugin-svelte (using rixo/rollup-plugin-svelte#svelte-hmr for
-  // now)
-  //
-  forceSvelteHot = false,
-
+export const parseRollupSvenchifyOptions = ({
+  presets = ['svench/presets/rollup', 'svench/presets/rollup-svenchify'],
   configFunction = !isRollupV1(),
-
-  svelte,
-
-  ...svench
-} = {}) => ({
-  svench: parseOptions({
-    enabled: true,
-    override: {
-      input: true,
-      output: true,
-    },
-    index: true,
-    serve: true,
-    presets: 'svench/presets/rollup',
-    ...svench,
-    _finalizeOptions: finalizeRollupOptions,
-  }),
-
-  svelte: {
-    // css: css => {
-    //   css.write('.svench/dist/bundle.css')
-    // },
-    emitCss: false,
-    hot: true, // TODO hmm :-/
-    ...svelte,
-  },
-
-  noMagic,
-  interceptSveltePlugin,
-  esm,
+  ...options
+}) => ({
+  presets,
   configFunction,
-  forceSvelteHot,
+  _finalizeOptions: finalizeRollupOptions,
+  ...options,
 })

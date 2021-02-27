@@ -1,4 +1,3 @@
-import * as fs from 'fs'
 import * as path from 'path'
 
 import { createPluginParts } from './plugin-shared.js'
@@ -6,14 +5,9 @@ import { createIndex } from './template.js'
 import { writeManifest } from './service-manifest.js'
 import { mkdirp } from './util.js'
 import { finalizeSnowpackOptions } from './snowpack-options.js'
+import { SNOWPACK_PLUGIN } from './const.js'
 
 const uniq = arr => [...new Set(arr)]
-
-const loadConfig = () => {
-  const svenchConfig = path.resolve('svench.config.js')
-  if (!fs.existsSync(svenchConfig)) return {}
-  return require.main.require(svenchConfig)
-}
 
 const resolveSveltePlugin = x =>
   typeof x === 'function' ? x : require.main.require(x)
@@ -82,16 +76,9 @@ const autoMount = ({ manifestDir, publicDir }, snowpackConfig) => {
 export const plugin = (snowpackConfig, pluginOptions = {}) => {
   const {
     svench: _legacySvenchUserOptions,
-    svenchOptions: svenchUserOptions = _legacySvenchUserOptions,
+    svenchOptions = _legacySvenchUserOptions,
     ...sveltePluginOptions
   } = pluginOptions
-
-  const { sveltePlugin = '@snowpack/plugin-svelte', ...svenchOptions } = {
-    ...loadConfig(),
-    ...svenchUserOptions,
-  }
-
-  const _pluginSvelte = resolveSveltePlugin(sveltePlugin)
 
   let resolveRouteImport = x => x
 
@@ -102,9 +89,15 @@ export const plugin = (snowpackConfig, pluginOptions = {}) => {
     _finalizeOptions: finalizeSnowpackOptions,
   })
 
+  const {
+    options: { enabled, sveltePlugin = '@snowpack/plugin-svelte' },
+  } = parts
+
+  const _pluginSvelte = resolveSveltePlugin(sveltePlugin)
+
   // --- Guard: Svench disabled ---
 
-  if (!parts.options.enabled) {
+  if (!enabled) {
     return _pluginSvelte(snowpackConfig, sveltePluginOptions)
   }
 
@@ -168,7 +161,7 @@ export const plugin = (snowpackConfig, pluginOptions = {}) => {
 
   return {
     ...hooks,
-    name: '@svench/snowpack',
+    name: SNOWPACK_PLUGIN,
     run: initSvench(parts),
   }
 }

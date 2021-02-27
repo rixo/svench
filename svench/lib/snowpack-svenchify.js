@@ -5,6 +5,7 @@
  *       ...
  *     })
  */
+import { SNOWPACK_PLUGIN } from './const.js'
 
 const isSveltePlugin = x =>
   Array.isArray(x) ? isSveltePlugin(x[0]) : x === '@snowpack/plugin-svelte'
@@ -12,10 +13,10 @@ const isSveltePlugin = x =>
 const wrapSveltePlugin = options => plugin => {
   if (!isSveltePlugin(plugin)) return plugin
   const [sveltePlugin, opts] = Array.isArray(plugin) ? plugin : [plugin, {}]
-  return ['svench/snowpack', { sveltePlugin, ...opts, svench: options }]
+  return [SNOWPACK_PLUGIN, { sveltePlugin, ...opts, svench: options }]
 }
 
-export default (snowpackConfig, svenchOptions = !!+process.env.SVENCH) => {
+export default (snowpackConfig, svenchOptions = true) => {
   const enabled =
     svenchOptions === true || (svenchOptions && svenchOptions.enabled)
 

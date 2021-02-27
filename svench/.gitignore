@@ -8,6 +8,8 @@ yarn-error.log
 /rollup.js.map
 /snowpack.js
 /snowpack.js.map
+/vite.js
+/vite.js.map
 /prism.js
 /themes/
 /app.*

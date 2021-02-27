@@ -1,7 +1,12 @@
 <script>
   import { View } from 'svench'
+  import App from './App.svelte'
 </script>
 
 <View name="index">
-  Index view
+  <App name="Svench" />
+</View>
+
+<View name="foo">
+  Foo
 </View>

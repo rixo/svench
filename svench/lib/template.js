@@ -2,9 +2,10 @@ import * as fs from 'fs'
 import * as path from 'path'
 import CheapWatch from 'cheap-watch'
 
-import { pipe, escapeRe, mkdirp } from './util'
+import { escapeRe, mkdirp } from './util'
 import { ENTRY_URL } from './const'
 import { parseIndexOptions } from './config'
+import Log from './log.js'
 
 export const _template = ({ script }) => () => `<!DOCTYPE html>
 <html lang="en">
@@ -74,6 +75,7 @@ const _createIndex = async (
       const dir = path.dirname(outputFile, { recursive: true })
       await mkdirp(dir)
       await fs.promises.writeFile(outputFile, contents, encoding)
+      Log.info('Written: %s*', outputFile)
     }
 
     return contents

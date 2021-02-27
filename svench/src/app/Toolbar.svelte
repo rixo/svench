@@ -57,14 +57,14 @@
       <input type="checkbox" bind:checked={$options.outline} />
       <span>Outline</span>
     </label>
-    <label class="svench-toolbar-select-label">
+    <label class="svench-toolbar-select-label" for={null}>
       <span>Canvas</span>
       <BackgroundSelect
         aliases={$options.backgroundAliases}
         colors={$options.canvasBackgrounds}
         bind:value={$options.canvasBackground} />
     </label>
-    <label class="svench-toolbar-select-label">
+    <label class="svench-toolbar-select-label" for={null}>
       <span>Background</span>
       <BackgroundSelect
         aliases={$options.backgroundAliases}

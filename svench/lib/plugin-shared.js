@@ -1,13 +1,23 @@
+import * as fs from 'fs'
 import * as path from 'path'
 import { createRoutix } from 'routix'
 
+import Log from './log.js'
+import { SVENCH_CONFIG_FILE } from './const.js'
 import { parseOptions } from './config.js'
 import cachingPreprocess from './caching-preprocess.js'
 import routixParser from './routix-parser.js'
 import { mkdirpSync } from './util.js'
 
-export const createPluginParts = arg => {
-  const options = parseOptions(arg)
+const loadSvenchConfig = () => {
+  const svenchConfig = path.resolve(SVENCH_CONFIG_FILE)
+  if (!fs.existsSync(svenchConfig)) return {}
+  // FIXME here's something ESM is not gonna love :/
+  return require.main.require(svenchConfig)
+}
+
+export const createPluginParts = argOptions => {
+  const options = parseOptions({ ...loadSvenchConfig(), ...argOptions })
 
   const {
     enabled,
@@ -39,6 +49,7 @@ export const createPluginParts = arg => {
   if (manifestDir) mkdirpSync(manifestDir)
 
   const routix = createRoutix({
+    log: Log.getLogger('routix'),
     merged: true,
     write: {
       routes: path.resolve(routesFile),

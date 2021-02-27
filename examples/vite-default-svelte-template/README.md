@@ -1,9 +1,15 @@
-# default svelte app template
-Created with `npx degit sveltejs/template`
+# First example of Svench with Vite
 
-adapted to vite by moving index.html to root and replacing rollup config with vite
+Copied, with light adaptations from : https://github.com/svitejs/svite/tree/main/packages/vite-plugin-svelte
 
-use yarn
+## Svench
+
+```bash
+yarn svench        # run with cli
+yarn svench:config # run with manual config
+```
+
+## Main app
 
 `yarn dev` starts dev server
 `yarn build` builds for production

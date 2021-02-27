@@ -1,14 +1,10 @@
 const path = require('path')
 const { svenchify } = require('svench/snowpack')
 
-// module.exports = svenchify(require('./snowpack.config.js'), true)
-module.exports = svenchify(require('./snowpack.config.js'), {
-  enabled: true,
-  svenchDir: '.svench',
-})
+module.exports = svenchify(require('./snowpack.config.js'))
 
 // module.exports = svenchify(require('./snowpack.config.js'), {
-//   sveltePlugin: require('@snowpack/plugin-svelte'),
+//   enabled: true,
 //
 //   svelte: {
 //     css: true, // CSS in JS
@@ -17,15 +13,13 @@ module.exports = svenchify(require('./snowpack.config.js'), {
 //   // The root dir that Svench will parse and watch.
 //   dir: './src',
 //
-//   manifestDir: '.svench/tmp',
-//
-//   svenchDir: '.svench',
+//   // svenchDir: '.svench',
 //
 //   override: {
 //     mount: {
 //       '.svench/public': { url: '/', static: true },
 //       public: { url: '/', static: true },
-//       '.svench': { url: '/_svench_' },
+//       '.svench/src': { url: '/_svench_' },
 //       src: { url: '/dist' },
 //     },
 //     devOptions: {
@@ -35,7 +29,7 @@ module.exports = svenchify(require('./snowpack.config.js'), {
 //
 //   resolveRouteImport: x => '/dist/' + path.relative('src', x),
 //
-//   index: true,
+//   // index: true,
 //   index: {
 //     source: 'public/index.html',
 //     replace: {

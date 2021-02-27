@@ -1,12 +1,10 @@
 import * as path from 'path'
 
-import { pipe, isRollupV1 } from './util.js'
-import { parseSvenchifyOptions } from './rollup-options.js'
+import { pipe } from './util.js'
+import { parseOptions } from './config.js'
 
-const SVENCH = Symbol('Svench')
-
-const PROXYQUIRE_MODULE = './lib/rollup-svenchify.proxyquire.js'
-const REQUIRE_MODULE = './lib/rollup-svenchify.require.js'
+const PROXYQUIRE_MODULE = '../lib/svenchify.proxyquire.cjs'
+const REQUIRE_MODULE = '../lib/svenchify.require.cjs'
 
 const defaultSvelteExtensions = ['.svelte']
 
@@ -19,24 +17,65 @@ const mergeExtensions = (...sources) => [
   ),
 ]
 
-const mergePreprocess = (...sources) => sources.flat().filter(Boolean)
+const mergePreprocessors = (...sources) => sources.flat().filter(Boolean)
 
-export default SvenchPlugin => {
-  const _svenchify = async (
+export const parseSvenchifyOptions = ({
+  noMagic = false,
+  interceptSveltePlugin = !noMagic,
+  esm = !noMagic,
+
+  // force resolving Svelte plugin to rollup-plugin-svelte-hot with Svench,
+  // even if it is rollup-plugin-svelte that is required in the config file
+  //
+  // allows using HMR with Svench only
+  //
+  // 2020-12-22 stop forcing, instead hoping for svelte-hmr to be integrated
+  // into rollup-plugin-svelte (using rixo/rollup-plugin-svelte#svelte-hmr for
+  // now)
+  //
+  forceSvelteHot = false,
+
+  svelte,
+
+  ...svench
+} = {}) => ({
+  svench: parseOptions(svench),
+
+  svelte: {
+    // css: css => {
+    //   css.write('.svench/dist/bundle.css')
+    // },
+    // emitCss: false,
+    hot: true, // TODO hmm :-/
+    ...svelte,
+  },
+
+  noMagic,
+  interceptSveltePlugin,
+  esm,
+  forceSvelteHot,
+})
+
+export default (
+  transformSvenchifyOptions,
+  createPluginParts,
+  customizeConfig,
+  finalizeConfig
+) => {
+  const doSvenchify = async (
     source,
     transform,
     {
       noMagic = false,
       interceptSveltePlugin = !noMagic,
       esm = !noMagic,
-      configFunction = !isRollupV1(),
       svelte,
       svench,
-      svench: { extensions, isNollup },
+      svench: { extensions },
       forceSvelteHot,
     }
   ) => {
-    process.env.SVENCH = process.env.SVENCH || 1
+    process.env.SVENCH = process.env.SVENCH || true
 
     const importConfig = wrapSvelteConfig => async source => {
       if (typeof source === 'string') {
@@ -68,14 +107,10 @@ export default SvenchPlugin => {
     }
 
     const getConfig = async (...args) => {
-      let preprocess
-
-      const preprocessor = {
-        markup: (...args) => $.preprocess.markup(...args),
-      }
+      let preprocessors
 
       const wrapSvelteConfig = config => {
-        preprocess = mergePreprocess(config.preprocess, svelte.preprocess)
+        preprocessors = mergePreprocessors(config.preprocess, svelte.preprocess)
         return {
           ...config,
           ...svelte,
@@ -85,7 +120,9 @@ export default SvenchPlugin => {
               config.extensions || defaultSvelteExtensions,
               extensions
             ),
-          preprocess: preprocessor,
+          preprocess: {
+            markup: (...args) => parts.preprocess.pull(...args),
+          },
         }
       }
 
@@ -101,61 +138,42 @@ export default SvenchPlugin => {
 
       let config = await loadConfig(source)
 
+      // === Config loaded (preprocess initialized) ===
+
+      const parts = createPluginParts({ preprocessors, ...svench })
+
       if (transform) {
         config = await transform(config)
       }
 
-      // NOTE this is not functionnaly necessary because this work is done by
-      // the plugin anyway, however this helps with Rollup logs, or someone
-      // dumping svenchified config for debug purpose
-      if (svench.override) {
-        const { override } = svench
-        if (override.input) {
-          config.input = override.input
-        }
-        if (override.output) {
-          config.output = override.output
-        }
-      }
-
-      if (!config.plugins) {
-        throw new Error('A Svelte plugin is required in your Rollup config')
-      }
-
-      config.plugins = config.plugins.filter(Boolean).map(x => {
-        if (!x[SVENCH]) return x
-        const {
-          [SVENCH]: { plugin, config },
-        } = x
-        return plugin(wrapSvelteConfig(config))
-      })
-
-      const { $, ...svenchPlugin } = SvenchPlugin({ preprocess, ...svench })
-
-      config.plugins.unshift(svenchPlugin)
+      config = customizeConfig(config, parts, { wrapSvelteConfig })
 
       return config
     }
 
-    return configFunction && !isNollup ? getConfig : getConfig()
+    return getConfig
   }
 
-  // API:
-  //     svenchify('rollup.config.js', {...svenchifyOptions})
-  //     svenchify('rollup.config.js', x => x.client, {...svenchifyOptions})
-  const svenchify = (source, transform, options) =>
-    typeof transform === 'function'
-      ? _svenchify(source, transform, parseSvenchifyOptions(options))
-      : _svenchify(source, null, parseSvenchifyOptions(transform || options))
+  const parseOptions = pipe(transformSvenchifyOptions, parseSvenchifyOptions)
 
-  svenchify.svelte = (plugin, config) => {
-    // avoid double wrapping
-    if (plugin._IS_SVENCH_WRAPPED) return plugin(config)
-    // try to avoid creating an useless instance (to avoid double warnings)
-    // NOTE check process.env.SVENCH just in time
-    const hooks = process.env.SVENCH ? {} : plugin(config)
-    hooks[SVENCH] = { plugin, config }
-    return hooks
+  // API:
+  //
+  //     svenchify('rollup.config.js', {...svenchifyOptions})
+  //
+  //     svenchify(configPath, transform = identity, {...svenchifyOptions})
+  //     eg. svenchify('rollup.config.js', x => x.client, {...svenchifyOptions})
+  //
+  const parseSvenchifyArgs = args =>
+    args.length === 2 ? [args[0], null, args[1]] : args
+
+  const svenchify = (...args) => {
+    const [source, transform, options = {}] = parseSvenchifyArgs(args)
+    const svenchifyOptions = parseOptions(options)
+    if (options._setOptions) {
+      options._setOptions(svenchifyOptions.svench)
+    }
+    const getConfig = doSvenchify(source, transform, svenchifyOptions)
+    return finalizeConfig(getConfig, svenchifyOptions)
   }
 
   return svenchify

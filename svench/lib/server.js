@@ -3,7 +3,7 @@ import * as path from 'path'
 import Sirv from 'sirv'
 import restana from 'restana'
 import httpProxy from 'http-proxy'
-import { log } from './util'
+import Log from './log.js'
 
 const parseMount = x => {
   if (typeof x === 'string') return { base: '/', dir: x }
@@ -29,9 +29,11 @@ export default (options, { mountEntry, isNollup }) => {
     return startedPromise.then(next).catch(next)
   }
 
-  const dirs = !dir ? [] : Array.isArray(dir) ? dir : [dir]
+  const sourceDirs = !dir ? [] : Array.isArray(dir) ? dir : [dir]
 
-  log.info(`Serving from ${dirs.join(', ')}`)
+  const dirs = sourceDirs.map(x => (x && x.dir) || x)
+
+  Log.info(`Serving from ${dirs.map(() => '%s*').join(', ')}`, ...dirs)
 
   let serveIndex
 
@@ -50,7 +52,7 @@ export default (options, { mountEntry, isNollup }) => {
   const app = restana({
     defaultRoute,
     errorHandler: (err, req, res) => {
-      log.error(err)
+      Log.error(err)
       res.send(err)
     },
   })
@@ -62,10 +64,10 @@ export default (options, { mountEntry, isNollup }) => {
   const readyPromise = app
     .start(port, host)
     .then(() => {
-      log.info(`Listening on http://${host}:${port}`)
+      Log.log(`Listening on http://${host}:${port}`)
     })
     .catch(err => {
-      log.error(err)
+      Log.error(err)
       throw err
     })
 
@@ -89,8 +91,7 @@ export default (options, { mountEntry, isNollup }) => {
           res.end(index)
         })
         .catch(err => {
-          // eslint-disable-next-line no-console
-          console.error('Failed to get index contents', err)
+          Log.error('Failed to get index contents', err)
           res.writeHead(500)
         })
     }
@@ -107,9 +108,10 @@ export default (options, { mountEntry, isNollup }) => {
       })
     }
 
-    for (const spec of dirs) {
-      const { base, dir } = parseMount(spec)
-      log.info('mount', base, '=>', dir)
+    const mounts = sourceDirs.map(parseMount)
+
+    for (const { base, dir } of mounts) {
+      Log.info('mount %s => %s*', base, dir)
       const sirv = Sirv(dir, { dev: true })
       const getPath = req =>
         base === req.url ? base : req.url.slice(base.length)
@@ -137,7 +139,7 @@ export default (options, { mountEntry, isNollup }) => {
       const mountDir = target.mount ? target.mount.replace(/[/*]*$/, '') : ''
       const route = mountDir + '*'
 
-      log.info(`Proxying to Nollup ${route} => ${target.host}:${target.port}`)
+      Log.info(`Proxying to Nollup ${route} => ${target.host}:${target.port}`)
 
       // app.all(route, proxy.web.bind(proxy))
       app.all(route, (req, res) => {

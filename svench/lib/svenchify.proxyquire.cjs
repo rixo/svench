@@ -1,11 +1,12 @@
 const proxyquire = require('proxyquire')
+const relative = require('require-relative')
 
 const wrap = (wrapSvelteConfig, modulePath, forceSvelteHot) => {
   const plugin = config => {
     const sveltePluginName = forceSvelteHot
       ? 'rollup-plugin-svelte-hot'
       : modulePath
-    const sveltePlugin = require(sveltePluginName)
+    const sveltePlugin = relative(sveltePluginName, process.cwd())
     const wrappedConfig = wrapSvelteConfig(config)
     return sveltePlugin(wrappedConfig)
   }

@@ -7,6 +7,8 @@
 import * as fs from 'fs'
 import dedent from 'dedent'
 
+import Log from './log.js'
+
 const quote = x => JSON.stringify(x)
 
 const hotDotJs = x => x.replace(/(\.js)?$/, '.hot$1')
@@ -60,6 +62,9 @@ const doWriteManifest = (
     '',
     'start(options, import.meta.hot)',
     '',
+    '// Some tools (e.g. Vite, Snowpack) do static code analysis and need',
+    '// to see this to enable HMR',
+    'if (false) import.meta.hot.accept()',
   ]
     .filter(x => x !== false)
     .join('\n')
@@ -81,6 +86,9 @@ const doWriteManifest = (
 
     export default hotRoutes(import.meta.hot, routes)
 
+    // Some tools (e.g. Vite, Snowpack) do static code analysis and need
+    // to see this to enable HMR
+    if (false) import.meta.hot.accept()
   `
 
   writeFile(hotRoutesFile, hotRoutesCode, encoding)
@@ -92,7 +100,7 @@ export const writeManifest = async options => {
   const writeFile = (file, ...args) => {
     promises.push(
       fs.promises.writeFile(file, ...args).then(() => {
-        console.log(`[svench] Written: ${file}`)
+        Log.info('Written: %s*', file)
       })
     )
   }
@@ -105,7 +113,7 @@ export const writeManifest = async options => {
 export const writeManifestSync = options => {
   const writeFile = (file, ...args) => {
     fs.writeFileSync(file, ...args)
-    console.log(`[svench] Written: ${file}`)
+    Log.info('Written: %s*', file)
   }
   doWriteManifest(writeFile, options)
 }

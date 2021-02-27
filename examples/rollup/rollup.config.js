@@ -4,7 +4,6 @@ import commonjs from '@rollup/plugin-commonjs'
 import livereload from 'rollup-plugin-livereload'
 import { terser } from 'rollup-plugin-terser'
 import hmr from 'rollup-plugin-hot'
-// import { svenchify } from 'svench/rollup'
 
 const watch = !!process.env.ROLLUP_WATCH
 const useLiveReload = !!process.env.LIVERELOAD
@@ -29,10 +28,11 @@ export default {
   },
 
   plugins: [
-    // svenchify.svelte(svelte, {
     svelte({
-      dev: !production,
-      css: false,
+      compilerOptions: {
+        dev: !production,
+      },
+      emitCss: false,
       hot: hot && {
         optimistic: true,
         noPreserveState: false,

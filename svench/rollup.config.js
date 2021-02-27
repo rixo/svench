@@ -10,6 +10,7 @@ import postcssNesting from 'postcss-nesting'
 import prefixer from 'postcss-prefix-selector'
 import atImport from 'postcss-import'
 import colorFunction from 'postcss-color-function'
+import builtins from 'builtins'
 
 const production = !process.env.ROLLUP_WATCH
 // const hot = !production
@@ -78,7 +79,11 @@ const configs = {
   },
 
   plugins: {
-    input: ['lib/rollup-plugin.js', 'lib/snowpack-plugin.js'],
+    input: [
+      'lib/rollup-plugin.js',
+      'lib/snowpack-plugin.js',
+      'lib/vite-plugin.js',
+    ],
     output: {
       format: 'cjs',
       dir: '.',
@@ -90,14 +95,20 @@ const configs = {
         banner: "require('source-map-support').install();",
       }),
     },
-    external: ['svelte/compiler', '@snowpack/plugin-svelte'],
+    external: [
+      'svelte/compiler',
+      '@snowpack/plugin-svelte',
+
+      // TODO there's some ESM shenanigans going on here >_<
+      // NOTE there's a build issue with Cheapwatch ESM
+      'cheap-watch',
+      'restana',
+      'trouter',
+      ...builtins,
+    ],
     plugins: [
       json(), // required by express
-      resolve({
-        preferBuiltins: true,
-        // NOTE there's a build issue with Cheapwatch ESM
-        mainFields: ['main', 'module'],
-      }),
+      resolve({ preferBuiltins: true }),
       commonjs(),
     ],
     watch: {

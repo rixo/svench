@@ -1,10 +1,4 @@
 {
-  "scripts": {
-    "start": "snowpack dev",
-    "build": "snowpack build",
-    "test": "web-test-runner \"src/**/*.test.js\"",
-    "svench": "svench"
-  },
   "dependencies": {
     "svelte": "^3.24.0"
   },
@@ -17,5 +11,12 @@
     "chai": "^4.2.0",
     "snowpack": "^2.18.4",
     "svench": "../../svench"
+  },
+  "scripts": {
+    "start": "snowpack dev",
+    "build": "snowpack build",
+    "test": "web-test-runner \"src/**/*.test.js\"",
+    "svench:cli": "svench",
+    "svench:config": "snowpack dev --config snowpack.config.svench.js"
   }
 }

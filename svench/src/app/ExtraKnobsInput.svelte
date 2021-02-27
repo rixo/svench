@@ -7,7 +7,7 @@
   $: label = field.label || field.name
 </script>
 
-<label>
+<label for={null}>
   <span>{field.label || field.name}</span>
   {#if type === 'number'}
     <input type="number" bind:value={$knobs[field.name]} {...props} />

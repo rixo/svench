@@ -53,10 +53,50 @@ Svench is composed from multiple parts what have to work together...
 
 - `src/app/prism.js` A prebuilt version of Prism (syntax highlighter) that works well with Svench, including a selection of plugin (like Svelte highlighting) and embedded CSS.
 
-### Example
+### Examples
+
+#### Vite
 
 ```bash
-cd example
+cd examples/vite-default-svelte-template
+yarn
+yarn link svench # optional
+# with cli:
+yarn svench
+```
+
+#### Snowpack
+
+```bash
+cd examples/snowpack-csa
+yarn
+yarn link svench # optional
+# "manual" setup:
+yarn svench:config
+# start with cli:
+yarn svench:cli
+# or run cli directly:
+yarn svench
+```
+
+#### Rollup (from sveltejs/template)
+
+```bash
+cd examples/svelte-template
+yarn
+yarn link svench # optional
+# "manual" setup:
+yarn svench:config
+# start with cli:
+yarn svench:cli
+# or run cli directly:
+yarn svench
+```
+
+### Rollup (legacy example)
+
+```bash
+cd examples/rollup
 yarn
 yarn link svench
 yarn svench # Rollup + rollup-plugin-hot

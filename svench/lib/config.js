@@ -1,6 +1,11 @@
 import * as path from 'path'
 
 import { pipe } from './util.js'
+import { maybeDump } from './dump.js'
+
+import { importDefaultRelative } from './import-relative.cjs'
+
+const ALREADY_PARSED = Symbol('Svench: already parsed options')
 
 const serveDefaults = {
   host: 'localhost',
@@ -17,30 +22,94 @@ export const parseIndexOptions = ({
   replace = {},
 } = {}) => ({ source, write, encoding, replace })
 
-const applyPresets = ({ ...options }) => {
-  const { presets, requirePreset = require.main.require } = options
-
-  if (!presets) return options
-
-  const resolvePreset = preset =>
-    typeof preset === 'string' ? requirePreset(preset) : preset
-
-  return Array.isArray(presets)
-    ? presets.map(resolvePreset).reduce((opts, fn) => fn(opts), options)
-    : resolvePreset(presets)(options)
+// for use in options pipelines
+const maybeDumpOptions = key => options => {
+  maybeDump(key, options && options.dump, options)
+  return options
 }
 
-const finalizeOptions = options => {
-  const finalizer = options._finalizeOptions
-  if (!finalizer) return options
-  return finalizer(options)
-}
+const ensureArray = x => (!x ? x : Array.isArray(x) ? x : [x])
 
-const validateOptions = ({ preset, presets, ...options }) => {
+const applyPresets = ({ preset, presets, ...options }) => {
+  const { cwd } = options
+
   if (preset && presets) {
     throw new Error("Can't use both preset and presets")
   }
+
+  const resolved = presets || preset
+
+  if (!resolved) return options
+
+  const presetArray = ensureArray(resolved).filter(Boolean)
+
+  const requirePreset = id => importDefaultRelative(id, cwd)
+
+  const resolvePreset = preset =>
+    typeof preset === 'string'
+      ? requirePreset(preset)
+      : Array.isArray(preset)
+      ? preset.map(resolvePreset)
+      : preset
+
+  return presetArray
+    .map(resolvePreset)
+    .flat()
+    .filter(Boolean)
+    .reduce((opts, fn) => fn(opts), { ...options, presets: presetArray })
+}
+
+const customizer = customizerOpt => options => {
+  const customize = options[customizerOpt]
+  if (!customize) return options
+  return customize(options)
+}
+
+const prepareOptions = customizer('_prepareOptions')
+
+const finalizeOptions = customizer('_finalizeOptions')
+
+const validateOptions = ({ preset, presets, ...options }) => {
   return { ...options, presets: presets || preset }
+}
+
+const withCwd = ({ cwd = process.cwd(), ...opts }) => ({ cwd, ...opts })
+
+const dumpFromEnv = ({ dump = process.env.DUMP, ...opts }) => ({
+  dump,
+  ...opts,
+})
+
+const resolveDir = (cwd, base) => dir =>
+  path.isAbsolute(dir)
+    ? dir
+    : dir.startsWith('./')
+    ? path.join(cwd, dir)
+    : path.join(base, dir)
+
+const resolveDirs = ({
+  cwd,
+  // a directory to contains all Svench generated things (or even merely
+  // _related_ -- could include user created files)
+  svenchDir: _svenchDir = '.svench',
+  manifestDir = 'src',
+  publicDir = 'public',
+  distDir = 'build',
+  ...config
+}) => {
+  if (_svenchDir.startsWith('./')) {
+    throw new Error("svenchDir can't be a relative path: " + _svenchDir)
+  }
+  const svenchDir = resolveDir(cwd, cwd)(_svenchDir)
+  const resolve = resolveDir(cwd, svenchDir)
+  publicDir = resolve(publicDir)
+  return {
+    ...config,
+    svenchDir,
+    manifestDir: resolve(manifestDir),
+    publicDir,
+    distDir: resolve(distDir),
+  }
 }
 
 const castOptions = ({
@@ -48,7 +117,7 @@ const castOptions = ({
 
   presets,
 
-  enabled = !!process.env.SVENCH,
+  enabled = !!+process.env.SVENCH,
 
   watch = false,
 
@@ -56,13 +125,15 @@ const castOptions = ({
 
   ignore = path => /(?:^|\/)(?:node_modules|\.git)\//.test(path),
 
+  write = true,
+
   // a directory to contains all Svench generated things (or even merely
   // _related_ -- could include user created files)
-  svenchDir = 'node_modules/.cache/svench',
+  svenchDir,
 
-  manifestDir = path.join(svenchDir, 'src'),
-  publicDir = path.join(svenchDir, 'public'),
-  distDir = path.join(publicDir, 'build'),
+  manifestDir,
+  publicDir,
+  distDir,
 
   entryFileName = 'svench.js',
   routesFileName = 'routes.js',
@@ -78,6 +149,9 @@ const castOptions = ({
 
   // overrides of Svelte plugin options
   svelte,
+
+  // Allow to specify a custom Svelte plugin
+  sveltePlugin,
 
   manifest = true,
 
@@ -110,6 +184,12 @@ const castOptions = ({
 
   // these extensions are kept in auto generated titles
   keepTitleExtensions = ['.md'],
+
+  // debugging
+  dump,
+
+  // unknown options... who knows?
+  ..._
 }) => ({
   _finalizeOptions,
   presets,
@@ -130,16 +210,21 @@ const castOptions = ({
   extensions,
   override,
   svelte,
+  sveltePlugin,
   manifest: manifest && {
     css: 'js',
     ui: 'svench/src/app/index.js', // TODO move to 'svench/app'
-    write: true,
+    write,
     ...manifest,
   },
   mountEntry,
-  index,
+  index: index && {
+    write,
+    ...index,
+  },
   serve: serve && {
     ...serveDefaults,
+    port,
     public: publicDir,
     ...serve,
   },
@@ -149,13 +234,41 @@ const castOptions = ({
   autoComponentIndex,
   autoSections,
   keepTitleExtensions,
+  dump,
+  _,
 })
 
-export const parseOptions = pipe(
+// to prevent extraneous parsing
+const earMark = config => {
+  config[ALREADY_PARSED] = true
+  return config
+}
+
+const doParseOptions = pipe(
+  // maybeDumpOptions('input:options'),
+  dumpFromEnv,
+  prepareOptions,
+  withCwd,
   validateOptions,
   applyPresets,
+  maybeDumpOptions(['preset:options', 'presets:options']),
+  resolveDirs,
+  maybeDumpOptions('resolveDirs:options'),
   castOptions,
   // finalize -- offers an opportunity to tooling (e.g. snowpack) specific
   // plugins to customize, or validated options
-  finalizeOptions
+  finalizeOptions,
+  earMark
 )
+
+export const mergePresets = (options, presets = []) => {
+  if (!options) return options
+  if (options === true) return { presets }
+  const existing = ensureArray(options.presets || options.preset || [])
+  return { ...options, presets: [...existing, ...presets] }
+}
+
+export const parseOptions = options => {
+  if (options && options[ALREADY_PARSED]) return options
+  return doParseOptions(options)
+}

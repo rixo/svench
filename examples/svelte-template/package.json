@@ -1,25 +1,29 @@
 {
   "name": "svelte-app",
   "version": "1.0.0",
-  "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "start": "sirv public",
-    "svench": "cross-env SVENCH=1 rollup -wc rollup.config.svench.js"
-  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "cross-env": "^7.0.3",
+    "nollup": "^0.15.2",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^3.0.0",
+    "rollup-plugin-hot-nollup": "^0.1.2",
     "rollup-plugin-livereload": "^2.0.0",
-    "rollup-plugin-svelte": "rixo/rollup-plugin-svelte#svelte-hmr",
+    "rollup-plugin-svelte-hot": "^1.0.0-1",
     "rollup-plugin-terser": "^7.0.0",
     "svelte": "^3.0.0",
-    "svench": "^0.0.9"
+    "svench": "../../svench/"
   },
   "dependencies": {
     "sirv-cli": "^1.0.0"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "sirv public",
+    "svench:plugin": "cross-env SVENCH=1 nollup -c rollup.config.svench.js",
+    "svench:plugin:rollup": "cross-env SVENCH=1 rollup -wc rollup.config.svench.js",
+    "svench:cli": "svench"
   }
 }

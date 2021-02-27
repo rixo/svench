@@ -6,4 +6,11 @@
 
 .DS_Store
 
-tmp/
+# Svench is ignored for demo purposes...
+/.svench/src/
+/.svench/public/
+
+# Actually, I would even recommend keeping the whole `.svench` directory under
+# version control, to track change in your Svench structure, caused by changes
+# in your `.svench` files and/or Svench version updates. A diff can surely help
+# with troubleshooting, sometimes.

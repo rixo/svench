@@ -9,19 +9,19 @@ const watch = !!process.env.ROLLUP_WATCH
 const useLiveReload = !!process.env.LIVERELOAD
 const hot = watch && !useLiveReload
 
-const dir = path.resolve(process.env.SVENCH_DIR || '')
+const svenchDir = path.resolve(process.env.SVENCH_DIR || '.svench')
 const port = process.env.SVENCH_PORT || 4242
-const manifestDir = dir && path.join(dir, 'tmp')
+const manifestDir = svenchDir && path.join(svenchDir, 'tmp')
 const svenchDist = process.env.SVENCH_DIR
   ? path.join(process.env.SVENCH_DIR, 'tmp/dist')
   : '.svench/dist'
 
 export default svenchify('./rollup.config.js', {
   // The root dir that Svench will parse and watch.
-  dir,
-  manifestDir,
+  svenchDir,
 
   svelte: {
+    // TODO this is legacy plugin API
     css: css => {
       css.write(path.join(svenchDist, 'bundle.css'))
     },
@@ -30,7 +30,8 @@ export default svenchify('./rollup.config.js', {
   // Example: code splitting with ES modules
   override: {
     // replace input with a Svench entry point (here a custom one)
-    input: '.svench/svench.js',
+    // input: '.svench/svench.js',
+    input: true,
 
     output: {
       // change output format to ES module
