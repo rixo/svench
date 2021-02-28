@@ -1,0 +1,21 @@
+# TODO
+
+- [ ] Can't watch from project root (Snowpack doesn't process the event apparently)
+
+- [ ] Automatic `mount` from Svench's `dir`
+
+  - [ ] Auto `resolveRouteImport`
+
+## Svenchify
+
+- [ ] Auto default port (4242)
+
+## Snowpack HMR
+
+- [ ] Deleting a dynamically imported module triggers an update and causes a 404
+
+- [ ] Snowpack mixes up Foo.svench and Foo.svelte (and Foo.js too!)
+
+- [ ] Can't watch node_modules? (for node_modules/.cache/svench/src)
+
+- [ ] Can't watch root? (because of node_modules?)

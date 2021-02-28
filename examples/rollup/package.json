@@ -1,0 +1,44 @@
+{
+  "name": "svelte-app",
+  "version": "1.0.0",
+  "devDependencies": {
+    "@rixo/eslint-config-svelte": "^0.8.1",
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "@rollup/plugin-replace": "^2.3.3",
+    "cross-env": "^6.0.3",
+    "mdsvex": "^0.8.9",
+    "nollup": "^0.14.4",
+    "prismjs": "^1.22.0",
+    "rollup": "^2.35.1",
+    "rollup-plugin-delete": "^1.2.0",
+    "rollup-plugin-hot": "^0.1.1",
+    "rollup-plugin-livereload": "^1.0.0",
+    "rollup-plugin-postcss-hot": "^0.0.4",
+    "rollup-plugin-svelte-hot": "^1.0.0-0",
+    "rollup-plugin-terser": "^5.1.2",
+    "svelte": "^3.31.0",
+    "svench": "../../svench/",
+    "zorax": "^0.0.8"
+  },
+  "dependencies": {
+    "cheap-watch": "^1.0.3",
+    "sirv-cli": "^0.4.4"
+  },
+  "scripts": {
+    "clean": "rm -r public/build public/svench",
+    "build": "rollup -c",
+    "svench:config": "rollup --config rollup.config.svench.js --watch",
+    "svench:nollup": "cross-env SVENCH=1 nollup",
+    "svench:iife": "cross-env SVENCH=1 rollup -w --config rollup.config.svelte-template.js",
+    "svench:single": "cross-env SVENCH=1 rollup -w --config rollup.config.single-build.js",
+    "svench:livereload": "routify --extensions svench,svench.svx --pages src --child-process='svench:start:livereload'",
+    "svench:start": "cross-env SVENCH=1 rollup -c -w",
+    "svench:start:livereload": "cross-env SVENCH=1 LIVERELOAD=1 rollup -c -w",
+    "dev:rollup": "rollup -c -w",
+    "dev:livereload": "cross-env LIVERELOAD=1 rollup -c -w",
+    "dev": "echo; echo '(!) For this demo, you probably want to run yarn svench (run yarn dev:yes, if really...)'; echo",
+    "dev:yes": "npm run dev:rollup",
+    "start": "sirv public"
+  }
+}

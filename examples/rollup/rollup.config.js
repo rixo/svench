@@ -1,0 +1,89 @@
+import svelte from 'rollup-plugin-svelte-hot'
+import resolve from '@rollup/plugin-node-resolve'
+import commonjs from '@rollup/plugin-commonjs'
+import livereload from 'rollup-plugin-livereload'
+import { terser } from 'rollup-plugin-terser'
+import hmr from 'rollup-plugin-hot'
+
+const watch = !!process.env.ROLLUP_WATCH
+const useLiveReload = !!process.env.LIVERELOAD
+
+const isTest = process.env.NODE_ENV === 'test'
+const dev = watch || useLiveReload
+const production = !dev && !isTest
+
+const hot = watch && !useLiveReload
+const isSvench = !!process.env.SVENCH
+
+const spa = true
+
+export default {
+  input: 'src/main.js',
+
+  output: {
+    sourcemap: true,
+    format: 'iife',
+    file: 'public/build/bundle.js',
+    name: 'app',
+  },
+
+  plugins: [
+    svelte({
+      compilerOptions: {
+        dev: !production,
+      },
+      emitCss: false,
+      hot: hot && {
+        optimistic: true,
+        noPreserveState: false,
+        // noDisableCss: true,
+      },
+    }),
+
+    resolve({
+      browser: true,
+      // dedupe: ['svelte', 'svelte/internal'],
+      dedupe: importee =>
+        importee === 'svelte' || importee.startsWith('svelte/'),
+    }),
+    commonjs(),
+
+    !isSvench && dev && serve(),
+
+    useLiveReload && livereload('public'),
+
+    !isTest &&
+      hmr({
+        hot: !isTest,
+        host: '0.0.0.0',
+        public: 'public',
+        inMemory: true,
+        compatModuleHot: !hot, // for terser
+      }),
+
+    production && terser(),
+  ],
+  watch: {
+    clearScreen: false,
+  },
+}
+
+function serve() {
+  let started = false
+  return {
+    name: 'svelte/template:serve',
+    writeBundle() {
+      if (!started) {
+        started = true
+        const flags = ['run', 'start', '--', '--dev']
+        if (spa) {
+          flags.push('--single')
+        }
+        require('child_process').spawn('npm', flags, {
+          stdio: ['ignore', 'inherit', 'inherit'],
+          shell: true,
+        })
+      }
+    },
+  }
+}

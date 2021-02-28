@@ -1,0 +1,28 @@
+extends:
+  - '@rixo/svelte'
+
+overrides:
+  - files: ["rollup.config.js", "lib/**", "cli/**", "rollup.js", "presets/**"]
+    env:
+      node: true
+  - files: ["**/*.svelte", "**/*.svench"]
+    rules:
+      no-unused-expressions: off
+  - files: ["test/**/*"]
+    env:
+      node: true
+    globals:
+      test: true
+      fixture: true
+    rules:
+      no-unused-expressions: off
+
+# settings:
+#   svelte3/compiler-options:
+#   customElement: true
+#   svelte3/enabled: true
+#   svelte3/ignore-warnings: false
+#   svelte3/lint-template: false
+
+rules:
+  no-unused-expressions: warn

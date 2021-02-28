@@ -1,15 +1,2 @@
-/dist/
-/node_modules/
 yarn-error.log
-*.bak.*
-/tmp/
-
-/rollup.js
-/rollup.js.map
-/prism.js
-/themes/
-/app.*
-/src/util-esm.js
-/src/util-esm.js.map
-
-/test/fixtures/**/tmp/
+*.bak
