@@ -62,7 +62,8 @@ Log.isEnabled = level => Log[levelMethods[level]] !== noop
 
 Log.inspect = (...args) => {
   const x = args.pop()
-  Log.log(...args, inspect(x, { depth: 999, colors: process.stdout.isTTY }))
+  // eslint-disable-next-line no-console
+  console.log(...args, inspect(x, { depth: 999, colors: process.stdout.isTTY }))
 }
 
 Log.setLevel = level => {

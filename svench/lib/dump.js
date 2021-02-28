@@ -2,8 +2,6 @@
  * Debug dump util.
  */
 
-import { inspect } from 'util'
-
 import Log from './log.js'
 
 const get = (o, path) => {
@@ -13,7 +11,7 @@ const get = (o, path) => {
 
 const dumpAt = (o, path) => {
   const x = get(o, path)
-  Log.log(inspect(x, { colors: true, depth: 999 }))
+  Log.inspect(x)
   process.exit()
 }
 
