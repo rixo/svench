@@ -51,10 +51,9 @@ export default async ({
   const command = 'serve'
 
   const [{ createServer }, { svenchify }] = await Promise.all(
-    ['vite', 'svench/vite'].map(async id => {
-      const m = await import(relative.resolve(id, cwd))
-      return m.default || m
-    })
+    ['vite', 'svench/vite'].map(
+      async id => await import(relative.resolve(id, cwd))
+    )
   )
 
   const svenchified = svenchify(configFile, {
