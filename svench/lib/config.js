@@ -7,6 +7,8 @@ import { importDefaultRelative } from './import-relative.cjs'
 
 const ALREADY_PARSED = Symbol('Svench: already parsed options')
 
+const POST = Symbol('Svench: presets post processors')
+
 const serveDefaults = {
   host: 'localhost',
   port: 4242,
@@ -30,18 +32,22 @@ const maybeDumpOptions = key => options => {
 
 const ensureArray = x => (!x ? x : Array.isArray(x) ? x : [x])
 
-const applyPresets = ({ preset, presets, ...options }) => {
+export const mergePresets = (options, presets = []) => {
+  if (!options) return options
+  if (options === true) return { presets }
+  const existing = ensureArray(options.presets || options.preset || [])
+  return { ...options, presets: [...existing, ...presets] }
+}
+
+const runPresets = (presets, options) =>
+  presets.reduce((o, f) => f(o) || o, options)
+
+const applyPresets = ({ presets, ...options }) => {
   const { cwd } = options
 
-  if (preset && presets) {
-    throw new Error("Can't use both preset and presets")
-  }
+  if (!presets) return options
 
-  const resolved = presets || preset
-
-  if (!resolved) return options
-
-  const presetArray = ensureArray(resolved).filter(Boolean)
+  const presetArray = ensureArray(presets).filter(Boolean)
 
   const requirePreset = id => importDefaultRelative(id, cwd)
 
@@ -52,32 +58,48 @@ const applyPresets = ({ preset, presets, ...options }) => {
       ? preset.map(resolvePreset)
       : preset
 
-  return presetArray
+  const hooks = ['pre', 'svenchify', 'transform', 'post']
+
+  const stages = Object.fromEntries(hooks.map(key => [key, []]))
+
+  presetArray
     .map(resolvePreset)
-    .flat()
+    .flat(Infinity)
     .filter(Boolean)
-    .reduce((opts, fn) => fn(opts), { ...options, presets: presetArray })
+    .forEach(preset => {
+      for (const key of hooks) {
+        if (preset[key]) stages[key].push(preset[key])
+      }
+      if (typeof preset === 'function') stages.transform.push(preset)
+    })
+
+  options[POST] = stages.post.flat(Infinity).filter(Boolean)
+
+  const pipeline = ['pre', 'svenchify', 'transform']
+    .map(key => stages[key])
+    .flat(Infinity)
+    .filter(Boolean)
+
+  return runPresets(pipeline, options)
 }
 
-const customizer = customizerOpt => options => {
-  const customize = options[customizerOpt]
+const customizer = prop => ({ [prop]: customize, ...options }) => {
   if (!customize) return options
-  return customize(options)
+  return runPresets(customize, options)
 }
 
-const prepareOptions = customizer('_prepareOptions')
-
-const finalizeOptions = customizer('_finalizeOptions')
-
-const validateOptions = ({ preset, presets, ...options }) => {
-  return { ...options, presets: presets || preset }
-}
+const applyPresetsPost = customizer(POST)
 
 const withCwd = ({ cwd = process.cwd(), ...opts }) => ({ cwd, ...opts })
 
-const dumpFromEnv = ({ dump = process.env.DUMP, ...opts }) => ({
+const withEnv = ({
+  dump = process.env.DUMP,
+  isNollup = !!+process.env.NOLLUP,
+  ...options
+}) => ({
   dump,
-  ...opts,
+  isNollup,
+  ...options,
 })
 
 const resolveDir = (cwd, base) => dir =>
@@ -113,10 +135,6 @@ const resolveDirs = ({
 }
 
 const castOptions = ({
-  _finalizeOptions,
-
-  presets,
-
   enabled = !!+process.env.SVENCH,
 
   watch = false,
@@ -144,8 +162,10 @@ const castOptions = ({
   // (path: string) => (resolvedPath: string)
   resolveRouteImport,
 
-  // overrides of Rollup / Snowpack config
-  override = false,
+  // overrides of Rollup / Vite / Snowpack config
+  rollup = null,
+  vite = null,
+  snowpack = null,
 
   // overrides of Svelte plugin options
   svelte,
@@ -188,11 +208,11 @@ const castOptions = ({
   // debugging
   dump,
 
+  [POST]: postPresets,
+
   // unknown options... who knows?
   ..._
 }) => ({
-  _finalizeOptions,
-  presets,
   enabled,
   watch,
   dir,
@@ -208,7 +228,9 @@ const castOptions = ({
   port,
   resolveRouteImport,
   extensions,
-  override,
+  rollup,
+  vite,
+  snowpack,
   svelte,
   sveltePlugin,
   manifest: manifest && {
@@ -235,6 +257,7 @@ const castOptions = ({
   autoSections,
   keepTitleExtensions,
   dump,
+  [POST]: postPresets,
   _,
 })
 
@@ -244,31 +267,61 @@ const earMark = config => {
   return config
 }
 
+// TODO implement? throw away?
+//
+// const mergeableArrayOptions = ['presets', 'dir', 'ignore', 'extensions']
+//
+// const mergeableOptions = [
+//   // dev server
+//   'rollup',
+//   'vite',
+//   'snowpack',
+//   // svelte options
+//   'svelte',
+//   // svench
+//   'manifest',
+//   'index',
+//   'serve',
+// ]
+//
+// export const mergeOptions = (a, b) => {
+//   const merged = { ...a, ...b }
+//   for (const opt of mergeableArrayOptions) {
+//     const ax = a[opt]
+//     const bx = b[opt]
+//     if (ax == null && bx == null) continue
+//     merged[opt] = [...new Set([ax, bx].filter(Boolean).flat())]
+//   }
+//   for (const opt of mergeableOptions) {
+//     const bx = b[opt]
+//     if (bx === false) {
+//       merged[opt] = false
+//       continue
+//     }
+//     const a_exists = a.hasOwnProperty(opt)
+//     const b_exists = b.hasOwnProperty(opt)
+//     if (!a_exists && !b_exists) continue
+//     const ax = a[opt]
+//     merged[opt] = (ax || bx) && { ...ax, ...bx }
+//   }
+//   return merged
+// }
+
 const doParseOptions = pipe(
-  // maybeDumpOptions('input:options'),
-  dumpFromEnv,
-  prepareOptions,
+  maybeDumpOptions('input:options'),
+  withEnv,
   withCwd,
-  validateOptions,
   applyPresets,
   maybeDumpOptions(['preset:options', 'presets:options']),
   resolveDirs,
   maybeDumpOptions('resolveDirs:options'),
   castOptions,
-  // finalize -- offers an opportunity to tooling (e.g. snowpack) specific
-  // plugins to customize, or validated options
-  finalizeOptions,
-  earMark
+  applyPresetsPost,
+  earMark,
+  maybeDumpOptions('options')
 )
 
-export const mergePresets = (options, presets = []) => {
-  if (!options) return options
-  if (options === true) return { presets }
-  const existing = ensureArray(options.presets || options.preset || [])
-  return { ...options, presets: [...existing, ...presets] }
-}
-
-export const parseOptions = options => {
+export const resolveOptions = options => {
   if (options && options[ALREADY_PARSED]) return options
   return doParseOptions(options)
 }

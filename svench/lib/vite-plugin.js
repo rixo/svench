@@ -6,10 +6,7 @@ import { VITE_PLUGIN_NAME } from './const.js'
 import { maybeDump } from './dump.js'
 import Svenchify from './svenchify.js'
 
-import {
-  finalizeViteOptions,
-  parseViteSvenchifyOptions,
-} from './vite-options.js'
+const defaultPresets = ['svench/presets/vite']
 
 const runtimeDeps = [
   'navaid',
@@ -49,12 +46,6 @@ const initSvench = async ({ options, routix }, { isDev }) => {
 
   await Promise.all([runIndex(), runManifest(), startRoutix()])
 }
-
-const createParts = svenchOptions =>
-  createPluginParts({
-    ...svenchOptions,
-    _finalizeOptions: finalizeViteOptions,
-  })
 
 const createPlugin = parts => {
   const {
@@ -96,11 +87,16 @@ const createPlugin = parts => {
   }
 }
 
-export const plugin = pipe(createParts, createPlugin)
+const svenchVitePlugin = pipe(
+  options => ({ presets: defaultPresets, ...options }),
+  createPluginParts,
+  createPlugin
+)
+
+export default svenchVitePlugin
 
 export const svenchify = Svenchify(
-  parseViteSvenchifyOptions,
-  createParts,
+  defaultPresets,
   ({ plugins, ...config }, parts) => {
     if (!plugins) {
       throw new Error('A Svelte plugin is required in your Vite plugins')
@@ -115,5 +111,3 @@ export const svenchify = Svenchify(
   },
   getConfig => getConfig
 )
-
-export default svenchify

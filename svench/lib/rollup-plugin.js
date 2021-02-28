@@ -2,7 +2,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import { rollupPlugin as Routix } from 'routix'
 
-import { pipe, mkdirp } from './util.js'
+import { tap, pipe, mkdirp } from './util.js'
 import { maybeDump } from './dump.js'
 import injectTransform from './transform.js'
 import createServer from './server.js'
@@ -10,33 +10,24 @@ import { createIndex, _template } from './template.js'
 import { writeManifestSync } from './service-manifest.js'
 import Svenchify from './svenchify.js'
 import { createPluginParts } from './plugin-shared.js'
-import {
-  parseRollupSvenchifyOptions,
-  finalizeRollupOptions,
-} from './rollup-options.js'
 
-// const entry = {
-//   shadow: ENTRY_PATH,
-//   shadowLight: path.resolve(__dirname, 'svench.shadow-light.js'),
-// }
+const defaultPresets = 'svench/presets/rollup'
 
-const tap = fn => x => (fn(x), x)
-
-const overrideInputOptions = ({ override, entryFile }) => original => {
+const overrideInputOptions = ({ rollup, entryFile }) => original => {
   const options = { ...original }
-  if (override) {
+  if (rollup) {
     // eslint-disable-next-line no-unused-vars
-    const { output, ...inputOptions } = override
+    const { output, ...inputOptions } = rollup
     Object.assign(options, inputOptions)
     if (options.input === true) {
       options.input = entryFile
     }
     // plugins
-    if (override.plugins) {
-      if (typeof override.plugins === 'function') {
-        options.plugins = override.plugins(original.plugins)
+    if (rollup.plugins) {
+      if (typeof rollup.plugins === 'function') {
+        options.plugins = rollup.plugins(original.plugins)
       } else {
-        options.plugins = [...original.plugins, ...override.plugins]
+        options.plugins = [...original.plugins, ...rollup.plugins]
       }
     }
   }
@@ -56,7 +47,7 @@ const createPlugin = ({
     entryFile,
     manifest,
 
-    override = null,
+    rollup = null,
     preserveOutputFileName = true,
 
     index: indexCfg,
@@ -70,8 +61,6 @@ const createPlugin = ({
   },
   routix,
 }) => {
-  maybeDump('options', dump, options)
-
   // NOTE if not enabled, routix & preprocess aren't instanciated
   if (!enabled) {
     return { name: 'svench (disabled)' }
@@ -187,7 +176,7 @@ const createPlugin = ({
     options: pipe(
       tap(saveOriginalInput),
       tap(findHotPlugin),
-      overrideInputOptions({ override, entryFile }),
+      overrideInputOptions({ rollup, entryFile }),
       injectTransform({ extensions, routix }),
       tap(saveInputOptions),
       maybeDump('config', dump)
@@ -195,7 +184,7 @@ const createPlugin = ({
 
     outputOptions(outputOptions) {
       originalOutputFile = outputOptions.file
-      return (override && override.output) || outputOptions
+      return (rollup && rollup.output) || outputOptions
     },
 
     async generateBundle(outputOptions, bundle) {
@@ -252,43 +241,30 @@ const createPlugin = ({
   }
 }
 
-const createParts = opts =>
-  createPluginParts({
-    _prepareOptions: ({
-      override,
-      rollup = override,
-      presets = 'svench/presets/rollup',
-      ...opts
-    }) => ({
-      presets,
-      override: rollup,
-      ...opts,
-    }),
-    ...opts,
-    _finalizeOptions: finalizeRollupOptions,
-  })
-
-export const svench = pipe(createParts, createPlugin)
+export const svench = pipe(
+  options => ({ presets: defaultPresets, ...options }),
+  createPluginParts,
+  createPlugin
+)
 
 const SVENCH = Symbol('Svench')
 
 // export const svenchify = Svenchify(createPlugin)
 export const svenchify = Svenchify(
-  parseRollupSvenchifyOptions,
-  createParts,
+  defaultPresets,
   (config, parts, { wrapSvelteConfig }) => {
     const { options } = parts
 
     // NOTE this is not functionnaly necessary because this work is done by
     // the plugin anyway, however this helps with Rollup logs, or someone
     // dumping svenchified config for debug purpose
-    if (options.override) {
-      const { override } = options
-      if (override.input) {
-        config.input = override.input
+    if (options.rollup) {
+      const { rollup } = options
+      if (rollup.input) {
+        config.input = rollup.input
       }
-      if (override.output) {
-        config.output = override.output
+      if (rollup.output) {
+        config.output = rollup.output
       }
     }
 
@@ -329,57 +305,57 @@ export const svenchify = Svenchify(
   }
 )
 
-// TODO deprecate / remove
-svenchify.svelte = (sveltePlugin, config) => {
-  // avoid double wrapping
-  if (sveltePlugin._IS_SVENCH_WRAPPED) return sveltePlugin(config)
-  // try to avoid creating an useless instance (to avoid double warnings)
-  // NOTE check process.env.SVENCH just in time
-  const hooks = process.env.SVENCH ? {} : sveltePlugin(config)
-  hooks[SVENCH] = { sveltePlugin, config }
-  return hooks
-}
-
-// TODO deprecate / remove
-export const withSvench = (
-  svelte,
-  { enabled = !!process.env.SVENCH, ...opts }
-) => {
-  if (!enabled) return svelte
-
-  return ({ preprocess, ...svelteOptions }) => {
-    const parts = createParts({
-      preprocess,
-      ...opts,
-    })
-
-    const svench = createPlugin(parts)
-
-    const {
-      options: { svelte: svelteOverrides },
-    } = parts
-
-    const sveltePlugin = svelte({
-      ...svelteOptions,
-      ...svelteOverrides,
-      preprocess: {
-        markup: parts.preprocess.pull,
-      },
-    })
-
-    const placeholder = {
-      name: 'svelte-svench-placeholder',
-      options(opts) {
-        const index = opts.plugins.indexOf(placeholder)
-        const plugins = [...opts.plugins]
-        plugins.splice(index, 1, svench, sveltePlugin)
-        return svench.options({
-          ...opts,
-          plugins,
-        })
-      },
-    }
-
-    return placeholder
-  }
-}
+// // TODO deprecate / remove
+// svenchify.svelte = (sveltePlugin, config) => {
+//   // avoid double wrapping
+//   if (sveltePlugin._IS_SVENCH_WRAPPED) return sveltePlugin(config)
+//   // try to avoid creating an useless instance (to avoid double warnings)
+//   // NOTE check process.env.SVENCH just in time
+//   const hooks = process.env.SVENCH ? {} : sveltePlugin(config)
+//   hooks[SVENCH] = { sveltePlugin, config }
+//   return hooks
+// }
+//
+// // TODO deprecate / remove
+// export const withSvench = (
+//   svelte,
+//   { enabled = !!process.env.SVENCH, ...opts }
+// ) => {
+//   if (!enabled) return svelte
+//
+//   return ({ preprocess, ...svelteOptions }) => {
+//     const parts = createPluginParts({
+//       preprocess,
+//       ...opts,
+//     })
+//
+//     const svench = createPlugin(parts)
+//
+//     const {
+//       options: { svelte: svelteOverrides },
+//     } = parts
+//
+//     const sveltePlugin = svelte({
+//       ...svelteOptions,
+//       ...svelteOverrides,
+//       preprocess: {
+//         markup: parts.preprocess.pull,
+//       },
+//     })
+//
+//     const placeholder = {
+//       name: 'svelte-svench-placeholder',
+//       options(opts) {
+//         const index = opts.plugins.indexOf(placeholder)
+//         const plugins = [...opts.plugins]
+//         plugins.splice(index, 1, svench, sveltePlugin)
+//         return svench.options({
+//           ...opts,
+//           plugins,
+//         })
+//       },
+//     }
+//
+//     return placeholder
+//   }
+// }

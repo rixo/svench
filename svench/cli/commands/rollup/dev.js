@@ -27,17 +27,12 @@ export default async ({ cwd, _nollup, ...options }) => {
   let svenchOptions
 
   const rawConfig = svenchify(configFile, {
-    _setOptions: x => {
-      svenchOptions = x
+    _setOptions: options => {
+      svenchOptions = options
     },
     enabled: true,
     watch: true,
     ...options,
-    presets: [
-      'svench/presets/rollup',
-      'svench/presets/rollup-svenchify',
-      ...(options.presets || []),
-    ].filter(Boolean),
   })
 
   const { publicDir, distDir } = svenchOptions

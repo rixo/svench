@@ -17,6 +17,6 @@
     "build": "snowpack build",
     "test": "web-test-runner \"src/**/*.test.js\"",
     "svench:cli": "svench",
-    "svench:config": "snowpack dev --config snowpack.config.svench.js"
+    "svench:plugin": "snowpack dev --config snowpack.config.svench.js"
   }
 }

@@ -12,20 +12,20 @@ const isSveltePlugin = x =>
 
 const wrapSveltePlugin = options => plugin => {
   if (!isSveltePlugin(plugin)) return plugin
-  const [sveltePlugin, opts] = Array.isArray(plugin) ? plugin : [plugin, {}]
-  return [SNOWPACK_PLUGIN, { sveltePlugin, ...opts, svench: options }]
+  const [sveltePlugin, svelte] = Array.isArray(plugin) ? plugin : [plugin, {}]
+  return [SNOWPACK_PLUGIN, { sveltePlugin, svelte, ...options }]
 }
 
-export default (snowpackConfig, svenchOptions = true) => {
+export default (snowpackConfig, svenchifyOptions = true) => {
   const enabled =
-    svenchOptions === true || (svenchOptions && svenchOptions.enabled)
+    svenchifyOptions === true || (svenchifyOptions && svenchifyOptions.enabled)
 
   if (!enabled) return snowpackConfig
 
   return {
     ...snowpackConfig,
     plugins: snowpackConfig.plugins.map(
-      wrapSveltePlugin({ enabled, ...svenchOptions })
+      wrapSveltePlugin({ enabled, ...svenchifyOptions })
     ),
   }
 }

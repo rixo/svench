@@ -1,7 +1,8 @@
 import * as path from 'path'
 
 import { pipe } from './util.js'
-import { parseOptions } from './config.js'
+import { resolveOptions } from './config.js'
+import { createPluginParts } from './plugin-shared.js'
 
 const PROXYQUIRE_MODULE = '../lib/svenchify.proxyquire.cjs'
 const REQUIRE_MODULE = '../lib/svenchify.require.cjs'
@@ -19,49 +20,21 @@ const mergeExtensions = (...sources) => [
 
 const mergePreprocessors = (...sources) => sources.flat().filter(Boolean)
 
-export const parseSvenchifyOptions = ({
+const parseSvenchifyOptions = ({
   noMagic = false,
   interceptSveltePlugin = !noMagic,
   esm = !noMagic,
-
-  // force resolving Svelte plugin to rollup-plugin-svelte-hot with Svench,
-  // even if it is rollup-plugin-svelte that is required in the config file
-  //
-  // allows using HMR with Svench only
-  //
-  // 2020-12-22 stop forcing, instead hoping for svelte-hmr to be integrated
-  // into rollup-plugin-svelte (using rixo/rollup-plugin-svelte#svelte-hmr for
-  // now)
-  //
-  forceSvelteHot = false,
-
-  svelte,
-
+  _setOptions,
   ...svench
 } = {}) => ({
-  svench: parseOptions(svench),
-
-  svelte: {
-    // css: css => {
-    //   css.write('.svench/dist/bundle.css')
-    // },
-    // emitCss: false,
-    hot: true, // TODO hmm :-/
-    ...svelte,
-  },
-
+  svench: resolveOptions(svench),
   noMagic,
   interceptSveltePlugin,
   esm,
-  forceSvelteHot,
+  _setOptions,
 })
 
-export default (
-  transformSvenchifyOptions,
-  createPluginParts,
-  customizeConfig,
-  finalizeConfig
-) => {
+export default (defaultPresets, customizeConfig, finalizeConfig) => {
   const doSvenchify = async (
     source,
     transform,
@@ -69,9 +42,8 @@ export default (
       noMagic = false,
       interceptSveltePlugin = !noMagic,
       esm = !noMagic,
-      svelte,
       svench,
-      svench: { extensions },
+      svench: { svelte = {}, extensions },
       forceSvelteHot,
     }
   ) => {
@@ -154,8 +126,6 @@ export default (
     return getConfig
   }
 
-  const parseOptions = pipe(transformSvenchifyOptions, parseSvenchifyOptions)
-
   // API:
   //
   //     svenchify('rollup.config.js', {...svenchifyOptions})
@@ -168,9 +138,12 @@ export default (
 
   const svenchify = (...args) => {
     const [source, transform, options = {}] = parseSvenchifyArgs(args)
-    const svenchifyOptions = parseOptions(options)
-    if (options._setOptions) {
-      options._setOptions(svenchifyOptions.svench)
+    const { _setOptions, ...svenchifyOptions } = parseSvenchifyOptions({
+      presets: defaultPresets,
+      ...options,
+    })
+    if (_setOptions) {
+      _setOptions(svenchifyOptions.svench)
     }
     const getConfig = doSvenchify(source, transform, svenchifyOptions)
     return finalizeConfig(getConfig, svenchifyOptions)

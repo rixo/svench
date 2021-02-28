@@ -2,47 +2,126 @@
  * Rollup specific defaults.
  */
 
-const rollup = ({
-  //
-  watch = !!+process.env.ROLLUP_WATCH,
+import path from 'path'
+import Log from '../lib/log.js'
 
-  publicDir = 'public',
-  distDir = 'public/build',
-
-  serve = true,
-
-  isNollup = !!+process.env.NOLLUP,
-
-  ...options
-}) => ({
-  watch,
-  publicDir,
-  distDir,
-  serve,
-  isNollup,
-  ...options,
-})
-
-const ifNollup = preset => opts => {
-  if (!opts.isNollup) return opts
-  return preset(opts)
+const serveDefaults = {
+  host: 'localhost',
+  port: 4242,
+  // public: '.svench/dist',
+  public: undefined,
+  index: undefined,
+  nollup: 'localhost:8080',
 }
 
-const nollup = ({
-  watch = true, // Nollup is always watch
-  write = true,
-  index = true,
-  serve,
-  ...options
-}) => ({
-  watch,
-  write,
-  index,
-  serve: serve && {
-    nollup: 'localhost:42421',
-    ...serve,
-  },
-  ...options,
-})
+const transformRollupOutput = ({ rollup, distDir, entryFileName }) => {
+  // guard: don't override output
+  if (!rollup || !rollup.output) return
 
-export default [rollup, ifNollup(nollup)]
+  // case: use full defaults
+  if (rollup.output === true) {
+    return {
+      format: 'es',
+      dir: distDir,
+      entryFileNames: entryFileName,
+      sourcemap: true,
+    }
+  }
+
+  // case: custom override
+  const transformed = { ...rollup.output }
+  if (transformed.file === true) {
+    transformed.file = path.join(distDir, entryFileName)
+  }
+  if (transformed.dir === true || !transformed.file) {
+    transformed.dir = distDir
+  }
+  return transformed
+}
+
+const resolveServe = ({ serve, publicDir }) => {
+  if (!serve) return false
+  const resolved = serve === true ? { ...serveDefaults } : { ...serve }
+  if (!resolved.public) {
+    resolved.public = publicDir
+  }
+  return resolved
+}
+
+const rollup = {
+  pre: ({ override, rollup = override, ...opts }) => {
+    if (override) {
+      Log.warn('options.override is deprecated, use options.rollup instead')
+    }
+    return {
+      rollup,
+      ...opts,
+    }
+  },
+
+  svenchify: ({
+    rollup: { input = true, output = true, ...rollup } = {},
+    index = true,
+    serve = true,
+    svelte: { emitCss = false, ...svelte } = {},
+    ...options
+  }) => ({
+    rollup: { input, output, ...rollup },
+    svelte: { ...svelte, emitCss },
+    index,
+    serve,
+    ...options,
+  }),
+
+  transform: ({
+    //
+    watch = !!+process.env.ROLLUP_WATCH,
+
+    publicDir = 'public',
+    distDir = 'public/build',
+
+    serve = true,
+
+    ...options
+  }) => ({
+    watch,
+    publicDir,
+    distDir,
+    serve,
+    ...options,
+  }),
+
+  post: [
+    // rollup.output: use default if rollup.output === true, otherwise
+    // defaults to nothing
+    options => ({
+      ...options,
+      rollup: options.rollup && {
+        ...options.rollup,
+        input:
+          options.rollup.input === true
+            ? options.entryFile
+            : options.rollup.input,
+        output: transformRollupOutput(options),
+      },
+    }),
+    // disable serve if not watching
+    options => ({
+      serve: options.watch ? resolveServe(options) : false,
+      ...options,
+    }),
+  ],
+}
+
+const nollup = ({ isNollup, write = true, serve, ...options }) =>
+  isNollup && {
+    watch: true, // Nollup is always watch
+    write,
+    serve: serve && {
+      nollup: 'localhost:42421',
+      ...serve,
+    },
+    ...options,
+  }
+
+export default [nollup, rollup]

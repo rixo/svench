@@ -3,9 +3,11 @@ import * as path from 'path'
 import { createPluginParts } from './plugin-shared.js'
 import { createIndex } from './template.js'
 import { writeManifest } from './service-manifest.js'
+import { maybeDump } from './dump.js'
 import { mkdirp } from './util.js'
-import { finalizeSnowpackOptions } from './snowpack-options.js'
 import { SNOWPACK_PLUGIN } from './const.js'
+
+const defaultPresets = 'svench/presets/snowpack'
 
 const uniq = arr => [...new Set(arr)]
 
@@ -74,38 +76,37 @@ const autoMount = ({ manifestDir, publicDir }, snowpackConfig) => {
 }
 
 export const plugin = (snowpackConfig, pluginOptions = {}) => {
-  const {
-    svench: _legacySvenchUserOptions,
-    svenchOptions = _legacySvenchUserOptions,
-    ...sveltePluginOptions
-  } = pluginOptions
+  const { svelte: sveltePluginOptions, ...svenchOptions } = pluginOptions
 
   let resolveRouteImport = x => x
 
   const parts = createPluginParts({
+    presets: defaultPresets,
     ...svenchOptions,
     resolveRouteImport: (...args) => resolveRouteImport(...args),
-    presets: 'svench/presets/snowpack',
-    _finalizeOptions: finalizeSnowpackOptions,
   })
 
   const {
-    options: { enabled, sveltePlugin = '@snowpack/plugin-svelte' },
+    options: {
+      enabled,
+      sveltePlugin = '@snowpack/plugin-svelte',
+      dump,
+      dir,
+      port,
+      extensions,
+      snowpack: override,
+    },
   } = parts
 
-  const _pluginSvelte = resolveSveltePlugin(sveltePlugin)
+  const _sveltePlugin = resolveSveltePlugin(sveltePlugin)
 
   // --- Guard: Svench disabled ---
 
   if (!enabled) {
-    return _pluginSvelte(snowpackConfig, sveltePluginOptions)
+    return _sveltePlugin(snowpackConfig, sveltePluginOptions)
   }
 
   // --- Svench enabled ---
-
-  const {
-    options: { dir, port, extensions, override },
-  } = parts
 
   sveltePluginOptions.preprocess = {
     markup: parts.preprocess.pull,
@@ -143,7 +144,7 @@ export const plugin = (snowpackConfig, pluginOptions = {}) => {
     resolveRouteImport = x => url + '/' + path.relative(distDir, x)
   }
 
-  const hooks = _pluginSvelte(snowpackConfig, sveltePluginOptions)
+  const hooks = _sveltePlugin(snowpackConfig, sveltePluginOptions)
 
   hooks.resolve.input = uniq([
     ...hooks.resolve.input,
@@ -162,6 +163,7 @@ export const plugin = (snowpackConfig, pluginOptions = {}) => {
   return {
     ...hooks,
     name: SNOWPACK_PLUGIN,
+    config: maybeDump('config', dump),
     run: initSvench(parts),
   }
 }

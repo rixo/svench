@@ -35,7 +35,7 @@ const mergeViteConfigs = mergeConfigs([
   'ssr',
 ])
 
-const run = async ({
+export default async ({
   cwd = process.cwd(),
 
   configFile = 'vite.config.js',
@@ -50,14 +50,11 @@ const run = async ({
   const mode = 'development'
   const command = 'serve'
 
-  const [
-    { createServer },
-    { svenchify },
-  ] = await Promise.all(
-    [
-      'vite',
-      'svench/vite',
-    ].map(id => import(relative.resolve(id, cwd)))
+  const [{ createServer }, { svenchify }] = await Promise.all(
+    ['vite', 'svench/vite'].map(async id => {
+      const m = await import(relative.resolve(id, cwd))
+      return m.default || m
+    })
   )
 
   const svenchified = svenchify(configFile, {
@@ -80,5 +77,3 @@ const run = async ({
 
   await server.listen()
 }
-
-export default run

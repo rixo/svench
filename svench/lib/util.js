@@ -3,6 +3,8 @@ import * as path from 'path'
 
 export const pipe = (...fns) => x0 => fns.reduce((x, f) => f(x), x0)
 
+export const tap = fn => x => (fn(x), x)
+
 export const noop = () => {}
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Escaping
