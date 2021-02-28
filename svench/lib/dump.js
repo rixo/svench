@@ -31,4 +31,5 @@ export const maybeDump = (...args) => {
     if (dump === key) dumpAt(o)
     if (dump.startsWith(key + '.')) dumpAt(o, dump.split('.'))
   }
+  return o
 }
