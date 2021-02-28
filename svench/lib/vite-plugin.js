@@ -1,3 +1,5 @@
+import path from 'path'
+
 import { createPluginParts } from './plugin-shared.js'
 import { createIndex } from './template.js'
 import { writeManifest } from './service-manifest.js'
@@ -15,13 +17,13 @@ const runtimeDeps = [
   'regexparam',
 ]
 
-const initSvench = async ({ options, routix }, { isDev }) => {
+const initSvench = async ({ options, routix }, { isDev, root }) => {
   const {
     manifest,
     index: indexCfg,
     manifestDir,
     publicDir,
-    entryFileName,
+    entryFile,
   } = options
 
   const runManifest = async () => {
@@ -31,9 +33,10 @@ const initSvench = async ({ options, routix }, { isDev }) => {
 
   const runIndex = async () => {
     if (!indexCfg) return
+    const script = './' + path.relative(root, entryFile)
     await createIndex(indexCfg, {
       watch: isDev,
-      script: './' + entryFileName,
+      script,
       publicDir,
     })
   }
@@ -50,7 +53,7 @@ const initSvench = async ({ options, routix }, { isDev }) => {
 const createPlugin = parts => {
   const {
     options,
-    options: { enabled, publicDir, port, dump },
+    options: { enabled, svenchDir: root, port, dump },
   } = parts
 
   maybeDump('options', dump, options)
@@ -67,7 +70,7 @@ const createPlugin = parts => {
     config(config, { mode }) {
       isDev = mode === 'development'
       return {
-        root: publicDir, // TODO make that svenchDir instead
+        root,
         optimizeDeps: {
           include: runtimeDeps,
         },
@@ -82,7 +85,7 @@ const createPlugin = parts => {
     },
 
     async options() {
-      await initSvench(parts, { isDev })
+      await initSvench(parts, { isDev, root })
     },
   }
 }

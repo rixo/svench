@@ -4,7 +4,8 @@
  * @todo theme option
  */
 
-import * as fs from 'fs'
+import { basename } from 'path'
+import fs from 'fs'
 import dedent from 'dedent'
 
 import Log from './log.js'
@@ -18,10 +19,10 @@ const doWriteManifest = (
   {
     entryFile,
     routesFile,
-    routesFileName,
     manifest: { encoding = 'utf8', ui, css, options, optionsFile },
   }
 ) => {
+  const routesFileName = basename(routesFile)
   const hotRoutesFilename = hotDotJs(routesFileName)
   const hotRoutesFile = hotDotJs(routesFile)
 

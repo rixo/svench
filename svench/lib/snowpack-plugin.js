@@ -20,7 +20,7 @@ const initSvench = ({ options, routix }) => async ({ isDev }) => {
     index: indexCfg,
     manifestDir,
     publicDir,
-    entryFileName,
+    entryFile,
   } = options
 
   // --- Manifest ---
@@ -36,7 +36,7 @@ const initSvench = ({ options, routix }) => async ({ isDev }) => {
     if (!indexCfg) return
     await createIndex(indexCfg, {
       watch: isDev,
-      script: '/_svench_/' + entryFileName,
+      script: '/_svench_/' + path.basename(entryFile),
       publicDir,
     })
   }

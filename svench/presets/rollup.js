@@ -14,9 +14,11 @@ const serveDefaults = {
   nollup: 'localhost:8080',
 }
 
-const transformRollupOutput = ({ rollup, distDir, entryFileName }) => {
+const transformRollupOutput = ({ rollup, distDir, entryFile }) => {
   // guard: don't override output
   if (!rollup || !rollup.output) return
+
+  const entryFileName = path.basename(entryFile)
 
   // case: use full defaults
   if (rollup.output === true) {

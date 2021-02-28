@@ -2,22 +2,38 @@
  * Preset for Vite (default Svelte template) apps.
  */
 
-export default ({
-  manifestDir = 'src',
-  publicDir = manifestDir,
+import path from 'path'
 
-  index = true,
-  manifest = true,
-  write = true,
+export default {
+  transform: ({
+    manifestDir = 'src',
+    publicDir = manifestDir,
 
-  ...options
-}) => ({
-  publicDir,
-  manifestDir,
+    index = true,
+    manifest = true,
+    write = true,
 
-  index,
-  manifest,
-  write,
+    ...options
+  }) => ({
+    publicDir,
+    manifestDir,
 
-  ...options,
-})
+    index,
+    manifest,
+    write,
+
+    ...options,
+  }),
+
+  post: ({ svenchDir, indexFileName, index, ...options }) => ({
+    ...options,
+    svenchDir,
+    index: index && {
+      ...index,
+      write:
+        index.write === true
+          ? path.join(svenchDir, indexFileName)
+          : index.write,
+    },
+  }),
+}

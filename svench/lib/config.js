@@ -7,7 +7,7 @@ import { importDefaultRelative } from './import-relative.cjs'
 
 const ALREADY_PARSED = Symbol('Svench: already parsed options')
 
-const POST = Symbol('Svench: presets post processors')
+const HOOK_POST = Symbol('Svench: presets post processors')
 
 const serveDefaults = {
   host: 'localhost',
@@ -73,7 +73,7 @@ const applyPresets = ({ presets, ...options }) => {
       if (typeof preset === 'function') stages.transform.push(preset)
     })
 
-  options[POST] = stages.post.flat(Infinity).filter(Boolean)
+  options[HOOK_POST] = stages.post.flat(Infinity).filter(Boolean)
 
   const pipeline = ['pre', 'svenchify', 'transform']
     .map(key => stages[key])
@@ -88,7 +88,7 @@ const customizer = prop => ({ [prop]: customize, ...options }) => {
   return runPresets(customize, options)
 }
 
-const applyPresetsPost = customizer(POST)
+const applyPresetsPost = customizer(HOOK_POST)
 
 const withCwd = ({ cwd = process.cwd(), ...opts }) => ({ cwd, ...opts })
 
@@ -155,6 +155,7 @@ const castOptions = ({
 
   entryFileName = 'svench.js',
   routesFileName = 'routes.js',
+  indexFileName = 'index.html',
 
   port = 4242,
 
@@ -208,7 +209,7 @@ const castOptions = ({
   // debugging
   dump,
 
-  [POST]: postPresets,
+  [HOOK_POST]: postPresets,
 
   // unknown options... who knows?
   ..._
@@ -222,9 +223,8 @@ const castOptions = ({
   distDir,
   publicDir,
   entryFileName,
-  entryFile: path.join(manifestDir, entryFileName),
   routesFileName,
-  routesFile: path.join(manifestDir, routesFileName),
+  indexFileName,
   port,
   resolveRouteImport,
   extensions,
@@ -257,8 +257,24 @@ const castOptions = ({
   autoSections,
   keepTitleExtensions,
   dump,
-  [POST]: postPresets,
+  [HOOK_POST]: postPresets,
   _,
+})
+
+const resolveFiles = ({
+  manifestDir,
+  publicDir,
+  entryFileName,
+  entryFile = path.join(manifestDir, entryFileName),
+  routesFileName,
+  routesFile = path.join(manifestDir, routesFileName),
+  ...options
+}) => ({
+  ...options,
+  manifestDir,
+  publicDir,
+  entryFile,
+  routesFile,
 })
 
 // to prevent extraneous parsing
@@ -266,46 +282,6 @@ const earMark = config => {
   config[ALREADY_PARSED] = true
   return config
 }
-
-// TODO implement? throw away?
-//
-// const mergeableArrayOptions = ['presets', 'dir', 'ignore', 'extensions']
-//
-// const mergeableOptions = [
-//   // dev server
-//   'rollup',
-//   'vite',
-//   'snowpack',
-//   // svelte options
-//   'svelte',
-//   // svench
-//   'manifest',
-//   'index',
-//   'serve',
-// ]
-//
-// export const mergeOptions = (a, b) => {
-//   const merged = { ...a, ...b }
-//   for (const opt of mergeableArrayOptions) {
-//     const ax = a[opt]
-//     const bx = b[opt]
-//     if (ax == null && bx == null) continue
-//     merged[opt] = [...new Set([ax, bx].filter(Boolean).flat())]
-//   }
-//   for (const opt of mergeableOptions) {
-//     const bx = b[opt]
-//     if (bx === false) {
-//       merged[opt] = false
-//       continue
-//     }
-//     const a_exists = a.hasOwnProperty(opt)
-//     const b_exists = b.hasOwnProperty(opt)
-//     if (!a_exists && !b_exists) continue
-//     const ax = a[opt]
-//     merged[opt] = (ax || bx) && { ...ax, ...bx }
-//   }
-//   return merged
-// }
 
 const doParseOptions = pipe(
   maybeDumpOptions('input:options'),
@@ -316,6 +292,7 @@ const doParseOptions = pipe(
   resolveDirs,
   maybeDumpOptions('resolveDirs:options'),
   castOptions,
+  resolveFiles,
   applyPresetsPost,
   earMark,
   maybeDumpOptions('options')
