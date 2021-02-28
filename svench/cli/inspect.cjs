@@ -116,13 +116,15 @@ const inspect = async ({
     return deps
   }
 
-  const findConfig = (configPath, req = require) =>
-    loadConfig
+  const findConfig = (configPath, req = require) => {
+    const resolved = path.relative(cwd, path.resolve(cwd, configPath))
+    return loadConfig
       ? {
-          path: path.relative(cwd, path.resolve(cwd, configPath)),
+          path: resolved,
           config: req(path.resolve(cwd, configPath)),
         }
-      : { path: configPath }
+      : { path: configPath, exists: fs.existsSync(resolved) }
+  }
 
   info.svench = {
     ...ensureDep('svench'),
@@ -130,11 +132,12 @@ const inspect = async ({
   }
 
   {
-    const config = vite || 'vite.config.js'
+    const config = typeof vite === 'string' ? vite : 'vite.config.js'
     if (vite || fs.existsSync(config)) {
       info.vite = {
         config: findConfig(config),
         deps: findDeps([
+          'vite',
           // '@svitejs/vite-plugin-svelte',
           'rollup-plugin-svelte-hot',
         ]),
