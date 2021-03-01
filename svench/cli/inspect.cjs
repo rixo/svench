@@ -88,9 +88,7 @@ const inspect = async ({
     cwd,
   }
 
-  const missingDeps = []
-
-  const ensureDep = (target, optional = false) => {
+  const ensureDep = (target, missingDeps) => {
     try {
       const _path = path.dirname(findup(res(target), 'package.json'))
       return {
@@ -98,8 +96,8 @@ const inspect = async ({
         path: path.relative(cwd, _path),
       }
     } catch (error) {
-      if (!optional) {
-        missingDeps.push(target)
+      if (missingDeps) {
+        missingDeps.add(target)
       }
       if (error.code === 'MODULE_NOT_FOUND') {
         return false
@@ -108,10 +106,10 @@ const inspect = async ({
     }
   }
 
-  const findDeps = (targets, { optional = false } = {}) => {
+  const findDeps = (targets, missingDeps) => {
     const deps = []
     for (const target of targets) {
-      deps[target] = ensureDep(target, optional)
+      deps[target] = ensureDep(target, missingDeps)
     }
     return deps
   }
@@ -133,14 +131,19 @@ const inspect = async ({
 
   {
     const config = typeof vite === 'string' ? vite : 'vite.config.js'
-    if (vite || fs.existsSync(config)) {
+    if (vite || fs.existsSync(config) || ensureDep('vite')) {
+      const missingDeps = new Set()
       info.vite = {
         config: findConfig(config),
-        deps: findDeps([
-          'vite',
-          // '@svitejs/vite-plugin-svelte',
-          'rollup-plugin-svelte-hot',
-        ]),
+        deps: findDeps(
+          [
+            'vite',
+            // '@svitejs/vite-plugin-svelte',
+            'rollup-plugin-svelte-hot',
+          ],
+          missingDeps
+        ),
+        missingDeps: [...missingDeps],
       }
     }
   }
@@ -148,9 +151,11 @@ const inspect = async ({
   {
     const config = snowpack || 'snowpack.config.js'
     if (snowpack || fs.existsSync(config)) {
+      const missingDeps = new Set()
       info.snowpack = {
-        config: findConfig(config),
-        deps: findDeps(['snowpack', '@snowpack/plugin-svelte']),
+        config: findConfig(config, missingDeps),
+        deps: findDeps(['snowpack', '@snowpack/plugin-svelte'], missingDeps),
+        missingDeps: [...missingDeps],
       }
     }
   }
@@ -160,14 +165,14 @@ const inspect = async ({
     if (rollup || nollup || fs.existsSync(config)) {
       process.env.ROLLUP_WATCH =
         process.env.ROLLUP_WATCH == null ? '1' : process.env.ROLLUP_WATCH
+      const missingDeps = new Set()
       const deps = {
-        ...findDeps(['rollup']),
-        ...findDeps(
-          ['nollup', 'rollup-plugin-svelte', 'rollup-plugin-svelte-hot'],
-          {
-            optional: true,
-          }
-        ),
+        ...findDeps(['rollup'], missingDeps),
+        ...findDeps([
+          'nollup',
+          'rollup-plugin-svelte',
+          'rollup-plugin-svelte-hot',
+        ]),
       }
       if (!deps['rollup-plugin-svelte'] && !deps['rollup-plugin-svelte-hot']) {
         missingDeps.push(
@@ -177,6 +182,7 @@ const inspect = async ({
       info.rollup = {
         config: findConfig(config, requireEsm),
         deps: deps,
+        missingDeps: [...missingDeps],
       }
     }
   }
@@ -184,6 +190,23 @@ const inspect = async ({
   info.args = cliOptions
 
   info.options = mergeOptions(svenchConfig, cliOptions)
+
+  const tools = ['vite', 'rollup', 'snowpack']
+
+  const withConfigAndNoMissingDeps = tools.filter(tool => {
+    if (!info[tool]) return false
+    const { config, missingDeps } = info[tool]
+    if (!config || config.exists === false) return false
+    if (missingDeps.length > 0) return false
+    return true
+  })
+
+  const withNoMissingDeps = tools.filter(tool => {
+    if (!info[tool]) return false
+    const { missingDeps } = info[tool]
+    if (missingDeps.length > 0) return false
+    return true
+  })
 
   info.favorite = vite
     ? 'vite'
@@ -193,17 +216,23 @@ const inspect = async ({
     ? 'nollup'
     : rollup
     ? 'rollup'
-    : info.vite
-    ? 'vite'
-    : info.snowpack
-    ? 'snowpack'
-    : info.rollup
-    ? info.rollup.deps.nollup && !info.rollup.deps.nollup.error
-      ? 'nollup'
-      : 'rollup'
+    : withConfigAndNoMissingDeps.length > 0
+    ? withConfigAndNoMissingDeps[0]
+    : withNoMissingDeps.length > 0
+    ? withNoMissingDeps[0]
     : undefined
 
-  info.missingDeps = missingDeps
+  if (
+    info.favorite === 'rollup' &&
+    info.rollup.deps.nollup &&
+    !info.rollup.deps.nollup.error
+  ) {
+    info.favorite = 'nollup'
+  }
+
+  if (info.favorite) {
+    info.missingDeps = info[info.favorite].missingDeps
+  }
 
   return info
 }

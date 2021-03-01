@@ -6,7 +6,7 @@ const debug = async options => {
 
   Log.inspect(info)
 
-  if (info.missingDeps.length > 0) {
+  if (info.missingDeps && info.missingDeps.length > 0) {
     Log.warn(`\n(!) Missing dependencies: ${info.missingDeps.join(', ')}\n`)
   }
 }
