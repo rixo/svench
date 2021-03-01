@@ -13,9 +13,9 @@
     Prism.highlightAll()
   }
 
-  onMount(highlight)
+  onMount(() => highlight())
 
-  onHmr(highlight)
+  onHmr(() => highlight())
 </script>
 
 <slot />
