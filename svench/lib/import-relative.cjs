@@ -7,14 +7,16 @@
 
 const relative = require('require-relative')
 
-export const importSync = require('esm')(module)
+const importSync = require('esm')(module)
 
-export const importRelative = (id, to = process.cwd()) => {
+const importRelative = (id, to = process.cwd()) => {
   const url = relative.resolve(id, to)
   return importSync(url)
 }
 
-export const importDefaultRelative = (id, to) => {
+const importDefaultRelative = (id, to) => {
   const m = importRelative(id, to)
   return m.default || m
 }
+
+module.exports = { importSync, importRelative, importDefaultRelative }

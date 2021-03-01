@@ -1,4 +1,6 @@
 import relative from 'require-relative'
+// import { svenchify } from '../../../vite'
+import { svenchify } from '../../../lib/vite-plugin'
 
 const resolveViteConfig = async (source, args = {}) => {
   const resolved = await source
@@ -48,10 +50,9 @@ export default async ({
 
   const [
     { createServer },
-    { svenchify },
     { default: sveltePluginFactory } = {},
   ] = await Promise.all(
-    ['vite', 'svench/vite', sveltePlugin].map(
+    ['vite', sveltePlugin].map(
       async id => id && (await import(relative.resolve(id, cwd)))
     )
   )
