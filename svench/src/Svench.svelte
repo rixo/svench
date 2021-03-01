@@ -180,6 +180,10 @@
   //
   // // $: test($pages)
 
+  // --- search ---
+
+  const search = writable({ query: '' })
+
   // --- commands ---
 
   const commands = createCommands({ options, router })
@@ -207,6 +211,8 @@
     tree,
 
     extras,
+
+    search,
 
     Fallback,
   })

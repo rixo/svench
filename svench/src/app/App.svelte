@@ -5,6 +5,8 @@
   import { circOut } from 'svelte/easing'
   import { fade } from 'svelte/transition'
   import Menu from './Menu.svelte'
+  import OmniSearchField from './OmniSearchField.svelte'
+  import OmniSearchResults from './OmniSearchResults.svelte'
   import ResizeHandle from './ResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
   import ExtrasPanel from './ExtrasPanel.svelte'
@@ -16,6 +18,7 @@
   export let router
   export let focus
   export let extras
+  export let search
   export let commands
   export let setScrollTarget
 
@@ -144,6 +147,7 @@
         Svench
       </a>
     </h1> -->
+    <OmniSearchField {search} />
     <Menu tree={$tree} {router} />
   </section>
 
@@ -181,6 +185,10 @@
         <ExtrasPanel {extras} />
         <ResizeHandle top shrink bind:width={$options.extrasHeight} />
       </section>
+    {/if}
+
+    {#if $search.query}
+      <OmniSearchResults results={$search.results}></OmniSearchResults>
     {/if}
   </div>
 </div>

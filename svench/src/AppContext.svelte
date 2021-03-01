@@ -45,7 +45,7 @@
   //
   // $: load(loader)
 
-  const { router, options, commands, tree, extras } = getContext()
+  const { router, options, commands, tree, extras, search } = getContext()
 
   // $: ({ shadow } = $options)
 
@@ -56,6 +56,7 @@
     router,
     focus,
     extras: $extras,
+    search,
     setScrollTarget,
   }
 
