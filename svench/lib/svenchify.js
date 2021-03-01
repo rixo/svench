@@ -1,3 +1,4 @@
+import * as fs from 'fs'
 import * as path from 'path'
 
 import { pipe } from './util.js'
@@ -52,6 +53,9 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
     const importConfig = wrapSvelteConfig => async source => {
       if (typeof source === 'string') {
         const file = path.resolve(source)
+        if (!fs.existsSync(file)) {
+          return {}
+        }
         if (interceptSveltePlugin) {
           if (esm) {
             const _require = require('esm')(module)
@@ -118,7 +122,7 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
         config = await transform(config)
       }
 
-      config = customizeConfig(config, parts, { wrapSvelteConfig })
+      config = await customizeConfig(config, parts, { wrapSvelteConfig })
 
       return config
     }

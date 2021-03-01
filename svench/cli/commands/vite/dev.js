@@ -37,38 +37,40 @@ const mergeViteConfigs = mergeConfigs([
 
 export default async ({
   cwd = process.cwd(),
-
-  configFile = 'vite.config.js',
-  // sveltePlugin: sveltePluginName = 'rollup-plugin-svelte',
-
-  override = {}, // legacy, deprecated, use named sub (i.e. vite)
-
-  vite: customViteConfig = override,
-
+  vite: configFile = 'vite.config.js',
+  override: configOverride,
+  nocfg = false,
+  sveltePlugin = 'rollup-plugin-svelte-hot',
   ...overrides
 } = {}) => {
   const mode = 'development'
   const command = 'serve'
 
-  const [{ createServer }, { svenchify }] = await Promise.all(
-    ['vite', 'svench/vite'].map(
-      async id => await import(relative.resolve(id, cwd))
+  const [
+    { createServer },
+    { svenchify },
+    { default: sveltePluginFactory } = {},
+  ] = await Promise.all(
+    ['vite', 'svench/vite', sveltePlugin].map(
+      async id => id && (await import(relative.resolve(id, cwd)))
     )
   )
 
-  const svenchified = svenchify(configFile, {
+  const source = nocfg
+    ? {}
+    : configFile === true
+    ? 'vite.config.js'
+    : configFile
+
+  const svenchified = svenchify(source, {
     enabled: true,
+    vite: configOverride || true,
+    sveltePlugin: sveltePluginFactory,
     ...overrides,
   })
 
   const finalConfig = await resolveViteConfig(
-    mergeViteConfigs(
-      {
-        configFile: false,
-      },
-      svenchified,
-      customViteConfig
-    ),
+    mergeViteConfigs({ configFile: false }, svenchified),
     { mode, command }
   )
 

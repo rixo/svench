@@ -49,12 +49,14 @@ const autodetect = command => async options => {
   if (!tool) {
     throw new Error('Failed to detect underlying tooling')
   }
+  let baseTool = tool
   if (tool === 'nollup') {
-    const { default: handler } = await import(`./commands/rollup/${command}.js`)
-    return handler({ ...options, _nollup: true })
+    baseTool = 'rollup'
+    options = { ...options, _nollup: true }
   }
-  Log.debug('Load command %s', `./commands/${tool}/${command}.js`)
-  const { default: handler } = await import(`./commands/${tool}/${command}.js`)
+  const cmd = `./commands/${baseTool}/${command}.js`
+  Log.debug('Load command %s', cmd)
+  const { default: handler } = await import(cmd)
   return handler(options)
 }
 
@@ -96,14 +98,15 @@ export default async argv => {
 
   const prog = cac('svench')
     // preset
-    .option('--preset, -p', 'Preset')
+    .option('-p, --preset', 'Preset')
     // config file
-    .option('--config [config], -c', 'Use Svench config file', true)
+    .option('-c, --config [config]', 'Use Svench config file', true)
     // flavor
     .option('--vite [config]', 'Use Vite')
     .option('--snowpack [config]', 'Use Snowpack')
     .option('--nollup [config]', 'Use Nollup')
     .option('--rollup [config]', 'Use Rollup')
+    .option('--nocfg, --noconfig', "Don't try to load tool specific config")
     // debugging
     .option('-v, --verbose', 'Increase verbosity (can be repeated -vv)')
     .option('-q, --quiet', 'Increase quietness (can be repeated -qq)')

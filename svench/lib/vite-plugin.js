@@ -1,5 +1,6 @@
 import path from 'path'
 
+import Log from './log.js'
 import { createPluginParts } from './plugin-shared.js'
 import { createIndex } from './template.js'
 import { writeManifest } from './service-manifest.js'
@@ -16,6 +17,8 @@ const runtimeDeps = [
   'zingtouch/src/ZingTouch.js',
   'regexparam',
 ]
+
+const isSveltePlugin = x => x && x.name === 'svelte'
 
 const initSvench = async ({ options, routix }, { isDev, root }) => {
   const {
@@ -100,17 +103,20 @@ export default svenchVitePlugin
 
 export const svenchify = Svenchify(
   defaultPresets,
-  ({ plugins, ...config }, parts) => {
-    if (!plugins) {
-      throw new Error('A Svelte plugin is required in your Vite plugins')
+  ({ plugins: [...plugins] = [], ...config }, parts, { wrapSvelteConfig }) => {
+    const hasSveltePlugin = plugins.some(isSveltePlugin)
+    if (!hasSveltePlugin) {
+      const {
+        options: { sveltePlugin, svelte = {} },
+      } = parts
+      Log.info('Inject default Svelte plugin')
+      plugins.unshift(sveltePlugin(wrapSvelteConfig(svelte)))
     }
 
     const svenchPlugin = createPlugin(parts)
+    plugins.unshift(svenchPlugin)
 
-    return {
-      ...config,
-      plugins: [svenchPlugin, ...plugins],
-    }
+    return { ...config, plugins }
   },
   getConfig => getConfig
 )

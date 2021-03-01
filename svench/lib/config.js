@@ -167,6 +167,7 @@ const castOptions = ({
   rollup = null,
   vite = null,
   snowpack = null,
+  nocfg = false,
 
   // overrides of Svelte plugin options
   svelte,
@@ -231,6 +232,7 @@ const castOptions = ({
   rollup,
   vite,
   snowpack,
+  nocfg,
   svelte,
   sveltePlugin,
   manifest: manifest && {
