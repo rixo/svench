@@ -10,7 +10,7 @@
     }
 
     function createSlotFn(element) {
-      return function() {
+      return function () {
         return {
           c: noop,
           m: function mount(target, anchor) {

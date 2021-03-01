@@ -18,7 +18,7 @@
   import Fallback from './app/Fallback.svelte'
   import DefaultIndex from './app/DefaultIndex.svelte'
 
-  let routes$ = readable({routes: [], tree: {}})
+  let routes$ = readable({ routes: [], tree: {} })
   export { routes$ as routes }
 
   export let ui
@@ -135,7 +135,7 @@
         await fn()
       } catch (err) {
         // eslint-disable-next-line no-console
-        console.error("Error prefetching route", route, err)
+        console.error('Error prefetching route', route, err)
       }
     }
   }
@@ -232,7 +232,8 @@
     {ui}
     {lightUi}
     {shadowUi}
-    let:current={{ App, error, shadow, css }}>
+    let:current={{ App, error, shadow, css }}
+  >
     {#if single}
       <Router {scrollNav} bind:focus />
     {:else if !shadow || css}

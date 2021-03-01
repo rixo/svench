@@ -21,7 +21,8 @@
         xmlns="http://www.w3.org/2000/svg"
         xmlns:cc="http://creativecommons.org/ns#"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      >
         <metadata>
           <rdf:RDF>
             <cc:Work rdf:about="">
@@ -35,7 +36,8 @@
           <path
             d="m318 532 469 471 469-471-469-471zm-160 0 629-632 630 632-630
             632zm-152 0 781 784 782-784-782-784z"
-            fill="currentColor" />
+            fill="currentColor"
+          />
         </g>
       </svg>
     {:else}
@@ -49,7 +51,8 @@
         xmlns="http://www.w3.org/2000/svg"
         xmlns:cc="http://creativecommons.org/ns#"
         xmlns:dc="http://purl.org/dc/elements/1.1/"
-        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+      >
         <metadata>
           <rdf:RDF>
             <cc:Work rdf:about="">
@@ -62,7 +65,8 @@
         <g transform="matrix(1,0,0,-1,-6,824)">
           <path
             d="m158 532 629-632 630 632-630 632zm-152 0 781 784 782-784-782-784z"
-            fill="currentColor" />
+            fill="currentColor"
+          />
         </g>
       </svg>
     {/if}
@@ -75,7 +79,8 @@
       xmlns="http://www.w3.org/2000/svg"
       xmlns:cc="http://creativecommons.org/ns#"
       xmlns:dc="http://purl.org/dc/elements/1.1/"
-      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    >
       <metadata>
         <rdf:RDF>
           <cc:Work rdf:about="">
@@ -101,7 +106,8 @@
     xmlns="http://www.w3.org/2000/svg"
     xmlns:cc="http://creativecommons.org/ns#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  >
     <metadata>
       <rdf:RDF>
         <cc:Work rdf:about="">
@@ -115,7 +121,8 @@
       <path
         d="m318 532 469 471 469-471-469-471zm-160 0 629-632 630 632-630
         632zm-152 0 781 784 782-784-782-784z"
-        fill="currentColor" />
+        fill="currentColor"
+      />
     </g>
   </svg>
 {:else if hasViews}
@@ -129,7 +136,8 @@
     xmlns="http://www.w3.org/2000/svg"
     xmlns:cc="http://creativecommons.org/ns#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  >
     <metadata>
       <rdf:RDF>
         <cc:Work rdf:about="">
@@ -143,7 +151,8 @@
       <path
         d="m170 745 339 339 339-339-339-339zm818 0 340 338 338-338-338-341zm-407
         405 339 341 339-341-339-338zm0-816 339 339 339-339-339-339z"
-        fill="currentColor" />
+        fill="currentColor"
+      />
     </g>
   </svg>
 {:else}
@@ -157,7 +166,8 @@
     xmlns="http://www.w3.org/2000/svg"
     xmlns:cc="http://creativecommons.org/ns#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  >
     <metadata>
       <rdf:RDF>
         <cc:Work rdf:about="">
@@ -170,7 +180,8 @@
     <g transform="matrix(1,0,0,-1,-6,824)">
       <path
         d="m158 532 629-632 630 632-630 632zm-152 0 781 784 782-784-782-784z"
-        fill="currentColor" />
+        fill="currentColor"
+      />
     </g>
   </svg>
 {/if}

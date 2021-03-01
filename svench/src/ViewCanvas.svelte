@@ -33,7 +33,8 @@
   class:svench-center={centered}
   class:svench-fill={fill}
   class:svench-wrap={!fill}
-  class:svench-padding={padding}>
+  class:svench-padding={padding}
+>
   {#if error}
     <pre>{error}</pre>
   {:else}

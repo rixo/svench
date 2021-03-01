@@ -28,7 +28,12 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <form on:submit|preventDefault={handleSubmit}>
-  <input bind:this={input} type="search" placeholder="Search Ctrl+K" bind:value={$search.query} />
+  <input
+    bind:this={input}
+    type="search"
+    placeholder="Search Ctrl+K"
+    bind:value={$search.query}
+  />
 </form>
 
 <style>
@@ -52,7 +57,7 @@
     width: calc(100% - var(--padding) * 2);
   }
   input {
-    padding: .25em .75em;
+    padding: 0.25em 0.75em;
     border: 0;
     border-right: 1px solid var(--gray-light);
     border-bottom: 1px solid var(--gray-light);

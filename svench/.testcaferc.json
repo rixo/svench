@@ -1,8 +1,0 @@
-{
-  "browsers": {
-    "path": "/usr/bin/google-chrome",
-    "cmd": "--user-data-dir=/tmp/.svench-test-chrome-profile"
-  },
-  "src": "test/**/*.test.js",
-  "concurrency": 1
-}

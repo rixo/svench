@@ -36,7 +36,7 @@ Log.cwd = process.cwd()
 Log.prefix = 'svench'
 
 const wrap = fn =>
-  function(...args) {
+  function (...args) {
     const { cwd } = Log
     let msg = args.shift()
     if (typeof msg === 'string') {

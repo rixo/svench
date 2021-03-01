@@ -32,7 +32,8 @@
 <select
   bind:value
   style={renderBg(selected && selected.value)}
-  class:dark={selected && selected.dark && false}>
+  class:dark={selected && selected.dark && false}
+>
   {#each _colors as { value, label, dark, optionStyle } (value)}
     <option {value} class:dark style={renderBg(value, true)}>{label}</option>
   {/each}

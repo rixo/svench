@@ -1,0 +1,7 @@
+extends:
+  - '@rixo/svelte'
+
+overrides:
+  - files: ['**/rollup.config.js', '**/snowpack.config.js', '**/vite.config.js']
+    env:
+      node: true

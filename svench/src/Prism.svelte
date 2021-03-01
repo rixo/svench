@@ -15,11 +15,16 @@
 </script>
 
 {#if anim}
-  <pre class="prism" transition:slide={{ duration: 200 }}>
+  <pre
+    class="prism"
+    transition:slide={{
+      duration: 200,
+    }}>
     <code bind:this={el} class="language-{language}">{code}</code>
   </pre>
 {:else}
-  <pre class="prism">
+  <pre
+    class="prism">
     <code bind:this={el} class="language-{language}">{code}</code>
   </pre>
 {/if}

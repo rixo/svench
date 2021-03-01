@@ -44,7 +44,8 @@
 
   <div
     use:scrollOverflow
-    class="svench-toolbar-wrapper svench-toolbar-scroller">
+    class="svench-toolbar-wrapper svench-toolbar-scroller"
+  >
     <label class="svench-toolbar-checkbox">
       <input type="checkbox" bind:checked={$options.centered} />
       <span>Centered</span>
@@ -62,14 +63,16 @@
       <BackgroundSelect
         aliases={$options.backgroundAliases}
         colors={$options.canvasBackgrounds}
-        bind:value={$options.canvasBackground} />
+        bind:value={$options.canvasBackground}
+      />
     </label>
     <label class="svench-toolbar-select-label" for={null}>
       <span>Background</span>
       <BackgroundSelect
         aliases={$options.backgroundAliases}
         colors={$options.backgrounds}
-        bind:value={$options.background} />
+        bind:value={$options.background}
+      />
     </label>
     {#if $options.dev}
       <label>
@@ -93,7 +96,8 @@
   <button
     aria-label="fullscreen"
     on:click={toggleFullscreen}
-    title="Toggle fullscreen (press ESC to escape)">
+    title="Toggle fullscreen (press ESC to escape)"
+  >
     ⛶
   </button>
 </div>

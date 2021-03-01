@@ -70,7 +70,8 @@
           {css}
           {router}
           Component={ShadowContext}
-          props={{ context, Component: component }} />
+          props={{ context, Component: component }}
+        />
       {:else}
         <svelte:component this={component} />
       {/if}

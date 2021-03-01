@@ -10,7 +10,7 @@ Directory index have the same path as the directory (without `/index`).
 
 `/index` suffix necessarilly indicates a _component index_ (making the distinction between components and dirs all the more blurry ~~).
 
-~~~
+```
 /             => /index.svench (home)
 /_/Foo        => /Foo.svench
 
@@ -20,4 +20,4 @@ Directory index have the same path as the directory (without `/index`).
 /:section     => /section[.svench]/index.svench
               => /section.svench
               => /section.index.svench
-~~~
+```

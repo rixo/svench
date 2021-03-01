@@ -12,7 +12,8 @@
   xmlns="http://www.w3.org/2000/svg"
   xmlns:cc="http://creativecommons.org/ns#"
   xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
   <metadata>
     <rdf:RDF>
       <cc:Work rdf:about="">
@@ -32,6 +33,7 @@
       55-293t172-255q108-110 249-170 140-59 296-59-156
       0-296-59-141-60-249-170-117-119-172-255t-55-293q0 161-57.5 299t-169.5
       249q-115 114-249 170-141 59-296 59z"
-      fill="currentColor" />
+      fill="currentColor"
+    />
   </g>
 </svg>

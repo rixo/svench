@@ -55,7 +55,8 @@
   class:left
   class:top
   class:bottom
-  on:mousedown={mousedown} />
+  on:mousedown={mousedown}
+/>
 
 <style>
   div {

@@ -24,9 +24,7 @@ const getScrollOffset = () => {
   if (match) {
     return (
       match[1] *
-      getComputedStyle(el)
-        .getPropertyValue('font-size')
-        .replace(/px$/, '')
+      getComputedStyle(el).getPropertyValue('font-size').replace(/px$/, '')
     )
   }
   return h.replace(/px$/, '')

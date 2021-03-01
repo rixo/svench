@@ -18,7 +18,10 @@
         <Prism
           anim={false}
           language="js"
-          code={e.data == null ? ' ' : JSON.stringify(e.data).replace(/":/g, '": ')} />
+          code={e.data == null
+            ? ' '
+            : JSON.stringify(e.data).replace(/":/g, '": ')}
+        />
       </td>
     </tr>
   {/each}

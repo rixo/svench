@@ -13,7 +13,8 @@
 
 {#key code}
   <div>
-    <pre class="prism">
+    <pre
+      class="prism">
       <code bind:this={el} class="language-{language}">{code}</code>
     </pre>
   </div>

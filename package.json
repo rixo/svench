@@ -1,0 +1,11 @@
+{
+  "name": "svench-monorepo",
+  "private": true,
+  "repository": "git@github.com:rixo/svench.git",
+  "author": "rixo <rixo@rixo.fr>",
+  "license": "MIT",
+  "devDependencies": {
+    "@rixo/eslint-config-svelte": "^0.11.0-alpha.1",
+    "prettier-plugin-svelte": "^2.1.6"
+  }
+}

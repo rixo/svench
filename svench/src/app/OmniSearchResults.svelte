@@ -2,7 +2,7 @@
   import { fade } from 'svelte/transition'
 </script>
 
-<div class="svench-ui" transition:fade={{duration: 150}}>
+<div class="svench-ui" transition:fade={{ duration: 150 }}>
   <h1>Searchin'?</h1>
 </div>
 

@@ -7,10 +7,7 @@
   "bugs": {
     "url": "https://github.com/rixo/svench/issues"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/rixo/svench"
-  },
+  "repository": "https://github.com/rixo/svench",
   "main": "src/index.js",
   "svelte": "src/index.js",
   "browser": "src/index.js",

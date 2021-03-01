@@ -16,7 +16,8 @@
     <a
       class="text"
       style={`padding-left: ${indent * indentWidth}em`}
-      href={router.resolve(`${path}?view=${name}`)}>
+      href={router.resolve(`${path}?view=${name}`)}
+    >
       <MenuViewItemIcon class="svench-menu-item-icon" />
       <span class="svench-menu-item-text">{name}</span>
     </a>
