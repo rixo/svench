@@ -1,11 +1,24 @@
 const proxyquire = require('proxyquire')
 const relative = require('require-relative')
 
-const wrap = (wrapSvelteConfig, modulePath, forceSvelteHot) => {
+const { default: Log } = require('./log.js')
+
+const wrap = (
+  wrapSvelteConfig,
+  modulePath,
+  { forceSvelteHot, sveltePlugin: forceSveltePlugin }
+) => {
   const plugin = config => {
-    const sveltePluginName = forceSvelteHot
+    const sveltePluginName = forceSveltePlugin
+      ? forceSveltePlugin
+      : forceSvelteHot
       ? 'rollup-plugin-svelte-hot'
       : modulePath
+    if (sveltePluginName === modulePath) {
+      Log.log('Reuse svelte plugin: %s', modulePath)
+    } else {
+      Log.log('Replace svelte plugin: %s => %s', modulePath, sveltePluginName)
+    }
     const sveltePlugin = relative(sveltePluginName, process.cwd())
     const wrappedConfig = wrapSvelteConfig(config)
     return sveltePlugin(wrappedConfig)
@@ -16,9 +29,10 @@ const wrap = (wrapSvelteConfig, modulePath, forceSvelteHot) => {
   }
 }
 
-module.exports = (wrapSvelteConfig, file, forceSvelteHot) => {
+module.exports = (wrapSvelteConfig, file, opts) => {
   return proxyquire(file, {
-    ...wrap(wrapSvelteConfig, 'rollup-plugin-svelte', forceSvelteHot),
-    ...wrap(wrapSvelteConfig, 'rollup-plugin-svelte-hot', forceSvelteHot),
+    ...wrap(wrapSvelteConfig, 'rollup-plugin-svelte', opts),
+    ...wrap(wrapSvelteConfig, 'rollup-plugin-svelte-hot', opts),
+    ...wrap(wrapSvelteConfig, '@svitejs/vite-plugin-svelte', opts),
   })
 }

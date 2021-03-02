@@ -13,6 +13,8 @@ export default {
     manifest = true,
     write = true,
 
+    vite,
+
     ...options
   }) => ({
     publicDir,
@@ -21,6 +23,14 @@ export default {
     index,
     manifest,
     write,
+
+    vite: {
+      clearScreen: false,
+      server: {
+        port: 4242,
+      },
+      ...vite,
+    },
 
     ...options,
   }),

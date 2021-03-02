@@ -8,7 +8,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import cac from 'cac'
 
-import { Log } from './lib.js'
+import { Log, loadSvenchConfig } from './lib.js'
 import { inspect } from './inspect.cjs'
 
 const normalizeDir = dirs => (dirs.length === 1 ? dirs[0] : dirs)
@@ -57,7 +57,7 @@ const autodetect = command => async options => {
   const cmd = `./commands/${baseTool}/${command}.js`
   Log.debug('Load command %s', cmd)
   const { default: handler } = await import(cmd)
-  return handler(options)
+  return handler(info, options)
 }
 
 export default async argv => {
@@ -72,7 +72,10 @@ export default async argv => {
   const cwd = process.cwd()
 
   const asyncAction = (run, args) => {
-    const opts = normalizeOptions({ cwd }, args)
+    const opts = {
+      ...loadSvenchConfig(cwd),
+      ...normalizeOptions({ cwd }, args),
+    }
 
     // configure log level as soon as possible
     Log.setVerbosity(opts.verbose, opts.quiet)
@@ -121,6 +124,10 @@ export default async argv => {
       default: true,
     })
     .alias('dev')
+    .option(
+      '--plugin, --svelte-plugin <plugin>',
+      'Specify name of the Svelte plugin to use'
+    )
     .option('--reload', 'Clear local cache (Snowpack only)')
     .action(handle(autodetect('dev')))
 

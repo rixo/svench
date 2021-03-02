@@ -88,17 +88,17 @@ const inspect = async ({
     cwd,
   }
 
-  const ensureDep = (target, missingDeps) => {
+  const ensureDep = target => {
     try {
       const _path = path.dirname(findup(res(target), 'package.json'))
+      const relPath = path.relative(cwd, _path)
       return {
+        module: target,
         version: require(path.join(_path, 'package.json')).version,
-        path: path.relative(cwd, _path),
+        path: relPath,
+        depth: -(relPath.split('..' + path.sep).length - 1),
       }
     } catch (error) {
-      if (missingDeps) {
-        missingDeps.add(target)
-      }
       if (error.code === 'MODULE_NOT_FOUND') {
         return false
       }
@@ -109,12 +109,29 @@ const inspect = async ({
   const findDeps = (targets, missingDeps) => {
     const deps = []
     for (const target of targets) {
-      deps[target] = ensureDep(target, missingDeps)
+      if (Array.isArray(target)) {
+        let found = false
+        for (const alternative of target) {
+          deps[alternative] = ensureDep(alternative, missingDeps)
+          if (deps[alternative] && !deps[alternative].error) {
+            found = true
+          }
+        }
+        if (!found) {
+          missingDeps.add(target.join(' or '))
+        }
+      } else {
+        deps[target] = ensureDep(target, missingDeps)
+        if (missingDeps && (!deps[target] || deps[target].error)) {
+          missingDeps.add(target)
+        }
+      }
     }
     return deps
   }
 
   const findConfig = (configPath, req = require) => {
+    if (!configPath) return false
     const resolved = path.relative(cwd, path.resolve(cwd, configPath))
     return loadConfig
       ? {
@@ -129,25 +146,32 @@ const inspect = async ({
     config: svenchConfig,
   }
 
+  // === Vite ===
   {
     const config = typeof vite === 'string' ? vite : 'vite.config.js'
     if (vite || fs.existsSync(config) || ensureDep('vite')) {
       const missingDeps = new Set()
+      const sveltePluginAlternatives = [
+        '@svitejs/vite-plugin-svelte',
+        'rollup-plugin-svelte-hot',
+      ]
+      const deps = findDeps(['vite', sveltePluginAlternatives], missingDeps)
       info.vite = {
         config: findConfig(config),
-        deps: findDeps(
-          [
-            'vite',
-            // '@svitejs/vite-plugin-svelte',
-            'rollup-plugin-svelte-hot',
-          ],
-          missingDeps
-        ),
+        deps,
         missingDeps: [...missingDeps],
+        sveltePlugin: sveltePluginAlternatives
+          .map(name => deps[name])
+          .filter(depInfo => depInfo && !depInfo.error)
+          .sort(({ depth: a }, { depth: b }) => b - a)
+          .slice(0, 1)
+          .map(({ module }) => module)
+          .shift(),
       }
     }
   }
 
+  // === Snowpack ===
   {
     const config = snowpack || 'snowpack.config.js'
     if (snowpack || fs.existsSync(config)) {
@@ -160,6 +184,7 @@ const inspect = async ({
     }
   }
 
+  // === Rollup / Nollup ===
   {
     const config = rollup || nollup || 'rollup.config.js'
     if (rollup || nollup || fs.existsSync(config)) {
@@ -180,7 +205,10 @@ const inspect = async ({
         )
       }
       info.rollup = {
-        config: findConfig(config, requireEsm),
+        config: findConfig(
+          config === true ? 'rollup.config.js' : config,
+          requireEsm
+        ),
         deps: deps,
         missingDeps: [...missingDeps],
       }

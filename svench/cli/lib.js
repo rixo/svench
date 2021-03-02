@@ -3,3 +3,5 @@
  */
 
 export { default as Log } from '../lib/log.js'
+
+export { loadSvenchConfig } from '../lib/plugin-shared.js'

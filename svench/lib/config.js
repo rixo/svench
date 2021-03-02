@@ -174,6 +174,7 @@ const castOptions = ({
 
   // Allow to specify a custom Svelte plugin
   sveltePlugin,
+  defaultSveltePlugin,
 
   manifest = true,
 
@@ -235,6 +236,7 @@ const castOptions = ({
   nocfg,
   svelte,
   sveltePlugin,
+  defaultSveltePlugin,
   manifest: manifest && {
     css: 'js',
     ui: 'svench/src/app/index.js', // TODO move to 'svench/app'
