@@ -71,6 +71,9 @@
     margin: 0;
     padding: 0.25em 0.5em;
   }
+  h2 + h2 {
+    margin-top: .75em;
+  }
   h2 > span,
   h2 > a {
     display: block;
