@@ -83,6 +83,9 @@
       {:else}
         <p>No results</p>
       {/each}
+      {#if $search.hasMore}
+        <div class="svench-search-result--results--has-more">&hellip;</div>
+      {/if}
     </div>
   </dialog>
 {/if}
@@ -186,5 +189,10 @@
   .svench-search-result--results :global(b) {
     font-weight: bold;
     opacity: 1;
+  }
+
+  .svench-search-result--results--has-more {
+    text-align: center;
+    font-size: 1.5rem;
   }
 </style>

@@ -10,11 +10,24 @@ const longer = (a, b) => {
   return b.length > a.length ? b : a
 }
 
+const bySortKey = ({ route: a }, { route: b }) => {
+  // TODO path should be sliced?
+  const ak = a.sortKey || a.path
+  const bk = b.sortKey || b.path
+  const diff = ak.localeCompare(bk)
+  if (diff !== 0) return diff
+  if (!a.view || !b.view) return 0
+  const ai = a.views.indexOf(a.view)
+  const bi = b.views.indexOf(b.view)
+  return ai - bi
+}
+
 export default ({ routes, router, maxResults = 10 }) => {
   const current = {
     query: '',
     results: [],
     open: false,
+    hasMore: false,
   }
 
   let selectedIndex = 0
@@ -28,11 +41,17 @@ export default ({ routes, router, maxResults = 10 }) => {
     (_$routes, set) => {
       $routes = _$routes
       update = () => set(current)
-      current.results = getResults()
+      const { results, hasMore } = getResults()
+      Object.assign(current, { results, hasMore })
       update()
     },
     current
   )
+
+  const finalizeResults = results => ({
+    results: results.slice(0, maxResults),
+    hasMore: results.length > maxResults,
+  })
 
   const getResults = () => {
     const items = []
@@ -55,25 +74,30 @@ export default ({ routes, router, maxResults = 10 }) => {
     }
 
     if (!current.query) {
-      return items.slice(0, maxResults).map((obj, index) => {
-        const { route, view, searchKey } = obj
-        const [titleA, path, titleB] = searchKey.split('✂️')
-        return {
-          index,
-          score: 0,
-          route,
-          view,
-          selected: index === current.selected,
-          href: router.resolveView(route.path, view),
-          path,
-          title: longer(titleA, titleB),
-        }
-      })
+      const results = items
+        .filter(({ route }) => route.dir !== '.')
+        .sort(bySortKey)
+        .slice(0, maxResults + 1)
+        .map((obj, index) => {
+          const { route, view, searchKey } = obj
+          const [titleA, path, titleB] = searchKey.split('✂️')
+          return {
+            index,
+            score: 0,
+            route,
+            view,
+            selected: index === current.selected,
+            href: router.resolveView(route.path, view),
+            path,
+            title: longer(titleA, titleB),
+          }
+        })
+      return finalizeResults(results)
     }
 
     const results = fuzzysort.go(current.query, items, {
       key: 'searchKey',
-      limit: maxResults,
+      limit: maxResults + 1,
     })
 
     const formattedResults = results.map((result, index) => {
@@ -95,14 +119,15 @@ export default ({ routes, router, maxResults = 10 }) => {
       }
     })
 
-    return formattedResults
+    return finalizeResults(formattedResults)
   }
 
   api.set = value => {
     Object.assign(current, value)
     if (current.query !== lastQuery) {
       selectedIndex = 0
-      current.results = getResults()
+      const { results, hasMore } = getResults()
+      Object.assign(current, { results, hasMore })
     }
     lastQuery = current.query
     updateSelected()
