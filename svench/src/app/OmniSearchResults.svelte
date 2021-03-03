@@ -69,6 +69,7 @@
 
   .svench-search-result--dialog {
     position: fixed;
+    z-index: 3;
     top: calc(var(--toolbar-height) + 2rem);
     left: 0;
     margin: auto;
@@ -78,6 +79,27 @@
     border-radius: 0.5rem;
     box-shadow: 0 8px 12px hsla(0deg, 0%, 0%, 0.1),
       0 4px 4px hsla(0deg, 0%, 0%, 0.2);
+  }
+
+  @media only screen and (max-width: 800px) {
+    .svench-search-result--dialog {
+      box-sizing: border-box;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+      min-width: none;
+      max-width: none;
+      margin: 0;
+      border-radius: 0;
+      border: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .svench-search-result--results {
+      flex: 1;
+    }
   }
 
   .svench-search-result--input {
@@ -95,6 +117,7 @@
 
   .svench-search-result--results {
     margin-top: 1rem;
+    overflow: auto;
   }
   .svench-search-result--results > a {
     text-decoration: none;
@@ -128,6 +151,7 @@
     font-style: normal;
     font-weight: normal;
   }
+  .svench-search-result--results em :global(b),
   .svench-search-result--results :global(b) {
     font-weight: bold;
     opacity: 1;
