@@ -15,17 +15,16 @@
         $search.select()
         break
 
-      case 'K':
-      case 'k':
-        if (!e.ctrlKey) return
-        if ($search.open && !e.shiftKey) {
-          $search.selectUp()
-          break
-        }
       case 'o':
       case 'O':
         if (!e.ctrlKey) return
         $search.open = !$search.open
+        break
+
+      case 'K':
+      case 'k':
+        if (!e.ctrlKey) return
+        $search.selectUp()
         break
 
       case 'ArrowUp':
@@ -41,6 +40,7 @@
 
       case 'h':
       case 'H':
+        if (!e.ctrlKey) return
         $search.query = ''
         break
 
