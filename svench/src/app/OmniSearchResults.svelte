@@ -55,10 +55,9 @@
     transition:fade={{ duration: 100 }}
     on:click={close} />
 
-  <dialog
+  <div
     transition:fly={{ y: 16, duration: 100 }}
-    class="svench-ui svench-search-result--dialog"
-    open>
+    class="svench-ui svench-search-result--dialog">
     <input
       bind:this={input}
       class="svench-search-result--input"
@@ -87,7 +86,7 @@
         <div class="svench-search-result--results--has-more">&hellip;</div>
       {/if}
     </div>
-  </dialog>
+  </div>
 {/if}
 
 <style>
@@ -105,8 +104,9 @@
     position: fixed;
     z-index: 3;
     top: calc(var(--toolbar-height) + 2rem);
-    left: 0;
+    background-color: var(--white);
     margin: auto;
+    padding: 0.75rem;
     width: 100%;
     max-width: 40rem;
     border: 0;
@@ -141,6 +141,7 @@
     font-size: 2rem;
     border: 0;
     border-bottom: 1px solid var(--gray-light);
+    background: none;
   }
   .svench-search-result--input:focus {
     outline: none;
