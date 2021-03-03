@@ -13,12 +13,12 @@ importers:
       cheap-watch: 1.0.3
       sirv-cli: 0.4.6
     devDependencies:
-      '@rixo/eslint-config-svelte': 0.8.1_svelte@3.34.0
+      '@rixo/eslint-config-svelte': 0.8.1_svelte@3.35.0
       '@rollup/plugin-commonjs': 17.1.0_rollup@2.40.0
       '@rollup/plugin-node-resolve': 11.2.0_rollup@2.40.0
       '@rollup/plugin-replace': 2.4.1_rollup@2.40.0
       cross-env: 6.0.3
-      mdsvex: 0.8.9_svelte@3.34.0
+      mdsvex: 0.8.9_svelte@3.35.0
       nollup: 0.14.4_rollup@2.40.0
       prismjs: 1.23.0
       rollup: 2.40.0
@@ -26,31 +26,31 @@ importers:
       rollup-plugin-hot: 0.1.1_rollup@2.40.0
       rollup-plugin-livereload: 1.3.0
       rollup-plugin-postcss-hot: 0.0.4
-      rollup-plugin-svelte-hot: 1.0.0-3_rollup@2.40.0+svelte@3.34.0
+      rollup-plugin-svelte-hot: 1.0.0-3_rollup@2.40.0+svelte@3.35.0
       rollup-plugin-terser: 5.3.1_rollup@2.40.0
-      svelte: 3.34.0
+      svelte: 3.35.0
       svench: link:../../svench
       zorax: 0.0.8
     specifiers:
       '@rixo/eslint-config-svelte': ^0.8.1
       '@rollup/plugin-commonjs': ^17.1.0
       '@rollup/plugin-node-resolve': ^11.2.0
-      '@rollup/plugin-replace': ^2.3.3
+      '@rollup/plugin-replace': ^2.4.1
       cheap-watch: ^1.0.3
       cross-env: ^6.0.3
       mdsvex: ^0.8.9
       nollup: ^0.14.4
-      prismjs: ^1.22.0
-      rollup: ^2.35.1
+      prismjs: ^1.23.0
+      rollup: ^2.40.0
       rollup-plugin-delete: ^1.2.0
       rollup-plugin-hot: ^0.1.1
-      rollup-plugin-livereload: ^1.0.0
+      rollup-plugin-livereload: ^1.3.0
       rollup-plugin-postcss-hot: ^0.0.4
-      rollup-plugin-svelte-hot: ^1.0.0-0
-      rollup-plugin-terser: ^5.1.2
-      sirv-cli: ^0.4.4
-      svelte: ^3.31.0
-      svench: ../../svench/
+      rollup-plugin-svelte-hot: ^1.0.0-3
+      rollup-plugin-terser: ^5.3.1
+      sirv-cli: ^0.4.6
+      svelte: ^3.35.0
+      svench: link:../../svench
       zorax: ^0.0.8
   examples/snowpack-csa:
     dependencies:
@@ -279,13 +279,6 @@ packages:
     dev: true
     resolution:
       integrity: sha512-4vrIhfJyfNf+lCtXC2ck1rKSzDwciqF7IWFhXXrSOUC2O5DrVp+w4c6ed4AllTxhTkUP5x2tYj41VaxdVMMRDw==
-  /@babel/parser/7.13.4:
-    dev: true
-    engines:
-      node: '>=6.0.0'
-    hasBin: true
-    resolution:
-      integrity: sha512-uvoOulWHhI+0+1f9L4BoozY7U5cIkZ9PgJqvb041d6vypgUmtVPG4vmGm4pSggjl8BELzvHyUeJSUyEMY6b+qA==
   /@babel/parser/7.13.9:
     dev: true
     engines:
@@ -405,6 +398,17 @@ packages:
       eslint-import-resolver-webpack: 0.11.1
       eslint-plugin-svelte3: 2.7.3_svelte@3.34.0
       prettier-plugin-svelte: 0.7.0_svelte@3.34.0
+    dev: true
+    peerDependencies:
+      svelte: '*'
+    resolution:
+      integrity: sha512-OCGS/nD1Ni5IbZpOX1g39ABz1cuhLPb4hIOlRMc/5rdmPCQe4STLQIwzp7N8ekYIoDDcfvkuKUoph00YHEHVow==
+  /@rixo/eslint-config-svelte/0.8.1_svelte@3.35.0:
+    dependencies:
+      '@rixo/eslint-config': 0.8.1
+      eslint-import-resolver-webpack: 0.11.1
+      eslint-plugin-svelte3: 2.7.3_svelte@3.35.0
+      prettier-plugin-svelte: 0.7.0_svelte@3.35.0
     dev: true
     peerDependencies:
       svelte: '*'
@@ -1430,7 +1434,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.1.3
-      es-abstract: 1.18.0-next.2
+      es-abstract: 1.18.0-next.3
       get-intrinsic: 1.1.1
       is-string: 1.0.5
     dev: true
@@ -1462,7 +1466,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.1.3
-      es-abstract: 1.18.0-next.2
+      es-abstract: 1.18.0-next.3
     dev: true
     engines:
       node: '>= 0.4'
@@ -1540,7 +1544,7 @@ packages:
   /babel-eslint/10.1.0_eslint@6.8.0:
     dependencies:
       '@babel/code-frame': 7.12.13
-      '@babel/parser': 7.13.4
+      '@babel/parser': 7.13.9
       '@babel/traverse': 7.13.0
       '@babel/types': 7.13.0
       eslint: 6.8.0
@@ -1718,9 +1722,9 @@ packages:
       integrity: sha512-Z942RysHXmJrhqk88FmKBVq/v5tqmSkDz7p54G/MGyjMnCFFnC79XWNbg+Vta8W6Wb2qtSZTSxIGkJrRpCFEiA==
   /browserslist/4.16.3:
     dependencies:
-      caniuse-lite: 1.0.30001192
+      caniuse-lite: 1.0.30001194
       colorette: 1.2.2
-      electron-to-chromium: 1.3.676
+      electron-to-chromium: 1.3.678
       escalade: 3.1.1
       node-releases: 1.1.71
     dev: true
@@ -1923,16 +1927,16 @@ packages:
   /caniuse-api/3.0.0:
     dependencies:
       browserslist: 4.16.3
-      caniuse-lite: 1.0.30001192
+      caniuse-lite: 1.0.30001194
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: true
     resolution:
       integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==
-  /caniuse-lite/1.0.30001192:
+  /caniuse-lite/1.0.30001194:
     dev: true
     resolution:
-      integrity: sha512-63OrUnwJj5T1rUmoyqYTdRWBqFFxZFlyZnRRjDR8NSUQFB6A+j/uBORU/SyJ5WzDLg4SPiZH40hQCBNdZ/jmAw==
+      integrity: sha512-iDUOH+oFeBYk5XawYsPtsx/8fFpndAPUQJC7gBTfxHM8xw5nOZv7ceAD4frS1MKCLUac7QL5wdAJiFQlDRjXlA==
   /chai/4.3.0:
     dependencies:
       assertion-error: 1.1.0
@@ -2721,7 +2725,7 @@ packages:
       integrity: sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
   /debug/3.2.7:
     dependencies:
-      ms: 2.1.2
+      ms: 2.1.3
     resolution:
       integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==
   /debug/4.3.1:
@@ -3031,10 +3035,10 @@ packages:
   /ee-first/1.1.1:
     resolution:
       integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
-  /electron-to-chromium/1.3.676:
+  /electron-to-chromium/1.3.678:
     dev: true
     resolution:
-      integrity: sha512-t0eEgYCP+XEbH/KwxWYZDY0XKwzmokDAsjFJ2rBstp2XuwuBCUZ+ni5qXI6XDRNkvDpVJcAOp2aJxkSkshKkmw==
+      integrity: sha512-E5ha1pE9+aWWrT2fUD5wdPBWUnYtKnEnloewbtVyrkAs79HvodOiNO4rMR94+hKbxgMFQG4fnPQACOc1cfMfBg==
   /elegant-spinner/1.0.1:
     dev: true
     engines:
@@ -3124,7 +3128,7 @@ packages:
       node: '>= 0.4'
     resolution:
       integrity: sha512-VBl/gnfcJ7OercKA9MVaegWsBHFjV492syMudcnQZvt/Dw8ezpcOHYZXa/J96O8vx+g4x65YKhxOwDUh63aS5g==
-  /es-abstract/1.18.0-next.2:
+  /es-abstract/1.18.0-next.3:
     dependencies:
       call-bind: 1.0.2
       es-to-primitive: 1.2.1
@@ -3135,16 +3139,18 @@ packages:
       is-callable: 1.2.3
       is-negative-zero: 2.0.1
       is-regex: 1.1.2
+      is-string: 1.0.5
       object-inspect: 1.9.0
       object-keys: 1.1.1
       object.assign: 4.1.2
       string.prototype.trimend: 1.0.4
       string.prototype.trimstart: 1.0.4
+      unbox-primitive: 1.0.0
     dev: true
     engines:
       node: '>= 0.4'
     resolution:
-      integrity: sha512-Ih4ZMFHEtZupnUh6497zEL4y2+w8+1ljnCyaTa+adcoafI1GOvMwFlDjBLfWR7y9VLfrjRJe9ocuHY1PSR9jjw==
+      integrity: sha512-VMzHx/Bczjg59E6jZOQjHeN3DEoptdhejpARgflAViidlqSpjdq9zA6lKwlhRRs/lOw1gHJv2xkkSFRgvEwbQg==
   /es-module-lexer/0.3.26:
     dev: true
     resolution:
@@ -3327,6 +3333,15 @@ packages:
   /eslint-plugin-svelte3/2.7.3_svelte@3.34.0:
     dependencies:
       svelte: 3.34.0
+    dev: true
+    peerDependencies:
+      eslint: '>=6.0.0'
+      svelte: ^3.2.0
+    resolution:
+      integrity: sha512-p6HhxyICX9x/x+8WSy6AVk2bmv9ayoznoTSyCvK47th/k/07ksuJixMwbGX9qxJVAmPBaYMjEIMSEZtJHPIN7w==
+  /eslint-plugin-svelte3/2.7.3_svelte@3.35.0:
+    dependencies:
+      svelte: 3.35.0
     dev: true
     peerDependencies:
       eslint: '>=6.0.0'
@@ -4064,6 +4079,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-NPUEnOHs3ysGSa8+8k5F7TVBbZE=
+  /has-bigints/1.0.1:
+    dev: true
+    resolution:
+      integrity: sha512-LSBS2LjbNBTf6287JEbEzvJgftkF5qFkmCo9hDRpAzKhUOlJ+hx8dd4USs00SgsUNwc4617J9ki5YtEClM2ffA==
   /has-flag/1.0.0:
     dev: true
     engines:
@@ -4539,6 +4558,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==
+  /is-bigint/1.0.1:
+    dev: true
+    resolution:
+      integrity: sha512-J0ELF4yHFxHy0cmSxZuheDOz2luOdVvqjwmEcj8H/L1JHeuEDSDbeRP+Dk9kFVk5RTFzbucJ2Kb9F7ixY2QaCg==
   /is-binary-path/2.1.0:
     dependencies:
       binary-extensions: 2.2.0
@@ -4546,6 +4569,14 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==
+  /is-boolean-object/1.1.0:
+    dependencies:
+      call-bind: 1.0.2
+    dev: true
+    engines:
+      node: '>= 0.4'
+    resolution:
+      integrity: sha512-a7Uprx8UtD+HWdyYwnD1+ExtTgqQtD2k/1yJgtXP6wnMm8byhkoTZRl+95LLThpzNZJ5aEvi46cdH+ayMFRwmA==
   /is-builtin-module/3.0.0:
     dependencies:
       builtin-modules: 3.2.0
@@ -4664,6 +4695,12 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-96ECIfh9xtDDlPylNPXhzjsykHsMJZ18ASpaWzQyBr4YRTcVjUvzaHayDAES2oU/3KpljhHUjtSRNiDwi0F0ig==
+  /is-number-object/1.0.4:
+    dev: true
+    engines:
+      node: '>= 0.4'
+    resolution:
+      integrity: sha512-zohwelOAur+5uXtk8O3GPQ1eAcu4ZX3UwxQhUlfFFMNpUd83gXgjbhJh6HmB6LUNV/ieOLQuDwJO3dWJosUeMw==
   /is-number/7.0.0:
     engines:
       node: '>=0.12.0'
@@ -5363,6 +5400,18 @@ packages:
       prismjs: 1.23.0
       svelte: 3.34.0
       vfile-message: 2.0.4
+    dev: false
+    peerDependencies:
+      svelte: 3.x
+    resolution:
+      integrity: sha512-9CDBDV29IVNJsJWDlCg1UwascU8QmuHsYEXJH2ZGsf7lCCWUDSwbOmR+I77tm8D2YQrPsbLCLq/UndUMJck3Cw==
+  /mdsvex/0.8.9_svelte@3.35.0:
+    dependencies:
+      '@types/unist': 2.0.3
+      prismjs: 1.23.0
+      svelte: 3.35.0
+      vfile-message: 2.0.4
+    dev: true
     peerDependencies:
       svelte: 3.x
     resolution:
@@ -5603,8 +5652,12 @@ packages:
     resolution:
       integrity: sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
   /ms/2.1.2:
+    dev: true
     resolution:
       integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
+  /ms/2.1.3:
+    resolution:
+      integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
   /multimatch/2.1.0:
     dependencies:
       array-differ: 1.0.0
@@ -5916,7 +5969,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.1.3
-      es-abstract: 1.18.0-next.2
+      es-abstract: 1.18.0-next.3
     dev: true
     engines:
       node: '>= 0.8'
@@ -5926,7 +5979,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       define-properties: 1.1.3
-      es-abstract: 1.18.0-next.2
+      es-abstract: 1.18.0-next.3
       has: 1.0.3
     dev: true
     engines:
@@ -6891,6 +6944,16 @@ packages:
       svelte: ^3.2.0
     resolution:
       integrity: sha512-SuZSeMh48rx42kCFEpI/xE1XgjxQcS3r22Yo7jIhBYRhwbAa8laNxiIHsfeWWkX8BdyELkEayaTQp4ricckwTQ==
+  /prettier-plugin-svelte/0.7.0_svelte@3.35.0:
+    dependencies:
+      svelte: 3.35.0
+      tslib: 1.14.1
+    dev: true
+    peerDependencies:
+      prettier: ^1.16.4
+      svelte: ^3.2.0
+    resolution:
+      integrity: sha512-SuZSeMh48rx42kCFEpI/xE1XgjxQcS3r22Yo7jIhBYRhwbAa8laNxiIHsfeWWkX8BdyELkEayaTQp4ricckwTQ==
   /prettier-plugin-svelte/2.1.6_prettier@2.2.1:
     dependencies:
       prettier: 2.2.1
@@ -7565,6 +7628,21 @@ packages:
       rollup: 2.40.0
       svelte: 3.34.0
       svelte-hmr: 0.12.7_svelte@3.34.0
+    dev: true
+    engines:
+      node: '>=10'
+    peerDependencies:
+      rollup: '>=2.0.0'
+      svelte: '>=3.5.0'
+    resolution:
+      integrity: sha512-iheuqAL6qBsNtBw86MOJByBTzi3E3uoL8x7s9YWCWDLlw75hsARsoio9giyArsMOa9MsEAHlFKq3Clr40K3FUA==
+  /rollup-plugin-svelte-hot/1.0.0-3_rollup@2.40.0+svelte@3.35.0:
+    dependencies:
+      '@rollup/pluginutils': 4.1.0_rollup@2.40.0
+      require-relative: 0.8.7
+      rollup: 2.40.0
+      svelte: 3.35.0
+      svelte-hmr: 0.12.8_svelte@3.35.0
     dev: true
     engines:
       node: '>=10'
@@ -8715,6 +8793,15 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-dvdQgNDNJo+8B2uBQoqdb11eUCE1JQXhvjC/CZtgvZseVd5TYMXnq0+vuUemXbd/Se29cTaUuPX3YIc2xgbvIg==
+  /unbox-primitive/1.0.0:
+    dependencies:
+      function-bind: 1.1.1
+      has-bigints: 1.0.1
+      has-symbols: 1.0.2
+      which-boxed-primitive: 1.0.2
+    dev: true
+    resolution:
+      integrity: sha512-P/51NX+JXyxK/aigg1/ZgyccdAxm5K1+n8+tvqSntjOivPt19gvm1VC49RWYetsiub8WViUchdxl/KWHHB0kzA==
   /unbzip2-stream/1.4.3:
     dependencies:
       buffer: 5.7.1
@@ -8972,6 +9059,16 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-vwTUFf6V4zhcPkWp/4CQPr1TW9Ml6SF4lVyaIMBdJw5i6qUUJ1QWM4Z6YYVkfka0OUIzVo/0aNtGVGk256IKWw==
+  /which-boxed-primitive/1.0.2:
+    dependencies:
+      is-bigint: 1.0.1
+      is-boolean-object: 1.1.0
+      is-number-object: 1.0.4
+      is-string: 1.0.5
+      is-symbol: 1.0.3
+    dev: true
+    resolution:
+      integrity: sha512-bwZdv0AKLpplFY2KZRX6TvyuN7ojjr7lwkg6ml0roIy9YeuSr7JS372qlNW18UQYzgYK9ziGcerWqZOmEn9VNg==
   /which/1.3.1:
     dependencies:
       isexe: 2.0.0
