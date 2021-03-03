@@ -1,4 +1,1 @@
-.build
-build
-web_modules
-node_modules
+/node_modules/

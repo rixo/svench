@@ -1,6 +1,5 @@
 import relative from 'require-relative'
-// import { svenchify } from '../../../vite'
-import { svenchify } from '../../../lib/vite-plugin'
+import { svenchify } from '../../../lib/vite-plugin.js'
 
 const resolveViteConfig = async (source, args = {}) => {
   const resolved = await source
@@ -37,25 +36,21 @@ const mergeViteConfigs = mergeConfigs([
   'ssr',
 ])
 
-export default async ({
-  cwd = process.cwd(),
-  vite: configFile = 'vite.config.js',
-  override: configOverride,
-  nocfg = false,
-  sveltePlugin = 'rollup-plugin-svelte-hot',
-  ...overrides
-} = {}) => {
+export default async (
+  { vite: { sveltePlugin: defaultSveltePlugin = 'rollup-plugin-svelte-hot' } },
+  {
+    cwd = process.cwd(),
+    vite: configFile = 'vite.config.js',
+    override: configOverride,
+    nocfg = false,
+    sveltePlugin,
+    ...cliOverrides
+  } = {}
+) => {
   const mode = 'development'
   const command = 'serve'
 
-  const [
-    { createServer },
-    { default: sveltePluginFactory } = {},
-  ] = await Promise.all(
-    ['vite', sveltePlugin].map(
-      async id => id && (await import(relative.resolve(id, cwd)))
-    )
-  )
+  const { createServer } = await import(relative.resolve('vite', cwd))
 
   const source = nocfg
     ? {}
@@ -66,8 +61,9 @@ export default async ({
   const svenchified = svenchify(source, {
     enabled: true,
     vite: configOverride || true,
-    sveltePlugin: sveltePluginFactory,
-    ...overrides,
+    sveltePlugin,
+    defaultSveltePlugin,
+    ...cliOverrides,
   })
 
   const finalConfig = await resolveViteConfig(

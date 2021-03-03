@@ -8,12 +8,12 @@ import { resolveOptions } from './config.js'
 import cachingPreprocess from './caching-preprocess.js'
 import routixParser from './routix-parser.js'
 import { mkdirpSync } from './util.js'
+import { importSync } from './import-relative.cjs'
 
-const loadSvenchConfig = () => {
-  const svenchConfig = path.resolve(SVENCH_CONFIG_FILE)
+export const loadSvenchConfig = (cwd = process.cwd()) => {
+  const svenchConfig = path.resolve(cwd, SVENCH_CONFIG_FILE)
   if (!fs.existsSync(svenchConfig)) return {}
-  // FIXME here's something ESM is not gonna love :/
-  return require.main.require(svenchConfig)
+  return importSync(svenchConfig).default
 }
 
 export const createPluginParts = argOptions => {

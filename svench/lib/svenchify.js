@@ -4,6 +4,7 @@ import * as path from 'path'
 import { pipe } from './util.js'
 import { resolveOptions } from './config.js'
 import { createPluginParts } from './plugin-shared.js'
+import { maybeDump } from './dump.js'
 
 const PROXYQUIRE_MODULE = '../lib/svenchify.proxyquire.cjs'
 const REQUIRE_MODULE = '../lib/svenchify.require.cjs'
@@ -44,7 +45,7 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
       interceptSveltePlugin = !noMagic,
       esm = !noMagic,
       svench,
-      svench: { svelte = {}, extensions },
+      svench: { svelte = {}, extensions, dump, sveltePlugin },
       forceSvelteHot,
     }
   ) => {
@@ -57,14 +58,19 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
           return {}
         }
         if (interceptSveltePlugin) {
+          const loadConfigArgs = [
+            wrapSvelteConfig,
+            file,
+            { sveltePlugin, forceSvelteHot },
+          ]
           if (esm) {
             const _require = require('esm')(module)
             const loadConfigFile = _require(PROXYQUIRE_MODULE)
-            const m = loadConfigFile(wrapSvelteConfig, file, forceSvelteHot)
+            const m = loadConfigFile(...loadConfigArgs)
             return m.default
           } else {
             const loadConfigFile = require(PROXYQUIRE_MODULE)
-            return loadConfigFile(wrapSvelteConfig, file, forceSvelteHot)
+            return loadConfigFile(...loadConfigArgs)
           }
         } else {
           if (esm) {
@@ -87,7 +93,7 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
 
       const wrapSvelteConfig = config => {
         preprocessors = mergePreprocessors(config.preprocess, svelte.preprocess)
-        return {
+        const svelteConfig = {
           ...config,
           ...svelte,
           extensions:
@@ -100,6 +106,8 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
             markup: (...args) => parts.preprocess.pull(...args),
           },
         }
+        maybeDump('svelte', dump, svelteConfig)
+        return svelteConfig
       }
 
       const castConfig = async source => {

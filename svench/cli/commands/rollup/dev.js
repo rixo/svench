@@ -10,7 +10,7 @@ const resolveConfig = async x =>
     ? resolveConfig(x())
     : x
 
-export default async ({ cwd, _nollup, ...options }) => {
+export default async (_, { cwd, _nollup, ...options }) => {
   process.env.ROLLUP_WATCH =
     process.env.ROLLUP_WATCH == null ? '1' : process.env.ROLLUP_WATCH
 

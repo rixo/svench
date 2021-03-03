@@ -2,7 +2,10 @@ import fs from 'fs'
 import path from 'path'
 import relative from 'require-relative'
 
-export default async ({ cwd = process.cwd(), reload, ...overrides } = {}) => {
+export default async (
+  _,
+  { cwd = process.cwd(), reload, ...overrides } = {}
+) => {
   const rel = x => relative(x, cwd)
 
   const { startDevServer, createConfiguration } = rel('snowpack')

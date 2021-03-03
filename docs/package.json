@@ -1,21 +1,28 @@
 {
-  "dependencies": {
-    "svelte": "^3.24.0"
+  "name": "svench-docs",
+  "version": "0.0.0",
+  "description": "Svench docs",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rixo/svench.git"
   },
+  "keywords": [
+    "svelte",
+    "workbench",
+    "vite",
+    "rollup"
+  ],
+  "author": "rixo <rixo@rixo.fr>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rixo/svench/issues"
+  },
+  "homepage": "https://github.com/rixo/svench#readme",
+  "scripts": {},
   "devDependencies": {
-    "@snowpack/plugin-dotenv": "^2.0.5",
-    "@snowpack/plugin-svelte": "^3.4.0",
-    "@snowpack/web-test-runner-plugin": "^0.1.5",
-    "@testing-library/svelte": "^3.0.0",
-    "@web/test-runner": "^0.10.0",
-    "chai": "^4.2.0",
-    "snowpack": "^2.18.4",
-    "svench": "../svench/"
-  },
-  "scripts": {
-    "svench": "snowpack dev --config snowpack.config.svench.js",
-    "start": "snowpack dev",
-    "build": "snowpack build",
-    "test": "web-test-runner \"src/**/*.test.js\""
+    "@svitejs/vite-plugin-svelte": "^0.9.2",
+    "svench": "workspace:^0.2.0-1",
+    "vite": "^2.0.4"
   }
 }
