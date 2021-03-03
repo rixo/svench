@@ -4,11 +4,12 @@
  * @todo theme option
  */
 
-import { basename } from 'path'
+import path, { basename } from 'path'
 import fs from 'fs'
 import dedent from 'dedent'
 
 import Log from './log.js'
+import { maybeDump } from './dump.js'
 
 const quote = x => JSON.stringify(x)
 
@@ -17,14 +18,25 @@ const hotDotJs = x => x.replace(/(\.js)?$/, '.hot$1')
 const doWriteManifest = (
   writeFile,
   {
+    cwd,
+    dir,
+    dump,
     entryFile,
     routesFile,
-    manifest: { encoding = 'utf8', ui, css, options, optionsFile },
+    manifest: { encoding = 'utf8', ui, css, options },
   }
 ) => {
   const routesFileName = basename(routesFile)
   const hotRoutesFilename = hotDotJs(routesFileName)
   const hotRoutesFile = hotDotJs(routesFile)
+
+  // --- user's src/.svench.js ---
+
+  const sourceDir = path.resolve(cwd, dir)
+  const optionsFile = path.join(sourceDir, '.svench.js')
+  const optionsUrl = fs.existsSync(optionsFile) && optionsFile
+
+  // --- svench.js ---
 
   const code = [
     'import { start } from "svench"',
@@ -55,10 +67,10 @@ const doWriteManifest = (
     '',
     options && `Object.assign(options, ${JSON.stringify(options, false, 2)})`,
     '',
-    optionsFile &&
+    optionsUrl &&
       dedent`
-        import config from ${quote(optionsFile)}
-        Object.assign(options, config)
+        import * as rc from ${quote(optionsUrl)}
+        options.rc = rc
       `,
     '',
     'start(options, import.meta.hot)',
@@ -70,6 +82,8 @@ const doWriteManifest = (
     .filter(x => x !== false)
     .join('\n')
     .replace(/\n{3,}/g, '\n\n')
+
+  maybeDump('entry', dump, code)
 
   writeFile(entryFile, code, encoding)
 
@@ -91,6 +105,8 @@ const doWriteManifest = (
     // to see this to enable HMR
     if (false) import.meta.hot.accept()
   `
+
+  maybeDump('routes.hot', dump, hotRoutesCode)
 
   writeFile(hotRoutesFile, hotRoutesCode, encoding)
 }
