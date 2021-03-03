@@ -37,7 +37,7 @@ export default ({ routes, router, maxResults = 10 }) => {
   const getResults = () => {
     const items = []
     for (const route of $routes) {
-      const { views = [], title, path } = route
+      const { views, title, path } = route
       const routeItem = {
         route,
         searchKey: [title, path.replace(/\/[^\/]*$/, '') || '/', title].join(
@@ -45,6 +45,8 @@ export default ({ routes, router, maxResults = 10 }) => {
         ),
       }
       items.push(routeItem)
+
+      if (!views) continue
       for (const view of views) {
         items.push({
           ...routeItem,
@@ -104,7 +106,6 @@ export default ({ routes, router, maxResults = 10 }) => {
       selectedIndex = 0
       current.results = getResults()
     }
-    lastOpen = current.open
     lastQuery = current.query
     updateSelected()
   }

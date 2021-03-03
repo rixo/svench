@@ -259,7 +259,8 @@ const inspect = async ({
   }
 
   if (info.favorite) {
-    info.missingDeps = info[info.favorite].missingDeps
+    const key = info.favorite === 'nollup' ? 'rollup' : info.favorite
+    info.missingDeps = info[key].missingDeps
   }
 
   return info
