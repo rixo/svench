@@ -1,0 +1,10 @@
+dependencies:
+  fuzzysort: 1.1.4
+lockfileVersion: 5.2
+packages:
+  /fuzzysort/1.1.4:
+    dev: false
+    resolution:
+      integrity: sha512-JzK/lHjVZ6joAg3OnCjylwYXYVjRiwTY6Yb25LvfpJHK8bjisfnZJ5bY8aVWwTwCXgxPNgLAtmHL+Hs5q1ddLQ==
+specifiers:
+  fuzzysort: ^1.1.4

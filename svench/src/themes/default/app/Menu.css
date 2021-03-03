@@ -1,3 +1,7 @@
+.svench-menu {
+  margin-top: .5rem;
+}
+
 .svench-app.svench-small-screen {
   & .svench-menu {
     /* font-size: 115%; */

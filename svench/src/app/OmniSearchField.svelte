@@ -1,68 +1,107 @@
 <script>
   export let search
 
-  let input
-
-  const handleSubmit = () => {
-    console.trace($search)
-  }
-
+  // TODO this should probably live in a more central place (the store?)
   const handleKeydown = e => {
-    if (!input) return
-    if (!e.ctrlKey) return
-    if (!['k', 'K'].includes(e.key)) return
-    e.preventDefault()
-    input.focus()
-  }
+    switch (e.key) {
+      case 'Escape':
+        if (!$search.open) return
+        $search.open = false
+        break
 
-  // onMount(() => {
-  //
-  //   window.addEventListener('keydown', handleKeydown)
-  //
-  //   return () => {
-  //     window.removeEventListener('keydown', handleKeydown)
-  //   }
-  // })
+      case 'Enter':
+        if (!$search.open) return
+        if ($search.results.length === 0) return
+        $search.select()
+        break
+
+      case 'K':
+      case 'k':
+        if (!e.ctrlKey) return
+        if ($search.open && !e.shiftKey) {
+          $search.selectUp()
+          break
+        }
+      case 'o':
+      case 'O':
+        if (!e.ctrlKey) return
+        $search.open = !$search.open
+        break
+
+      case 'ArrowUp':
+        $search.selectUp()
+        break
+
+      case 'j':
+      case 'J':
+        if (!e.ctrlKey) return
+      case 'ArrowDown':
+        $search.selectDown()
+        break
+
+      case 'h':
+      case 'H':
+        $search.query = ''
+        break
+
+      default:
+        return
+    }
+    e.preventDefault()
+  }
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
 
-<form on:submit|preventDefault={handleSubmit}>
-  <input
-    bind:this={input}
-    type="search"
-    placeholder="Search Ctrl+K"
-    bind:value={$search.query}
-  />
-</form>
+<div class="svench-omnisearch-ct">
+  <button on:click={() => ($search.open = true)}>
+    <span class="svench-omnisearch-button-label">Search</span>
+    <kbd>Ctrl</kbd><kbd>O</kbd></button>
+</div>
 
 <style>
-  form {
-    --padding: 4px;
-    --padding: 0px;
+  .svench-omnisearch-ct {
+    --padding: 0.5rem;
   }
 
-  form {
+  .svench-omnisearch-ct {
     height: var(--toolbar-height);
     width: 100%;
     position: relative;
-  }
-
-  input {
-    position: absolute;
-    top: var(--padding);
-    bottom: var(--padding);
-    left: var(--padding);
-    right: var(--padding);
+    display: flex;
+    align-items: center;
+    margin-left: var(--padding);
     width: calc(100% - var(--padding) * 2);
   }
-  input {
-    padding: 0.25em 0.75em;
+
+  button {
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
     border: 0;
-    border-right: 1px solid var(--gray-light);
-    border-bottom: 1px solid var(--gray-light);
+    background-color: var(--light-2-r);
+    width: 100%;
+    min-width: 11rem;
+    white-space: nowrap;
+    overflow: hidden;
   }
-  input::placeholder {
-    color: var(--tertiary-light);
+
+  button .svench-omnisearch-button-label {
+    color: var(--light-2);
+    margin-right: 0.5rem;
+  }
+
+  kbd {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    font: 0.8rem SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+    line-height: 1;
+    color: #444d56;
+    vertical-align: middle;
+    background-color: #fafbfc;
+    border: 1px solid #d1d5da;
+    border-radius: 3px;
+    box-shadow: inset 0 -1px 0 #d1d5da;
+    margin: 0 0.1rem;
+    position: relative;
   }
 </style>

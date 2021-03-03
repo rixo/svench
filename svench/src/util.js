@@ -20,6 +20,10 @@ export const noop = () => {}
 
 export const identity = x => x
 
+export const map = mapper => arr => arr.map(mapper)
+
+export const filter = predicate => arr => arr.filter(predicate)
+
 // export const pipe = (...fns) => x => fns.reduce((f, g) => g(f), x)
 
 export const pipe = (...fns) => {

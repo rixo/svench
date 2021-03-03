@@ -1,5 +1,14 @@
+pluginSearchDirs:
+  - .
+
+overrides:
+  - files: "*.svelte"
+    options:
+      parser: svelte
+
 semi: false
 singleQuote: true
 trailingComma: es5
-svelteSortOrder: scripts-markup-styles
 arrowParens: avoid
+svelteSortOrder: scripts-markup-styles
+svelteBracketNewLine: false

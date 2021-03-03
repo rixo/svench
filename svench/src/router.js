@@ -41,6 +41,9 @@ export default ({
     return uri
   }
 
+  router.resolveView = (path, view) =>
+    router.resolve(view ? `${path}?view=${view}` : path)
+
   router.error = writable()
   router.current = writable()
 

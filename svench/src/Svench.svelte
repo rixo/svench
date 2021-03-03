@@ -10,6 +10,7 @@
   import addRegister from './register.js'
   import createOptions from './Svench.options.js'
   import createCommands from './Svench.commands.js'
+  import createOmniSearch from './Svench.omnisearch.js'
   import Scroll from './scroll.js'
   import Busy from './Svench.busy.js'
 
@@ -182,7 +183,7 @@
 
   // --- search ---
 
-  const search = writable({ query: '' })
+  const search = createOmniSearch({ routes: _routes, router })
 
   // --- commands ---
 
@@ -201,6 +202,7 @@
     router: {
       listen: router.listen,
       resolve: (...args) => router.resolve(...args),
+      resolveView: (...args) => router.resolveView(...args),
       findRoute: (...args) => router.findRoute(...args),
       current: router.current,
       error: router.error,
@@ -232,8 +234,7 @@
     {ui}
     {lightUi}
     {shadowUi}
-    let:current={{ App, error, shadow, css }}
-  >
+    let:current={{ App, error, shadow, css }}>
     {#if single}
       <Router {scrollNav} bind:focus />
     {:else if !shadow || css}

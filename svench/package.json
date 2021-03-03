@@ -38,6 +38,7 @@
     "color-js": "^1.0.5",
     "dedent": "^0.7.0",
     "esm": "^3.2.25",
+    "fuzzysort": "^1.1.4",
     "hast-util-select": "^4.0.0",
     "mdsvex": "^0.8.0",
     "navaid": "^1.1.0",

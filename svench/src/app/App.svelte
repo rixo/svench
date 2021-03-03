@@ -134,14 +134,12 @@
   class="svench-app"
   class:svench-small-screen={isPhone}
   class:svench-focus={focus}
-  class:svench-fullscreen={fullscreen}
->
+  class:svench-fullscreen={fullscreen}>
   <section
     use:swipeMenu={{ run: toggleVisibleMenu, regionEl }}
     use:overlayscrollbars
     class="svench-ui svench-app-menu"
-    style="width: {menuWidth}px"
-  >
+    style="width: {menuWidth}px">
     <!-- <h1 class="svench-app-logo">
       <a href="/">
         <span class="svench-icon">🔬</span>
@@ -159,14 +157,12 @@
       <div
         class="svench-app-body-mask"
         in:fade={{ duration: 100 }}
-        on:click={commands.toggleMenu}
-      />
+        on:click={commands.toggleMenu} />
     {/if}
 
     <section
       class="svench-ui svench-app-toolbar"
-      style="left: {menuOffset}px; right: {isPhone ? -menuOffset : 0}px"
-    >
+      style="left: {menuOffset}px; right: {isPhone ? -menuOffset : 0}px">
       <Toolbar {options} {commands} />
     </section>
 
@@ -175,8 +171,7 @@
       use:swipeMenu={{ run: toggleMenu, regionEl }}
       class="svench-app-main"
       class:svench-app-focus={focus}
-      style={mainStyle}
-    >
+      style={mainStyle}>
       <div class="svench-app-canvas">
         <slot />
       </div>
@@ -185,15 +180,12 @@
     {#if hasExtras}
       <section
         class="svench-ui svench-app-extras"
-        style="height: {extrasHeight}px"
-      >
+        style="height: {extrasHeight}px">
         <ExtrasPanel {extras} />
         <ResizeHandle top shrink bind:width={$options.extrasHeight} />
       </section>
     {/if}
 
-    {#if $search.query}
-      <OmniSearchResults results={$search.results} />
-    {/if}
+    <OmniSearchResults {search} />
   </div>
 </div>

@@ -38,7 +38,7 @@ const initSvench = async ({ options, routix }, { isDev, root }) => {
 
   const runIndex = async () => {
     if (!indexCfg) return
-    const script = './' + path.relative(root, entryFile)
+    const script = '/' + path.relative(root, entryFile)
     await createIndex(indexCfg, {
       watch: isDev,
       script,
@@ -108,7 +108,11 @@ export default svenchVitePlugin
 
 export const svenchify = Svenchify(
   defaultPresets,
-  async ({ plugins: [...plugins] = [], ...config }, parts, { wrapSvelteConfig }) => {
+  async (
+    { plugins: [...plugins] = [], ...config },
+    parts,
+    { wrapSvelteConfig }
+  ) => {
     const {
       options: {
         defaultSveltePlugin,
