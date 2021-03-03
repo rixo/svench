@@ -127,6 +127,7 @@ const resolveDirs = ({
   publicDir = resolve(publicDir)
   return {
     ...config,
+    cwd,
     svenchDir,
     manifestDir: resolve(manifestDir),
     publicDir,
@@ -135,6 +136,8 @@ const resolveDirs = ({
 }
 
 const castOptions = ({
+  cwd,
+
   enabled = !!+process.env.SVENCH,
 
   watch = false,
@@ -178,6 +181,8 @@ const castOptions = ({
 
   manifest = true,
 
+  baseUrl = '/',
+  entryUrl = true,
   mountEntry = '/__svench/svench.js',
 
   index = false,
@@ -216,6 +221,7 @@ const castOptions = ({
   // unknown options... who knows?
   ..._
 }) => ({
+  cwd,
   enabled,
   watch,
   dir,
@@ -240,10 +246,12 @@ const castOptions = ({
   manifest: manifest && {
     css: 'js',
     ui: 'svench/src/app/index.js', // TODO move to 'svench/app'
-    write,
+    write, // TODO not implemented anymore? deprecate?
     ...manifest,
   },
   mountEntry,
+  baseUrl,
+  entryUrl,
   index: index && {
     write,
     ...index,

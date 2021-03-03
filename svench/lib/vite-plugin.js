@@ -1,5 +1,3 @@
-import path from 'path'
-
 import Log from './log.js'
 import { createPluginParts } from './plugin-shared.js'
 import { createIndex } from './template.js'
@@ -15,13 +13,13 @@ const defaultPresets = ['svench/presets/vite']
 const isSveltePlugin = x =>
   (x && x.name === 'svelte') || /\bvite-plugin-svelte\b/.test(x.name)
 
-const initSvench = async ({ options, routix }, { isDev, root }) => {
+const initSvench = async ({ options, routix }, { isDev }) => {
   const {
     manifest,
     index: indexCfg,
     manifestDir,
     publicDir,
-    entryFile,
+    entryUrl,
   } = options
 
   const runManifest = async () => {
@@ -31,10 +29,9 @@ const initSvench = async ({ options, routix }, { isDev, root }) => {
 
   const runIndex = async () => {
     if (!indexCfg) return
-    const script = '/' + path.relative(root, entryFile)
     await createIndex(indexCfg, {
       watch: isDev,
-      script,
+      script: entryUrl,
       publicDir,
     })
   }
@@ -74,6 +71,14 @@ const createPlugin = parts => {
           port,
           ...vite.server,
         },
+        // TODO $svench alias?
+        // resolve: {
+        //   alias: {
+        //     $svench: entryFile,
+        //     ...(vite.resolve && vite.resolve.alias),
+        //   },
+        //   ...vite.resolve,
+        // },
       }
     },
 
@@ -82,7 +87,7 @@ const createPlugin = parts => {
     },
 
     async options() {
-      await initSvench(parts, { isDev, root })
+      await initSvench(parts, { isDev })
     },
   }
 }

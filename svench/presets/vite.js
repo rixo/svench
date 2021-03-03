@@ -35,15 +35,39 @@ export default {
     ...options,
   }),
 
-  post: ({ svenchDir, indexFileName, index, ...options }) => ({
-    ...options,
+  post: ({
+    cwd,
     svenchDir,
-    index: index && {
-      ...index,
-      write:
-        index.write === true
-          ? path.join(svenchDir, indexFileName)
-          : index.write,
-    },
-  }),
+    entryFile,
+    baseUrl,
+    entryUrl,
+    indexFileName,
+    index,
+    ...options
+  }) => {
+    const writeIndex = !index
+      ? false
+      : index.write === true
+      ? path.join(svenchDir, indexFileName)
+      : typeof index.write === 'string'
+      ? path.resolve(cwd, index.write)
+      : false
+
+    if (entryUrl === true && typeof writeIndex === 'string') {
+      const dir = path.dirname(writeIndex)
+      entryUrl = baseUrl + path.relative(dir, entryFile)
+    }
+
+    return {
+      ...options,
+      cwd,
+      svenchDir,
+      entryFile,
+      entryUrl,
+      index: index && {
+        ...index,
+        write: writeIndex,
+      },
+    }
+  },
 }
