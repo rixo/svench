@@ -1,7 +1,7 @@
 <script>
   import { onDestroy } from 'svelte'
   import { writable, readable, derived } from 'svelte/store'
-  import navaid from 'navaid'
+  // import navaid from 'navaid'
   import { setContext, makeNamer as _makeNamer } from './util.js'
   import createRouter from './router.js'
   import Router from './Router.svelte'
@@ -61,15 +61,15 @@
 
   // --- fallback ---
 
-  if (fallback) {
-    const rootRouter = navaid('/', () => {
-      $options.enabled = false
-    })
-
-    rootRouter.listen()
-
-    onDestroy(rootRouter.unlisten)
-  }
+  // if (fallback) {
+  //   const rootRouter = navaid('/', () => {
+  //     $options.enabled = false
+  //   })
+  //
+  //   rootRouter.listen()
+  //
+  //   onDestroy(rootRouter.unlisten)
+  // }
 
   // --- router ---
   // WARNING after scroll! (for pop/push state events precendence)

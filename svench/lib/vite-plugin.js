@@ -12,13 +12,6 @@ import Svenchify from './svenchify.js'
 
 const defaultPresets = ['svench/presets/vite']
 
-const runtimeDeps = [
-  'navaid',
-  'overlayscrollbars',
-  'zingtouch/src/ZingTouch.js',
-  'regexparam',
-]
-
 const isSveltePlugin = x =>
   (x && x.name === 'svelte') || /\bvite-plugin-svelte\b/.test(x.name)
 
@@ -77,10 +70,6 @@ const createPlugin = parts => {
       return {
         root,
         ...vite,
-        optimizeDeps: {
-          include: runtimeDeps,
-          ...vite.optimizeDeps,
-        },
         server: {
           port,
           ...vite.server,

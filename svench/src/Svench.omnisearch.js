@@ -1,5 +1,5 @@
 import { derived } from 'svelte/store'
-import fuzzysort from 'fuzzysort'
+import { fuzzysort } from './util-esm.js'
 
 import { noop } from './util.js'
 
