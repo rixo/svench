@@ -9,14 +9,45 @@
     $search.open = false
   }
 
+  let mouseHasMoved = false
+
+  let mouseX, mouseY
+
+  const handleMouseMove = ({ clientX, clientY }) => {
+    if (!open) return
+    if (mouseX === clientX && mouseY === clientY) return
+    mouseX = clientX
+    mouseY = clientY
+    mouseHasMoved = true
+  }
+
+  const trackMouse = open => {
+    if (open) {
+      if (mouseHasMoved) return
+      mouseHasMoved = false
+    } else {
+      mouseHasMoved = false
+    }
+  }
+
+  const handleHover = index => () => {
+    if (!mouseHasMoved) return
+    $search.setSelectedIndex(index)
+    mouseHasMoved = false
+  }
+
   const selectInput = () => {
     input.select()
   }
 
-  $: ({ open } = $search)
+  $: ({ open, selectedIndex } = $search)
 
   $: if (open && input) selectInput()
+
+  $: trackMouse(open)
 </script>
+
+<svelte:body on:mousemove={handleMouseMove} />
 
 {#if $search.open}
   <div
@@ -41,7 +72,7 @@
           class:selected
           {href}
           on:click={close}
-          on:mouseenter={() => $search.setSelectedIndex(index)}>
+          on:mousemove={handleHover(index)}>
           <strong class="svench-search-result--item-title">
             {@html title}
           </strong>
