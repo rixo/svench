@@ -11,7 +11,12 @@ const get = (o, path) => {
 
 const dumpAt = (o, path) => {
   const x = get(o, path)
-  Log.inspect(x)
+  if (typeof x === 'string') {
+    // eslint-disable-next-line no-console
+    console.log(x)
+  } else {
+    Log.inspect(x)
+  }
   process.exit()
 }
 
