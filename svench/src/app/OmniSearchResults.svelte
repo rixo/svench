@@ -62,7 +62,6 @@
       bind:this={input}
       class="svench-search-result--input"
       type="search"
-      autofocus
       placeholder="Searchin'"
       bind:value={$search.query} />
     <div class="svench-search-result--results">
