@@ -137,7 +137,6 @@
   class:svench-fullscreen={fullscreen}>
   <section
     use:swipeMenu={{ run: toggleVisibleMenu, regionEl }}
-    use:overlayscrollbars
     class="svench-ui svench-app-menu"
     style="width: {menuWidth}px">
     <!-- <h1 class="svench-app-logo">
@@ -147,7 +146,12 @@
       </a>
     </h1> -->
     <OmniSearchField {search} />
-    <Menu tree={$tree} {router} />
+    <div
+      class="svench-app-menu-menu"
+      use:overlayscrollbars
+      style="width: {menuWidth}px">
+      <Menu tree={$tree} {router} />
+    </div>
   </section>
 
   <div class="svench-app-body" style={bodyStyle}>
