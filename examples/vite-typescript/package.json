@@ -1,0 +1,19 @@
+{
+  "name": "svench-example-vite-typescript",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@svitejs/vite-plugin-svelte": "^0.9.3",
+    "svelte-preprocess": "^4.6.9",
+    "svench": "workspace:^0.2.0-6",
+    "typescript": "^4.2.2",
+    "vite": "^2.0.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

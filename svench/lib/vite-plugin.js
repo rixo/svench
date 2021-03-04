@@ -13,7 +13,7 @@ const defaultPresets = ['svench/presets/vite']
 const isSveltePlugin = x =>
   (x && x.name === 'svelte') || /\bvite-plugin-svelte\b/.test(x.name)
 
-const initSvench = async ({ options, routix }, { isDev }) => {
+const initSvench = async ({ options, routix }, { command }) => {
   const {
     manifest,
     index: indexCfg,
@@ -21,6 +21,8 @@ const initSvench = async ({ options, routix }, { isDev }) => {
     publicDir,
     entryUrl,
   } = options
+
+  const watch = command === 'serve'
 
   const runManifest = async () => {
     if (!manifest) return
@@ -30,7 +32,7 @@ const initSvench = async ({ options, routix }, { isDev }) => {
   const runIndex = async () => {
     if (!indexCfg) return
     await createIndex(indexCfg, {
-      watch: isDev,
+      watch,
       script: entryUrl,
       publicDir,
     })
@@ -38,7 +40,7 @@ const initSvench = async ({ options, routix }, { isDev }) => {
 
   const startRoutix = async () => {
     await mkdirp(manifestDir)
-    await routix.start({ watch: isDev })
+    await routix.start({ watch })
     await routix.onIdle(100) // report init errors
   }
 
@@ -57,13 +59,13 @@ const createPlugin = parts => {
     return { name: `${VITE_PLUGIN_NAME}:disabled` }
   }
 
-  let isDev
+  let env
 
   return {
     name: VITE_PLUGIN_NAME,
 
-    config(config, { mode }) {
-      isDev = mode === 'development'
+    config(config, _env) {
+      env = _env
       return {
         root,
         ...vite,
@@ -87,7 +89,7 @@ const createPlugin = parts => {
     },
 
     async options() {
-      await initSvench(parts, { isDev })
+      await initSvench(parts, env)
     },
   }
 }

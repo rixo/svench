@@ -119,6 +119,19 @@ importers:
       svelte-hmr: ^0.12.8
       svench: workspace:^0.2.0-1
       vite: ^2.0.5
+  examples/vite-typescript:
+    devDependencies:
+      '@svitejs/vite-plugin-svelte': 0.9.3_vite@2.0.5
+      svelte-preprocess: 4.6.9_typescript@4.2.2
+      svench: link:../../svench
+      typescript: 4.2.2
+      vite: 2.0.5
+    specifiers:
+      '@svitejs/vite-plugin-svelte': ^0.9.3
+      svelte-preprocess: ^4.6.9
+      svench: workspace:^0.2.0-6
+      typescript: ^4.2.2
+      vite: ^2.0.5
   svench:
     dependencies:
       cac: 6.7.2
@@ -713,6 +726,25 @@ packages:
       source-map: 0.7.3
       svelte: 3.35.0
       svelte-hmr: 0.12.8_svelte@3.35.0
+      vite: 2.0.5
+    dev: true
+    engines:
+      node: '>=12.0.0'
+    peerDependencies:
+      svelte: ^3.34.0
+      vite: ^2.0.4
+    resolution:
+      integrity: sha512-bUjHCFfz1IsfO41/cBUXfkclc0NBqIwKfhmrkVQIO0J0MG9Vg9XXJp+1irkl8Xs3tUN/khp7x/4+Ij51dSa29A==
+  /@svitejs/vite-plugin-svelte/0.9.3_vite@2.0.5:
+    dependencies:
+      '@rollup/pluginutils': 4.1.0
+      chalk: 4.1.0
+      debug: 4.3.1
+      hash-sum: 2.0.0
+      require-relative: 0.8.7
+      slash: 3.0.0
+      source-map: 0.7.3
+      svelte-hmr: 0.12.8
       vite: 2.0.5
     dev: true
     engines:
@@ -6914,6 +6946,16 @@ packages:
       node: ^10 || ^12 || >=14
     resolution:
       integrity: sha512-xpB8qYxgPuly166AGlpRjUdEYtmOWx2iCwGmrv4vqZL9YPVviDVPZPRXxnXr6xPZOdxQ9lp3ZBFCRgWJ7LE3Sg==
+  /postcss/8.2.7:
+    dependencies:
+      colorette: 1.2.2
+      nanoid: 3.1.20
+      source-map: 0.6.1
+    dev: true
+    engines:
+      node: ^10 || ^12 || >=14
+    resolution:
+      integrity: sha512-DsVLH3xJzut+VT+rYr0mtvOtpTjSyqDwPf5EZWXcb0uAKfitGpTY9Ec+afi2+TgdN8rWS9Cs88UDYehKo/RvOw==
   /prelude-ls/1.1.2:
     dev: true
     engines:
@@ -7627,7 +7669,7 @@ packages:
       require-relative: 0.8.7
       rollup: 2.40.0
       svelte: 3.34.0
-      svelte-hmr: 0.12.7_svelte@3.34.0
+      svelte-hmr: 0.12.8_svelte@3.34.0
     dev: true
     engines:
       node: '>=10'
@@ -8393,6 +8435,20 @@ packages:
       svelte: '>=3.19.0'
     resolution:
       integrity: sha512-f5FlHAO7o5vuRI2ZV5ZG1CTP0dtOekYDMQxjeELOR7nHJpVTXLNosFh822FM9WxYr0Vbv17caXRCOKD+l4ThEA==
+  /svelte-hmr/0.12.8:
+    dev: true
+    peerDependencies:
+      svelte: '>=3.19.0'
+    resolution:
+      integrity: sha512-ed9kd6aokguVMUnxRCB7u/3xWyKnNBOP/g9euQ65K+gEkkZGdLvuNqK7Np97Nc4/MpMQz8SxQJ8KjrNhetrwrw==
+  /svelte-hmr/0.12.8_svelte@3.34.0:
+    dependencies:
+      svelte: 3.34.0
+    dev: true
+    peerDependencies:
+      svelte: '>=3.19.0'
+    resolution:
+      integrity: sha512-ed9kd6aokguVMUnxRCB7u/3xWyKnNBOP/g9euQ65K+gEkkZGdLvuNqK7Np97Nc4/MpMQz8SxQJ8KjrNhetrwrw==
   /svelte-hmr/0.12.8_svelte@3.35.0:
     dependencies:
       svelte: 3.35.0
@@ -8408,6 +8464,55 @@ packages:
       detect-indent: 6.0.0
       strip-indent: 3.0.0
       svelte: 3.34.0
+    dev: true
+    engines:
+      node: '>= 9.11.2'
+    peerDependencies:
+      '@babel/core': ^7.10.2
+      coffeescript: ^2.5.1
+      less: ^3.11.3
+      node-sass: '*'
+      postcss: ^7 || ^8
+      postcss-load-config: ^2.1.0 || ^3.0.0
+      pug: ^3.0.0
+      sass: ^1.26.8
+      stylus: ^0.54.7
+      sugarss: ^2.0.0
+      svelte: ^3.23.0
+      typescript: ^3.9.5 || ^4.0.0
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      coffeescript:
+        optional: true
+      less:
+        optional: true
+      node-sass:
+        optional: true
+      postcss:
+        optional: true
+      postcss-load-config:
+        optional: true
+      pug:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      typescript:
+        optional: true
+    requiresBuild: true
+    resolution:
+      integrity: sha512-SROWH0rB0DJ+0Ii264cprmNu/NJyZacs5wFD71ya93Cg/oA2lKHgQm4F6j0EWA4ktFMzeuJJm/eX6fka39hEHA==
+  /svelte-preprocess/4.6.9_typescript@4.2.2:
+    dependencies:
+      '@types/pug': 2.0.4
+      '@types/sass': 1.16.0
+      detect-indent: 6.0.0
+      strip-indent: 3.0.0
+      typescript: 4.2.2
     dev: true
     engines:
       node: '>= 9.11.2'
@@ -8781,6 +8886,13 @@ packages:
     dev: true
     resolution:
       integrity: sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
+  /typescript/4.2.2:
+    dev: true
+    engines:
+      node: '>=4.2.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-tbb+NVrLfnsJy3M59lsDgrzWIflR4d4TIUjz+heUnHZwdF7YsrMTKoRERiIvI2lvBG95dfpLxB21WZhys1bgaQ==
   /typical/4.0.0:
     dev: true
     engines:
@@ -9021,7 +9133,7 @@ packages:
   /vite/2.0.5:
     dependencies:
       esbuild: 0.8.54
-      postcss: 8.2.6
+      postcss: 8.2.7
       resolve: 1.20.0
       rollup: 2.40.0
     dev: true
