@@ -96,7 +96,7 @@
   "scripts": {
     "dev": "rollup -c -w",
     "build": "rollup -c",
-    "prepublish": "pnpm build",
+    "prepublishOnly": "pnpm build",
     "test": "npx zoar"
   }
 }
