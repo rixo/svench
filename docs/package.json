@@ -19,10 +19,16 @@
     "url": "https://github.com/rixo/svench/issues"
   },
   "homepage": "https://github.com/rixo/svench#readme",
-  "scripts": {},
   "devDependencies": {
-    "@svitejs/vite-plugin-svelte": "^0.9.2",
-    "svench": "workspace:^0.2.0-1",
-    "vite": "^2.0.4"
+    "rollup-plugin-svelte-hot": "^1.0.0-5",
+    "svelte": "^3.35.0",
+    "svench": "workspace:^0.2.0-8",
+    "vite": "^2.0.5"
+  },
+  "scripts": {
+    "svench": "svench"
+  },
+  "dependencies": {
+    "svench-docs": "link:"
   }
 }

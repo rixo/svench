@@ -8,6 +8,20 @@ importers:
       '@rixo/eslint-config-svelte': ^0.11.0-alpha.1
       prettier: ^2.2.1
       prettier-plugin-svelte: ^2.1.6
+  docs:
+    dependencies:
+      svench-docs: 'link:'
+    devDependencies:
+      rollup-plugin-svelte-hot: 1.0.0-5_svelte@3.35.0
+      svelte: 3.35.0
+      svench: link:../svench
+      vite: 2.0.5
+    specifiers:
+      rollup-plugin-svelte-hot: ^1.0.0-5
+      svelte: ^3.35.0
+      svench: workspace:^0.2.0-8
+      svench-docs: 'link:'
+      vite: ^2.0.5
   examples/rollup:
     dependencies:
       cheap-watch: 1.0.3
@@ -107,7 +121,7 @@ importers:
   examples/vite-default-svelte-template:
     devDependencies:
       '@svitejs/vite-plugin-svelte': 0.9.3_svelte@3.35.0+vite@2.0.5
-      rollup-plugin-svelte-hot: link:../../../../../.nvm/versions/node/v12.16.3/pnpm-global/node_modules/rollup-plugin-svelte-hot
+      rollup-plugin-svelte-hot: 1.0.0-3_svelte@3.35.0
       svelte: 3.35.0
       svelte-hmr: 0.12.8_svelte@3.35.0
       svench: link:../../svench
@@ -3188,6 +3202,12 @@ packages:
     requiresBuild: true
     resolution:
       integrity: sha512-DJH38OiTgXJxFb/EhHrCrY8eGmtdkTtWymHpN9IYN9AF+4jykT0dQArr7wzFejpVbaB0TMIq2+vfNRWr3LXpvw==
+  /esbuild/0.8.55:
+    dev: true
+    hasBin: true
+    requiresBuild: true
+    resolution:
+      integrity: sha512-mM/s7hjYe5mQR+zAWOM5JVrCtYCke182E9l1Bbs6rG5EDP3b1gZF9sHZka53PD/iNt6OccymVZRWkTtBfcKW4w==
   /escalade/3.1.1:
     dev: true
     engines:
@@ -7676,6 +7696,34 @@ packages:
       svelte: '>=3.5.0'
     resolution:
       integrity: sha512-iheuqAL6qBsNtBw86MOJByBTzi3E3uoL8x7s9YWCWDLlw75hsARsoio9giyArsMOa9MsEAHlFKq3Clr40K3FUA==
+  /rollup-plugin-svelte-hot/1.0.0-3_svelte@3.35.0:
+    dependencies:
+      '@rollup/pluginutils': 4.1.0
+      require-relative: 0.8.7
+      svelte: 3.35.0
+      svelte-hmr: 0.12.8_svelte@3.35.0
+    dev: true
+    engines:
+      node: '>=10'
+    peerDependencies:
+      rollup: '>=2.0.0'
+      svelte: '>=3.5.0'
+    resolution:
+      integrity: sha512-iheuqAL6qBsNtBw86MOJByBTzi3E3uoL8x7s9YWCWDLlw75hsARsoio9giyArsMOa9MsEAHlFKq3Clr40K3FUA==
+  /rollup-plugin-svelte-hot/1.0.0-5_svelte@3.35.0:
+    dependencies:
+      '@rollup/pluginutils': 4.1.0
+      require-relative: 0.8.7
+      svelte: 3.35.0
+      svelte-hmr: 0.12.9_svelte@3.35.0
+    dev: true
+    engines:
+      node: '>=10'
+    peerDependencies:
+      rollup: '>=2.0.0'
+      svelte: '>=3.5.0'
+    resolution:
+      integrity: sha512-UItjo+ggEJYfOe9sEGhoO2/7SaBgbpER76Au4k1xaZB9h9dohY6YxB8NADFmkDiLg4b3BNLfSD+cOnGcxvMPXg==
   /rollup-plugin-svelte/7.1.0_svelte@3.34.0:
     dependencies:
       require-relative: 0.8.7
@@ -8420,6 +8468,14 @@ packages:
       svelte: '>=3.19.0'
     resolution:
       integrity: sha512-ed9kd6aokguVMUnxRCB7u/3xWyKnNBOP/g9euQ65K+gEkkZGdLvuNqK7Np97Nc4/MpMQz8SxQJ8KjrNhetrwrw==
+  /svelte-hmr/0.12.9_svelte@3.35.0:
+    dependencies:
+      svelte: 3.35.0
+    dev: true
+    peerDependencies:
+      svelte: '>=3.19.0'
+    resolution:
+      integrity: sha512-SGE7Odznj4dqZtUVIWcoPCvZ9gHImxVIIjrz+O3DDSi0j4OaSLim6MRF4UdhlBKeW3glSRc+tXNSKYvM5x+Dyw==
   /svelte-preprocess/4.6.9_svelte@3.34.0:
     dependencies:
       '@types/pug': 2.0.4
@@ -9096,7 +9152,7 @@ packages:
       integrity: sha512-+PP89D7AKXFE4gps8c5+4eP5yXTh5qCogjdYX7iSsIxbLZAa26JoGSq6OLk0qdb/fqDh7gtJqGiLbG2V6NvkKQ==
   /vite/2.0.5:
     dependencies:
-      esbuild: 0.8.54
+      esbuild: 0.8.55
       postcss: 8.2.7
       resolve: 1.20.0
       rollup: 2.40.0

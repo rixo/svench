@@ -65,19 +65,6 @@ const f /* files */ = [
     "views": []
   },
   { // f[5]
-    path: "/Svench",
-    import: () => import("/home/eric/projects/svench/svench/docs/src/Svench.svench.svx"),
-    "id": "ebpe3d",
-    "ext": ".svench.svx",
-    "dir": "",
-    "segment": "Svench",
-    "sortKey": "Svench",
-    "title": "Svench",
-    "canonical": "/Svench",
-    "options": {},
-    "views": []
-  },
-  { // f[6]
     path: "/_/Getting_Started/index",
     import: () => import("/home/eric/projects/svench/svench/docs/src/01-Getting_Started.svench/index.md"),
     "id": "fvwnrn",
@@ -87,6 +74,19 @@ const f /* files */ = [
     "sortKey": "index",
     "title": "index.md",
     "canonical": "/Getting_Started/index",
+    "options": {},
+    "views": []
+  },
+  { // f[6]
+    path: "/index",
+    import: () => import("/home/eric/projects/svench/svench/docs/src/index.md"),
+    "id": "1ng6h6z",
+    "ext": ".md",
+    "dir": "",
+    "segment": "index",
+    "sortKey": "index",
+    "title": "index.md",
+    "canonical": "/index",
     "options": {},
     "views": []
   }
@@ -155,7 +155,6 @@ const tree = {
   "title": undefined,
   "canonical": undefined,
   children: [
-    f[5],
     d[3]
   ]
 }
