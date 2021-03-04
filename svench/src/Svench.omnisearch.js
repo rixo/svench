@@ -57,9 +57,10 @@ export default ({ routes, router, maxResults = 10 }) => {
     const items = []
     for (const route of $routes) {
       const { views, title, path } = route
+      const displayPath = path.replace(/^\/_\//, '/')
       const routeItem = {
         route,
-        searchKey: [title, path, title].join('✂️'),
+        searchKey: [title, displayPath, title].join('✂️'),
       }
       items.push(routeItem)
 
@@ -68,7 +69,7 @@ export default ({ routes, router, maxResults = 10 }) => {
         items.push({
           ...routeItem,
           view,
-          searchKey: [view, '✂️', path, '?', view].join(''),
+          searchKey: [view, '✂️', displayPath, '?', view].join(''),
         })
       }
     }
