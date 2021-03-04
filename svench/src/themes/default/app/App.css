@@ -153,9 +153,23 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  position: relative;
   & .svench-app-menu-menu {
     flex: 1;
     width: 100%;
+  }
+  & .svench-app-menu-brand {
+    position: absolute;
+    z-index: -1;
+    bottom: 0;
+    text-align: center;
+    width: 100%;
+    padding: .25rem .2rem;
+    margin-left: -.5rem;
+    font-size: 2rem;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.4) !important;
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.15);
   }
 }
 

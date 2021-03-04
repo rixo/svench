@@ -152,6 +152,7 @@
       style="width: {menuWidth}px">
       <Menu tree={$tree} {router} />
     </div>
+    <div class="svench-app-menu-brand">Svench</div>
   </section>
 
   <div class="svench-app-body" style={bodyStyle}>

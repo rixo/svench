@@ -8,16 +8,16 @@
     /* font-size: var(--svench-font-size-big); */
     --svench-menu-font-size: var(--svench-font-size-big);
     --icon-size: var(--svench-menu-icon-size, 1);
-    /* --font-size: var(--svench-menu-font-size, 1.04em); */
+    /* --font-size: var(--svench-menu-font-size, 1.04rem); */
     & .svench-menu-item-icon {
-      width: 2.6em;
-      padding: 0.2em 0.1em 0;
+      width: 2.6rem;
+      padding: 0.2rem 0.1rem 0;
       & .svench-menu-item-icon-icon {
         display: none;
       }
     }
     & .svench-menu-item-text {
-      margin-left: -0.8em;
+      margin-left: -0.8rem;
     }
   }
 }
