@@ -9,7 +9,9 @@
     knobs: 'Knobs',
     actions: 'Actions',
     source: 'Source',
-    styles: '<style>',
+    // NOTE writing the string in full makes svelte preprocess things the
+    // styling tag starts here!
+    styles: '<' + 'style' + '>',
     // test: 'Test',
   }
 
