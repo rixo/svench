@@ -63,6 +63,8 @@ export default async (
     vite: configOverride || true,
     sveltePlugin,
     defaultSveltePlugin,
+    // enforce hot mode (@svitejs/vite-plugin-svelte doesn't do auto hot)
+    forceSvelteHot: true,
     ...cliOverrides,
   })
 

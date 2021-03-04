@@ -11,7 +11,7 @@ const wrap = (
   const plugin = config => {
     const sveltePluginName = forceSveltePlugin
       ? forceSveltePlugin
-      : forceSvelteHot
+      : forceSvelteHot && modulePath === 'rollup-plugin-svelte'
       ? 'rollup-plugin-svelte-hot'
       : modulePath
     if (sveltePluginName === modulePath) {

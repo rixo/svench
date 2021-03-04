@@ -26,6 +26,7 @@ const parseSvenchifyOptions = ({
   noMagic = false,
   interceptSveltePlugin = !noMagic,
   esm = !noMagic,
+  forceSvelteHot = false,
   _setOptions,
   ...svench
 } = {}) => ({
@@ -33,6 +34,7 @@ const parseSvenchifyOptions = ({
   noMagic,
   interceptSveltePlugin,
   esm,
+  forceSvelteHot,
   _setOptions,
 })
 
@@ -105,6 +107,18 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
           preprocess: {
             markup: (...args) => parts.preprocess.pull(...args),
           },
+          // enforce hot mode:
+          // - @svitejs/vite-plugin-svelte doesn't do auto hot
+          // - with Rollup, user might be using non-HMR rollup-plugin-svelte
+          ...(forceSvelteHot && {
+            hot: {
+              ...svelte.hot,
+            },
+            compilerOptions: {
+              ...svelte.compilerOptions,
+              dev: true,
+            },
+          }),
         }
         maybeDump('svelte', dump, svelteConfig)
         return svelteConfig
