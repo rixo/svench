@@ -34,5 +34,6 @@ module.exports = (wrapSvelteConfig, file, opts) => {
     ...wrap(wrapSvelteConfig, 'rollup-plugin-svelte', opts),
     ...wrap(wrapSvelteConfig, 'rollup-plugin-svelte-hot', opts),
     ...wrap(wrapSvelteConfig, '@svitejs/vite-plugin-svelte', opts),
+    ...wrap(wrapSvelteConfig, '@sveltejs/vite-plugin-svelte', opts),
   })
 }

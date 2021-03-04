@@ -153,6 +153,7 @@ const inspect = async ({
       const missingDeps = new Set()
       const sveltePluginAlternatives = [
         '@svitejs/vite-plugin-svelte',
+        '@sveltejs/vite-plugin-svelte',
         'rollup-plugin-svelte-hot',
       ]
       const deps = findDeps(['vite', sveltePluginAlternatives], missingDeps)
