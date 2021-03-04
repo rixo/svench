@@ -83,6 +83,14 @@
     min-width: 11rem;
     white-space: nowrap;
     overflow: hidden;
+    cursor: pointer;
+    opacity: .9;
+    transition: opacity 150ms;
+    box-shadow: inset 2px 2px 6px hsla(0, 0%, 0%, .2);
+  }
+
+  button:hover {
+    opacity: 1;
   }
 
   button .svench-omnisearch-button-label {
