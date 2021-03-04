@@ -25,7 +25,7 @@ export const createPluginParts = argOptions => {
     manifestDir,
     routesFile,
     resolveRouteImport,
-    // preprocess: preprocessors,
+    preprocessors = options.svelte && options.svelte.preprocess,
     mdsvex,
     md,
     autoComponentIndex,
@@ -34,9 +34,6 @@ export const createPluginParts = argOptions => {
   } = options
 
   if (!enabled) return { options }
-
-  const preprocessors =
-    options.preprocess || (options.svelte && options.svelte.preprocess)
 
   const preprocess = cachingPreprocess({
     extensions,

@@ -3,13 +3,13 @@
 import { mdsvex } from 'mdsvex'
 import link from 'rehype-autolink-headings'
 import slug from 'rehype-slug'
-// import gemoji from 'remark-gemoji'
+// import gemoji from
 // import gemojiToEmoji from 'remark-gemoji-to-emoji'
 
 const { preprocess } = require('svelte/compiler')
-
 import addClasses from './rehype-add-classes'
 import preprocessSvench from './preprocessor'
+import { stringHashcode } from './util'
 
 const noPreprocess = code => ({ code })
 
@@ -22,6 +22,8 @@ export default ({
   preprocessors = [],
   mdsvex: mdsvexEnabled,
   md: mdEnabled,
+
+  disableCache = false, // TODO wire externally
 }) => {
   const cache = {}
 
@@ -70,20 +72,33 @@ export default ({
     },
   ].filter(Boolean)
 
-  const push = (...args) => {
-    const [, { filename }] = args
-    const result = preprocess(args.shift(), svenchPreprocessors, ...args)
-    cache[filename] = result
+  const push = async (
+    code,
+    { filename, length = code.length, hash, ...attributes }
+  ) => {
+    const result = preprocess(code, svenchPreprocessors, {
+      filename,
+      ...attributes,
+    })
+    if (!disableCache) {
+      cache[filename] = {
+        length,
+        hash: hash || stringHashcode(code),
+        result,
+      }
+    }
     return result
   }
 
   const pull = async ({ content, filename }) => {
+    const length = content.length
+    const hash = stringHashcode(content)
     const cached = cache[filename]
-    if (cached) {
-      delete cache[filename]
-      return cached
+    delete cache[filename]
+    if (cached && cached.length === length && cached.hash === hash) {
+      return cached.result
     }
-    return preprocess(content, svenchPreprocessors, { filename })
+    return await push(content, { filename, length, hash })
   }
 
   return { push, pull }
