@@ -53,37 +53,37 @@
   <div
     class="svench-ui svench-search-result--overlay"
     transition:fade={{ duration: 100 }}
-    on:click={close} />
-
-  <div
-    transition:fly={{ y: 16, duration: 100 }}
-    class="svench-ui svench-search-result--dialog">
-    <input
-      bind:this={input}
-      class="svench-search-result--input"
-      type="search"
-      placeholder="Searchin'"
-      bind:value={$search.query} />
-    <div class="svench-search-result--results">
-      {#each $search.results as { index, selected, href, searchKey, title, path } (href)}
-        <a
-          class:selected
-          {href}
-          on:click={close}
-          on:mousemove={handleHover(index)}>
-          <strong class="svench-search-result--item-title">
-            {@html title}
-          </strong>
-          <em class="svench-search-result--item-path">
-            {@html path}
-          </em>
-        </a>
-      {:else}
-        <p>No results</p>
-      {/each}
-      {#if $search.hasMore}
-        <div class="svench-search-result--results--has-more">&hellip;</div>
-      {/if}
+    on:click={close}>
+    <div
+      transition:fly={{ y: 16, duration: 100 }}
+      class="svench-ui svench-search-result--dialog">
+      <input
+        bind:this={input}
+        class="svench-search-result--input"
+        type="search"
+        placeholder="Searchin'"
+        bind:value={$search.query} />
+      <div class="svench-search-result--results">
+        {#each $search.results as { index, selected, href, searchKey, title, path } (href)}
+          <a
+            class:selected
+            {href}
+            on:click={close}
+            on:mousemove={handleHover(index)}>
+            <strong class="svench-search-result--item-title">
+              {@html title}
+            </strong>
+            <em class="svench-search-result--item-path">
+              {@html path}
+            </em>
+          </a>
+        {:else}
+          <p class="svench-search-result--results--no-results">No results</p>
+        {/each}
+        {#if $search.hasMore}
+          <div class="svench-search-result--results--has-more">&hellip;</div>
+        {/if}
+      </div>
     </div>
   </div>
 {/if}
@@ -97,14 +97,17 @@
     right: 0;
 
     background: hsla(209deg, 20%, 66%, 0.75);
+
+    display: flex;
+    justify-content: center;
+    align-items: start;
   }
 
   .svench-search-result--dialog {
-    position: fixed;
+    position: relative;
     z-index: 3;
-    top: calc(var(--toolbar-height) + 2rem);
+    margin-top: calc(var(--toolbar-height) + 2rem);
     background-color: var(--white);
-    margin: auto;
     padding: 0.75rem;
     width: 100%;
     max-width: 40rem;
@@ -194,5 +197,10 @@
   .svench-search-result--results--has-more {
     text-align: center;
     font-size: 1.5rem;
+  }
+
+  .svench-search-result--results--no-results {
+    text-align: center;
+    color: var(--gray);
   }
 </style>
