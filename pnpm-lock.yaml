@@ -107,7 +107,7 @@ importers:
   examples/vite-default-svelte-template:
     devDependencies:
       '@svitejs/vite-plugin-svelte': 0.9.3_svelte@3.35.0+vite@2.0.5
-      rollup-plugin-svelte-hot: 1.0.0-3_svelte@3.35.0
+      rollup-plugin-svelte-hot: link:../../../../../.nvm/versions/node/v12.16.3/pnpm-global/node_modules/rollup-plugin-svelte-hot
       svelte: 3.35.0
       svelte-hmr: 0.12.8_svelte@3.35.0
       svench: link:../../svench
@@ -121,13 +121,15 @@ importers:
       vite: ^2.0.5
   examples/vite-typescript:
     devDependencies:
-      '@svitejs/vite-plugin-svelte': 0.9.3_vite@2.0.5
-      svelte-preprocess: 4.6.9_typescript@4.2.2
+      '@svitejs/vite-plugin-svelte': 0.9.3_svelte@3.35.0+vite@2.0.5
+      svelte: 3.35.0
+      svelte-preprocess: 4.6.9_svelte@3.35.0+typescript@4.2.2
       svench: link:../../svench
       typescript: 4.2.2
       vite: 2.0.5
     specifiers:
       '@svitejs/vite-plugin-svelte': ^0.9.3
+      svelte: ^3.35.0
       svelte-preprocess: ^4.6.9
       svench: workspace:^0.2.0-6
       typescript: ^4.2.2
@@ -726,25 +728,6 @@ packages:
       source-map: 0.7.3
       svelte: 3.35.0
       svelte-hmr: 0.12.8_svelte@3.35.0
-      vite: 2.0.5
-    dev: true
-    engines:
-      node: '>=12.0.0'
-    peerDependencies:
-      svelte: ^3.34.0
-      vite: ^2.0.4
-    resolution:
-      integrity: sha512-bUjHCFfz1IsfO41/cBUXfkclc0NBqIwKfhmrkVQIO0J0MG9Vg9XXJp+1irkl8Xs3tUN/khp7x/4+Ij51dSa29A==
-  /@svitejs/vite-plugin-svelte/0.9.3_vite@2.0.5:
-    dependencies:
-      '@rollup/pluginutils': 4.1.0
-      chalk: 4.1.0
-      debug: 4.3.1
-      hash-sum: 2.0.0
-      require-relative: 0.8.7
-      slash: 3.0.0
-      source-map: 0.7.3
-      svelte-hmr: 0.12.8
       vite: 2.0.5
     dev: true
     engines:
@@ -7693,20 +7676,6 @@ packages:
       svelte: '>=3.5.0'
     resolution:
       integrity: sha512-iheuqAL6qBsNtBw86MOJByBTzi3E3uoL8x7s9YWCWDLlw75hsARsoio9giyArsMOa9MsEAHlFKq3Clr40K3FUA==
-  /rollup-plugin-svelte-hot/1.0.0-3_svelte@3.35.0:
-    dependencies:
-      '@rollup/pluginutils': 4.1.0
-      require-relative: 0.8.7
-      svelte: 3.35.0
-      svelte-hmr: 0.12.8_svelte@3.35.0
-    dev: true
-    engines:
-      node: '>=10'
-    peerDependencies:
-      rollup: '>=2.0.0'
-      svelte: '>=3.5.0'
-    resolution:
-      integrity: sha512-iheuqAL6qBsNtBw86MOJByBTzi3E3uoL8x7s9YWCWDLlw75hsARsoio9giyArsMOa9MsEAHlFKq3Clr40K3FUA==
   /rollup-plugin-svelte/7.1.0_svelte@3.34.0:
     dependencies:
       require-relative: 0.8.7
@@ -8435,12 +8404,6 @@ packages:
       svelte: '>=3.19.0'
     resolution:
       integrity: sha512-f5FlHAO7o5vuRI2ZV5ZG1CTP0dtOekYDMQxjeELOR7nHJpVTXLNosFh822FM9WxYr0Vbv17caXRCOKD+l4ThEA==
-  /svelte-hmr/0.12.8:
-    dev: true
-    peerDependencies:
-      svelte: '>=3.19.0'
-    resolution:
-      integrity: sha512-ed9kd6aokguVMUnxRCB7u/3xWyKnNBOP/g9euQ65K+gEkkZGdLvuNqK7Np97Nc4/MpMQz8SxQJ8KjrNhetrwrw==
   /svelte-hmr/0.12.8_svelte@3.34.0:
     dependencies:
       svelte: 3.34.0
@@ -8506,12 +8469,13 @@ packages:
     requiresBuild: true
     resolution:
       integrity: sha512-SROWH0rB0DJ+0Ii264cprmNu/NJyZacs5wFD71ya93Cg/oA2lKHgQm4F6j0EWA4ktFMzeuJJm/eX6fka39hEHA==
-  /svelte-preprocess/4.6.9_typescript@4.2.2:
+  /svelte-preprocess/4.6.9_svelte@3.35.0+typescript@4.2.2:
     dependencies:
       '@types/pug': 2.0.4
       '@types/sass': 1.16.0
       detect-indent: 6.0.0
       strip-indent: 3.0.0
+      svelte: 3.35.0
       typescript: 4.2.2
     dev: true
     engines:
