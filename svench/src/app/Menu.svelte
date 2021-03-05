@@ -72,7 +72,7 @@
     padding: 0.25em 0.5em;
   }
   h2 + h2 {
-    margin-top: .75em;
+    margin-top: 0.75em;
   }
   h2 > span,
   h2 > a {
@@ -101,8 +101,8 @@
     content: ' ';
     display: block;
     position: absolute;
-    left: -0.5em;
-    right: -0.5em;
+    left: 0;
+    right: 0;
     top: 0;
     bottom: 0;
     background-color: var(--gray);
