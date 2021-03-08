@@ -166,6 +166,9 @@ const stateful = initialOptions => {
       if (qs.length > 0) {
         url += '?' + qs.replace(/=true(?=&|$)/g, '')
       }
+      if (location.hash) {
+        url += location.hash
+      }
       const currentUrl = location.pathname + location.search
       if (url !== currentUrl) {
         // NOTE we need to keep the state, because it contains restore scroll

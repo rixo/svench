@@ -41,8 +41,12 @@ export default ({
     return uri
   }
 
-  router.resolveView = (path, view) =>
-    router.resolve(view ? `${path}?view=${view}` : path)
+  router.resolveView = (path, view, hash) => {
+    let uri = path
+    if (view) uri += '?' + view
+    if (hash) uri += '#' + hash
+    return router.resolve(uri)
+  }
 
   router.error = writable()
   router.current = writable()
@@ -56,7 +60,8 @@ export default ({
         !next ||
         current.cmp !== next.cmp ||
         current.route !== next.route ||
-        current.view !== next.view)
+        current.view !== next.view ||
+        current.hash !== next.hash)
       // || current.hash !== next.hash
     ) {
       current = next

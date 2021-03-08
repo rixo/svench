@@ -1,5 +1,7 @@
 import path from 'path'
-import relative from 'require-relative'
+
+import { importRelative } from '../../../lib/import-relative.cjs'
+import { Log } from '../../lib.js'
 
 const isPromise = x => x && typeof x.then === 'function'
 
@@ -18,9 +20,7 @@ export default async (_, { cwd, _nollup, ...options }) => {
     process.env.NOLLUP = process.env.NOLLUP == null ? '1' : process.env.NOLLUP
   }
 
-  const rel = x => relative(x, cwd)
-
-  const { svenchify } = rel('svench/rollup')
+  const { svenchify } = importRelative('svench/rollup')
 
   const configFile = path.resolve(cwd, 'rollup.config.js')
 
@@ -40,7 +40,7 @@ export default async (_, { cwd, _nollup, ...options }) => {
   const config = await resolveConfig(rawConfig)
 
   if (_nollup) {
-    const nollup = rel('nollup/lib/dev-server.js')
+    const nollup = importRelative('nollup/lib/dev-server.js')
     nollup({
       // NOTE Nollup's defaults bellow
       contentBase: './',
@@ -72,7 +72,7 @@ export default async (_, { cwd, _nollup, ...options }) => {
       publicPath: path.relative(publicDir, distDir),
     })
   } else {
-    const rollup = rel('rollup')
+    const rollup = importRelative('rollup')
     rollup.watch(config)
   }
 }

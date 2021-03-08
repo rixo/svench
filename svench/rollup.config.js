@@ -88,8 +88,8 @@ const configs = {
       format: 'cjs',
       dir: '.',
       entryFileNames: ({ facadeModuleId: x }) =>
-        path.basename(x).replace('-plugin', ''),
-      chunkFileNames: 'dist/[name].js',
+        path.basename(x).replace('-plugin', '').replace('.js', '.cjs'),
+      chunkFileNames: 'dist/[name].cjs',
       sourcemap: true,
       ...(!production && {
         banner: "require('source-map-support').install();",

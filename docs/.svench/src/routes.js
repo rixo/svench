@@ -10,7 +10,8 @@ const f /* files */ = [
     "title": "config.md",
     "canonical": "/Installation/config",
     "options": {},
-    "views": []
+    "views": [],
+    "headings": []
   },
   { // f[1]
     path: "/_/Installation/index",
@@ -23,22 +24,10 @@ const f /* files */ = [
     "title": "index.md",
     "canonical": "/Installation/index",
     "options": {},
-    "views": []
+    "views": [],
+    "headings": []
   },
   { // f[2]
-    path: "/_/Usage/View",
-    import: () => import("/home/eric/projects/svench/svench/docs/src/03-Usage.svench/00-View.svench"),
-    "id": "i99bec",
-    "ext": ".svench",
-    "dir": "Usage",
-    "segment": "View",
-    "sortKey": "00-View",
-    "title": "View",
-    "canonical": "/Usage/View",
-    "options": {},
-    "views": []
-  },
-  { // f[3]
     path: "/_/Usage/Render",
     import: () => import("/home/eric/projects/svench/svench/docs/src/03-Usage.svench/10-Render.svench"),
     "id": "49ijpe",
@@ -49,9 +38,10 @@ const f /* files */ = [
     "title": "Render",
     "canonical": "/Usage/Render",
     "options": {},
-    "views": []
+    "views": [],
+    "headings": []
   },
-  { // f[4]
+  { // f[3]
     path: "/_/Usage/index",
     import: () => import("/home/eric/projects/svench/svench/docs/src/03-Usage.svench/index.md"),
     "id": "e586u2",
@@ -62,7 +52,31 @@ const f /* files */ = [
     "title": "index.md",
     "canonical": "/Usage/index",
     "options": {},
-    "views": []
+    "views": [],
+    "headings": []
+  },
+  { // f[4]
+    path: "/index",
+    import: () => import("/home/eric/projects/svench/svench/docs/src/index.md"),
+    "id": "1ng6h6z",
+    "ext": ".md",
+    "dir": "",
+    "segment": "index",
+    "sortKey": "index",
+    "title": "index.md",
+    "canonical": "/index",
+    "options": {},
+    "views": [],
+    "headings": [
+      {
+        "level": 1,
+        "hierarchy": [
+          "Svench"
+        ],
+        "text": "Svench",
+        "id": "svench"
+      }
+    ]
   },
   { // f[5]
     path: "/_/Getting_Started/index",
@@ -75,20 +89,80 @@ const f /* files */ = [
     "title": "index.md",
     "canonical": "/Getting_Started/index",
     "options": {},
-    "views": []
+    "views": [],
+    "headings": [
+      {
+        "level": 1,
+        "hierarchy": [
+          "Getting Started"
+        ],
+        "text": "Getting Started",
+        "id": "getting-started"
+      },
+      {
+        "level": 2,
+        "hierarchy": [
+          "Getting Started",
+          "What is Svench?"
+        ],
+        "text": "What is Svench?",
+        "id": "what-is-svench"
+      },
+      {
+        "level": 2,
+        "hierarchy": [
+          "Getting Started",
+          "Why is Svench?"
+        ],
+        "text": "Why is Svench?",
+        "id": "why-is-svench"
+      },
+      {
+        "level": 3,
+        "hierarchy": [
+          "Getting Started",
+          "Why is Svench?",
+          "Fast"
+        ],
+        "text": "Fast",
+        "id": "fast"
+      },
+      {
+        "level": 3,
+        "hierarchy": [
+          "Getting Started",
+          "Why is Svench?",
+          "Easy"
+        ],
+        "text": "Easy",
+        "id": "easy"
+      },
+      {
+        "level": 2,
+        "hierarchy": [
+          "Getting Started",
+          "How is Svench?"
+        ],
+        "text": "How is Svench?",
+        "id": "how-is-svench"
+      }
+    ]
   },
   { // f[6]
-    path: "/index",
-    import: () => import("/home/eric/projects/svench/svench/docs/src/index.md"),
-    "id": "1ng6h6z",
-    "ext": ".md",
-    "dir": "",
-    "segment": "index",
-    "sortKey": "index",
-    "title": "index.md",
-    "canonical": "/index",
+    path: "/_/Usage/View",
+    import: () => import("/home/eric/projects/svench/svench/docs/src/03-Usage.svench/00-View.svench"),
+    "id": "i99bec",
+    "ext": ".svench",
+    "dir": "Usage",
+    "segment": "View",
+    "sortKey": "00-View",
+    "title": "View",
+    "canonical": "/Usage/View",
     "options": {},
-    "views": []
+    "views": [
+      "a view"
+    ],
+    "headings": []
   }
 ]
 
@@ -124,7 +198,7 @@ const d /* dirs */ = [
     "sortKey": "03-Usage",
     "title": "Usage",
     "canonical": "/_/Usage",
-    children: () => [f[2], f[3]]
+    children: () => [f[6], f[2]]
   },
   { // d[3]
     path: "/_",

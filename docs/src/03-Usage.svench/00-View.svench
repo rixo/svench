@@ -1,0 +1,9 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<h1>View</h1>
+
+<View name="a view">
+  A piece of view!
+</View>

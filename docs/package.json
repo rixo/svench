@@ -20,15 +20,13 @@
   },
   "homepage": "https://github.com/rixo/svench#readme",
   "devDependencies": {
-    "rollup-plugin-svelte-hot": "^1.0.0-5",
+    "@svitejs/vite-plugin-svelte": "^0.9.4",
+    "rollup-plugin-svelte-hot": "^1.0.0-6",
     "svelte": "^3.35.0",
     "svench": "workspace:^0.2.0-8",
     "vite": "^2.0.5"
   },
   "scripts": {
     "svench": "svench"
-  },
-  "dependencies": {
-    "svench-docs": "link:"
   }
 }

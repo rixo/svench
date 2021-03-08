@@ -42,6 +42,7 @@ const format = ({
   title,
   options,
   views,
+  headings,
   // isIndex,
 }) => ({
   id,
@@ -52,7 +53,7 @@ const format = ({
   title,
   canonical,
   // isIndex,
-  ...(isFile && { options, views }),
+  ...(isFile && { options, views, headings }),
 })
 
 const bySortKey = (a, b) =>
@@ -107,9 +108,13 @@ export default ({
 
     return async (item, previous) => {
       if (item.isFile) {
-        const { options, views } = await parseMeta(preprocess, item.absolute)
+        const { options, views, headings } = await parseMeta(
+          preprocess,
+          item.absolute
+        )
         item.options = options || {}
         item.views = views
+        item.headings = headings
         item.extra = {}
       }
 

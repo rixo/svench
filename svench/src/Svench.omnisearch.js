@@ -10,37 +10,44 @@ const longer = (a, b) => {
   return b.length > a.length ? b : a
 }
 
-const bySortKey = ({ route: a }, { route: b }) => {
+const byRoutePath = ({ route: a }, { route: b }) => {
   // TODO path should be sliced?
-  const ak = a.sortKey || a.path
-  const bk = b.sortKey || b.path
-  const diff = ak.localeCompare(bk)
+  const ak = a.path
+  const bk = b.path
+  let diff = ak.localeCompare(bk)
   if (diff !== 0) return diff
   if (!a.view || !b.view) return 0
   const ai = a.views.indexOf(a.view)
   const bi = b.views.indexOf(b.view)
-  return ai - bi
+  diff = ai - bi
+  if (diff !== 0) return diff
+  const ah = (a.headings || []).indexOf(a.heading)
+  const bh = (b.headings || []).indexOf(b.heading)
+  diff = ah - bh
+  return diff
 }
 
-export default ({ routes, router, maxResults = 10 }) => {
+export default ({ routes, router, maxResults = 500 }) => {
   const current = {
     query: '',
     results: [],
     open: false,
     hasMore: false,
+    // initially true because activated by first key stroke
+    preventScroll: true,
   }
 
   let selectedIndex = 0
   let lastQuery = ''
 
   let $routes
-  let update = noop
+  let set = noop
 
   const api = derived(
     routes,
-    (_$routes, set) => {
+    (_$routes, _set) => {
       $routes = _$routes
-      update = () => set(current)
+      set = _set
       const { results, hasMore } = getResults()
       Object.assign(current, { results, hasMore })
       update()
@@ -48,19 +55,57 @@ export default ({ routes, router, maxResults = 10 }) => {
     current
   )
 
-  const finalizeResults = results => ({
-    results: results.slice(0, maxResults),
-    hasMore: results.length > maxResults,
-  })
+  const update = () =>
+    set({
+      ...current,
+      selectedIndex,
+    })
+
+  const finalizeResults = results => {
+    const knownHref = new Set()
+    return {
+      results: results
+        .slice(0, maxResults)
+        .map(({ 0: titleResult, 1: pathResult, obj }, index) => {
+          const { route, path, title, view, hash } = obj
+          // const [titleA, path, titleB] = searchKey.split('✂️')
+          const href = router.resolveView(route.path, view, hash)
+
+          if (knownHref.has(href)) return
+          knownHref.add(href)
+
+          const highTitle = titleResult
+            ? fuzzysort.highlight(titleResult)
+            : title
+          const highPath = pathResult ? fuzzysort.highlight(pathResult) : path
+          return {
+            index,
+            score: 0,
+            selected: index === current.selected,
+            title: highTitle,
+            path: highPath,
+            route,
+            href,
+          }
+        })
+        .filter(Boolean),
+      hasMore: results.length > maxResults,
+    }
+  }
 
   const getResults = () => {
     const items = []
     for (const route of $routes) {
-      const { views, title, path } = route
+      if (route.path === '.') continue
+      if (route.path === '/_') continue
+
+      const { views, title, path, headings = [] } = route
       const displayPath = path.replace(/^\/_\//, '/')
       const routeItem = {
         route,
-        searchKey: [title, displayPath, title].join('✂️'),
+        // searchKey: [title, displayPath, title].join('✂️'),
+        title,
+        path: displayPath,
       }
       items.push(routeItem)
 
@@ -69,58 +114,47 @@ export default ({ routes, router, maxResults = 10 }) => {
         items.push({
           ...routeItem,
           view,
-          searchKey: [view, '✂️', displayPath, '?', view].join(''),
+          title: '? ' + view,
+          path: `${displayPath} ? ${view}`,
+        })
+      }
+
+      for (const heading of headings) {
+        const { id, level, hierarchy } = heading
+        // can't link to headings with no id
+        if (!id) continue
+        items.push({
+          ...routeItem,
+          heading,
+          hash: id,
+          title: `${'#'.repeat(level)} ${heading.text}`,
+          path: `${displayPath} # ${hierarchy.join(' > ')}`,
         })
       }
     }
 
     if (!current.query) {
       const results = items
-        .filter(({ route }) => route.dir !== '.')
-        .sort(bySortKey)
+        .sort(byRoutePath)
         .slice(0, maxResults + 1)
-        .map((obj, index) => {
-          const { route, view, searchKey } = obj
-          const [titleA, path, titleB] = searchKey.split('✂️')
-          return {
-            index,
-            score: 0,
-            route,
-            view,
-            selected: index === current.selected,
-            href: router.resolveView(route.path, view),
-            path,
-            title: longer(titleA, titleB),
-          }
-        })
+        .map(obj => ({ obj }))
       return finalizeResults(results)
     }
 
     const results = fuzzysort.go(current.query, items, {
-      key: 'searchKey',
+      keys: ['title', 'path'],
       limit: maxResults + 1,
+      threshold: -999,
+      scoreFn: ([title, path]) => {
+        let score = 0
+        if (!title && !path) return -1000
+        if (title) score += title.score
+        if (path) score += path.score * 1.5
+        return score
+      },
     })
 
-    const formattedResults = results.map((result, index) => {
-      const {
-        score,
-        obj: { route, view, searchKey },
-      } = result
-      const h = result ? fuzzysort.highlight(result) : searchKey
-      const [titleA, path, titleB] = h.split('✂️')
-      return {
-        index,
-        score,
-        route,
-        view,
-        selected: index === current.selected,
-        href: router.resolveView(route.path, view),
-        path,
-        title: longer(titleA, titleB),
-      }
-    })
-
-    return finalizeResults(formattedResults)
+    return finalizeResults(results)
   }
 
   api.set = value => {
@@ -134,7 +168,8 @@ export default ({ routes, router, maxResults = 10 }) => {
     updateSelected()
   }
 
-  const updateSelected = () => {
+  const updateSelected = (preventScroll = false) => {
+    current.preventScroll = preventScroll
     current.results.map((result, i) => {
       result.selected = i === selectedIndex
     })
@@ -142,20 +177,19 @@ export default ({ routes, router, maxResults = 10 }) => {
   }
 
   current.selectUp = () => {
-    if (selectedIndex <= 0) return
-    selectedIndex = selectedIndex - 1
+    const n = current.results.length
+    selectedIndex = (n + selectedIndex - 1) % n
     updateSelected()
   }
 
   current.selectDown = () => {
-    if (selectedIndex >= current.results.length - 1) return
-    selectedIndex = selectedIndex + 1
+    selectedIndex = (selectedIndex + 1) % current.results.length
     updateSelected()
   }
 
-  current.setSelectedIndex = index => {
+  current.setSelectedIndex = (index, preventScroll = false) => {
     selectedIndex = index
-    updateSelected()
+    updateSelected(preventScroll)
   }
 
   current.select = () => {

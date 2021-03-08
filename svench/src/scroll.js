@@ -189,7 +189,7 @@ export default (getOptions, hasBeenIdle) => {
 
   const trackAnchor = hash => {
     const name = hash.replace(/^#/, '')
-    const offset = getScrollOffset() || 0
+    const offset = 0
     trackScroll(() => {
       const target = document.querySelector(
         `:target, ${hash}, a[name="${name}"]`
