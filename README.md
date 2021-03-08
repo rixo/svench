@@ -20,20 +20,31 @@ Docs are currently being rewritten for v0.2. You can find previous docs in the [
 
 ## v0.2
 
-```bash
-yarn init -y
-yarn add -D vite rollup-plugin-svelte-hot@next svench@beta
-mkdir src
-echo '# Hello' > src/hello.md
-echo '<h1>Hi!</h1>' > src/Hi.svench
-yarn svench
-```
+From scratch:
 
 ```bash
-pnpm init -y
-pnpm add -D vite rollup-plugin-svelte-hot@next svench@beta
+npm init -y
+npm add -D svelte vite rollup-plugin-svelte-hot@next svench@beta
 mkdir src
 echo '# Hello' > src/hello.md
 echo '<h1>Hi!</h1>' > src/Hi.svench
 npx svench
+```
+
+```bash
+pnpm init -y
+pnpm add -D svelte vite rollup-plugin-svelte-hot@next svench@beta
+mkdir src
+echo '# Hello' > src/hello.md
+echo '<h1>Hi!</h1>' > src/Hi.svench
+npx svench
+```
+
+```bash
+yarn init -y
+yarn add -D svelte vite rollup-plugin-svelte-hot@next svench@beta
+mkdir src
+echo '# Hello' > src/hello.md
+echo '<h1>Hi!</h1>' > src/Hi.svench
+yarn svench
 ```
