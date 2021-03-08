@@ -53,18 +53,18 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
-<div class="svench-omnisearch-ct">
+<div class="svench-omnisearch-field">
   <button on:click={() => ($search.open = true)}>
     <span class="svench-omnisearch-button-label">Search</span>
     <kbd>Ctrl</kbd><kbd>O</kbd></button>
 </div>
 
 <style>
-  .svench-omnisearch-ct {
+  .svench-omnisearch-field {
     --padding: 0.5rem;
   }
 
-  .svench-omnisearch-ct {
+  .svench-omnisearch-field {
     height: var(--toolbar-height);
     width: 100%;
     position: relative;
@@ -84,9 +84,9 @@
     white-space: nowrap;
     overflow: hidden;
     cursor: pointer;
-    opacity: .9;
+    opacity: 0.9;
     transition: opacity 150ms;
-    box-shadow: inset 2px 2px 6px hsla(0, 0%, 0%, .2);
+    box-shadow: inset 2px 2px 6px hsla(0, 0%, 0%, 0.2);
   }
 
   button:hover {

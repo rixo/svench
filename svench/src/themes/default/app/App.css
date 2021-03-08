@@ -127,13 +127,18 @@
 }
 
 .svench-app-logo {
-  margin: 0.5em 1em 1.5em;
+  margin: 0.5rem;
   padding: 0;
   white-space: nowrap;
   & a {
     text-decoration: none;
-    color: #79889a;
+    color: var(--light-2-r);
     font-size: 2em;
+    opacity: .66;
+    transition: opacity 150ms;
+    &:hover {
+      opacity: .75;
+    }
   }
   & .svench-icon {
     font-size: 1.2em;
@@ -144,6 +149,10 @@
     position: relative;
     bottom: -0.075em;
   }
+}
+
+.svench-omnisearch-field {
+  margin: .25rem 0 .5rem;
 }
 
 .svench-app-menu {
