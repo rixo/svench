@@ -135,7 +135,8 @@ export default ({ routes, router, maxResults = 10 }) => {
   }
 
   const updateSelected = () => {
-    current.results.map((result, i) => {
+    current.selectedIndex = selectedIndex
+    current.results.forEach((result, i) => {
       result.selected = i === selectedIndex
     })
     update()
