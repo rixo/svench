@@ -21,7 +21,10 @@ export default {
     manifestDir,
 
     index,
-    manifest,
+    manifest: manifest && {
+      css: true,
+      ...manifest,
+    },
     write,
 
     vite: {
