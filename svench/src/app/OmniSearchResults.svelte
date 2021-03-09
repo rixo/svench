@@ -4,9 +4,14 @@
   export let search
 
   let input
+  let overlay
 
   const close = () => {
     $search.open = false
+  }
+
+  const handleOverlayClick = ({ target }) => {
+    if (target === overlay) close()
   }
 
   let mouseHasMoved = false
@@ -51,9 +56,10 @@
 
 {#if $search.open}
   <div
+    bind:this={overlay}
     class="svench-ui svench-search-result--overlay"
     transition:fade={{ duration: 100 }}
-    on:click={close}>
+    on:click={handleOverlayClick}>
     <div
       transition:fly={{ y: 16, duration: 100 }}
       class="svench-ui svench-search-result--dialog">
@@ -61,7 +67,7 @@
         bind:this={input}
         class="svench-search-result--input"
         type="search"
-        placeholder="Searchin'"
+        placeholder="Searchin' Box"
         bind:value={$search.query} />
       <div class="svench-search-result--results">
         {#each $search.results as { index, selected, href, searchKey, title, path } (href)}
@@ -69,7 +75,8 @@
             class:selected
             {href}
             on:click={close}
-            on:mousemove={handleHover(index)}>
+            on:mousemove={handleHover(index)}
+            on:focus={() => $search.setSelectedIndex(index)}>
             <strong class="svench-search-result--item-title">
               {@html title}
             </strong>
@@ -162,6 +169,7 @@
     padding: 0.33rem 0.66rem;
     border-bottom: 2px solid var(--white);
     background: var(--secondary-light);
+    outline: none;
   }
   .svench-search-result--results > a :global(*) {
     color: var(--text-primary);
