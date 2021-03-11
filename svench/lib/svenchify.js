@@ -69,7 +69,10 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
             const _require = require('esm')(module)
             const loadConfigFile = _require(PROXYQUIRE_MODULE)
             const m = loadConfigFile(...loadConfigArgs)
-            return m.default
+            // NOTE even if esm option is enabled (and it's enabled by default),
+            //      we don't know whether we'll actually be importing an ESM or
+            //      CJS file... hence default || module
+            return m.default || m
           } else {
             const loadConfigFile = require(PROXYQUIRE_MODULE)
             return loadConfigFile(...loadConfigArgs)
