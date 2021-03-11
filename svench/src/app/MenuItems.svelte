@@ -84,27 +84,23 @@
     {#each _items as item, i (item.path)}
       <li
         class:svench-menu-active={activeItem && item.id === activeItem.id}
-        class:expanded={expanded[item.id]}
-      >
+        class:expanded={expanded[item.id]}>
         <a
           class="text"
           style={`padding-left: ${indent * indentWidth}em`}
-          href={item.href}
-        >
+          href={item.href}>
           <span
             class="svench-menu-item-icon svench-menu-item-expand-icon"
             class:expand={item.isDirectory && !item.index && has(item.children)}
             class:svench-menu-item-active={route &&
               route.path.startsWith(item.path)}
-            on:click|preventDefault={() => toggle(item)}
-          >
+            on:click|preventDefault={() => toggle(item)}>
             <MenuItemIcon
               class="svench-menu-item-expand-icon-icon"
               isIndex={item.index}
               isDirectory={item.isDirectory}
               hasChildren={has(item.children)}
-              hasViews={has(item.views)}
-            />
+              hasViews={has(item.views)} />
           </span>
           <span class="svench-menu-item-text">{item.title}</span>
         </a>
@@ -116,16 +112,14 @@
               views={item.views$}
               active={getActiveView(item)}
               indent={indent + 1}
-              {indentWidth}
-            />
+              {indentWidth} />
           {/if}
           {#if item.children}
             <svelte:self
               {router}
               {autofold}
               items={item.children}
-              indent={indent + 1}
-            />
+              indent={indent + 1} />
           {/if}
         {/if}
       </li>
