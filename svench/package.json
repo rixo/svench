@@ -3,7 +3,7 @@
   "version": "0.2.0-9",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
-  "homepage": "https://github.com/rixo/svench",
+  "homepage": "https://svench.dev",
   "bugs": {
     "url": "https://github.com/rixo/svench/issues"
   },
@@ -15,6 +15,7 @@
     "svench": "./cli.bin.js"
   },
   "files": [
+    "README.md",
     "src",
     "lib",
     "cli",
