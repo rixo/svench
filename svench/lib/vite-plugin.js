@@ -88,8 +88,9 @@ const createPlugin = parts => {
       maybeDump('config', dump, config)
     },
 
-    async options() {
+    async options(options) {
       await initSvench(parts, env)
+      return options
     },
   }
 }

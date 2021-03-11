@@ -131,6 +131,15 @@ export default async argv => {
     .option('--reload', 'Clear local cache (Snowpack only)')
     .action(handle(autodetect('dev')))
 
+  // svench build
+  prog
+    .command('build [dir]', 'Build your Svench')
+    .option(
+      '--plugin, --svelte-plugin <plugin>',
+      'Specify name of the Svelte plugin to use'
+    )
+    .action(handle(autodetect('build')))
+
   // svench debug
   prog
     .command(

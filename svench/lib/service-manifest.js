@@ -73,7 +73,7 @@ const doWriteManifest = (
         options.rc = rc
       `,
     '',
-    'start(options, import.meta.hot)',
+    'start(options, document.body, import.meta.hot)',
     '',
     '// Some tools (e.g. Vite, Snowpack) do static code analysis and need',
     '// to see this to enable HMR',

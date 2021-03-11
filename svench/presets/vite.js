@@ -4,7 +4,7 @@
 
 import path from 'path'
 
-export default {
+const defaults = {
   transform: ({
     manifestDir = 'src',
     publicDir = manifestDir,
@@ -74,3 +74,17 @@ export default {
     }
   },
 }
+
+const buildDefaults = {
+  post: ({ vite, ...options }) => ({
+    ...options,
+    vite: {
+      build: {
+        outDir: options.distDir,
+      },
+      ...vite,
+    },
+  }),
+}
+
+export default [defaults, buildDefaults]
