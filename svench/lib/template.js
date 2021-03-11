@@ -12,12 +12,9 @@ export const _template = ({ script }) => () => `<!DOCTYPE html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-
     <title>Svench</title>
-
     <script type="module" defer src="${script}"></script>
   </head>
-
   <body />
 </html>
 `
