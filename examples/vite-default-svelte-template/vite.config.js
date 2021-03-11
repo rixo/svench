@@ -8,8 +8,8 @@ export default ({ command, mode }) => {
     root: 'src',
     plugins: [
       svelte({
-        emitCss: true
-      })
+        emitCss: true,
+      }),
     ],
     build: {
       minify: isProduction,
