@@ -112,3 +112,11 @@ test('presets: automerge index, manifest, and serve', t => {
   t.eq(parsed.serve.bar, 'baz')
   t.eq(parsed.serve.bazz, 'barr')
 })
+
+test('cast', t => {
+  const parsed = resolveOptions({
+    presets: [{ cast: ({ foo }) => ({ foo }) }],
+    foo: 42,
+  })
+  t.eq(parsed.foo, 42)
+})

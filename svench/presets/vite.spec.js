@@ -2,12 +2,12 @@ import { test } from 'zorax'
 
 import { resolveOptions } from '../lib/config.js'
 
-import { viteConfigMerger } from './vite.js'
+import { viteOption } from './vite.js'
 
 test('merge aliases', t => {
   const parsed = resolveOptions({
     presets: [
-      viteConfigMerger,
+      viteOption,
       () => ({
         vite: {
           resolve: {

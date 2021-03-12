@@ -29,7 +29,7 @@ const viteSubConfigs = [
   'ssr',
 ]
 
-const _mergeViteConfig = (a = {}, b = {}) => {
+const mergeViteConfig = (a = {}, b = {}) => {
   const merged = {
     ...a,
     ...b,
@@ -49,27 +49,26 @@ const _mergeViteConfig = (a = {}, b = {}) => {
   return merged
 }
 
-export const viteConfigMerger = {
-  merge: (a = {}, b = {}) => ({
-    vite: _mergeViteConfig(a.vite, b.vite),
-  }),
-}
-
 const viteDefaults = {
   transform: ({
     manifestDir = 'src',
     publicDir = manifestDir,
+
+    entryUrl = '/@svench/svench.js',
+
     index = true,
     manifest = true,
     write = true,
   }) => ({
     publicDir,
     manifestDir,
+    entryUrl,
     index,
-    manifest: manifest && {
-      css: true,
-    },
+    manifest: manifest && { css: true },
     write,
+    vite: {
+      clearScreen: false,
+    },
   }),
 
   post: ({
@@ -104,13 +103,17 @@ const viteDefaults = {
   },
 }
 
-const viteConfig = {
-  transform: ({ entryUrl = '/@svench/svench.js' }) => ({ entryUrl }),
+export const viteOption = {
+  merge: ({ vite: a } = {}, { vite: b } = {}) => ({
+    vite: mergeViteConfig(a, b),
+  }),
+  cast: ({ vite = {} }) => ({ vite }),
+}
 
+const viteConfig = {
   post: ({ svenchDir, manifestDir, distDir, port }) => ({
     vite: {
       root: svenchDir,
-      clearScreen: false,
       server: { port },
       build: { outDir: distDir },
       // /@svench/* alias
@@ -121,4 +124,4 @@ const viteConfig = {
   }),
 }
 
-export default [viteConfigMerger, viteConfig, viteDefaults]
+export default [viteOption, viteConfig, viteDefaults]

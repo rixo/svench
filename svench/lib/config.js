@@ -1,6 +1,6 @@
 import * as path from 'path'
 
-import { pipe } from './util.js'
+import { pipe, noop } from './util.js'
 import { maybeDump } from './dump.js'
 
 import { importDefaultRelative } from './import-relative.cjs'
@@ -9,6 +9,7 @@ const ALREADY_PARSED = Symbol('Svench: already parsed options')
 
 const HOOK_POST = Symbol('Svench: presets post processors')
 const HOOK_MERGE = Symbol('Svench: merge hooks')
+const HOOK_CAST = Symbol('Svench: cast hooks')
 
 const serveDefaults = {
   host: 'localhost',
@@ -80,7 +81,7 @@ const applyPresets = ({ presets, ...options }) => {
 
   const flattenHooks = hooks => hooks.flat(Infinity).filter(Boolean)
 
-  const hooks = ['merge', 'pre', 'svenchify', 'transform', 'post']
+  const hooks = ['merge', 'pre', 'svenchify', 'transform', 'cast', 'post']
 
   const stages = Object.fromEntries(hooks.map(key => [key, []]))
 
@@ -97,11 +98,21 @@ const applyPresets = ({ presets, ...options }) => {
 
   const mergers = [mergeOptions, ...flattenHooks(stages.merge)]
 
+  const casters = flattenHooks(stages.cast)
+
   options[HOOK_MERGE] = (a = {}, b = {}) => {
     const result = { ...a, ...b }
     for (const merge of mergers) {
       const patch = merge(a, b)
       if (patch) Object.assign(result, patch)
+    }
+    return result
+  }
+
+  options[HOOK_CAST] = rest => {
+    const result = {}
+    for (const cast of casters) {
+      Object.assign(result, cast(rest))
     }
     return result
   }
@@ -200,8 +211,8 @@ const castOptions = ({
   resolveRouteImport,
 
   // overrides of Rollup / Vite / Snowpack config
+  // TODO migrate rollup & snowpack to cast
   rollup = null,
-  vite = null,
   snowpack = null,
   nocfg = false,
 
@@ -252,6 +263,7 @@ const castOptions = ({
   dump,
 
   [HOOK_MERGE]: mergeHook,
+  [HOOK_CAST]: castHook = noop,
   [HOOK_POST]: postHook,
 
   // unknown options... who knows?
@@ -273,7 +285,6 @@ const castOptions = ({
   resolveRouteImport,
   extensions,
   rollup,
-  vite,
   snowpack,
   nocfg,
   svelte,
@@ -307,6 +318,7 @@ const castOptions = ({
   dump,
   [HOOK_MERGE]: mergeHook,
   [HOOK_POST]: postHook,
+  ...castHook(_),
   _,
 })
 
