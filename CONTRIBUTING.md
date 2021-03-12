@@ -51,6 +51,14 @@ Svench is composed from multiple parts what have to work together...
 
 - `src/app/prism.js` A prebuilt version of Prism (syntax highlighter) that works well with Svench, including a selection of plugin (like Svelte highlighting) and embedded CSS.
 
+### Docs
+
+```bash
+cd docs
+pnpm install
+pnpx svench
+```
+
 ### Examples
 
 #### Vite
