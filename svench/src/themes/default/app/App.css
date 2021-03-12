@@ -163,15 +163,19 @@
   height: 100%;
   overflow: hidden;
   position: relative;
+  padding: 0 .75rem .25em;
+  box-sizing: border-box;
   & .svench-app-menu-menu {
     flex: 1;
-    width: 100%;
+    /* NOTE important is needed to override inline fixed width */
+    width: 100% !important;
   }
   & .svench-app-menu-brand {
     position: absolute;
     z-index: -1;
-    bottom: 0;
+    bottom: .25rem;
     text-align: center;
+    left: 0;
     width: 100%;
     padding: .25rem .2rem;
     margin-left: -.5rem;
