@@ -8,6 +8,7 @@ import { importDefaultRelative } from './import-relative.cjs'
 const ALREADY_PARSED = Symbol('Svench: already parsed options')
 
 const HOOK_POST = Symbol('Svench: presets post processors')
+const HOOK_MERGE = Symbol('Svench: merge hooks')
 
 const serveDefaults = {
   host: 'localhost',
@@ -32,15 +33,34 @@ const maybeDumpOptions = key => options => {
 
 const ensureArray = x => (!x ? x : Array.isArray(x) ? x : [x])
 
-export const mergePresets = (options, presets = []) => {
-  if (!options) return options
-  if (options === true) return { presets }
-  const existing = ensureArray(options.presets || options.preset || [])
-  return { ...options, presets: [...existing, ...presets] }
+// export const mergePresets = (options, presets = []) => {
+//   if (!options) return options
+//   if (options === true) return { presets }
+//   const existing = ensureArray(options.presets || options.preset || [])
+//   return { ...options, presets: [...existing, ...presets] }
+// }
+
+const mergeableOptions = ['manifest', 'index', 'serve']
+
+const mergeOptions = (a = {}, b = {}) => {
+  const merged = { ...a, ...b }
+  for (const option of mergeableOptions) {
+    if (b[option] === false) {
+      merged[option] = false
+    } else if (b[option]) {
+      merged[option] = { ...a[option], ...b[option] }
+    }
+  }
+  return merged
 }
 
-const runPresets = (presets, options) =>
-  presets.reduce((o, f) => f(o) || o, options)
+const runPresets = (presets, options) => {
+  const merge = options[HOOK_MERGE]
+  return presets.reduce((cur, f) => {
+    const next = typeof f === 'function' ? f(cur) : f
+    return next ? merge(cur, next) : cur
+  }, options)
+}
 
 const applyPresets = ({ presets, ...options }) => {
   const { cwd } = options
@@ -53,12 +73,14 @@ const applyPresets = ({ presets, ...options }) => {
 
   const resolvePreset = preset =>
     typeof preset === 'string'
-      ? requirePreset(preset)
+      ? resolvePreset(requirePreset(preset))
       : Array.isArray(preset)
       ? preset.map(resolvePreset)
       : preset
 
-  const hooks = ['pre', 'svenchify', 'transform', 'post']
+  const flattenHooks = hooks => hooks.flat(Infinity).filter(Boolean)
+
+  const hooks = ['merge', 'pre', 'svenchify', 'transform', 'post']
 
   const stages = Object.fromEntries(hooks.map(key => [key, []]))
 
@@ -73,7 +95,18 @@ const applyPresets = ({ presets, ...options }) => {
       if (typeof preset === 'function') stages.transform.push(preset)
     })
 
-  options[HOOK_POST] = stages.post.flat(Infinity).filter(Boolean)
+  const mergers = [mergeOptions, ...flattenHooks(stages.merge)]
+
+  options[HOOK_MERGE] = (a = {}, b = {}) => {
+    const result = { ...a, ...b }
+    for (const merge of mergers) {
+      const patch = merge(a, b)
+      if (patch) Object.assign(result, patch)
+    }
+    return result
+  }
+
+  options[HOOK_POST] = flattenHooks(stages.post)
 
   const pipeline = ['pre', 'svenchify', 'transform']
     .map(key => stages[key])
@@ -177,6 +210,8 @@ const castOptions = ({
 
   // Allow to specify a custom Svelte plugin
   sveltePlugin,
+  // default is fed by Svenchify inspect, and will be used if there's no user
+  // provided sveltePlugin
   defaultSveltePlugin,
 
   manifest = true,
@@ -189,7 +224,7 @@ const castOptions = ({
 
   serve = false,
 
-  isNollup = !!process.env.NOLLUP,
+  isNollup = false,
 
   // true|false|string
   // if true, default to '.svx', if string used as the extension
@@ -216,7 +251,8 @@ const castOptions = ({
   // debugging
   dump,
 
-  [HOOK_POST]: postPresets,
+  [HOOK_MERGE]: mergeHook,
+  [HOOK_POST]: postHook,
 
   // unknown options... who knows?
   ..._
@@ -269,7 +305,8 @@ const castOptions = ({
   autoSections,
   keepTitleExtensions,
   dump,
-  [HOOK_POST]: postPresets,
+  [HOOK_MERGE]: mergeHook,
+  [HOOK_POST]: postHook,
   _,
 })
 
