@@ -2,9 +2,9 @@ import * as fs from 'fs'
 import * as path from 'path'
 import CheapWatch from 'cheap-watch'
 
-import { escapeRe, mkdirp } from './util'
-import { ENTRY_URL } from './const'
-import { parseIndexOptions } from './config'
+import { escapeRe, mkdirp } from './util.js'
+import { ENTRY_URL } from './const.js'
+import { parseIndexOptions } from './config.js'
 import Log from './log.js'
 
 export const _template = ({ script }) => () => `<!DOCTYPE html>

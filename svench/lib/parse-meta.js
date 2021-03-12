@@ -1,6 +1,7 @@
 import * as fs from 'fs'
-import { SVENCH_META_START, SVENCH_META_END } from './const'
-import { escapeRe } from './util'
+
+import { SVENCH_META_START, SVENCH_META_END } from './const.js'
+import { escapeRe } from './util.js'
 
 const extractMetaRe = new RegExp(
   `${escapeRe(SVENCH_META_START)}([\\s\\S]+?)${escapeRe(SVENCH_META_END)}`

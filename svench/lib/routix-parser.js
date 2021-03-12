@@ -1,7 +1,7 @@
 import * as path from 'path'
 
-import { escapeRe } from './util'
-import { parseMeta } from './parse-meta'
+import { escapeRe } from './util.js'
+import { parseMeta } from './parse-meta.js'
 
 const sectionBase = '/_'
 const sectionPrefix = '/_/'

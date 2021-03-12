@@ -1,6 +1,6 @@
 import dedent from 'dedent'
-import { SVENCH_META_START, SVENCH_META_END } from './const'
-import { makeNamer } from './name-maker'
+import { SVENCH_META_START, SVENCH_META_END } from './const.js'
+import { makeNamer } from './name-maker.js'
 
 // import doesn't play well with esm / zorax
 const svelte = require('svelte/compiler')
