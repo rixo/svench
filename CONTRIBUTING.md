@@ -5,30 +5,28 @@
 ```bash
 git clone
 cd svench
-git checkout next # development is active on `next` branch currently
 ```
 
 ### Svench
 
 ```bash
 cd packages/svench
-yarn link
-yarn
-yarn dev # wathc & rebuild
+pnpm install
+pnpm dev # watch & rebuild
 
 # watch & rebuild only some parts
 #
 # targets: app, theme, rollup (rollup plugin), util-esm, prism
 #
-yarn dev --configTarget app,theme
+pnpm dev -- --configTarget app,theme
 ```
 
 Run (the few) tests:
 
 ```bash
-yarn test
-yarn test --watch
-yarn test --help # see all of Zoar's (the test runner) options
+pnpm test
+pnpm test -- --watch
+pnpm test -- --help # see all of Zoar's (the test runner) options
 ```
 
 #### Sub projects
@@ -59,47 +57,45 @@ Svench is composed from multiple parts what have to work together...
 
 ```bash
 cd examples/vite-default-svelte-template
-yarn
-yarn link svench # optional
+pnpm install
 # with cli:
-yarn svench
+pnpx svench
 ```
 
 #### Snowpack
 
 ```bash
 cd examples/snowpack-csa
-yarn
-yarn link svench # optional
+pnpm install
 # "manual" setup:
-yarn svench:config
+pnpm svench:plugin
 # start with cli:
-yarn svench:cli
+pnpm svench:cli
 # or run cli directly:
-yarn svench
+pnpx svench
 ```
 
 #### Rollup (from sveltejs/template)
 
 ```bash
 cd examples/svelte-template
-yarn
-yarn link svench # optional
-# "manual" setup:
-yarn svench:config
+pnpm install
+# "manual" setup with Nollup (default):
+pnpm svench:plugin
+# "manual" setup with Rollup:
+pnpm svench:plugin:rollup
 # start with cli:
-yarn svench:cli
+pnpm svench:cli
 # or run cli directly:
-yarn svench
+pnpx svench
 ```
 
 ### Rollup (legacy example)
 
 ```bash
 cd examples/rollup
-yarn
-yarn link svench
-yarn svench # Rollup + rollup-plugin-hot
+pnpm install
+pnpm svench # Rollup + rollup-plugin-hot
 # or
-yarn svench:nollup # Nollup
+pnpm svench:nollup # Nollup
 ```
