@@ -37,7 +37,7 @@ pnpm add -D svelte vite rollup-plugin-svelte-hot@next svench@beta
 mkdir src
 echo '# Hello' > src/hello.md
 echo '<h1>Hi!</h1>' > src/Hi.svench
-npx svench
+pnpx svench
 ```
 
 ```bash
