@@ -1,14 +1,13 @@
-import relative from 'require-relative'
+import { resolve } from '../../lib.js'
 
 import { loadSvenchifiedConfig } from './util.js'
 
-export default async (
-  options, { cwd = process.cwd(), ...cliOptions }
-) => {
+export default async (options, { cwd = process.cwd(), ...cliOptions }) => {
   const mode = 'development'
   const command = 'serve'
 
-  const { createServer } = await import(relative.resolve('vite', cwd))
+  const vitePath = await resolve('vite', cwd)
+  const { createServer } = await import(vitePath)
 
   const finalConfig = await loadSvenchifiedConfig(
     { mode, command },

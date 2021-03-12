@@ -1,15 +1,19 @@
 import fs from 'fs'
 import path from 'path'
-import relative from 'require-relative'
+
+import { resolve } from '../../lib.js'
 
 export default async (
   _,
   { cwd = process.cwd(), reload, ...overrides } = {}
 ) => {
-  const rel = x => relative(x, cwd)
+  const rel = async x => {
+    const file = await resolve(x, cwd)
+    return await import(file)
+  }
 
-  const { startDevServer, createConfiguration } = rel('snowpack')
-  const { svenchify } = rel('svench/snowpack')
+  const { startDevServer, createConfiguration } = await rel('snowpack')
+  const { svenchify } = await rel('svench/snowpack')
 
   const defaultConfigFile = path.resolve(cwd, 'snowpack.config.js')
 
@@ -19,7 +23,7 @@ export default async (
 
   const svenchified = svenchify(original, {
     enabled: true,
-    sveltePlugin: rel('@snowpack/plugin-svelte'),
+    sveltePlugin: await rel('@snowpack/plugin-svelte'),
     ...overrides,
   })
 

@@ -20,19 +20,22 @@ const importDefaultRelative = (id, to) => {
   return m.default || m
 }
 
-const resolve = async (...args) =>
+const parseResolveOptions = opts =>
+  typeof opts === 'string' ? { basedir: opts } : opts
+
+const resolve = async (target, opts) =>
   await new Promise((res, rej) =>
-    _resolve(...args, (err, result) => {
+    _resolve(target, parseResolveOptions(opts), (err, result) => {
       if (err) rej(err)
       else res(result)
     })
   )
 
-const resolveSync = _resolve.sync
+const resolveSync = (target, opts) =>
+  _resolve.sync(target, parseResolveOptions(opts))
 
 module.exports = {
   importSync,
-  importRelative,
   importDefaultRelative,
   resolve,
   resolveSync,
