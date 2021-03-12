@@ -4,38 +4,72 @@
 
 import path from 'path'
 
-const defaults = {
+// TODO test that we don't eat user's aliases
+const mergeAlias = (...sources) =>
+  sources
+    .map(alias =>
+      !alias
+        ? []
+        : Array.isArray(alias)
+        ? alias
+        : Object.entries(alias).map(([find, replacement]) => ({
+            find,
+            replacement,
+          }))
+    )
+    .flat()
+
+const viteSubConfigs = [
+  'resolve',
+  'css',
+  'json',
+  'server',
+  'build',
+  'optimizeDeps',
+  'ssr',
+]
+
+const _mergeViteConfig = (a = {}, b = {}) => {
+  const merged = {
+    ...a,
+    ...b,
+    ...Object.fromEntries(
+      viteSubConfigs
+        .map(sub => [sub, { ...a[sub], ...b[sub] }])
+        .filter(([, v]) => Object.keys(v).length > 0)
+    ),
+  }
+  merged.resolve = {
+    ...merged.resolve,
+    alias: mergeAlias(
+      a.resolve && a.resolve.alias,
+      b.resolve && b.resolve.alias
+    ),
+  }
+  return merged
+}
+
+export const viteConfigMerger = {
+  merge: (a = {}, b = {}) => ({
+    vite: _mergeViteConfig(a.vite, b.vite),
+  }),
+}
+
+const viteDefaults = {
   transform: ({
     manifestDir = 'src',
     publicDir = manifestDir,
-
     index = true,
     manifest = true,
     write = true,
-
-    vite,
-
-    ...options
   }) => ({
     publicDir,
     manifestDir,
-
     index,
     manifest: manifest && {
       css: true,
-      ...manifest,
     },
     write,
-
-    vite: {
-      clearScreen: false,
-      server: {
-        port: 4242,
-      },
-      ...vite,
-    },
-
-    ...options,
   }),
 
   post: ({
@@ -46,7 +80,6 @@ const defaults = {
     entryUrl,
     indexFileName,
     index,
-    ...options
   }) => {
     const writeIndex = !index
       ? false
@@ -62,10 +95,6 @@ const defaults = {
     }
 
     return {
-      ...options,
-      cwd,
-      svenchDir,
-      entryFile,
       entryUrl,
       index: index && {
         ...index,
@@ -75,16 +104,21 @@ const defaults = {
   },
 }
 
-const buildDefaults = {
-  post: ({ vite, ...options }) => ({
-    ...options,
+const viteConfig = {
+  transform: ({ entryUrl = '/@svench/svench.js' }) => ({ entryUrl }),
+
+  post: ({ svenchDir, manifestDir, distDir, port }) => ({
     vite: {
-      build: {
-        outDir: options.distDir,
+      root: svenchDir,
+      clearScreen: false,
+      server: { port },
+      build: { outDir: distDir },
+      // /@svench/* alias
+      resolve: {
+        alias: [{ find: /^\/@svench\//, replacement: manifestDir + '/' }],
       },
-      ...vite,
     },
   }),
 }
 
-export default [defaults, buildDefaults]
+export default [viteConfigMerger, viteConfig, viteDefaults]

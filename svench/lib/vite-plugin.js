@@ -50,7 +50,7 @@ const initSvench = async ({ options, routix }, { command }) => {
 const createPlugin = parts => {
   const {
     options,
-    options: { enabled, svenchDir: root, port, dump, vite = {} },
+    options: { enabled, dump, vite = {} },
   } = parts
 
   maybeDump('options', dump, options)
@@ -59,29 +59,14 @@ const createPlugin = parts => {
     return { name: `${VITE_PLUGIN_NAME}:disabled` }
   }
 
-  let env
+  let commandContext
 
   return {
     name: VITE_PLUGIN_NAME,
 
-    config(config, _env) {
-      env = _env
-      return {
-        root,
-        ...vite,
-        server: {
-          port,
-          ...vite.server,
-        },
-        // TODO $svench alias?
-        // resolve: {
-        //   alias: {
-        //     $svench: entryFile,
-        //     ...(vite.resolve && vite.resolve.alias),
-        //   },
-        //   ...vite.resolve,
-        // },
-      }
+    config(config, ctx) {
+      commandContext = ctx
+      return vite
     },
 
     configResolved(config) {
@@ -89,7 +74,7 @@ const createPlugin = parts => {
     },
 
     async options(options) {
-      await initSvench(parts, env)
+      await initSvench(parts, commandContext)
       return options
     },
   }
