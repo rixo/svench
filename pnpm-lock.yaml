@@ -164,6 +164,7 @@ importers:
       rehype-autolink-headings: 3.0.0
       rehype-slug: 3.0.0
       require-relative: 0.8.7
+      resolve: 1.20.0
       restana: 4.8.1
       routix: 0.1.0-5
       stack-chain: 2.0.0
@@ -230,6 +231,7 @@ importers:
       rehype-autolink-headings: ^3.0.0
       rehype-slug: ^3.0.0
       require-relative: ^0.8.7
+      resolve: ^1.20.0
       restana: ^4.4.1
       rollup: ^2.39.1
       rollup-plugin-copy: ^3.3.0
@@ -730,26 +732,6 @@ packages:
       snowpack: ^2.14.3
     resolution:
       integrity: sha512-aeX08rgqR4WYexGtwnY7nZCjbkzIMK9RIvhNVtyg8Xr6VF9HgCOYnTo2rp/y1PWenUba3o2cYAGcl6RuBIXLbw==
-  /@svitejs/vite-plugin-svelte/0.10.0-0_svelte@3.35.0+vite@2.0.5:
-    dependencies:
-      '@rollup/pluginutils': 4.1.0
-      chalk: 4.1.0
-      debug: 4.3.1
-      hash-sum: 2.0.0
-      require-relative: 0.8.7
-      slash: 3.0.0
-      source-map: 0.7.3
-      svelte: 3.35.0
-      svelte-hmr: 0.13.0-2_svelte@3.35.0
-      vite: 2.0.5
-    dev: true
-    engines:
-      node: '>=12.0.0'
-    peerDependencies:
-      svelte: ^3.35.0
-      vite: ^2.0.5
-    resolution:
-      integrity: sha512-M1gM+SawaEZRA6Jjus6PiTYG7/e5vGwAKtyb68m6Iso8IRigYfKRef084Iy4P6FS+2e3sV78LOkf7B31fHwIbA==
   /@svitejs/vite-plugin-svelte/0.9.3_svelte@3.35.0+vite@2.0.5:
     dependencies:
       '@rollup/pluginutils': 4.1.0
@@ -8473,14 +8455,6 @@ packages:
       svelte: '>=3.19.0'
     resolution:
       integrity: sha512-ed9kd6aokguVMUnxRCB7u/3xWyKnNBOP/g9euQ65K+gEkkZGdLvuNqK7Np97Nc4/MpMQz8SxQJ8KjrNhetrwrw==
-  /svelte-hmr/0.13.0-2_svelte@3.35.0:
-    dependencies:
-      svelte: 3.35.0
-    dev: true
-    peerDependencies:
-      svelte: '>=3.19.0'
-    resolution:
-      integrity: sha512-3Sqxbs5hG212oweKhHzh2S7jVScylzbVXuEkydgdS9NpvcdnyCSufpaJSUNxUGc02wgjWugtqaJXs1DybAjRpw==
   /svelte-preprocess/4.6.9_svelte@3.34.0:
     dependencies:
       '@types/pug': 2.0.4

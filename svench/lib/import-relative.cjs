@@ -4,6 +4,7 @@
  *
  * Needs to be CJS for require('esm') to work.
  */
+const _resolve = require('resolve')
 
 const relative = require('require-relative')
 
@@ -19,4 +20,20 @@ const importDefaultRelative = (id, to) => {
   return m.default || m
 }
 
-module.exports = { importSync, importRelative, importDefaultRelative }
+const resolve = async (...args) =>
+  await new Promise((res, rej) =>
+    _resolve(...args, (err, result) => {
+      if (err) rej(err)
+      else res(result)
+    })
+  )
+
+const resolveSync = _resolve.sync
+
+module.exports = {
+  importSync,
+  importRelative,
+  importDefaultRelative,
+  resolve,
+  resolveSync,
+}

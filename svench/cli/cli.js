@@ -9,7 +9,7 @@ import * as path from 'path'
 import cac from 'cac'
 
 import { Log, loadSvenchConfig } from './lib.js'
-import { inspect } from './inspect.cjs'
+import { inspect } from './inspect.js'
 
 const normalizeDir = dirs => (dirs.length === 1 ? dirs[0] : dirs)
 

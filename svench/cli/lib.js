@@ -5,3 +5,11 @@
 export { default as Log } from '../lib/log.js'
 
 export { loadSvenchConfig } from '../lib/plugin-shared.js'
+
+export {
+  importSync,
+  importRelative,
+  importDefaultRelative,
+  resolve,
+  resolveSync,
+} from '../lib/import-relative.cjs'

@@ -50,6 +50,7 @@
     "rehype-autolink-headings": "^3.0.0",
     "rehype-slug": "^3.0.0",
     "require-relative": "^0.8.7",
+    "resolve": "^1.20.0",
     "restana": "^4.4.1",
     "routix": "^0.1.0-5",
     "stack-chain": "^2.0.0",

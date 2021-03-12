@@ -1,5 +1,5 @@
 import { Log } from '../lib.js'
-import { inspect } from '../inspect.cjs'
+import { inspect } from '../inspect.js'
 
 const debug = async options => {
   const info = await inspect(options)

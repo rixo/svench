@@ -2,18 +2,10 @@
  * Tooling inspection / autodetect.
  */
 
-const fs = require('fs')
-const path = require('path')
-const relative = require('require-relative')
+import fs from 'fs'
+import path from 'path'
 
-let _requireEsm
-
-const requireEsm = name => {
-  if (!_requireEsm) {
-    _requireEsm = require('esm')(module)
-  }
-  return _requireEsm(name).default
-}
+import { importSync, resolveSync } from './lib.js'
 
 const findup = (from, target) => {
   let last = null
@@ -69,7 +61,7 @@ const mergeOptions = (
   ...cli,
 })
 
-const inspect = async ({
+export const inspect = async ({
   load: loadConfig,
   snowpack,
   rollup,
@@ -78,7 +70,7 @@ const inspect = async ({
   ...rest
 }) => {
   const cwd = process.cwd()
-  const res = x => relative.resolve(x, cwd)
+  const res = x => resolveSync(x, { basedir: cwd, preserveSymlinks: true })
 
   const cliOptions = parseCliOptions(rest)
 
@@ -95,7 +87,7 @@ const inspect = async ({
       return {
         module: target,
         version: require(path.join(_path, 'package.json')).version,
-        path: relPath,
+        path: _path,
         depth: -(relPath.split('..' + path.sep).length - 1),
       }
     } catch (error) {
@@ -208,7 +200,7 @@ const inspect = async ({
       info.rollup = {
         config: findConfig(
           config === true ? 'rollup.config.js' : config,
-          requireEsm
+          importSync
         ),
         deps: deps,
         missingDeps: [...missingDeps],
@@ -266,5 +258,3 @@ const inspect = async ({
 
   return info
 }
-
-module.exports = { inspect }
