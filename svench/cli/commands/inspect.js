@@ -1,8 +1,16 @@
-import { Log } from '../lib.js'
+import { Log, maybeDump, dumpAt } from '../lib.js'
 import { inspect } from '../inspect.js'
 
 const debug = async options => {
+  const { dump, inspect: inspectItem } = options
+
+  maybeDump('options', dump, options)
+
   const info = await inspect(options)
+
+  if (inspectItem) {
+    dumpAt(info, inspectItem)
+  }
 
   Log.inspect(info)
 

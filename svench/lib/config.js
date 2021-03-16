@@ -359,7 +359,7 @@ const doParseOptions = pipe(
   maybeDumpOptions('options')
 )
 
-export const resolveOptions = options => {
+export const parseSvenchOptions = options => {
   if (options && options[ALREADY_PARSED]) return options
   return doParseOptions(options)
 }

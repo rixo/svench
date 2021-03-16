@@ -1,5 +1,5 @@
 import { getContext, noop, pipe, split, reduce } from '../util.js'
-import { sectionPrefix } from '../constants'
+import { sectionPrefix } from '../constants.js'
 
 const resolveRaw = route =>
   function _resolveRaw(path) {

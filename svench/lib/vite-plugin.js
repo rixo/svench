@@ -1,17 +1,12 @@
-import Log from './log.js'
 import { createPluginParts } from './plugin-shared.js'
 import { createIndex } from './template.js'
 import { writeManifest } from './service-manifest.js'
 import { pipe, mkdirp } from './util.js'
 import { VITE_PLUGIN_NAME } from './const.js'
 import { maybeDump } from './dump.js'
-import { importDefaultRelative } from './import-relative.cjs'
 import Svenchify from './svenchify.js'
 
 const defaultPresets = ['svench/presets/vite']
-
-const isSveltePlugin = x =>
-  (x && x.name === 'svelte') || /\bvite-plugin-svelte\b/.test(x.name)
 
 const initSvench = async ({ options, routix }, { command }) => {
   const {
@@ -90,38 +85,13 @@ export default svenchVitePlugin
 
 export const svenchify = Svenchify(
   defaultPresets,
-  async (
-    { plugins: [...plugins] = [], ...config },
-    parts,
-    { wrapSvelteConfig }
-  ) => {
-    const {
-      options: {
-        defaultSveltePlugin,
-        sveltePlugin = defaultSveltePlugin,
-        svelte = {},
-        vite: { clearScreen = config.clearScreen, server } = {},
-      },
-    } = parts
-
-    const hasSveltePlugin = plugins.some(isSveltePlugin)
-    if (!hasSveltePlugin) {
-      Log.info('Inject svelte plugin: %s', sveltePlugin)
-      const plugin = await importDefaultRelative(sveltePlugin)
-      plugins.unshift(plugin(wrapSvelteConfig(svelte)))
-    }
-
+  async ({ plugins = [], ...config }, parts) => {
+    const { vite: { clearScreen = config.clearScreen } = {} } = parts.options
     const svenchPlugin = createPlugin(parts)
-    plugins.unshift(svenchPlugin)
-
     return {
       ...config,
-      plugins,
+      plugins: [svenchPlugin, ...plugins],
       clearScreen,
-      server: {
-        ...config.server,
-        ...server,
-      },
     }
   },
   getConfig => getConfig

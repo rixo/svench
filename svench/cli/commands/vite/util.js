@@ -37,7 +37,10 @@ const mergeViteConfigs = mergeConfigs([
 
 export const loadSvenchifiedConfig = async (
   { mode, command },
-  { vite: { sveltePlugin: defaultSveltePlugin = 'rollup-plugin-svelte-hot' } },
+  {
+    app: { type },
+    vite: { sveltePlugin: defaultSveltePlugin = 'rollup-plugin-svelte-hot' },
+  },
   {
     vite: configFile = 'vite.config.js',
     override: configOverride,
@@ -55,6 +58,7 @@ export const loadSvenchifiedConfig = async (
   const svenchified = svenchify(source, {
     enabled: true,
     vite: configOverride || true,
+    isModule: type === 'module',
     sveltePlugin,
     defaultSveltePlugin,
     // enforce hot mode (@svitejs/vite-plugin-svelte doesn't do auto hot)

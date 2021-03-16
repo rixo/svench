@@ -2,7 +2,7 @@ import { resolve } from '../../lib.js'
 
 import { loadSvenchifiedConfig } from './util.js'
 
-export default async (options, { cwd = process.cwd(), ...cliOptions }) => {
+export default async (info, { cwd = process.cwd(), ...cliOptions }) => {
   const mode = 'development'
   const command = 'serve'
 
@@ -11,7 +11,7 @@ export default async (options, { cwd = process.cwd(), ...cliOptions }) => {
 
   const finalConfig = await loadSvenchifiedConfig(
     { mode, command },
-    options,
+    info,
     cliOptions
   )
 

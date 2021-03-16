@@ -5,39 +5,46 @@
 process.env.SVENCH = process.env.SVENCH == null ? '1' : process.env.SVENCH
 
 import * as fs from 'fs'
-import * as path from 'path'
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import cac from 'cac'
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 import { Log, loadSvenchConfig } from './lib.js'
 import { inspect } from './inspect.js'
 
 const normalizeDir = dirs => (dirs.length === 1 ? dirs[0] : dirs)
 
-const normalizeOptions = (
+const parseGlobalOptions = (
   { cwd },
-
-  [
-    dir,
-    {
-      _: dirs = [],
-      verbose,
-      quiet,
-      v, // eslint-disable-line no-unused-vars
-      q, // eslint-disable-line no-unused-vars
-      ...rest
-    },
-  ]
+  {
+    verbose,
+    quiet,
+    v, // eslint-disable-line no-unused-vars
+    q, // eslint-disable-line no-unused-vars
+    ...rest
+  },
 ) => ({
   cwd,
-  dir: normalizeDir([dir, ...dirs]),
   verbose,
   quiet,
   ...rest,
 })
 
+const parseBuildOptions = (params, [dir, {_: dirs = [], ...opts}]) => ({
+  ...parseGlobalOptions(params, opts),
+  dir: normalizeDir([dir, ...dirs]),
+})
+
+const parseInspectOptions = (params, [inspect, opts]) => ({
+  ...parseGlobalOptions(params, opts),
+  inspect
+})
+
 const readPkg = async () => {
   const contents = await fs.promises.readFile(
-    path.resolve(__dirname, '../package.json'),
+    resolve(__dirname, '../package.json'),
     'utf8'
   )
   return JSON.parse(contents)
@@ -47,7 +54,7 @@ const autodetect = command => async options => {
   const info = await inspect(options)
   const { favorite: tool } = info
   if (!tool) {
-    throw new Error('Failed to detect underlying tooling')
+    throw new Error('Failed to autodetect project tooling')
   }
   let baseTool = tool
   if (tool === 'nollup') {
@@ -71,10 +78,10 @@ export default async argv => {
   const pkg = await readPkg()
   const cwd = process.cwd()
 
-  const asyncAction = (run, args) => {
+  const asyncAction = (run, args, parser) => {
     const opts = {
       ...loadSvenchConfig(cwd),
-      ...normalizeOptions({ cwd }, args),
+      ...parser({ cwd }, args),
     }
 
     // configure log level as soon as possible
@@ -94,9 +101,9 @@ export default async argv => {
         }
       : cmd
 
-  const handle = cmd => (...args) => {
-    const commandHandler = resolveCommand(cmd)
-    asyncAction(commandHandler, args)
+  const handle = (cmd, normalizer) => (...args) => {
+    const run = resolveCommand(cmd)
+    asyncAction(run, args, normalizer)
   }
 
   const prog = cac('svench')
@@ -129,7 +136,7 @@ export default async argv => {
       'Specify name of the Svelte plugin to use'
     )
     .option('--reload', 'Clear local cache (Snowpack only)')
-    .action(handle(autodetect('dev')))
+    .action(handle(autodetect('dev'), parseBuildOptions))
 
   // svench build
   prog
@@ -138,16 +145,16 @@ export default async argv => {
       '--plugin, --svelte-plugin <plugin>',
       'Specify name of the Svelte plugin to use'
     )
-    .action(handle(autodetect('build')))
+    .action(handle(autodetect('build'), parseBuildOptions))
 
   // svench debug
   prog
     .command(
-      'inspect [dir]',
+      'inspect [item]',
       'Report about detected tooling (mainly for debug purpose)'
     )
     .option('--load-config, --load, -l', 'Load config contents', false)
-    .action(handle('inspect'))
+    .action(handle('inspect', parseInspectOptions))
 
   prog.parse(argv)
 

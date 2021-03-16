@@ -33,7 +33,7 @@ const parseCliOptions = ({ dir, preset, config, snowpack, rollup }) =>
     rollup,
   })
 
-const readSvenchConfig = (cwd, configOption) => {
+const readSvenchConfig = async (cwd, configOption) => {
   if (configOption === true) {
     configOption = 'svench.config.js'
   }
@@ -42,7 +42,7 @@ const readSvenchConfig = (cwd, configOption) => {
     if (fs.existsSync(file)) {
       return {
         path: path.relative(cwd, file),
-        config: require(file),
+        config: (await import(file)).default,
       }
     }
   }
@@ -61,7 +61,11 @@ const mergeOptions = (
   ...cli,
 })
 
+const loadJson = async file =>
+  JSON.parse(await fs.promises.readFile(file, 'utf8'))
+
 export const inspect = async ({
+  cwd,
   load: loadConfig,
   snowpack,
   rollup,
@@ -69,26 +73,22 @@ export const inspect = async ({
   vite,
   ...rest
 }) => {
-  const cwd = process.cwd()
   const res = x => resolveSync(x, { basedir: cwd, preserveSymlinks: true })
 
   const cliOptions = parseCliOptions(rest)
 
-  const svenchConfig = readSvenchConfig(cwd, cliOptions.config)
+  const svenchConfig = await readSvenchConfig(cwd, cliOptions.config)
 
-  const info = {
-    cwd,
-  }
-
-  const ensureDep = target => {
+  const ensureDep = async target => {
     try {
       const _path = path.dirname(findup(res(target), 'package.json'))
       const relPath = path.relative(cwd, _path)
+      const { version } = await loadJson(path.join(_path, 'package.json'))
       return {
         module: target,
-        version: require(path.join(_path, 'package.json')).version,
+        version,
         path: _path,
-        depth: -(relPath.split('..' + path.sep).length - 1),
+        depth: -(relPath.split('..' + path.sep).length - 1) || 0,
       }
     } catch (error) {
       if (error.code === 'MODULE_NOT_FOUND') {
@@ -98,13 +98,13 @@ export const inspect = async ({
     }
   }
 
-  const findDeps = (targets, missingDeps) => {
+  const findDeps = async (targets, missingDeps) => {
     const deps = []
     for (const target of targets) {
       if (Array.isArray(target)) {
         let found = false
         for (const alternative of target) {
-          deps[alternative] = ensureDep(alternative, missingDeps)
+          deps[alternative] = await ensureDep(alternative, missingDeps)
           if (deps[alternative] && !deps[alternative].error) {
             found = true
           }
@@ -113,7 +113,7 @@ export const inspect = async ({
           missingDeps.add(target.join(' or '))
         }
       } else {
-        deps[target] = ensureDep(target, missingDeps)
+        deps[target] = await ensureDep(target, missingDeps)
         if (missingDeps && (!deps[target] || deps[target].error)) {
           missingDeps.add(target)
         }
@@ -122,35 +122,64 @@ export const inspect = async ({
     return deps
   }
 
-  const findConfig = (configPath, req = require) => {
+  const findConfig = async (
+    configPath,
+    req = x => import(x).then(m => m.default)
+  ) => {
     if (!configPath) return false
     const resolved = path.relative(cwd, path.resolve(cwd, configPath))
     return loadConfig
       ? {
           path: resolved,
-          config: req(path.resolve(cwd, configPath)),
+          config: await req(path.resolve(cwd, configPath)),
         }
       : { path: configPath, exists: fs.existsSync(resolved) }
   }
 
+  // === System ===
+
+  const info = {
+    cwd,
+  }
+
+  // === App ===
+
+  {
+    const root = path.dirname(findup(cwd, 'package.json'))
+    const { name, version, type } = await loadJson(
+      path.join(root, 'package.json')
+    )
+    info.app = {
+      name,
+      version,
+      type,
+      root,
+    }
+  }
+
+  // === Svench ===
+
   info.svench = {
-    ...ensureDep('svench'),
+    ...(await ensureDep('svench')),
     config: svenchConfig,
   }
 
   // === Vite ===
   {
     const config = typeof vite === 'string' ? vite : 'vite.config.js'
-    if (vite || fs.existsSync(config) || ensureDep('vite')) {
+    if (vite || fs.existsSync(config) || (await ensureDep('vite'))) {
       const missingDeps = new Set()
       const sveltePluginAlternatives = [
         '@svitejs/vite-plugin-svelte',
         '@sveltejs/vite-plugin-svelte',
         'rollup-plugin-svelte-hot',
       ]
-      const deps = findDeps(['vite', sveltePluginAlternatives], missingDeps)
+      const deps = await findDeps(
+        ['vite', sveltePluginAlternatives],
+        missingDeps
+      )
       info.vite = {
-        config: findConfig(config),
+        config: await findConfig(config),
         deps,
         missingDeps: [...missingDeps],
         sveltePlugin: sveltePluginAlternatives
@@ -170,8 +199,11 @@ export const inspect = async ({
     if (snowpack || fs.existsSync(config)) {
       const missingDeps = new Set()
       info.snowpack = {
-        config: findConfig(config, missingDeps),
-        deps: findDeps(['snowpack', '@snowpack/plugin-svelte'], missingDeps),
+        config: await findConfig(config, missingDeps),
+        deps: await findDeps(
+          ['snowpack', '@snowpack/plugin-svelte'],
+          missingDeps
+        ),
         missingDeps: [...missingDeps],
       }
     }
@@ -185,12 +217,12 @@ export const inspect = async ({
         process.env.ROLLUP_WATCH == null ? '1' : process.env.ROLLUP_WATCH
       const missingDeps = new Set()
       const deps = {
-        ...findDeps(['rollup'], missingDeps),
-        ...findDeps([
+        ...(await findDeps(['rollup'], missingDeps)),
+        ...(await findDeps([
           'nollup',
           'rollup-plugin-svelte',
           'rollup-plugin-svelte-hot',
-        ]),
+        ])),
       }
       if (!deps['rollup-plugin-svelte'] && !deps['rollup-plugin-svelte-hot']) {
         missingDeps.push(
@@ -198,7 +230,7 @@ export const inspect = async ({
         )
       }
       info.rollup = {
-        config: findConfig(
+        config: await findConfig(
           config === true ? 'rollup.config.js' : config,
           importSync
         ),

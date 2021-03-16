@@ -6,10 +6,11 @@ import Log from './log.js'
 
 const get = (o, path) => {
   if (!path) return o
-  return path.slice(1).reduce((cur, step) => cur && cur[step], o)
+  return path.reduce((cur, step) => cur && cur[step], o)
 }
 
-const dumpAt = (o, path) => {
+export const dumpAt = (o, path) => {
+  if (typeof path === 'string') path = path.split('.')
   const x = get(o, path)
   if (typeof x === 'string') {
     // eslint-disable-next-line no-console
@@ -32,7 +33,7 @@ export const maybeDump = (...args) => {
     }
   } else {
     if (dump === key) dumpAt(o)
-    if (dump.startsWith(key + '.')) dumpAt(o, dump.split('.'))
+    if (dump.startsWith(key + '.')) dumpAt(o, dump.split('.').slice(1))
   }
   return o
 }

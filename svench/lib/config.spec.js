@@ -1,17 +1,20 @@
 import path from 'path'
 import { test } from 'zorax'
 
-import { resolveOptions } from './config.js'
+import { parseSvenchOptions } from './config.js'
 
 test('sanity', t => {
-  t.ok(typeof resolveOptions === 'function', 'resolveOptions is a function')
+  t.ok(
+    typeof parseSvenchOptions === 'function',
+    'parseSvenchOptions is a function'
+  )
 })
 
 test('does not parse same options twice', t => {
   const o = { name: 'foo' }
-  const o2 = resolveOptions(o)
+  const o2 = parseSvenchOptions(o)
   t.notEq(o !== o2, 'unknown options object is parsed')
-  const o3 = resolveOptions(o2)
+  const o3 = parseSvenchOptions(o2)
   t.ok(o2 === o3, 'already parsed options object is returned as is')
 })
 
@@ -20,13 +23,13 @@ test('enrich options from env', t => {
   {
     process.env.NOLLUP = '0'
     process.env.DUMP = 'ENV_DUMP' + Math.random()
-    const parsed = resolveOptions({})
+    const parsed = parseSvenchOptions({})
     t.eq(parsed.dump, process.env.DUMP, 'resolves process.env.DUMP')
     t.eq(parsed.isNollup, false, 'parse falsy process.env.NOLLUP')
   }
   {
     process.env.NOLLUP = '1'
-    const parsed = resolveOptions({})
+    const parsed = parseSvenchOptions({})
     t.eq(parsed.isNollup, true, 'parse truthy process.env.NOLLUP')
   }
   // restore env
@@ -36,7 +39,7 @@ test('enrich options from env', t => {
 
 test('default cwd', t => {
   {
-    const parsed = resolveOptions({})
+    const parsed = parseSvenchOptions({})
     t.eq(
       parsed.cwd,
       process.cwd(),
@@ -45,7 +48,7 @@ test('default cwd', t => {
   }
   {
     const cwd = 'C:\\wherever'
-    const parsed = resolveOptions({ cwd })
+    const parsed = parseSvenchOptions({ cwd })
     t.eq(parsed.cwd, cwd, 'custom cwd can be passed')
   }
 })
@@ -56,7 +59,7 @@ test('presets can be a simple function', t => {
     svenchDir,
   }))
   const options = { presets: pre }
-  const parsed = resolveOptions(options)
+  const parsed = parseSvenchOptions(options)
   pre.wasCalled()
   t.eq(path.basename(parsed.svenchDir), 'das_root')
 })
@@ -67,7 +70,7 @@ test('presets: can return a partial config', t => {
     () => ({ foo: 42 }),
     () => ({ bar: 43 }),
   ]
-  const parsed = resolveOptions({ presets })
+  const parsed = parseSvenchOptions({ presets })
   t.eq(parsed.md, '.mdxxx')
   t.eq(parsed._.foo, 42)
   t.eq(parsed._.bar, 43)
@@ -84,7 +87,7 @@ test('presets: merge can return a partial config', t => {
       port: 42421,
     }),
   ]
-  const parsed = resolveOptions({ presets })
+  const parsed = parseSvenchOptions({ presets })
   merge.wasCalled()
   t.eq(parsed.port, 42421)
   t.eq(parsed._.merged.port, 42421)
@@ -106,7 +109,7 @@ test('presets: automerge index, manifest, and serve', t => {
       serve: { bazz: 'barr' },
     }),
   ]
-  const parsed = resolveOptions({ presets })
+  const parsed = parseSvenchOptions({ presets })
   t.eq(parsed.index, { foofoo: 'babar', write: false })
   t.eq(parsed.manifest, false)
   t.eq(parsed.serve.bar, 'baz')
@@ -114,7 +117,7 @@ test('presets: automerge index, manifest, and serve', t => {
 })
 
 test('cast', t => {
-  const parsed = resolveOptions({
+  const parsed = parseSvenchOptions({
     presets: [{ cast: ({ foo }) => ({ foo }) }],
     foo: 42,
   })

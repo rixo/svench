@@ -1,12 +1,10 @@
 const proxyquire = require('proxyquire')
 const relative = require('require-relative')
 
-const { default: Log } = require('./log.js')
-
 const wrap = (
   wrapSvelteConfig,
   modulePath,
-  { forceSvelteHot, sveltePlugin: forceSveltePlugin }
+  { forceSvelteHot, sveltePlugin: forceSveltePlugin, Log }
 ) => {
   const plugin = config => {
     const sveltePluginName = forceSveltePlugin

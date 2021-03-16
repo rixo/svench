@@ -4,6 +4,8 @@
 
 export { default as Log } from '../lib/log.js'
 
+export { maybeDump, dumpAt } from '../lib/dump.js'
+
 export { loadSvenchConfig } from '../lib/plugin-shared.js'
 
 export {

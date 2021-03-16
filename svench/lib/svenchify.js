@@ -2,12 +2,16 @@ import * as fs from 'fs'
 import * as path from 'path'
 
 import { pipe } from './util.js'
-import { resolveOptions } from './config.js'
+import { parseSvenchOptions } from './config.js'
 import { createPluginParts } from './plugin-shared.js'
 import { maybeDump } from './dump.js'
-
-const PROXYQUIRE_MODULE = '../lib/svenchify.proxyquire.cjs'
-const REQUIRE_MODULE = '../lib/svenchify.require.cjs'
+import Log from './log.js'
+import {
+  isSveltePlugin,
+  loadSvelteConfig,
+  mergeSvelteOptions,
+} from './ecosystem.js'
+import { importDefaultRelative } from './import-relative.cjs'
 
 const defaultSvelteExtensions = ['.svelte']
 
@@ -23,6 +27,7 @@ const mergeExtensions = (...sources) => [
 const mergePreprocessors = (...sources) => sources.flat().filter(Boolean)
 
 const parseSvenchifyOptions = ({
+  isModule = true,
   noMagic = false,
   interceptSveltePlugin = !noMagic,
   esm = !noMagic,
@@ -30,7 +35,8 @@ const parseSvenchifyOptions = ({
   _setOptions,
   ...svench
 } = {}) => ({
-  svench: resolveOptions(svench),
+  svench: parseSvenchOptions(svench),
+  isModule,
   noMagic,
   interceptSveltePlugin,
   esm,
@@ -43,88 +49,118 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
     source,
     transform,
     {
-      noMagic = false,
-      interceptSveltePlugin = !noMagic,
-      esm = !noMagic,
+      isModule,
+      interceptSveltePlugin,
+      esm,
       svench,
-      svench: { svelte = {}, extensions, dump, sveltePlugin },
+      svench: {
+        cwd,
+        svelte: svelteOverrides = {},
+        extensions,
+        dump,
+        defaultSveltePlugin,
+        sveltePlugin = defaultSveltePlugin,
+      },
       forceSvelteHot,
     }
   ) => {
     process.env.SVENCH = process.env.SVENCH || true
 
-    const importConfig = wrapSvelteConfig => async source => {
-      if (typeof source === 'string') {
-        const file = path.resolve(source)
-        if (!fs.existsSync(file)) {
-          return {}
-        }
-        if (interceptSveltePlugin) {
-          const loadConfigArgs = [
-            wrapSvelteConfig,
-            file,
-            { sveltePlugin, forceSvelteHot },
-          ]
-          if (esm) {
-            const _require = require('esm')(module)
-            const loadConfigFile = _require(PROXYQUIRE_MODULE)
-            const m = loadConfigFile(...loadConfigArgs)
-            // NOTE even if esm option is enabled (and it's enabled by default),
-            //      we don't know whether we'll actually be importing an ESM or
-            //      CJS file... hence default || module
-            return m.default || m
-          } else {
-            const loadConfigFile = require(PROXYQUIRE_MODULE)
-            return loadConfigFile(...loadConfigArgs)
-          }
-        } else {
-          if (esm) {
-            const _require = require('esm')(module)
-            // NOTE this should be the following, but esm fails to rewrite some
-            // imports (`import { svenchify } from 'svench/rollup'`, especially)
-            //     return require(file).default
-            const requireFile = _require(REQUIRE_MODULE)
-            return requireFile(file).default
-          } else {
-            return require(file)
-          }
-        }
-      }
-      return source
-    }
+    const createPlugin = await importDefaultRelative(sveltePlugin, cwd)
 
     const getConfig = async (...args) => {
       let preprocessors
 
-      const wrapSvelteConfig = config => {
-        preprocessors = mergePreprocessors(config.preprocess, svelte.preprocess)
-        const svelteConfig = {
-          ...config,
-          ...svelte,
+      const svelteConfigFile = await loadSvelteConfig(cwd)
+
+      const svelteOverridesWithoutPreprocess = { ...svelteOverrides }
+      delete svelteOverridesWithoutPreprocess.preprocess
+
+      const wrapSvelteConfig = (inlineConfig = {}) => {
+        const mergedOptions = mergeSvelteOptions(
+          svelteConfigFile,
+          inlineConfig,
+          svelteOverridesWithoutPreprocess
+        )
+
+        preprocessors = mergePreprocessors(
+          mergedOptions.preprocess,
+          svelteOverrides.preprocess
+        )
+
+        const finalConfig = {
+          ...mergedOptions,
           extensions:
-            svelte.extensions ||
+            // if extension in overrides: replace,
+            // else: merge project extensions with Svench's ones
+            svelteOverrides.extensions ||
             mergeExtensions(
-              config.extensions || defaultSvelteExtensions,
+              mergedOptions.extensions || defaultSvelteExtensions,
               extensions
             ),
+          // replace with caching / static analysis preprocessor
           preprocess: {
             markup: (...args) => parts.preprocess.pull(...args),
           },
-          // enforce hot mode:
-          // - @svitejs/vite-plugin-svelte doesn't do auto hot
-          // - with Rollup, user might be using non-HMR rollup-plugin-svelte
+          // force hot
           ...(forceSvelteHot && {
             hot: {
-              ...svelte.hot,
+              ...mergedOptions.hot,
             },
             compilerOptions: {
-              ...svelte.compilerOptions,
+              ...mergedOptions.compilerOptions,
               dev: true,
             },
           }),
         }
-        maybeDump('svelte', dump, svelteConfig)
-        return svelteConfig
+
+        maybeDump('svelte', dump, finalConfig)
+
+        return finalConfig
+      }
+
+      const importConfig = async source => {
+        if (typeof source === 'string') {
+          const file = path.resolve(source)
+
+          if (!fs.existsSync(file)) return {}
+
+          if (isModule) {
+            const svelteOptions = wrapSvelteConfig()
+            const { default: loadConfigFile } = await import('./svenchify.mjs')
+            return await loadConfigFile(file, {
+              sveltePlugin,
+              createPlugin,
+              svelteOptions,
+              Log,
+            })
+          } else {
+            const { default: loadConfigFile } = await import('./svenchify.cjs')
+            return await loadConfigFile(file, {
+              interceptSveltePlugin,
+              esm,
+              wrapSvelteConfig,
+              sveltePlugin,
+              forceSvelteHot,
+              Log,
+            })
+          }
+        }
+        return source
+      }
+
+      const ensureSveltePlugin = ({ plugins = [], ...options }) => {
+        if (!plugins.some(isSveltePlugin)) {
+          if (sveltePlugin) {
+            Log.log('Inject svelte plugin: %s', sveltePlugin)
+            plugins.unshift(createPlugin(wrapSvelteConfig()))
+          } else {
+            Log.warn(
+              'No Svelte plugin found in config, no Svelte plugin found to inject'
+            )
+          }
+        }
+        return { ...options, plugins }
       }
 
       const castConfig = async source => {
@@ -135,9 +171,11 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
         return resolved
       }
 
-      const loadConfig = pipe(importConfig(wrapSvelteConfig), castConfig)
-
-      let config = await loadConfig(source)
+      let config = await pipe(
+        importConfig,
+        ensureSveltePlugin,
+        castConfig
+      )(source)
 
       // === Config loaded (preprocess initialized) ===
 

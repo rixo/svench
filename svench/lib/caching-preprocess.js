@@ -6,7 +6,7 @@ import slug from 'rehype-slug'
 // import gemoji from
 // import gemojiToEmoji from 'remark-gemoji-to-emoji'
 
-const { preprocess } = require('svelte/compiler')
+import { preprocess } from 'svelte/compiler'
 import addClasses from './rehype-add-classes.js'
 import preprocessSvench from './preprocessor.js'
 import { stringHashcode } from './util.js'

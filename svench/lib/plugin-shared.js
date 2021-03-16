@@ -4,7 +4,7 @@ import { createRoutix } from 'routix'
 
 import Log from './log.js'
 import { SVENCH_CONFIG_FILE } from './const.js'
-import { resolveOptions } from './config.js'
+import { parseSvenchOptions } from './config.js'
 import cachingPreprocess from './caching-preprocess.js'
 import routixParser from './routix-parser.js'
 import { mkdirpSync } from './util.js'
@@ -17,7 +17,7 @@ export const loadSvenchConfig = (cwd = process.cwd()) => {
 }
 
 export const createPluginParts = argOptions => {
-  const options = resolveOptions({ ...loadSvenchConfig(), ...argOptions })
+  const options = parseSvenchOptions({ ...loadSvenchConfig(), ...argOptions })
 
   const {
     enabled,

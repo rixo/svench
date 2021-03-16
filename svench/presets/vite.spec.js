@@ -1,11 +1,11 @@
 import { test } from 'zorax'
 
-import { resolveOptions } from '../lib/config.js'
+import { parseSvenchOptions } from '../lib/config.js'
 
 import { viteOption } from './vite.js'
 
 test('merge aliases', t => {
-  const parsed = resolveOptions({
+  const parsed = parseSvenchOptions({
     presets: [
       viteOption,
       () => ({

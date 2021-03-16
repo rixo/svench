@@ -11,6 +11,7 @@
   "main": "src/index.js",
   "svelte": "src/index.js",
   "browser": "src/index.js",
+  "type": "module",
   "bin": {
     "svench": "./cli.bin.js"
   },
@@ -52,7 +53,6 @@
     "require-relative": "^0.8.7",
     "resolve": "^1.20.0",
     "restana": "^4.4.1",
-    "routix": "^0.1.0-5",
     "stack-chain": "^2.0.0",
     "trace": "^3.1.1",
     "zingtouch": "^1.0.6"
@@ -85,11 +85,11 @@
     "rollup-plugin-postcss-hot": "^0.0.4",
     "rollup-plugin-svelte-hot": "^0.11.0-1",
     "rollup-plugin-terser": "^5.3.0",
+    "routix": "^0.1.0-7",
     "sirv": "^0.4.2",
     "source-map-support": "^0.5.19",
     "svelte": "^3.29.0",
-    "svench": "workspace:^0.2.0-8",
-    "zoar": "^0.2.0",
+    "zoar": "^0.3.0",
     "zora-node-reporter": "rixo/zora-reporters#zora-node-reporter-v0.0.1-rixo.3-gitpkg",
     "zorax": "^0.0.8"
   },
