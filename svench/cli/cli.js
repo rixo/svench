@@ -16,7 +16,7 @@ import { inspect } from './inspect.js'
 
 const normalizeDir = dirs => (dirs.length === 1 ? dirs[0] : dirs)
 
-const parseGlobalOptions = (
+const normalizeGlobalOptions = (
   { cwd },
   {
     verbose,
@@ -32,13 +32,13 @@ const parseGlobalOptions = (
   ...rest,
 })
 
-const parseBuildOptions = (params, [dir, {_: dirs = [], ...opts}]) => ({
-  ...parseGlobalOptions(params, opts),
+const normalizeBuildOptions = (params, [dir, {_: dirs = [], ...opts}]) => ({
+  ...normalizeGlobalOptions(params, opts),
   dir: normalizeDir([dir, ...dirs]),
 })
 
-const parseInspectOptions = (params, [inspect, opts]) => ({
-  ...parseGlobalOptions(params, opts),
+const normalizeInspectOptions = (params, [inspect, opts]) => ({
+  ...normalizeGlobalOptions(params, opts),
   inspect
 })
 
@@ -136,7 +136,7 @@ export default async argv => {
       'Specify name of the Svelte plugin to use'
     )
     .option('--reload', 'Clear local cache (Snowpack only)')
-    .action(handle(autodetect('dev'), parseBuildOptions))
+    .action(handle(autodetect('dev'), normalizeBuildOptions))
 
   // svench build
   prog
@@ -145,18 +145,16 @@ export default async argv => {
       '--plugin, --svelte-plugin <plugin>',
       'Specify name of the Svelte plugin to use'
     )
-    .action(handle(autodetect('build'), parseBuildOptions))
+    .action(handle(autodetect('build'), normalizeBuildOptions))
 
   // svench debug
   prog
     .command(
       'inspect [item]',
-      'Report about detected tooling (mainly for debug purpose)'
+      'Report about detected tooling (for diagnostic purpose)'
     )
     .option('--load-config, --load, -l', 'Load config contents', false)
-    .action(handle('inspect', parseInspectOptions))
-
-  prog.parse(argv)
+    .action(handle('inspect', normalizeInspectOptions))
 
   return done
 }
