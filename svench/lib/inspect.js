@@ -73,14 +73,19 @@ export const inspect = async ({
   vite,
   ...rest
 }) => {
+  const standalone =
+    typeof process.env.SVENCH_STANDALONE === 'string'
+      ? process.env.SVENCH_STANDALONE
+      : false
+
   const res = x => resolveSync(x, { basedir: cwd, preserveSymlinks: true })
 
   // svench-cli
   const resSvenchCli =
-    typeof process.env.SVENCH_STANDALONE === 'string' &&
+    standalone &&
     (x =>
       resolveSync(x, {
-        basedir: process.env.SVENCH_STANDALONE,
+        basedir: standalone,
         preserveSymlinks: true,
       }))
 
@@ -154,7 +159,11 @@ export const inspect = async ({
 
   // === System ===
 
-  const info = { cwd, missingDeps: [] }
+  const info = {
+    cwd,
+    missingDeps: [],
+    standalone,
+  }
 
   // === App ===
 
