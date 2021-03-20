@@ -2,8 +2,8 @@
  * Rollup specific defaults.
  */
 
-import path from 'path'
-import Log from '../lib/log.js'
+const path = require('path')
+const Log = require('../lib/log.js')
 
 const serveDefaults = {
   host: 'localhost',
@@ -126,4 +126,4 @@ const nollup = ({ isNollup, write = true, serve, ...options }) =>
     ...options,
   }
 
-export default [nollup, rollup]
+module.exports = [nollup, rollup]
