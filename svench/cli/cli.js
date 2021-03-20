@@ -5,11 +5,11 @@
 process.env.SVENCH = process.env.SVENCH == null ? '1' : process.env.SVENCH
 
 import * as fs from 'fs'
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
 import cac from 'cac'
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 import { Log, loadSvenchConfig } from './lib.js'
 import { inspect } from './inspect.js'
@@ -24,7 +24,7 @@ const normalizeGlobalOptions = (
     v, // eslint-disable-line no-unused-vars
     q, // eslint-disable-line no-unused-vars
     ...rest
-  },
+  }
 ) => ({
   cwd,
   verbose,
@@ -32,14 +32,14 @@ const normalizeGlobalOptions = (
   ...rest,
 })
 
-const normalizeBuildOptions = (params, [dir, {_: dirs = [], ...opts}]) => ({
+const normalizeBuildOptions = (params, [dir, { _: dirs = [], ...opts }]) => ({
   ...normalizeGlobalOptions(params, opts),
   dir: normalizeDir([dir, ...dirs]),
 })
 
 const normalizeInspectOptions = (params, [inspect, opts]) => ({
   ...normalizeGlobalOptions(params, opts),
-  inspect
+  inspect,
 })
 
 const readPkg = async () => {
@@ -155,6 +155,8 @@ export default async argv => {
     )
     .option('--load-config, --load, -l', 'Load config contents', false)
     .action(handle('inspect', normalizeInspectOptions))
+
+  prog.parse(argv)
 
   return done
 }
