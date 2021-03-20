@@ -3,8 +3,8 @@
  */
 
 const path = require('path')
-// const resolve = require('resolve')
-// const findup = require('findup')
+const os = require('os')
+const { stringHashcode } = require('../lib/util.js')
 
 // TODO test that we don't eat user's aliases
 const mergeAlias = (...sources) =>
@@ -119,8 +119,8 @@ const viteOption = {
 
 const viteConfig = {
   post: ({
-    standalone,
     svenchPath,
+    sveltePath,
     svenchDir,
     manifestDir,
     distDir,
@@ -129,19 +129,49 @@ const viteConfig = {
     vite: {
       root: svenchDir,
       server: { port },
-      esbuild: false,
       build: { outDir: distDir },
       // /@svench/* alias
       resolve: {
         alias: [
           { find: /^\/@svench\//, replacement: manifestDir + '/' },
-          // TODO DEBUG move that where it belongs!
-          standalone &&
-            svenchPath && { find: /^svench\//, replacement: svenchPath + '/' },
+          // TODO move that where it belongs!
+          svenchPath && { find: /^svench\//, replacement: svenchPath + '/' },
+          sveltePath && {
+            find: /^svelte($|\/)/,
+            replacement: sveltePath + '$1',
+          },
         ].filter(Boolean),
       },
     },
   }),
 }
 
-module.exports = [viteOption, viteConfig, viteDefaults]
+// for svench-vite
+const maybeStandalone = {
+  transform: ({ standalone, cwd, dir }) => {
+    if (!standalone) return null
+    const target = path.resolve(cwd, dir)
+    const id = stringHashcode(target)
+    const svenchDir = path.join(os.tmpdir(), `svench-${id}`)
+    return { svenchDir }
+  },
+
+  post: ({ standalone, svenchPath, sveltePath }) => {
+    if (!standalone) return null
+    return {
+      vite: {
+        resolve: {
+          alias: [
+            svenchPath && { find: /^svench\//, replacement: svenchPath + '/' },
+            sveltePath && {
+              find: /^svelte($|\/)/,
+              replacement: sveltePath + '$1',
+            },
+          ].filter(Boolean),
+        },
+      },
+    }
+  },
+}
+
+module.exports = [viteOption, viteConfig, viteDefaults, maybeStandalone]

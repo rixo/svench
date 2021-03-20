@@ -62,10 +62,11 @@ export const loadSvenchifiedConfig = async (
   }
 
   const {
+    standalone,
     app: { type },
     vite: { sveltePlugin: defaultSveltePlugin = 'rollup-plugin-svelte-hot' },
     svench: { dir: svenchPath },
-    svelte: { compiler: svelteCompiler } = {},
+    svelte: { dir: sveltePath, compiler: svelteCompiler } = {},
   } = info
 
   const source = nocfg
@@ -77,7 +78,9 @@ export const loadSvenchifiedConfig = async (
   const svenchified = svenchify(source, {
     enabled: true,
 
+    standalone,
     svenchPath,
+    sveltePath,
     svelteCompiler,
 
     vite: configOverride || true,

@@ -1,4 +1,5 @@
-import * as path from 'path'
+import fs from 'fs'
+import path from 'path'
 
 import { pipe, noop } from './util.js'
 import { maybeDump } from './dump.js'
@@ -72,16 +73,16 @@ const applyPresets = ({ presets, ...options }) => {
     return path.join(path.dirname(options.svenchPath), id)
   }
 
-  const presetArray = ensureArray(presets)
-    .filter(Boolean)
-    .map(resolveSvenchImports)
+  const presetArray = ensureArray(presets).filter(Boolean)
+
+  const importPreset = pipe(resolveSvenchImports, importSync)
 
   // const requirePreset = id => importDefaultRelative(id, cwd)
   // const requirePreset = id => importDefaultRelative(id, cwd)
 
   const resolvePreset = preset =>
     typeof preset === 'string'
-      ? resolvePreset(importSync(preset))
+      ? resolvePreset(importPreset(preset))
       : Array.isArray(preset)
       ? preset.map(resolvePreset)
       : preset
@@ -143,6 +144,14 @@ const applyPresetsPost = customizer(HOOK_POST)
 
 const withCwd = ({ cwd = process.cwd(), ...opts }) => ({ cwd, ...opts })
 
+const withDefaultDir = ({ cwd, dir, ...opts }) => {
+  if (dir == null) {
+    if (fs.existsSync(path.resolve(cwd, 'src'))) dir = 'src'
+    else dir = '.'
+  }
+  return { cwd, dir, ...opts }
+}
+
 const withEnv = ({
   dump = process.env.DUMP,
   isNollup = !!+process.env.NOLLUP,
@@ -189,14 +198,16 @@ const resolveDirs = ({
 const castOptions = ({
   cwd,
 
+  standalone,
   svenchPath,
+  sveltePath,
   svelteCompiler,
 
   enabled = !!+process.env.SVENCH,
 
   watch = false,
 
-  dir = 'src',
+  dir,
 
   ignore = path => /(?:^|\/)(?:node_modules|\.git)\//.test(path),
 
@@ -280,7 +291,9 @@ const castOptions = ({
   ..._
 }) => ({
   cwd,
+  standalone,
   svenchPath,
+  sveltePath,
   svelteCompiler,
   enabled,
   watch,
@@ -360,6 +373,7 @@ const doParseOptions = pipe(
   maybeDumpOptions('input:options'),
   withEnv,
   withCwd,
+  withDefaultDir,
   applyPresets,
   maybeDumpOptions(['preset:options', 'presets:options']),
   resolveDirs,
