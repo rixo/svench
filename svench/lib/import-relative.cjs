@@ -10,9 +10,23 @@ const relative = require('require-relative')
 
 const importSync = require('esm')(module)
 
+const possibleExtensions = id => {
+  if (/\.[cm]?js$/.test(id)) return [id]
+  const alts = [id, id + '.js', id + '.mjs', id + '.cjs']
+  if (!id.endsWith('/index')) alts.push(...possibleExtensions(id + '/index'))
+  return alts
+}
+
 const importRelative = (id, to = process.cwd()) => {
-  const url = relative.resolve(id, to)
-  return importSync(url)
+  for (const file of possibleExtensions(id)) {
+    try {
+      return importSync(relative.resolve(file, to))
+    } catch (err) {
+      if (err && err.code === 'MODULE_NOT_FOUND') continue
+      throw err
+    }
+  }
+  throw new Error('Module not found: ' + id)
 }
 
 const importDefaultRelative = (id, to) => {
@@ -36,6 +50,7 @@ const resolveSync = (target, opts) =>
 
 module.exports = {
   importSync,
+  importRelative,
   importDefaultRelative,
   resolve,
   resolveSync,

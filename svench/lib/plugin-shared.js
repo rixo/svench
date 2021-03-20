@@ -20,6 +20,8 @@ export const createPluginParts = argOptions => {
   const options = parseSvenchOptions({ ...loadSvenchConfig(), ...argOptions })
 
   const {
+    cwd,
+    svelteCompiler,
     enabled,
     svenchDir,
     manifestDir,
@@ -36,6 +38,8 @@ export const createPluginParts = argOptions => {
   if (!enabled) return { options }
 
   const preprocess = cachingPreprocess({
+    cwd,
+    svelteCompiler,
     extensions,
     preprocessors,
     mdsvex,

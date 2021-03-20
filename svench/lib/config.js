@@ -3,7 +3,7 @@ import * as path from 'path'
 import { pipe, noop } from './util.js'
 import { maybeDump } from './dump.js'
 
-import { importDefaultRelative } from './import-relative.cjs'
+import { importSync } from './import-relative.cjs'
 
 const ALREADY_PARSED = Symbol('Svench: already parsed options')
 
@@ -64,17 +64,24 @@ const runPresets = (presets, options) => {
 }
 
 const applyPresets = ({ presets, ...options }) => {
-  const { cwd } = options
-
   if (!presets) return options
 
-  const presetArray = ensureArray(presets).filter(Boolean)
+  const resolveSvenchImports = id => {
+    if (!options.svenchPath) return id
+    if (!id.startsWith('svench/') && id !== 'svench') return id
+    return path.join(path.dirname(options.svenchPath), id)
+  }
 
-  const requirePreset = id => importDefaultRelative(id, cwd)
+  const presetArray = ensureArray(presets)
+    .filter(Boolean)
+    .map(resolveSvenchImports)
+
+  // const requirePreset = id => importDefaultRelative(id, cwd)
+  // const requirePreset = id => importDefaultRelative(id, cwd)
 
   const resolvePreset = preset =>
     typeof preset === 'string'
-      ? resolvePreset(requirePreset(preset))
+      ? resolvePreset(importSync(preset))
       : Array.isArray(preset)
       ? preset.map(resolvePreset)
       : preset
@@ -182,6 +189,9 @@ const resolveDirs = ({
 const castOptions = ({
   cwd,
 
+  svenchPath,
+  svelteCompiler,
+
   enabled = !!+process.env.SVENCH,
 
   watch = false,
@@ -270,6 +280,8 @@ const castOptions = ({
   ..._
 }) => ({
   cwd,
+  svenchPath,
+  svelteCompiler,
   enabled,
   watch,
   dir,

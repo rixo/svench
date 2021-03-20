@@ -2,7 +2,9 @@
  * Preset for Vite (default Svelte template) apps.
  */
 
-import path from 'path'
+const path = require('path')
+// const resolve = require('resolve')
+// const findup = require('findup')
 
 // TODO test that we don't eat user's aliases
 const mergeAlias = (...sources) =>
@@ -103,25 +105,43 @@ const viteDefaults = {
   },
 }
 
-export const viteOption = {
+const viteOption = {
   merge: ({ vite: a } = {}, { vite: b } = {}) => ({
     vite: mergeViteConfig(a, b),
   }),
   cast: ({ vite = {} }) => ({ vite }),
 }
 
+// const index = resolve.sync('svench', { basedir: process.env.SVENCH_CLI })
+// const dir = path.dirname(findup(index, 'package.json'))
+// console.log(dir)
+// process.exit()
+
 const viteConfig = {
-  post: ({ svenchDir, manifestDir, distDir, port }) => ({
+  post: ({
+    standalone,
+    svenchPath,
+    svenchDir,
+    manifestDir,
+    distDir,
+    port,
+  }) => ({
     vite: {
       root: svenchDir,
       server: { port },
+      esbuild: false,
       build: { outDir: distDir },
       // /@svench/* alias
       resolve: {
-        alias: [{ find: /^\/@svench\//, replacement: manifestDir + '/' }],
+        alias: [
+          { find: /^\/@svench\//, replacement: manifestDir + '/' },
+          // TODO DEBUG move that where it belongs!
+          standalone &&
+            svenchPath && { find: /^svench\//, replacement: svenchPath + '/' },
+        ].filter(Boolean),
       },
     },
   }),
 }
 
-export default [viteOption, viteConfig, viteDefaults]
+module.exports = [viteOption, viteConfig, viteDefaults]

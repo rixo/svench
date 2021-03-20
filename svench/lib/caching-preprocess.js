@@ -6,10 +6,10 @@ import slug from 'rehype-slug'
 // import gemoji from
 // import gemojiToEmoji from 'remark-gemoji-to-emoji'
 
-import { preprocess } from 'svelte/compiler'
 import addClasses from './rehype-add-classes.js'
 import preprocessSvench from './preprocessor.js'
 import { stringHashcode } from './util.js'
+import { importRelative, importSync } from './import-relative.cjs'
 
 const noPreprocess = code => ({ code })
 
@@ -18,6 +18,8 @@ noPreprocess.getCached = noPreprocess
 const maybeCustomExtension = (dft, x) => (typeof x === 'string' ? x : dft)
 
 export default ({
+  cwd,
+  svelteCompiler,
   extensions,
   preprocessors = [],
   mdsvex: mdsvexEnabled,
@@ -25,6 +27,10 @@ export default ({
 
   disableCache = false, // TODO wire externally
 }) => {
+  const { preprocess } = svelteCompiler
+    ? importSync(svelteCompiler)
+    : importRelative('svelte/compiler', cwd)
+
   const cache = {}
 
   const mdsvexExtension = maybeCustomExtension('.svx', mdsvexEnabled)

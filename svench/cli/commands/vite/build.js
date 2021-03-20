@@ -1,13 +1,10 @@
-import { resolve } from '../../lib.js'
+import { loadVite, loadSvenchifiedConfig } from './util.js'
 
-import { loadSvenchifiedConfig } from './util.js'
-
-export default async (info, { cwd = process.cwd(), ...cliOptions }) => {
+export default async (info, cliOptions) => {
   const mode = 'production'
   const command = 'build'
 
-  const vitePath = await resolve('vite', cwd)
-  const { build } = await import(vitePath)
+  const { build } = await loadVite(info)
 
   const finalConfig = await loadSvenchifiedConfig(
     { mode, command },

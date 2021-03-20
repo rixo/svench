@@ -77,10 +77,10 @@ export const inspect = async ({
 
   // svench-cli
   const resSvenchCli =
-    typeof process.env.SVENCH_CLI === 'string' &&
+    typeof process.env.SVENCH_STANDALONE === 'string' &&
     (x =>
       resolveSync(x, {
-        basedir: process.env.SVENCH_CLI,
+        basedir: process.env.SVENCH_STANDALONE,
         preserveSymlinks: true,
       }))
 
@@ -95,9 +95,10 @@ export const inspect = async ({
       const relPath = path.relative(cwd, dir)
       const { version } = await loadJson(path.join(dir, 'package.json'))
       return {
-        module: target,
+        package: target,
         version,
         path: index,
+        dir,
         depth: -(relPath.split('..' + path.sep).length - 1) || 0,
       }
     } catch (error) {
@@ -108,22 +109,18 @@ export const inspect = async ({
     }
   }
 
-  const ensureDep = async (target, trySvenchCli = false) =>
+  const ensureDep = async (target, standalone = true) =>
     (await _ensureDep(target)) ||
-    (trySvenchCli && (await _ensureDep(target, resSvenchCli))) ||
+    (resSvenchCli && standalone && (await _ensureDep(target, resSvenchCli))) ||
     false
 
-  const findDeps = async (targets, missingDeps, trySvenchCli = false) => {
+  const findDeps = async (targets, missingDeps) => {
     const deps = []
     for (const target of targets) {
       if (Array.isArray(target)) {
         let found = false
         for (const alternative of target) {
-          deps[alternative] = await ensureDep(
-            alternative,
-            missingDeps,
-            trySvenchCli
-          )
+          deps[alternative] = await ensureDep(alternative)
           if (deps[alternative] && !deps[alternative].error) {
             found = true
           }
@@ -132,7 +129,7 @@ export const inspect = async ({
           missingDeps.add(target.join(' or '))
         }
       } else {
-        deps[target] = await ensureDep(target, missingDeps, trySvenchCli)
+        deps[target] = await ensureDep(target)
         if (missingDeps && (!deps[target] || deps[target].error)) {
           missingDeps.add(target)
         }
@@ -157,9 +154,7 @@ export const inspect = async ({
 
   // === System ===
 
-  const info = {
-    cwd,
-  }
+  const info = { cwd }
 
   // === App ===
 
@@ -183,10 +178,20 @@ export const inspect = async ({
     config: svenchConfig,
   }
 
+  // === Svelte ===
+
+  info.svelte = await ensureDep('svelte')
+  if (info.svelte) {
+    const compiler = path.join(info.svelte.dir, 'compiler.mjs')
+    if (fs.existsSync(compiler)) {
+      info.svelte.compiler = compiler
+    }
+  }
+
   // === Vite ===
   {
     const config = typeof vite === 'string' ? vite : 'vite.config.js'
-    if (vite || fs.existsSync(config) || (await ensureDep('vite', true))) {
+    if (vite || fs.existsSync(config) || (await ensureDep('vite'))) {
       const missingDeps = new Set()
       const sveltePluginAlternatives = [
         '@svitejs/vite-plugin-svelte',
@@ -195,15 +200,14 @@ export const inspect = async ({
       ]
       const deps = await findDeps(
         ['vite', sveltePluginAlternatives],
-        missingDeps,
-        true
+        missingDeps
       )
       const sveltePlugin = sveltePluginAlternatives
         .map(name => deps[name])
         .filter(depInfo => depInfo && !depInfo.error)
         .sort(({ depth: a }, { depth: b }) => b - a)
         .slice(0, 1)
-        .map(({ module }) => module)
+        .map(({ package: pkg }) => pkg)
         .shift()
       info.vite = {
         config: await findConfig(config),
@@ -309,6 +313,13 @@ export const inspect = async ({
   if (info.favorite) {
     const key = info.favorite === 'nollup' ? 'rollup' : info.favorite
     info.missingDeps = info[key].missingDeps
+  }
+
+  if (!info.svench) info.missingDeps.push('svench')
+  if (!info.svelte) {
+    info.missingDeps.push('svelte')
+  } else {
+    if (!info.svelte.compiler) info.missingDeps.push('svelte/compiler')
   }
 
   return info

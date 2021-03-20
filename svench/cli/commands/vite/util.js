@@ -1,4 +1,5 @@
 import { svenchify } from '../../../lib/vite-plugin.js'
+import { Log } from '../../lib.js'
 
 const resolveViteConfig = async (source, args = {}) => {
   const resolved = await source
@@ -35,20 +36,38 @@ const mergeViteConfigs = mergeConfigs([
   'ssr',
 ])
 
+export const loadVite = async info => {
+  if (!info.vite || !info.vite.vitePath) {
+    throw new Error('Failed to find Vite')
+  }
+  if (!info.vite.sveltePluginPath) {
+    throw new Error('Failed to find Svelte plugin for Vite')
+  }
+  return await import(info.vite.vitePath)
+}
+
 export const loadSvenchifiedConfig = async (
   { mode, command },
-  {
-    app: { type },
-    vite: { sveltePlugin: defaultSveltePlugin = 'rollup-plugin-svelte-hot' },
-  },
+  info,
   {
     vite: configFile = 'vite.config.js',
     override: configOverride,
     nocfg = false,
-    sveltePlugin,
     ...cliOverrides
   } = {}
 ) => {
+  if (info.missingDeps.length > 0) {
+    Log.error('Missing dependencies: %s', info.missingDeps.join(', '))
+    process.exit(255)
+  }
+
+  const {
+    app: { type },
+    vite: { sveltePlugin: defaultSveltePlugin = 'rollup-plugin-svelte-hot' },
+    svench: { dir: svenchPath },
+    svelte: { compiler: svelteCompiler } = {},
+  } = info
+
   const source = nocfg
     ? {}
     : configFile === true
@@ -57,9 +76,12 @@ export const loadSvenchifiedConfig = async (
 
   const svenchified = svenchify(source, {
     enabled: true,
+
+    svenchPath,
+    svelteCompiler,
+
     vite: configOverride || true,
     isModule: type === 'module',
-    sveltePlugin,
     defaultSveltePlugin,
     // enforce hot mode (@svitejs/vite-plugin-svelte doesn't do auto hot)
     forceSvelteHot: true,

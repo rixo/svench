@@ -18,7 +18,7 @@ dependencies:
   require-relative: 0.8.7
   resolve: 1.20.0
   restana: 4.8.1
-  routix: 0.1.0-5
+  routix: 0.1.0-8
   stack-chain: 2.0.0
   trace: 3.1.1
   zingtouch: 1.0.6
@@ -43,7 +43,7 @@ devDependencies:
   sirv: 0.4.6
   source-map-support: 0.5.19
   svelte: 3.35.0
-  zoar: 0.2.0
+  zoar: 0.3.0
   zora-node-reporter: github.com/rixo/zora-reporters/002538be1e3fc28bc4bdca8e1bed15b20c8bd2e6
   zorax: 0.0.8
 lockfileVersion: 5.2
@@ -5522,12 +5522,12 @@ packages:
       fsevents: 2.3.2
     resolution:
       integrity: sha512-nepLFAW5W71/MWpS2Yr7r31eS7HRfYg2RXnxb6ehqN9zY42yACxKtEfb4xq8SmNfUohAzGMcyl6jkwdLOAiUbg==
-  /routix/0.1.0-5:
+  /routix/0.1.0-8:
     dependencies:
       cheap-watch: 1.0.3
     dev: false
     resolution:
-      integrity: sha512-ZWg5tJsaQpzOB9MP7ONft6TUle4Ga6eGP6JnkjejR5H3U0a1X+lpfz6FxH4gQjZGgWm6zMr+Z8YRoaUDcNzBfw==
+      integrity: sha512-f2KiGGjI8cmUg2hOWyWHdPnzGQHZAqj8hB9PkabrYl0ANF1luelkH/Bp2/PnaqxHMvKac2nVZdgNuw6HXBnS6A==
   /run-async/2.4.1:
     dev: true
     engines:
@@ -6599,7 +6599,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-S7jcR7cSRy28VmQBO0Tq7ZJV4pzfvvrTU9FrrL0K1QPpfBal9wm0oKhoCuifc+PPCq+hQMTJr5E9XKUQDm00VA==
-  /zoar/0.2.0:
+  /zoar/0.3.0:
     dependencies:
       arg: 4.1.3
       cheap-watch: 1.0.3
@@ -6617,7 +6617,7 @@ packages:
     dev: true
     hasBin: true
     resolution:
-      integrity: sha512-2GhsECMRqEhSuf1JO9+R75R+ZHiwtqNn4eX4JSUgwNKWUv2har7GbemLavVwvYlLbMyvYfp8t5pDQd06Oqc94w==
+      integrity: sha512-ruy67kMBinOj52ooiBgO0z/THf+wFsn5/kLk9ZsJR8oIyFuHwsVqji25ah6j/CF87/HNUKbze+L2g95K+MnyNg==
   /zora-tap-reporter/2.0.0:
     dev: true
     resolution:
@@ -6682,7 +6682,7 @@ specifiers:
   rollup-plugin-postcss-hot: ^0.0.4
   rollup-plugin-svelte-hot: ^0.11.0-1
   rollup-plugin-terser: ^5.3.0
-  routix: ^0.1.0-5
+  routix: ^0.1.0-8
   sirv: ^0.4.2
   snowpack: ^3.0.13
   source-map-support: ^0.5.19
@@ -6691,6 +6691,6 @@ specifiers:
   trace: ^3.1.1
   vite: ^2.0.3
   zingtouch: ^1.0.6
-  zoar: ^0.2.0
+  zoar: ^0.3.0
   zora-node-reporter: rixo/zora-reporters#zora-node-reporter-v0.0.1-rixo.3-gitpkg
   zorax: ^0.0.8
