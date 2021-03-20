@@ -175,7 +175,7 @@ importers:
       esbuild: ^0.9.5
       resolve: ^1.20.0
       svelte: ^3.35.0
-      svench: workspace:^0.2.0-15
+      svench: workspace:^0.2.0-16
       vite: ^2.1.2
   svench:
     dependencies:
