@@ -1,6 +1,6 @@
 {
   "name": "svench-vite",
-  "version": "0.0.1-1",
+  "version": "0.0.1-2",
   "description": "All inclusive (Vite, Svelte plugin) Svench cli package",
   "type": "module",
   "main": "index.js",
@@ -12,12 +12,7 @@
     "type": "git",
     "url": "git+ssh://git@github.com/rixo/svench.git"
   },
-  "keywords": [
-    "svelte",
-    "svench",
-    "standalone",
-    "cli"
-  ],
+  "keywords": ["svelte", "svench", "standalone", "cli"],
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
   "bugs": {
