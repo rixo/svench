@@ -37,7 +37,7 @@ pnpm add -D svelte vite @svitejs/vite-plugin-svelte svench
 mkdir src
 echo '# Hello' > src/hello.md
 echo '<h1>Hi!</h1>' > src/Hi.svench
-npx svench
+pnpx svench
 ```
 
 ```bash
