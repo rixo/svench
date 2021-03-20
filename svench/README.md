@@ -8,7 +8,7 @@ Please refer to the [docs site](https://svench.dev), and the monorepo's [README]
 
 ```bash
 npm init -y
-npm add -D svelte vite rollup-plugin-svelte-hot@next svench@beta
+npm add -D svelte vite @sveltejs/vite-plugin-svelte svench
 mkdir src
 npx svench
 echo '# Hello' > src/hello.md
