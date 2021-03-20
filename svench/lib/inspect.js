@@ -5,7 +5,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { importSync, resolveSync } from './lib.js'
+import { importSync, resolveSync } from './import-relative.cjs'
 
 const findup = (from, target) => {
   let last = null

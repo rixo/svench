@@ -8,6 +8,8 @@ export { maybeDump, dumpAt } from '../lib/dump.js'
 
 export { loadSvenchConfig } from '../lib/plugin-shared.js'
 
+export { inspect } from '../lib/inspect.js'
+
 export {
   importSync,
   importDefaultRelative,

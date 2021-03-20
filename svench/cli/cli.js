@@ -11,8 +11,7 @@ import cac from 'cac'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-import { Log, loadSvenchConfig } from './lib.js'
-import { inspect } from './inspect.js'
+import { Log, loadSvenchConfig, inspect } from './lib.js'
 
 const normalizeDir = dirs => (dirs.length === 1 ? dirs[0] : dirs)
 
