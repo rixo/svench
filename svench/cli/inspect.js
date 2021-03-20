@@ -154,7 +154,7 @@ export const inspect = async ({
 
   // === System ===
 
-  const info = { cwd }
+  const info = { cwd, missingDeps: [] }
 
   // === App ===
 
