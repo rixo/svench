@@ -42,7 +42,7 @@ if (majorVer < 14) {
 
 process.env.SVENCH = true
 // needed to skip nolluprc
-process.env.SVENCH_CLI = true
+process.env.SVENCH_CLI = process.env.SVENCH_CLI || true
 
 run(process.argv).catch(err => {
   console.error((err && err.stack) || err)
