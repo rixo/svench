@@ -1,6 +1,6 @@
 {
   "name": "svench-cli",
-  "version": "0.0.1-4",
+  "version": "0.0.1-5",
   "description": "All inclusive (Vite, Svelte plugin) Svench cli package",
   "type": "module",
   "main": "index.js",
