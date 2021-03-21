@@ -156,20 +156,13 @@ const viteConfig = {
 
 // for svench-vite
 const maybeStandalone = {
-  transform: ({ standalone, cwd, dir }) => {
-    if (!standalone) return null
-    const target = path.resolve(cwd, dir)
-    const id = stringHashcode(target)
-    const svenchDir = path.join(os.tmpdir(), `svench-${id}`)
-    return { svenchDir }
-  },
-
-  post: ({ standalone, svenchPath, sveltePath }) => {
-    if (!standalone) return null
-    return {
+  post: ({ standalone, svenchPath, sveltePath }) =>
+    standalone && {
       vite: {
         resolve: {
           alias: [
+            // NOTE need to be able to resolve svench/* from anywhere, even a
+            // directory with no node_modules at all (for npx svench-vite)
             svenchPath && { find: /^svench\//, replacement: svenchPath + '/' },
             sveltePath && {
               find: /^svelte($|\/)/,
@@ -178,8 +171,7 @@ const maybeStandalone = {
           ].filter(Boolean),
         },
       },
-    }
-  },
+    },
 }
 
 module.exports = [viteOption, viteConfig, viteDefaults, maybeStandalone]

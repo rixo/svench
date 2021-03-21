@@ -1,7 +1,8 @@
+import os from 'os'
 import fs from 'fs'
 import path from 'path'
 
-import { pipe, noop } from './util.js'
+import { pipe, noop, stringHashcode } from './util.js'
 import { maybeDump } from './dump.js'
 
 import { importSync } from './import-relative.cjs'
@@ -169,6 +170,22 @@ const resolveDir = (cwd, base) => dir =>
     ? path.join(cwd, dir)
     : path.join(base, dir)
 
+const resolveTmp = options => {
+  // tmp defaults to true when standalone
+  const { standalone, tmp = !!standalone } = options
+  if (!tmp) return { ...options, tmp }
+  const {
+    cwd,
+    dir,
+    svenchDir = `.svench-${stringHashcode(path.resolve(cwd, dir))}`,
+  } = options
+  return {
+    ...options,
+    tmp,
+    svenchDir: path.join(os.tmpdir(), svenchDir),
+  }
+}
+
 const resolveDirs = ({
   cwd,
   // a directory to contains all Svench generated things (or even merely
@@ -197,6 +214,8 @@ const resolveDirs = ({
 
 const castOptions = ({
   cwd,
+
+  tmp,
 
   standalone,
   svenchPath,
@@ -291,6 +310,7 @@ const castOptions = ({
   ..._
 }) => ({
   cwd,
+  tmp,
   standalone,
   svenchPath,
   sveltePath,
@@ -376,8 +396,9 @@ const doParseOptions = pipe(
   withDefaultDir,
   applyPresets,
   maybeDumpOptions(['preset:options', 'presets:options']),
-  resolveDirs,
+  resolveTmp,
   maybeDumpOptions('resolveDirs:options'),
+  resolveDirs,
   castOptions,
   resolveFiles,
   applyPresetsPost,

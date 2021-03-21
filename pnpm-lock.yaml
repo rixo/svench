@@ -175,7 +175,7 @@ importers:
       esbuild: ^0.9.5
       resolve: ^1.20.0
       svelte: ^3.35.0
-      svench: workspace:^0.2.0-16
+      svench: ^0.2.0-16
       vite: ^2.1.2
   svench:
     dependencies:
@@ -198,6 +198,7 @@ importers:
       require-relative: 0.8.7
       resolve: 1.20.0
       restana: 4.8.1
+      routix: 0.1.0-8
       stack-chain: 2.0.0
       trace: 3.1.1
       zingtouch: 1.0.6
@@ -219,7 +220,6 @@ importers:
       rollup-plugin-hot: 0.0.22_rollup@2.40.0
       rollup-plugin-postcss-hot: 0.0.4
       rollup-plugin-terser: 5.3.1_rollup@2.40.0
-      routix: 0.1.0-8
       sirv: 0.4.6
       source-map-support: 0.5.19
       svelte: 3.34.0
@@ -7879,7 +7879,7 @@ packages:
   /routix/0.1.0-8:
     dependencies:
       cheap-watch: 1.0.3
-    dev: true
+    dev: false
     resolution:
       integrity: sha512-f2KiGGjI8cmUg2hOWyWHdPnzGQHZAqj8hB9PkabrYl0ANF1luelkH/Bp2/PnaqxHMvKac2nVZdgNuw6HXBnS6A==
   /run-async/2.4.1:

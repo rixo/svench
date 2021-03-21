@@ -116,6 +116,8 @@ export default async argv => {
     .option('--nollup [config]', 'Use Nollup')
     .option('--rollup [config]', 'Use Rollup')
     .option('--nocfg, --noconfig', "Don't try to load tool specific config")
+    //
+    .option('--tmp', 'Write generated files to OS temp dir', false)
     // debugging
     .option('-v, --verbose', 'Increase verbosity (can be repeated -vv)')
     .option('-q, --quiet', 'Increase quietness (can be repeated -qq)')
