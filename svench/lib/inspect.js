@@ -182,9 +182,11 @@ export const inspect = async ({
 
   // === Svench ===
 
-  info.svench = {
-    ...(await ensureDep('svench')),
-    config: svenchConfig,
+  info.svench = await ensureDep('svench')
+  if (info.svench) {
+    info.svench.config = svenchConfig
+    const cli = path.join(info.svench.dir, 'cli.bin.js')
+    info.svench.cli = fs.existsSync(cli) && cli
   }
 
   // === Svelte ===
