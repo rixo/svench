@@ -1,5 +1,0 @@
-devDependencies:
-  svelte-hmr: link:../../../../../.nvm/versions/node/v12.16.3/pnpm-global/node_modules/svelte-hmr
-lockfileVersion: 5.2
-specifiers:
-  svelte-hmr: ^0.12.6

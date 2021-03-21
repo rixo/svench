@@ -18,7 +18,7 @@
     "rollup-plugin-svelte-hot": "^1.0.0-3",
     "rollup-plugin-terser": "^5.3.1",
     "svelte": "^3.35.0",
-    "svench": "link:../../svench",
+    "svench": "workspace:^0.2.0-16",
     "zorax": "^0.0.8"
   },
   "dependencies": {
