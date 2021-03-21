@@ -29,7 +29,7 @@
     "esbuild": "^0.9.5",
     "resolve": "^1.20.0",
     "svelte": "^3.35.0",
-    "svench": "^0.2.0-16",
+    "svench": "workspace:^0.2.0-17",
     "vite": "^2.1.2"
   },
   "scripts": {

@@ -250,6 +250,21 @@ importers:
       zoar: ^0.3.0
       zora-node-reporter: rixo/zora-reporters#zora-node-reporter-v0.0.1-rixo.3-gitpkg
       zorax: ^0.0.8
+  packages/svench-cli:
+    dependencies:
+      '@sveltejs/vite-plugin-svelte': 1.0.0-next.5_svelte@3.35.0+vite@2.1.2
+      esbuild: 0.9.6
+      resolve: 1.20.0
+      svelte: 3.35.0
+      svench: link:../svench
+      vite: 2.1.2
+    specifiers:
+      '@sveltejs/vite-plugin-svelte': ^1.0.0-next.5
+      esbuild: ^0.9.5
+      resolve: ^1.20.0
+      svelte: ^3.35.0
+      svench: workspace:^0.2.0-17
+      vite: ^2.1.2
   packages/svench-vite:
     dependencies:
       '@sveltejs/vite-plugin-svelte': 1.0.0-next.5_svelte@3.35.0+vite@2.1.2
