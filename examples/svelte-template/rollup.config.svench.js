@@ -11,7 +11,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import { terser } from 'rollup-plugin-terser'
 import css from 'rollup-plugin-css-only'
 import nollupEsmHmr from 'rollup-plugin-hot-nollup'
-import { svench } from 'svench/rollup'
+import { svench } from 'svench/rollup.cjs'
 
 process.env.SVENCH = true
 
@@ -34,10 +34,7 @@ export default {
     dir: '.svench/public/build',
   },
   plugins: [
-    svench({
-      enabled: true,
-      presets: 'svench/presets/rollup',
-    }),
+    svench({ enabled: true }),
 
     svelte({
       extensions,

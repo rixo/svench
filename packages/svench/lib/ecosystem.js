@@ -18,4 +18,4 @@ export const loadSvelteConfig = async cwd => {
   }
 }
 
-export const mergeSvelteOptions = (a = {}, b = {}) => ({ ...a, ...b })
+export const mergeSvelteOptions = (...opts) => Object.assign({}, ...opts)

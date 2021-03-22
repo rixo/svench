@@ -13,9 +13,9 @@ const wrap = (
       ? 'rollup-plugin-svelte-hot'
       : modulePath
     if (sveltePluginName === modulePath) {
-      Log.log('Reuse svelte plugin: %s', modulePath)
+      Log.info('Reuse svelte plugin: %s', modulePath)
     } else {
-      Log.log('Replace svelte plugin: %s => %s', modulePath, sveltePluginName)
+      Log.info('Replace svelte plugin: %s => %s', modulePath, sveltePluginName)
     }
     const sveltePlugin = relative(sveltePluginName, process.cwd())
     const wrappedConfig = wrapSvelteConfig(config)

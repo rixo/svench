@@ -4,8 +4,8 @@
  *
  * Needs to be CJS for require('esm') to work.
  */
+const fs = require('fs')
 const _resolve = require('resolve')
-
 const relative = require('require-relative')
 
 const importSync = require('esm')(module)
@@ -18,12 +18,10 @@ const possibleExtensions = id => {
 }
 
 const importRelative = (id, to = process.cwd()) => {
-  for (const file of possibleExtensions(id)) {
-    try {
-      return importSync(relative.resolve(file, to))
-    } catch (err) {
-      if (err && err.code === 'MODULE_NOT_FOUND') continue
-      throw err
+  for (const filename of possibleExtensions(id)) {
+    const file = relative.resolve(filename, to)
+    if (fs.existsSync(file)) {
+      return importSync(file)
     }
   }
   throw new Error('Module not found: ' + id)

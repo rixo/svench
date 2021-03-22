@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { pipe } from './util.js'
+import { pipeAsync } from './util.js'
 import { parseSvenchOptions } from './config.js'
 import { createPluginParts } from './plugin-shared.js'
 import { maybeDump } from './dump.js'
@@ -51,7 +51,7 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
     {
       isModule,
       interceptSveltePlugin,
-      esm,
+      esm = !isModule,
       svench,
       svench: {
         cwd,
@@ -121,7 +121,7 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
 
       const importConfig = async source => {
         if (typeof source === 'string') {
-          const file = path.resolve(source)
+          const file = path.resolve(cwd, source)
 
           if (!fs.existsSync(file)) return {}
 
@@ -171,7 +171,7 @@ export default (defaultPresets, customizeConfig, finalizeConfig) => {
         return resolved
       }
 
-      let config = await pipe(
+      let config = await pipeAsync(
         importConfig,
         ensureSveltePlugin,
         castConfig

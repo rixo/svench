@@ -205,8 +205,8 @@ export const inspect = async ({
     if (vite || fs.existsSync(config) || (await ensureDep('vite'))) {
       const missingDeps = new Set()
       const sveltePluginAlternatives = [
-        '@svitejs/vite-plugin-svelte',
         '@sveltejs/vite-plugin-svelte',
+        '@svitejs/vite-plugin-svelte',
         'rollup-plugin-svelte-hot',
       ]
       const deps = await findDeps(
@@ -254,19 +254,30 @@ export const inspect = async ({
       process.env.ROLLUP_WATCH =
         process.env.ROLLUP_WATCH == null ? '1' : process.env.ROLLUP_WATCH
       const missingDeps = new Set()
-      const deps = {
-        ...(await findDeps(['rollup'], missingDeps)),
-        ...(await findDeps([
-          'nollup',
-          'rollup-plugin-svelte',
-          'rollup-plugin-svelte-hot',
-        ])),
+      const sveltePluginAlternatives = [
+        'rollup-plugin-svelte',
+        'rollup-plugin-svelte-hot',
+      ]
+      const deps = await findDeps(
+        ['rollup', 'nollup', sveltePluginAlternatives],
+        missingDeps
+      )
+
+      const sveltePlugin = sveltePluginAlternatives
+        .map(name => deps[name])
+        .filter(depInfo => depInfo && !depInfo.error)
+        .sort(({ depth: a }, { depth: b }) => b - a)
+        .slice(0, 1)
+        .map(({ package: pkg }) => pkg)
+        .shift()
+
+      if (deps.nollup) {
+        const devServer = path.join(deps.nollup.dir, 'lib/dev-server.js')
+        if (fs.existsSync(devServer)) {
+          deps.nollup.devServer = devServer
+        }
       }
-      if (!deps['rollup-plugin-svelte'] && !deps['rollup-plugin-svelte-hot']) {
-        missingDeps.push(
-          'Svelte plugin (rollup-plugin-svelte or rollup-plugin-svelte-hot)'
-        )
-      }
+
       info.rollup = {
         config: await findConfig(
           config === true ? 'rollup.config.js' : config,
@@ -274,6 +285,9 @@ export const inspect = async ({
         ),
         deps: deps,
         missingDeps: [...missingDeps],
+        rollupPath: deps && deps.rollup && deps.rollup.path,
+        sveltePlugin,
+        sveltePluginPath: deps && deps[sveltePlugin] && deps[sveltePlugin].path,
       }
     }
   }
@@ -314,6 +328,7 @@ export const inspect = async ({
     : undefined
 
   if (
+    !rollup &&
     info.favorite === 'rollup' &&
     info.rollup.deps.nollup &&
     !info.rollup.deps.nollup.error

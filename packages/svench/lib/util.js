@@ -3,6 +3,14 @@ import * as path from 'path'
 
 export const pipe = (...fns) => x0 => fns.reduce((x, f) => f(x), x0)
 
+export const pipeAsync = (...fns) => async x0 => {
+  let x = x0
+  for (const fn of fns) {
+    x = await fn(x)
+  }
+  return x
+}
+
 export const tap = fn => x => (fn(x), x)
 
 export const noop = () => {}

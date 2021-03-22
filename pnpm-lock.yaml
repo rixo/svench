@@ -8,6 +8,8 @@ importers:
       '@rixo/eslint-config-svelte': ^0.11.0-alpha.1
       prettier: ^2.2.1
       prettier-plugin-svelte: ^2.1.6
+  ../../../.nvm/versions/node/v14.16.0/pnpm-global:
+    specifiers: {}
   examples/rollup:
     dependencies:
       cheap-watch: 1.0.3
@@ -99,11 +101,11 @@ importers:
       rollup-plugin-css-only: ^3.0.0
       rollup-plugin-hot-nollup: ^0.1.2
       rollup-plugin-livereload: ^2.0.0
-      rollup-plugin-svelte-hot: ^1.0.0-1
+      rollup-plugin-svelte-hot: ^1.0.0-6
       rollup-plugin-terser: ^7.0.0
       sirv-cli: ^1.0.0
       svelte: ^3.0.0
-      svench: workspace:^0.2.0-16
+      svench: workspace:^0.2.0-17
   examples/vite-default-svelte-template:
     devDependencies:
       '@svitejs/vite-plugin-svelte': 0.9.4_svelte@3.35.0+vite@2.1.2

@@ -1,23 +1,18 @@
 {
   "name": "svench-cli",
-  "version": "0.0.1-5",
+  "version": "0.0.1-6",
   "description": "All inclusive (Vite, Svelte plugin) Svench cli package",
   "type": "module",
   "main": "index.js",
   "bin": {
     "svench": "./index.js",
-    "svench-vite": "./index.js"
+    "svench-cli": "./index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/rixo/svench.git"
   },
-  "keywords": [
-    "svelte",
-    "svench",
-    "standalone",
-    "cli"
-  ],
+  "keywords": ["svelte", "svench", "standalone", "cli"],
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
   "bugs": {

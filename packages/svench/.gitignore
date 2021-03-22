@@ -4,12 +4,9 @@ yarn-error.log
 *.bak.*
 /tmp/
 
-/rollup.js
-/rollup.js.map
-/snowpack.js
-/snowpack.js.map
-/vite.js
-/vite.js.map
+/rollup.*
+/snowpack.*
+/vite.*
 /prism.js
 /themes/
 /app.*

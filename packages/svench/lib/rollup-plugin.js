@@ -11,7 +11,7 @@ import { writeManifestSync } from './service-manifest.js'
 import Svenchify from './svenchify.js'
 import { createPluginParts } from './plugin-shared.js'
 
-const defaultPresets = 'svench/presets/rollup'
+import defaultPresets from '../presets/rollup.cjs'
 
 const overrideInputOptions = ({ rollup, entryFile }) => original => {
   const options = { ...original }

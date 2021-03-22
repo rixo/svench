@@ -12,6 +12,8 @@ import atImport from 'postcss-import'
 import colorFunction from 'postcss-color-function'
 import builtins from 'builtins'
 
+import pkg from './package.json'
+
 const production = !process.env.ROLLUP_WATCH
 // const hot = !production
 
@@ -88,8 +90,8 @@ const configs = {
       format: 'cjs',
       dir: '.',
       entryFileNames: ({ facadeModuleId: x }) =>
-        path.basename(x).replace('-plugin', ''),
-      chunkFileNames: 'dist/[name].js',
+        path.basename(x).replace('-plugin', '').replace('.js', '.cjs'),
+      chunkFileNames: 'dist/[name].cjs',
       sourcemap: true,
       ...(!production && {
         banner: "require('source-map-support').install();",
@@ -98,13 +100,11 @@ const configs = {
     external: [
       'svelte/compiler',
       '@snowpack/plugin-svelte',
-
-      // TODO there's some ESM shenanigans going on here >_<
-      // NOTE there's a build issue with Cheapwatch ESM
-      'cheap-watch',
-      'restana',
-      'trouter',
+      // 'trouter',
       ...builtins,
+      'esm',
+      'svench',
+      ...Object.keys(pkg.dependencies).filter(id => !id.startsWith('routix')),
     ],
     plugins: [
       json(), // required by express

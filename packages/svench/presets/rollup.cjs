@@ -3,7 +3,7 @@
  */
 
 const path = require('path')
-const Log = require('../lib/log.js')
+// const Log = require('../lib/log.js')
 
 const serveDefaults = {
   host: 'localhost',

@@ -25,9 +25,14 @@ const lookup = (module, basedir) => {
 
 const cliBin = 'svench/cli.bin.js'
 
-const svenchPath = lookup(cliBin, process.cwd()) || lookup(cliBin, __dirname)
+const projectSvench = lookup(cliBin, process.cwd())
 
-process.env.SVENCH_STANDALONE = __dirname
+const svenchPath = projectSvench || lookup(cliBin, __dirname)
+
+// NOTE we don't want to set STANDALONE if we use local project's Svench
+if (!projectSvench) {
+  process.env.SVENCH_STANDALONE = __dirname
+}
 
 import(svenchPath).catch(err => {
   // eslint-disable-next-line no-console
