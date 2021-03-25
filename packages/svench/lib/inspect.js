@@ -18,7 +18,7 @@ const findup = (from, target) => {
     last = cur
     cur = path.dirname(cur)
   }
-  throw new Error(`Could not find ${target} from ${from} and upper`)
+  return null
 }
 
 const normalizeOptions = o =>
@@ -168,10 +168,13 @@ export const inspect = async ({
   // === App ===
 
   {
-    const root = path.dirname(findup(cwd, 'package.json'))
-    const { name, version, type } = await loadJson(
-      path.join(root, 'package.json')
-    )
+    let root = cwd
+    let name, version, type
+    const packageJson = findup(cwd, 'package.json')
+    if (packageJson) {
+      root = path.dirname(packageJson)
+      ;({ name, version, type } = await loadJson(path.join(root, 'package.json')))
+    }
     info.app = {
       name,
       version,
