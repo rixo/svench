@@ -58,7 +58,7 @@ const parseOptions = ({
   hmrScrollStickBottom = true,
 
   // state
-  menuWidth = 200,
+  menuWidth = 220,
   menuVisible = true,
   extrasHeight = 200,
 
