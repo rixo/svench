@@ -32,6 +32,7 @@ export const createPluginParts = argOptions => {
     md,
     autoComponentIndex,
     autoSections,
+    keepTitleExtensions,
     extensions,
   } = options
 
@@ -62,6 +63,7 @@ export const createPluginParts = argOptions => {
       preprocess: preprocess.push,
       autoComponentIndex,
       autoSections,
+      keepTitleExtensions,
     }),
   })
 
