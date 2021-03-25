@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { pipeAsync } from './util.js'
+import { pipeAsync, identity } from './util.js'
 import { parseSvenchOptions } from './config.js'
 import { createPluginParts } from './plugin-shared.js'
 import { maybeDump } from './dump.js'
@@ -44,7 +44,7 @@ const parseSvenchifyOptions = ({
   _setOptions,
 })
 
-export default (defaultPresets, customizeConfig, finalizeConfig) => {
+export default (defaultPresets, customizeConfig, finalizeConfig = identity) => {
   const doSvenchify = async (
     source,
     transform,

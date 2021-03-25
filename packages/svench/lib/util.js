@@ -1,6 +1,8 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
+export const identity = x => x
+
 export const pipe = (...fns) => x0 => fns.reduce((x, f) => f(x), x0)
 
 export const pipeAsync = (...fns) => async x0 => {
