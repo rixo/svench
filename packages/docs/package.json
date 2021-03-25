@@ -21,6 +21,8 @@
     "vite": "^2.0.5"
   },
   "scripts": {
-    "svench": "svench"
+    "svench": "svench",
+    "dev": "svench dev",
+    "build": "svench build"
   }
 }
