@@ -138,14 +138,14 @@ importers:
       vite: ^2.0.5
   packages/docs:
     devDependencies:
-      '@svitejs/vite-plugin-svelte': 0.10.0_svelte@3.35.0+vite@2.1.2
+      '@sveltejs/vite-plugin-svelte': 1.0.0-next.5_svelte@3.35.0+vite@2.1.2
       svelte: 3.35.0
       svench: link:../svench
       vite: 2.1.2
     specifiers:
-      '@svitejs/vite-plugin-svelte': ^0.10.0-0
+      '@sveltejs/vite-plugin-svelte': ^1.0.0-next.5
       svelte: ^3.35.0
-      svench: workspace:^0.2.0-8
+      svench: ^0.2.0-8
       vite: ^2.0.5
   packages/svench:
     dependencies:
@@ -769,7 +769,6 @@ packages:
       svelte: 3.35.0
       svelte-hmr: 0.13.3_svelte@3.35.0
       vite: 2.1.2
-    dev: false
     engines:
       node: '>=12.0.0'
     peerDependencies:
@@ -777,26 +776,6 @@ packages:
       vite: ^2.1.2
     resolution:
       integrity: sha512-RVjafsqziWwnQm8VEy2y0qNaugNDvRd8tTaCt9rjgQkqaS/BDiyDCluXxA28PRC+ddZjvwUeq9k+0EfbLVObfg==
-  /@svitejs/vite-plugin-svelte/0.10.0_svelte@3.35.0+vite@2.1.2:
-    dependencies:
-      '@rollup/pluginutils': 4.1.0
-      chalk: 4.1.0
-      debug: 4.3.1
-      hash-sum: 2.0.0
-      require-relative: 0.8.7
-      slash: 3.0.0
-      source-map: 0.7.3
-      svelte: 3.35.0
-      svelte-hmr: 0.13.3_svelte@3.35.0
-      vite: 2.1.2
-    dev: true
-    engines:
-      node: '>=12.0.0'
-    peerDependencies:
-      svelte: ^3.35.0
-      vite: ^2.0.5
-    resolution:
-      integrity: sha512-gttcMIZvLwanYbkfkl77o8mkPKxnYGoqz0xOfz4ZPrzJdan+DzH9b2PEQbpWb53klFKANB7FPBDr7bCaixIT5Q==
   /@svitejs/vite-plugin-svelte/0.9.4_svelte@3.35.0+vite@2.1.2:
     dependencies:
       '@rollup/pluginutils': 4.1.0
@@ -2856,7 +2835,6 @@ packages:
   /debug/4.3.2:
     dependencies:
       ms: 2.1.2
-    dev: false
     engines:
       node: '>=6.0'
     peerDependencies:
