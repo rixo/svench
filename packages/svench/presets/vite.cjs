@@ -116,14 +116,7 @@ const viteOption = {
 // process.exit()
 
 const viteConfig = {
-  post: ({
-    svenchPath,
-    sveltePath,
-    svenchDir,
-    manifestDir,
-    distDir,
-    port,
-  }) => ({
+  post: ({ svenchDir, manifestDir, distDir, port }) => ({
     vite: {
       root: svenchDir,
       server: { port },
@@ -132,12 +125,6 @@ const viteConfig = {
       resolve: {
         alias: [
           { find: /^\/@svench\//, replacement: manifestDir + '/' },
-          // TODO move that where it belongs!
-          svenchPath && { find: /^svench\//, replacement: svenchPath + '/' },
-          sveltePath && {
-            find: /^svelte($|\/)/,
-            replacement: sveltePath + '$1',
-          },
         ].filter(Boolean),
       },
     },
