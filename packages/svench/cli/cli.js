@@ -31,8 +31,14 @@ const normalizeGlobalOptions = (
   ...rest,
 })
 
-const normalizeBuildOptions = (params, [dir, { _: dirs = [], ...opts }]) => ({
+const normalizeBuildOptions = isBuild => (
+  params,
+  [dir, { _: dirs = [], raw, ...opts }]
+) => ({
   ...normalizeGlobalOptions(params, opts),
+  isBuild,
+  // --raw is a hidden option 'cause we don't necessaliry want to support it
+  raw,
   dir: normalizeDir([dir, ...dirs]),
 })
 
@@ -116,8 +122,15 @@ export default async argv => {
     .option('--nollup [config]', 'Use Nollup')
     .option('--rollup [config]', 'Use Rollup')
     .option('--nocfg, --noconfig', "Don't try to load tool specific config")
-    //
+    // output
     .option('--tmp', 'Write generated files to OS temp dir', false)
+    // (pre) compilation
+    .option(
+      '--prod',
+      'Use prod build (default is prod build with build command, dev build ' +
+        'with dev command)'
+    )
+    .option('--raw', 'Use Svench from source instead of precompiled')
     // debugging
     .option('-v, --verbose', 'Increase verbosity (can be repeated -vv)')
     .option('-q, --quiet', 'Increase quietness (can be repeated -qq)')
@@ -137,7 +150,7 @@ export default async argv => {
       'Specify name of the Svelte plugin to use'
     )
     .option('--reload', 'Clear local cache (Snowpack only)')
-    .action(handle(autodetect('dev'), normalizeBuildOptions))
+    .action(handle(autodetect('dev'), normalizeBuildOptions(false)))
 
   // svench build
   prog
@@ -146,7 +159,7 @@ export default async argv => {
       '--plugin, --svelte-plugin <plugin>',
       'Specify name of the Svelte plugin to use'
     )
-    .action(handle(autodetect('build'), normalizeBuildOptions))
+    .action(handle(autodetect('build'), normalizeBuildOptions(true)))
 
   // svench debug
   prog

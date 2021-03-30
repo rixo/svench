@@ -6,6 +6,7 @@ import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import _postcss from 'rollup-plugin-postcss-hot'
 import svelte from 'rollup-plugin-svelte-hot'
+import { terser } from 'rollup-plugin-terser'
 import postcssNesting from 'postcss-nesting'
 import prefixer from 'postcss-prefix-selector'
 import atImport from 'postcss-import'
@@ -201,17 +202,15 @@ const configs = {
       file: 'app.js',
       footer: "export { default as css } from './app.css.js';",
     },
+    external: [/^svelte(\/|$)/],
     plugins: [
       svelte({
-        // dev: !production,
+        dev: !production,
+        hot: !production,
         css: css => {
           css.write('app.css', false)
         },
         extensions: ['.svelte'],
-        // hot: hot && {
-        //   optimistic: true,
-        //   noPreserveState: false,
-        // },
       }),
       postcss({
         extract: 'app.vendor.css',
@@ -224,6 +223,7 @@ const configs = {
           importee === 'svelte' || importee.startsWith('svelte/'),
       }),
       commonjs(),
+      production && terser(),
       {
         async writeBundle() {
           const sources = ['app.css', 'app.vendor.css']
@@ -239,6 +239,32 @@ const configs = {
       },
     ],
   },
+
+  svench: [true, false].map(dev => ({
+    input: 'src/index.js',
+    output: {
+      format: 'es',
+      file: dev ? 'index.dev.js' : 'index.prod.js',
+    },
+    external: [/^svelte(\/|$)/],
+    plugins: [
+      svelte({
+        dev,
+        hot: !production,
+        // Svench core components are not supposed to have CSS -- the few that
+        // there may be is probably supposed to be builtin
+        css: false,
+      }),
+      resolve({
+        mainFields: ['svelte', 'module', 'main'],
+        browser: true,
+        dedupe: importee =>
+          importee === 'svelte' || importee.startsWith('svelte/'),
+      }),
+      commonjs(),
+      production && terser(),
+    ],
+  })),
 }
 
 export default ({ configTarget }) =>

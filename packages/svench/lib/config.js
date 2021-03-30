@@ -143,6 +143,16 @@ const customizer = prop => ({ [prop]: customize, ...options }) => {
 
 const applyPresetsPost = customizer(HOOK_POST)
 
+const validate = options => {
+  const { raw, prod } = options
+
+  if (raw && prod) {
+    throw new Error("--raw and --prod don't make sense together")
+  }
+
+  return options
+}
+
 const withCwd = ({ cwd = process.cwd(), ...opts }) => ({ cwd, ...opts })
 
 const withDefaultDir = ({ cwd, dir, ...opts }) => {
@@ -232,6 +242,19 @@ const castOptions = ({
 
   write = true,
 
+  // true if build mode, false if dev mode
+  isBuild = false,
+
+  // use raw sources as much as possible, instead of prebuilt Svench, for
+  // dev mode of Svench itself (lighter prebuild, etc., to make HMR and all
+  // work better when developping Svench components)
+  raw = false,
+
+  // use prod build of Svench: with compiler option dev to false, which means
+  // components are only compatible with dev false user components (and vice
+  // versa)
+  prod = !raw && !!isBuild,
+
   // a directory to contains all Svench generated things (or even merely
   // _related_ -- could include user created files)
   svenchDir,
@@ -302,8 +325,11 @@ const castOptions = ({
   // debugging
   dump,
 
+  // hook for merging tool config
   [HOOK_MERGE]: mergeHook,
+  // hook for casting unknown options
   [HOOK_CAST]: castHook = noop,
+  // `post` hooks
   [HOOK_POST]: postHook,
 
   // unknown options... who knows?
@@ -319,6 +345,9 @@ const castOptions = ({
   watch,
   dir,
   ignore,
+  raw,
+  prod: prod && !raw,
+  isBuild,
   svenchDir,
   manifestDir,
   distDir,
@@ -337,8 +366,8 @@ const castOptions = ({
   defaultSveltePlugin,
   manifest: manifest && {
     css: 'js',
-    ui: 'svench/src/app/index.js', // TODO move to 'svench/app'
-    write, // TODO not implemented anymore? deprecate?
+    ui: raw ? 'svench/src/app/index.js' : 'svench/app.js',
+    write, // TODO not implemented anymore? deprecate? (always write now)
     ...manifest,
   },
   mountEntry,
@@ -389,7 +418,8 @@ const earMark = config => {
   return config
 }
 
-const doParseOptions = pipe(
+const parseOptions = pipe(
+  validate,
   maybeDumpOptions('input:options'),
   withEnv,
   withCwd,
@@ -408,5 +438,5 @@ const doParseOptions = pipe(
 
 export const parseSvenchOptions = options => {
   if (options && options[ALREADY_PARSED]) return options
-  return doParseOptions(options)
+  return parseOptions(options)
 }

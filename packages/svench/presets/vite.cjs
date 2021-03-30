@@ -116,14 +116,20 @@ const viteOption = {
 // process.exit()
 
 const viteConfig = {
-  post: ({ svenchDir, manifestDir, distDir, port }) => ({
+  post: ({ svenchPath, svenchDir, manifestDir, distDir, port, raw, prod }) => ({
     vite: {
       root: svenchDir,
       server: { port },
       build: { outDir: distDir },
-      // /@svench/* alias
       resolve: {
         alias: [
+          // --raw, --prod
+          !raw &&
+            svenchPath && {
+              find: /^svench(?:\/index.js)?$/,
+              replacement: svenchPath + `/index.${prod ? 'prod' : 'dev'}.js`,
+            },
+          // /@svench/* alias (from HTML)
           { find: /^\/@svench\//, replacement: manifestDir + '/' },
         ].filter(Boolean),
       },

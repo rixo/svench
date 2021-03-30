@@ -4,6 +4,10 @@ yarn-error.log
 *.bak.*
 /tmp/
 
+# Svench build -- ignore .prod and .dev, but index.js itself is just an
+# indirection to src/index.js (keep it!)
+/index.*.js
+
 /rollup.*
 !/rollup.config.js
 /snowpack.*
