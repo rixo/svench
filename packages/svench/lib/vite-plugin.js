@@ -4,6 +4,7 @@ import { writeManifest } from './service-manifest.js'
 import { pipe, mkdirp } from './util.js'
 import { VITE_PLUGIN_NAME } from './const.js'
 import { maybeDump } from './dump.js'
+import injectTransform from './transform.js'
 import Svenchify from './svenchify.js'
 
 const defaultPresets = ['svench/presets/vite']
@@ -86,13 +87,22 @@ export default svenchVitePlugin
 export const svenchify = Svenchify(
   defaultPresets,
   async ({ plugins = [], ...config }, parts) => {
-    const { vite: { clearScreen = config.clearScreen } = {} } = parts.options
+    const {
+      routix,
+      options: { extensions, vite: { clearScreen = config.clearScreen } = {} },
+    } = parts
+
     const svenchPlugin = createPlugin(parts)
-    return {
+
+    return injectTransform({
+      extensions,
+      routix,
+      // NOTE current Vite plugins are enforce 'pre', so let's follow them...
+      enforce: 'pre',
+    })({
       ...config,
       plugins: [svenchPlugin, ...plugins],
       clearScreen,
-    }
-  },
-  getConfig => getConfig
+    })
+  }
 )

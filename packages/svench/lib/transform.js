@@ -1,13 +1,15 @@
+import { isSveltePlugin } from './ecosystem.js'
+
 const INJECTED = Symbol('SVENCH OPTIONS INJECTED')
 
-export default ({ extensions, routix }) => options => {
+export default ({ extensions, routix, enforce }) => options => {
   if (options[INJECTED]) return
 
   options[INJECTED] = true
 
   const plugins = options.plugins.filter(Boolean)
 
-  const svelteIndex = plugins.findIndex(({ name }) => /^svelte\b/.test(name))
+  const svelteIndex = plugins.findIndex(isSveltePlugin)
 
   if (svelteIndex === -1) {
     throw new Error('Failed to find Svelte plugin')
@@ -15,6 +17,7 @@ export default ({ extensions, routix }) => options => {
 
   const afterSvelte = {
     name: 'svench:after',
+    enforce,
     transform(code, id) {
       if (!extensions.some(ext => id.endsWith(ext))) return null
 
