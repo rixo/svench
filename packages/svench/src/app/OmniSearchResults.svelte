@@ -108,6 +108,9 @@
     display: flex;
     justify-content: center;
     align-items: start;
+
+    /* above menu overlay */
+    z-index: 3;
   }
 
   .svench-search-result--dialog {
