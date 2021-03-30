@@ -53,7 +53,9 @@ const resolveServe = ({ serve, publicDir }) => {
 const rollup = {
   pre: ({ override, rollup = override, ...opts }) => {
     if (override) {
-      Log.warn('options.override is deprecated, use options.rollup instead')
+      // TODO migrate to Log (when ESM/CJS shenanigans have been sorted out...)
+      // eslint-disable-next-line no-console
+      console.warn('options.override is deprecated, use options.rollup instead')
     }
     return {
       rollup,
