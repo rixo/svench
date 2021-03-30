@@ -1,0 +1,111 @@
+<script>
+  import { Render, url } from 'svench'
+  import Bar from './lorem/Bar.svench'
+</script>
+
+<svench:options title="<Render />" />
+
+# `<Render />`
+
+Used to render views in other pages than the component where they're defined.
+
+```svelte
+<script>
+  import { Render } from 'svench'
+</script>
+
+<Render src="./lorem/Foo" view="another view" />
+```
+
+## Prop: `src`
+
+The target to render.
+
+### Component `src`
+
+`src` can be a Svench component:
+
+```svelte
+<Render src={Bar} view="default" />
+```
+
+<Render src={Bar} view="default" />
+
+This component can also be passed as a dynamic import promise:
+
+```svelte
+<Render src={import('./lorem/Bar.svench')} view="default" />
+```
+
+<Render src={import('./lorem/Bar.svench')} view="default" />
+
+### Path `src`
+
+Relative `src` are resolved relative to file system (conceptually). See [URL resolution](<{$url('/concepts/URL_resolution')}>) for all details.
+
+Essentially: same as node requires.
+
+```svelte
+<Render src="./lorem/Foo" view="another view" />
+```
+
+<Render src="./lorem/Foo" view="another view" />
+
+Absolute `src` resolves from the root of your 'pages' directory:
+
+```svelte
+<Render src="/Usage/lorem/Foo" view="default" />
+```
+
+<Render src="/Usage/lorem/Foo" view="default" />
+
+### when no `view` is specified, all views are rendered
+
+```svelte
+<Render src="./lorem/Foo" />
+```
+
+<Render src="./lorem/Foo" />
+
+Ordering prefixes and `.svench` suffix (on folders) are ignored when matching `src`:
+
+```svelte
+<!-- real path is ../10-Render/lorem/Foo.svench -->
+<Render src="../Usage/lorem/Foo" view="default" />
+```
+
+<Render src="../Usage/lorem/Foo" view="default" />
+
+Basic globbing (`*`, `**`, and `?`) is available:
+
+```svelte
+<Render src="./lorem/*" />
+```
+
+<Render src="./lorem/*" />
+
+### DRYing the `src`
+
+`<Render>` can be nested to share a common src:
+
+```svelte
+<Render src="./lorem/Foo">
+  <Render view="default" />
+  <Render view="another view" />
+</Render>
+```
+
+<Render src="./lorem/Foo">
+  <Render view="default" />
+  <Render view="another view" />
+</Render>
+
+### Component index
+
+The `src` of `<Render>` defaults to the Svench component of which this file is the index. That is, from the current file, you can render views from `./Render.svench` without specifying the `src`:
+
+```svelte
+<Render view="example" />
+```
+
+<Render view="example" />

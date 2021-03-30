@@ -1,0 +1,16 @@
+<script>
+  import { View } from 'svench'
+</script>
+
+<View name="default">I am Foo's default View.</View>
+
+<View name="another view">
+  <p>
+    The Foo component is mostly used to illustrate `&lt;Render /&gt;` in other
+    chapters.
+  </p>
+  <p>
+    The Foo component is mostly used to illustrate `&lt;Render /&gt;` in other
+    chapters.
+  </p>
+</View>
