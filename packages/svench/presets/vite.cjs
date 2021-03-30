@@ -175,3 +175,5 @@ const maybeStandalone = {
 }
 
 module.exports = [viteOption, viteConfig, viteDefaults, maybeStandalone]
+
+Object.assign(module.exports, { viteOption })

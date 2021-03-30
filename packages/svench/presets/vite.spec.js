@@ -2,7 +2,9 @@ import { test } from 'zorax'
 
 import { parseSvenchOptions } from '../lib/config.js'
 
-import { viteOption } from './vite.js'
+import vitePreset from './vite.cjs'
+
+const { viteOption } = vitePreset
 
 test('merge aliases', t => {
   const parsed = parseSvenchOptions({
