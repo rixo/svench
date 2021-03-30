@@ -22,13 +22,7 @@ const start = (options, target = document.body, hot) => {
 
   const app = new Svench({
     target,
-    props: {
-      // import is dynamic to avoid loading it unnecessarily if it is replaced
-      // by user, but it should be recommended to load it sync
-      ui: () => import('svench/app.js'),
-      // ui: () => import('./app/index.js'),
-      ...options,
-    },
+    props: options,
   })
 
   // recreate the whole app(s) if an HMR update touches this module
