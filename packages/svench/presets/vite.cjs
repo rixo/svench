@@ -4,6 +4,18 @@
 
 const path = require('path')
 
+const mergeOptimizeDeps = (...sources) => {
+  sources = sources.filter(Boolean)
+
+  const flatFilterMap = mapper => sources.map(mapper).filter(Boolean).flat()
+
+  return {
+    entries: flatFilterMap(src => src.entries),
+    include: flatFilterMap(src => src.include),
+    exclude: flatFilterMap(src => src.exclude),
+  }
+}
+
 // TODO test that we don't eat user's aliases
 const mergeAlias = (...sources) =>
   sources
@@ -41,6 +53,7 @@ const mergeViteConfig = (a = {}, b = {}) => {
   }
   merged.resolve = {
     ...merged.resolve,
+    optimizeDeps: mergeOptimizeDeps(a.optimizeDeps, b.optimizeDeps),
     alias: mergeAlias(
       a.resolve && a.resolve.alias,
       b.resolve && b.resolve.alias
@@ -121,6 +134,10 @@ const viteConfig = {
       root: svenchDir,
       server: { port },
       build: { outDir: distDir },
+      // when using precompiled, we must prevent Vite from optimizing the Svench
+      // bundle because it will put a duplicated Svelte runtime in there -- I
+      // surmise there's special optimize treatment for .svelte in Vite
+      optimizeDeps: !raw && { exclude: ['svench'] },
       resolve: {
         alias: [
           // --raw, --prod
