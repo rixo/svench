@@ -22,6 +22,8 @@ const bySortKey = ({ route: a }, { route: b }) => {
   return ai - bi
 }
 
+const sanitizeHtml = s => s.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
 export default ({ routes, router, maxResults = 10 }) => {
   const current = {
     query: '',
@@ -90,7 +92,7 @@ export default ({ routes, router, maxResults = 10 }) => {
             selected: index === current.selected,
             href: router.resolveView(route.path, view),
             path,
-            title: longer(titleA, titleB),
+            title: sanitizeHtml(longer(titleA, titleB)),
           }
         })
       return finalizeResults(results)
@@ -106,7 +108,11 @@ export default ({ routes, router, maxResults = 10 }) => {
         score,
         obj: { route, view, searchKey },
       } = result
-      const h = result ? fuzzysort.highlight(result) : searchKey
+      const h = result
+        ? sanitizeHtml(fuzzysort.highlight(result, 'øðððø', 'ðøøøð'))
+            .replace(/øðððø/g, '<b>')
+            .replace(/ðøøøð/g, '</b>')
+        : searchKey
       const [titleA, path, titleB] = h.split('✂️')
       return {
         index,
