@@ -12,7 +12,12 @@
     "type": "git",
     "url": "git+ssh://git@github.com/rixo/svench.git"
   },
-  "keywords": ["svelte", "svench", "standalone", "cli"],
+  "keywords": [
+    "svelte",
+    "svench",
+    "standalone",
+    "cli"
+  ],
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
   "bugs": {
@@ -24,7 +29,7 @@
     "esbuild": "^0.9.5",
     "resolve": "^1.20.0",
     "svelte": "^3.35.0",
-    "svench": "workspace:^0.2.0-17",
+    "svench": "workspace:^0.2.0-18",
     "vite": "^2.1.2"
   },
   "scripts": {
