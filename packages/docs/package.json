@@ -22,7 +22,7 @@
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.5",
     "svelte": "^3.35.0",
-    "svench": "^0.2.0-8",
+    "svench": "^0.2.0-17",
     "vite": "^2.0.5"
   },
   "scripts": {
