@@ -49,10 +49,10 @@
   // let menuWidth = getMenuWidth(window.innerWidth)
   $: menuWidth = isPhone
     ? Math.min(innerWidth - toolbarHeight, 0.95 * innerWidth)
-    : _menuWidth || 200
+    : _menuWidth || 220
 
   const menuOffset$ = tweened(
-    $options.menuVisible ? $options.menuWidth || 200 : 0,
+    $options.menuVisible ? $options.menuWidth || 220 : 0,
     {
       duration: (x0, x1) => Math.abs(x0 - x1) * 0.33,
       easing: circOut,
