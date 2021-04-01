@@ -44,7 +44,7 @@ export default ({
 
   router.resolveView = (path, view, hash) => {
     let uri = path
-    if (view) uri += '?' + view
+    if (view) uri += '?view=' + view
     if (hash) uri += '#' + hash
     return router.resolve(uri)
   }
