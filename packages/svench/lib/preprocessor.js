@@ -11,13 +11,7 @@ const parseExtensions = x =>
   Array.isArray(x) ? cleanExtensions(x) : cleanExtensions(x.split(','))
 
 // TODO should be in config.js, shouldn't it?
-const defaultExtensions = [
-  '.svench',
-  '.svench.svelte',
-  '.svench.md',
-  '.svench.svx',
-  '.svench.svexy',
-]
+const defaultExtensions = ['.svench', '.svench.svelte', '.md', '.svx', '.svexy']
 
 const extensionMatcher = _extensions => {
   const extensions = parseExtensions(_extensions)
@@ -142,6 +136,19 @@ const findViewName = ast => {
 const parseValue = node => {
   if (!node) return
 
+  if (Array.isArray(node)) {
+    let lastEnd = null
+    const parts = []
+    for (const n of node) {
+      if (lastEnd != null && lastEnd > n.start) {
+        parts.push(' ')
+      }
+      lastEnd = n.end
+      parts.push(parseValue(n).replace(/\n/g, '').trim())
+    }
+    return parts.join('')
+  }
+
   switch (node.type) {
     case 'Text':
       return node.data
@@ -162,9 +169,12 @@ const parseValue = node => {
 
     case 'ArrayExpression':
       return node.elements.map(parseValue)
+
+    case 'Element':
+      return parseValue(node.children)
   }
 
-  throw new Error('Failed to parse option')
+  throw new Error('Failed to parse node value: ' + node.type)
 }
 
 const isLetAction = x => x.type === 'Let' && x.name === 'action'
