@@ -3,7 +3,7 @@
 </script>
 
 <svench:options
-  title="ah > ah"
+  title="Bar (with custom title)"
   x={false}
   js={{ a: 1, b: 2 }}
   tags={['colors', 'brim', 42]} />
