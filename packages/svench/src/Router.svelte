@@ -13,7 +13,6 @@
 
   const { current, error } = router
 
-  // prettier-ignore
   $: ({
     fallback,
     route,
@@ -40,7 +39,7 @@
 {#if $error}
   <RouterError error={$error} />
 {:else if $current}
-  {#key $current}
+  {#key $current.key}
     {#if fallback}
       <ComponentContext {...props}>
         <svelte:component this={Fallback} {route} />

@@ -46,8 +46,6 @@ h6 {
       font-weight: 700;
       &:before {
         content: '#';
-        /* this MUST NOT have a bigger height than the link, or it causses
-        jump when scroll to an anchor (track scroll + disappearing height) */
         line-height: 1;
       }
     }

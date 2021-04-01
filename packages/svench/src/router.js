@@ -17,6 +17,7 @@ export default ({
   let currentRoute = null
   let currentView = null
   let current
+  let lastCurrentKey = 0
 
   const on404 = (path, hash, popState) => {
     if (path === '/' || path === '/index') {
@@ -41,8 +42,12 @@ export default ({
     return uri
   }
 
-  router.resolveView = (path, view) =>
-    router.resolve(view ? `${path}?view=${view}` : path)
+  router.resolveView = (path, view, hash) => {
+    let uri = path
+    if (view) uri += '?' + view
+    if (hash) uri += '#' + hash
+    return router.resolve(uri)
+  }
 
   router.error = writable()
   router.current = writable()
@@ -50,17 +55,25 @@ export default ({
   const getView = () => new URLSearchParams(window.location.search).get('view')
 
   const setCurrent = (next, force = false) => {
+    if (current === next && !force) return
     if (
-      (current !== next || force) &&
-      (!current ||
-        !next ||
-        current.cmp !== next.cmp ||
-        current.route !== next.route ||
-        current.view !== next.view)
-      // || current.hash !== next.hash
+      !current ||
+      !next ||
+      current.cmp !== next.cmp ||
+      current.route !== next.route ||
+      current.view !== next.view
     ) {
       current = next
+      const nextKey = ++lastCurrentKey // bump key in all cases
+      if (current) current.key = nextKey
       router.current.set(next)
+    }
+    // on hash only navigation, we don't want to recreate the components
+    // => DO NOT change the current.key here!
+    else if (current && next && current.hash !== next.hash) {
+      next.key = current.key
+      current = next
+      router.current.set(current)
     }
   }
 
@@ -123,6 +136,7 @@ export default ({
     if (current) {
       const next = { ...current }
       current = next
+      current.key = ++lastCurrentKey
       router.current.set(next)
     }
   }

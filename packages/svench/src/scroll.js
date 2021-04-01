@@ -176,13 +176,11 @@ export default (getOptions, hasBeenIdle) => {
     const name = hash.replace(/^#/, '')
     const offset = 0
     trackScroll(() => {
-      const target = document.querySelector(
-        `:target, ${hash}, a[name="${name}"]`
-      )
+      const target =
+        document.querySelector(`${hash}, a[name="${name}"]`) ||
+        document.querySelector(':target')
       if (!target) return
-      // TODO measure extraoffset from env
-      const extraOffset = 12
-      const top = target.offsetTop - offset - extraOffset
+      const top = target.offsetTop - offset
       return { top }
     })
   }
