@@ -46,6 +46,7 @@ const createPlugin = ({
     publicDir,
     entryFile,
     manifest,
+    svenchIcon,
 
     rollup = null,
     preserveOutputFileName = true,
@@ -148,6 +149,7 @@ const createPlugin = ({
             script,
             onChange: hotReload,
             publicDir,
+            svenchIcon,
           })
       : null
 

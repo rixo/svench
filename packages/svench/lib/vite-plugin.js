@@ -16,6 +16,7 @@ const initSvench = async ({ options, routix }, { command }) => {
     manifestDir,
     publicDir,
     entryUrl,
+    svenchIcon,
   } = options
 
   const watch = command === 'serve'
@@ -31,6 +32,7 @@ const initSvench = async ({ options, routix }, { command }) => {
       watch,
       script: entryUrl,
       publicDir,
+      svenchIcon,
     })
   }
 

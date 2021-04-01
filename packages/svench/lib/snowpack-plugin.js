@@ -21,6 +21,7 @@ const initSvench = ({ options, routix }) => async ({ isDev }) => {
     manifestDir,
     publicDir,
     entryFile,
+    svenchIcon,
   } = options
 
   // --- Manifest ---
@@ -38,6 +39,7 @@ const initSvench = ({ options, routix }) => async ({ isDev }) => {
       watch: isDev,
       script: '/_svench_/' + path.basename(entryFile),
       publicDir,
+      svenchIcon,
     })
   }
 

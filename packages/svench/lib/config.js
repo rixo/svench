@@ -296,6 +296,8 @@ const castOptions = ({
 
   index = false,
 
+  svenchIcon = !!write,
+
   serve = false,
 
   isNollup = false,
@@ -373,6 +375,7 @@ const castOptions = ({
   mountEntry,
   baseUrl,
   entryUrl,
+  svenchIcon,
   index: index && {
     write,
     ...index,
