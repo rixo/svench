@@ -1,17 +1,20 @@
+const callbacks = []
+
 const notify = () => {
   for (const cb of callbacks) {
     cb()
   }
 }
 
-if (typeof window !== 'undefined' && window.__SVELTE_HMR) {
-  window.__SVELTE_HMR.on('afterupdate', notify)
-} else if (import.meta.hot && import.meta.hot.afterUpdate) {
-  import.meta.hot.afterUpdate(notify)
+// NOTE needs to wait before "install" that at least one Svelte component has
+// been loaded, otherwise svelte-hmr might not have initialized yet
+const installIfNeeded = () => {
+  if (typeof window !== 'undefined' && window.__SVELTE_HMR) {
+    window.__SVELTE_HMR.on('afterupdate', notify)
+  }
 }
 
-const callbacks = []
-
-export default callback => {
+export const onHmr = callback => {
+  installIfNeeded()
   callbacks.push(callback)
 }

@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte'
-  import onHmr from './PrismApply.hmr.js'
+  import { onHmr } from './PrismApply.hmr.js'
 
   const highlight = () => {
     if (typeof Prism === 'undefined') return
