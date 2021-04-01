@@ -20,10 +20,11 @@ export const parseMeta = async (preprocess, filename) => {
 
   ;({ code } = await preprocess(code, { filename }))
 
-  const { views, options } = extractSvenchMeta(code, filename)
+  const { views, options, headings } = extractSvenchMeta(code, filename)
 
   return {
     options: options || {},
     views: !options || !options.dynamic ? views : null,
+    headings,
   }
 }
