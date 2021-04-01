@@ -1,6 +1,4 @@
 <script>
-  /* global OverlayScrollbars */
-
   import { tweened } from 'svelte/motion'
   import { circOut } from 'svelte/easing'
   import { fade } from 'svelte/transition'
@@ -10,7 +8,7 @@
   import ResizeHandle from './ResizeHandle.svelte'
   import Toolbar from './Toolbar.svelte'
   import ExtrasPanel from './ExtrasPanel.svelte'
-  import 'overlayscrollbars'
+  import overlayscrollbars from './overlayscrollbars-action.js'
   import { swipeMenu } from './App.touch.js'
 
   export let options
@@ -33,9 +31,22 @@
   } = $options)
 
   const onKeydown = e => {
-    if (e.key === 'Escape') {
-      $options.fullscreen = false
+    switch (e.key) {
+      case 'Escape':
+        if (!$options.fullscreen) return
+        $options.fullscreen = false
+        break
+
+      // case 'l':
+      // case 'L':
+      //   if (!e.ctrlKey) return
+      //   commands.toggleMenu()
+      //   break
+
+      default:
+        return
     }
+    e.preventDefault()
   }
 
   $: hasExtras = extras && extras.source
@@ -108,14 +119,6 @@
   }
 
   let regionEl
-
-  const overlayscrollbars = el => {
-    OverlayScrollbars(el, {
-      scrollbars: {
-        autoHide: 'move',
-      },
-    })
-  }
 
   const toggleMenu = x => {
     $options.menuVisible = x
