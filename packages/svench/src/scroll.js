@@ -15,21 +15,6 @@ import { pipe } from './util.js'
 
 // history.scrollRestoration = 'manual'
 
-const getScrollOffset = () => {
-  const el = document.querySelector('.svench-ui')
-  if (!el) return 0
-  const h = getComputedStyle(el).getPropertyValue('--toolbar-height')
-  if (!h) return 0
-  const match = /^(.*)em$/.exec(h)
-  if (match) {
-    return (
-      match[1] *
-      getComputedStyle(el).getPropertyValue('font-size').replace(/px$/, '')
-    )
-  }
-  return h.replace(/px$/, '')
-}
-
 export default (getOptions, hasBeenIdle) => {
   const {
     // max tracking time
@@ -189,7 +174,7 @@ export default (getOptions, hasBeenIdle) => {
 
   const trackAnchor = hash => {
     const name = hash.replace(/^#/, '')
-    const offset = getScrollOffset() || 0
+    const offset = 0
     trackScroll(() => {
       const target = document.querySelector(
         `:target, ${hash}, a[name="${name}"]`
