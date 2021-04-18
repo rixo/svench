@@ -142,12 +142,11 @@
     use:swipeMenu={{ run: toggleVisibleMenu, regionEl }}
     class="svench-ui svench-app-menu"
     style="width: {menuWidth}px">
-    <h1 class="svench-app-logo">
+    <!-- <h1 class="svench-app-logo">
       <a href="/">
-        <!-- <span class="svench-icon">🔬</span> -->
         Svench
       </a>
-    </h1>
+    </h1> -->
     <OmniSearchField {search} />
     <div
       class="svench-app-menu-menu"
