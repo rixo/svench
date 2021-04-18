@@ -3,7 +3,7 @@ import { get, writable } from 'svelte/store'
 const parseValueType = value => {
   let type = typeof value
   if (typeof value === 'string') {
-    const match = /^([\d.]+)-([\d.]+)(?:;([\d.]+))?$/.exec(value)
+    const match = /^(-?[\d.]+)-(-?[\d.]+)(?:;([\d.]+))?$/.exec(value)
     if (match) {
       const [, min, max, x] = match
       value = x != null ? x : (max - min) / 2
