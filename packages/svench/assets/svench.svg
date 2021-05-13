@@ -7,13 +7,13 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="256px"
-   height="308px"
-   viewBox="0 0 256 308"
+   width="280"
+   height="331.65854"
+   viewBox="0 0 280 331.65854"
    version="1.1"
    preserveAspectRatio="xMidYMid"
    id="svg8"
-   sodipodi:docname="svelte-seeklogo.com.svg"
+   sodipodi:docname="svench.svg"
    inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <metadata
      id="metadata14">
@@ -23,6 +23,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -41,15 +42,20 @@
      inkscape:window-height="1154"
      id="namedview10"
      showgrid="false"
-     inkscape:zoom="5.5390625"
-     inkscape:cx="128"
-     inkscape:cy="177.75652"
-     inkscape:window-x="1017"
-     inkscape:window-y="573"
+     inkscape:zoom="1.9583543"
+     inkscape:cx="156.09519"
+     inkscape:cy="135.89129"
+     inkscape:window-x="1113"
+     inkscape:window-y="605"
      inkscape:window-maximized="0"
-     inkscape:current-layer="g6" />
+     inkscape:current-layer="g6"
+     fit-margin-top="12"
+     fit-margin-left="12"
+     fit-margin-right="12"
+     fit-margin-bottom="12" />
   <g
-     id="g6">
+     id="g6"
+     transform="translate(12,12)">
     <path
        d="M 239.68157,40.706757 C 211.11327,-0.18188937 154.69089,-12.301439 113.89482,13.691039 L 42.246906,59.355535 C 22.676004,71.668003 9.1958152,91.653854 5.1119689,114.41213 1.6942052,133.37117 4.6982178,152.92858 13.648395,169.9879 7.5154968,179.29114 3.3325943,189.7413 1.3524912,200.70679 c -4.1233289,23.19531 1.2703786,47.07375 14.9634688,66.24465 28.574338,40.8925 84.99699,53.00683 125.78675,27.01572 l 71.64791,-45.6645 c 19.57228,-12.31103 33.05293,-32.29757 37.13494,-55.05659 3.41731,-18.95882 0.41565,-38.51584 -8.53011,-55.57715 6.1313,-9.30303 10.31244,-19.75276 12.29068,-30.71751 4.12606,-23.195371 -1.26789,-47.074863 -14.96347,-66.244653"
        id="path2"
