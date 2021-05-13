@@ -1,6 +1,6 @@
 import { Log, maybeDump, dumpAt, inspect } from '../lib.js'
 
-const debug = async options => {
+export default async options => {
   const { dump, inspect: inspectItem } = options
 
   maybeDump('options', dump, options)
@@ -17,5 +17,3 @@ const debug = async options => {
     Log.warn(`\n(!) Missing dependencies: ${info.missingDeps.join(', ')}\n`)
   }
 }
-
-export default debug
