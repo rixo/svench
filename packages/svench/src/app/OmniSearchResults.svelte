@@ -1,10 +1,13 @@
 <script>
   import { fly, fade } from 'svelte/transition'
+  import overlayscrollbars from './overlayscrollbars-action.js'
 
   export let search
 
   let input
   let overlay
+  let scroller
+  const itemElements = []
 
   const close = () => {
     $search.open = false
@@ -37,7 +40,7 @@
 
   const handleHover = index => () => {
     if (!mouseHasMoved) return
-    $search.setSelectedIndex(index)
+    $search.setSelectedIndex(index, true)
     mouseHasMoved = false
   }
 
@@ -45,21 +48,39 @@
     input.select()
   }
 
-  $: ({ open, selectedIndex } = $search)
+  $: ({ open, selectedIndex, preventScroll } = $search)
 
   $: if (open && input) selectInput()
 
   $: trackMouse(open)
+
+  $: if (!preventScroll && itemElements[selectedIndex]) {
+    const el = itemElements[selectedIndex]
+    const viewport = scroller.querySelector('.os-viewport')
+    if (viewport) {
+      const itemRect = el.getBoundingClientRect()
+      const viewportRect = viewport.getBoundingClientRect()
+      if (itemRect.top < viewportRect.top) {
+        viewport.scroll(0, el.offsetTop)
+      } else if (itemRect.bottom > viewportRect.bottom) {
+        viewport.scrollTo(
+          0,
+          el.offsetTop - viewport.offsetHeight + el.offsetHeight
+        )
+      }
+    }
+  }
 </script>
 
 <svelte:body on:mousemove={handleMouseMove} />
 
 {#if $search.open}
-  <div
-    bind:this={overlay}
-    class="svench-ui svench-search-result--overlay"
-    transition:fade={{ duration: 100 }}
-    on:click={handleOverlayClick}>
+  <div class="svench-ui svench-search-result">
+    <div
+      bind:this={overlay}
+      class="svench-search-result--overlay"
+      transition:fade={{ duration: 100 }}
+      on:click={handleOverlayClick} />
     <div
       transition:fly={{ y: 16, duration: 100 }}
       class="svench-ui svench-search-result--dialog">
@@ -69,33 +90,49 @@
         type="search"
         placeholder="Searchin' Box"
         bind:value={$search.query} />
-      <div class="svench-search-result--results">
-        {#each $search.results as { index, selected, href, searchKey, title, path } (href)}
-          <a
-            class:selected
-            {href}
-            on:click={close}
-            on:mousemove={handleHover(index)}
-            on:focus={() => $search.setSelectedIndex(index)}>
-            <strong class="svench-search-result--item-title">
-              {@html title}
-            </strong>
-            <em class="svench-search-result--item-path">
-              {@html path}
-            </em>
-          </a>
-        {:else}
-          <p class="svench-search-result--results--no-results">No results</p>
-        {/each}
-        {#if $search.hasMore}
-          <div class="svench-search-result--results--has-more">&hellip;</div>
-        {/if}
+      <div bind:this={scroller} use:overlayscrollbars>
+        <div class="svench-search-result--results">
+          {#each $search.results as { selected, href, searchKey, title, path }, index (href)}
+            <a
+              bind:this={itemElements[index]}
+              class:selected
+              {href}
+              on:click={close}
+              on:mousemove={handleHover(index)}>
+              <strong class="svench-search-result--item-title">
+                {@html title}
+              </strong>
+              <em class="svench-search-result--item-path">
+                {@html path}
+              </em>
+            </a>
+          {:else}
+            <p class="svench-search-result--results--no-results">No results</p>
+          {/each}
+          {#if $search.hasMore}
+            <div class="svench-search-result--results--has-more">&hellip;</div>
+          {/if}
+        </div>
       </div>
     </div>
   </div>
 {/if}
 
 <style>
+  .svench-search-result {
+    --padding: 0.75rem;
+    position: fixed;
+    top: 10vh;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+  }
+  .svench-search-result :global(.os-host) {
+    max-height: 70vh;
+  }
+
   .svench-search-result--overlay {
     position: fixed;
     top: 0;
@@ -116,11 +153,11 @@
   .svench-search-result--dialog {
     position: relative;
     z-index: 3;
-    margin-top: calc(var(--toolbar-height) + 2rem);
     background-color: var(--white);
-    padding: 0.75rem;
+    padding: var(--padding);
     width: 100%;
     max-width: 40rem;
+    overflow: hidden;
     border: 0;
     border-radius: 0.5rem;
     box-shadow: 0 8px 12px hsla(0deg, 0%, 0%, 0.1),
@@ -137,6 +174,7 @@
       width: 100%;
       min-width: none;
       max-width: none;
+      max-height: none;
       margin: 0;
       border-radius: 0;
       border: 0;
@@ -163,10 +201,12 @@
   }
 
   .svench-search-result--results {
-    margin-top: 1rem;
+    flex: 1;
     overflow: auto;
+    line-height: 1.5;
+    margin-top: var(--padding);
   }
-  .svench-search-result--results > a {
+  .svench-search-result--results a {
     text-decoration: none;
     display: block;
     padding: 0.33rem 0.66rem;
@@ -174,14 +214,14 @@
     background: var(--secondary-light);
     outline: none;
   }
-  .svench-search-result--results > a :global(*) {
+  .svench-search-result--results a :global(*) {
     color: var(--text-primary);
   }
-  .svench-search-result--results > a.selected {
+  .svench-search-result--results a.selected {
     background: var(--tertiary);
   }
-  .svench-search-result--results > a.selected,
-  .svench-search-result--results > a.selected :global(*) {
+  .svench-search-result--results a.selected,
+  .svench-search-result--results a.selected :global(*) {
     color: var(--white);
   }
   .svench-search-result--results strong {

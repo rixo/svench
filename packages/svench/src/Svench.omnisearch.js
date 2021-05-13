@@ -24,7 +24,7 @@ const bySortKey = ({ route: a }, { route: b }) => {
 
 const sanitizeHtml = s => s.replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
-export default ({ routes, router, maxResults = 10 }) => {
+export default ({ routes, router, maxResults = 200 }) => {
   const current = {
     query: '',
     results: [],
@@ -149,14 +149,20 @@ export default ({ routes, router, maxResults = 10 }) => {
   }
 
   current.selectUp = () => {
-    if (selectedIndex <= 0) return
-    selectedIndex = selectedIndex - 1
+    if (selectedIndex <= 0) {
+      selectedIndex = current.results.length - 1
+    } else {
+      selectedIndex = selectedIndex - 1
+    }
     updateSelected()
   }
 
   current.selectDown = () => {
-    if (selectedIndex >= current.results.length - 1) return
-    selectedIndex = selectedIndex + 1
+    if (selectedIndex >= current.results.length - 1) {
+      selectedIndex = 0
+    } else {
+      selectedIndex = selectedIndex + 1
+    }
     updateSelected()
   }
 
