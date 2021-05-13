@@ -134,10 +134,19 @@ const viteConfig = {
       root: svenchDir,
       server: { port },
       build: { outDir: distDir },
-      // when using precompiled, we must prevent Vite from optimizing the Svench
-      // bundle because it will put a duplicated Svelte runtime in there -- I
-      // surmise there's special optimize treatment for .svelte in Vite
-      optimizeDeps: raw ? { include: ['svench'] } : { exclude: ['svench'] },
+      // we must prevent Vite from optimizing the Svench bundle because it will
+      // put a duplicated Svelte runtime in there
+      // optimizeDeps: false ? { include: ['svench'] } : { exclude: ['svench'] },
+      optimizeDeps: {
+        exclude: ['svench'],
+        // ...(raw && {
+        //   include: [
+        //     'overlayscrollbars',
+        //     'zingtouch/src/ZingTouch.js',
+        //     'regexparam',
+        //   ],
+        // }),
+      },
       resolve: {
         alias: [
           // --raw, --prod
