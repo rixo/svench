@@ -13,6 +13,7 @@ import colorFunction from 'postcss-color-function'
 import builtins from 'builtins'
 
 import pkg from './package.json'
+import { makeSvenchConfig } from './rollup.config.svench.js'
 
 const production = !process.env.ROLLUP_WATCH
 // const hot = !production
@@ -248,31 +249,11 @@ const configs = {
   // Svench package, and we'll see how to make this better when the need becomes
   // pressing -- or free time suddenly appear...
   //
-  svench: [true, false].map(dev => ({
-    input: 'src/index.js',
-    output: {
-      format: 'es',
-      file: dev ? 'index.dev.js' : 'index.prod.js',
-    },
-    external: [/^svelte(\/|$)/],
-    plugins: [
-      svelte({
-        // Svench core components are not supposed to have CSS -- the few that
-        // there may be is probably supposed to be builtin
-        emitCss: false,
-        compilerOptions: { dev },
-        hot: false,
-      }),
-      resolve({
-        mainFields: ['svelte', 'module', 'main'],
-        browser: true,
-        dedupe: importee =>
-          importee === 'svelte' || importee.startsWith('svelte/'),
-      }),
-      commonjs(),
-      production && terser(),
-    ],
-  })),
+  svench: makeSvenchConfig({
+    file: mode => `index.${mode}.js`,
+    minify: !process.env.ROLLUP_WATCH,
+    svelte,
+  }),
 }
 
 export default ({ configTarget }) =>

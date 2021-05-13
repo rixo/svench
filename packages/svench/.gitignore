@@ -1,4 +1,5 @@
 /dist/
+/runtime/
 /node_modules/
 yarn-error.log
 *.bak.*
@@ -9,7 +10,7 @@ yarn-error.log
 /index.*.js
 
 /rollup.*
-!/rollup.config.js
+!/rollup.config.*
 /snowpack.*
 /vite.*
 /prism.js
