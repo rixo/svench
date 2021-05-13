@@ -137,7 +137,7 @@ const viteConfig = {
       // when using precompiled, we must prevent Vite from optimizing the Svench
       // bundle because it will put a duplicated Svelte runtime in there -- I
       // surmise there's special optimize treatment for .svelte in Vite
-      optimizeDeps: !raw && { exclude: ['svench'] },
+      optimizeDeps: raw ? { include: ['svench'] } : { exclude: ['svench'] },
       resolve: {
         alias: [
           // --raw, --prod

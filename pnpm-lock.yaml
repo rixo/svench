@@ -8,6 +8,8 @@ importers:
       '@rixo/eslint-config-svelte': ^0.11.0-alpha.1
       prettier: ^2.2.1
       prettier-plugin-svelte: ^2.1.6
+  ../../../.nvm/versions/node/v14.16.0/pnpm-global:
+    specifiers: {}
   examples/rollup:
     dependencies:
       cheap-watch: 1.0.3
@@ -187,7 +189,7 @@ importers:
       rollup-plugin-copy: 3.4.0
       rollup-plugin-hot: 0.0.22_rollup@2.42.1
       rollup-plugin-postcss-hot: 0.0.4
-      rollup-plugin-svelte-hot: 1.0.0-3_rollup@2.42.1+svelte@3.35.0
+      rollup-plugin-svelte-hot: 1.0.0-7_rollup@2.42.1+svelte@3.35.0
       rollup-plugin-terser: 7.0.2_rollup@2.42.1
       sirv: 0.4.6
       source-map-support: 0.5.19
@@ -236,7 +238,7 @@ importers:
       rollup-plugin-copy: ^3.3.0
       rollup-plugin-hot: ^0.0.22-0
       rollup-plugin-postcss-hot: ^0.0.4
-      rollup-plugin-svelte-hot: ^1.0.0-3
+      rollup-plugin-svelte-hot: ^1.0.0-7
       rollup-plugin-terser: ^7.0.2
       routix: ^0.1.0-8
       sirv: ^0.4.2
@@ -654,7 +656,7 @@ packages:
   /@rollup/pluginutils/4.1.0_rollup@2.42.1:
     dependencies:
       estree-walker: 2.0.2
-      picomatch: 2.2.2
+      picomatch: 2.2.3
       rollup: 2.42.1
     dev: true
     engines:
@@ -6474,6 +6476,12 @@ packages:
       node: '>=8.6'
     resolution:
       integrity: sha512-q0M/9eZHzmr0AulXyPwNfZjtwZ/RBZlbN3K3CErVrk50T2ASYI7Bye0EvekFY3IP1Nt2DHu0re+V2ZHIpMkuWg==
+  /picomatch/2.2.3:
+    dev: true
+    engines:
+      node: '>=8.6'
+    resolution:
+      integrity: sha512-KpELjfwcCDUb9PeigTs2mBJzXUPzAuP2oPcA989He8Rte0+YUAjw1JVedDhuTKPkHjSYzMN3npC9luThGYEKdg==
   /pify/2.3.0:
     engines:
       node: '>=0.10.0'
@@ -7686,21 +7694,6 @@ packages:
       node: '>=10'
     resolution:
       integrity: sha512-ejyg9V8OVijAXVPuFnjiYEOvf3HMaFxY9A2eRQzaiKQCaJFIuaZKmJu8LifuUoPmUPfnmpMiYY075fkMfIrCkw==
-  /rollup-plugin-svelte-hot/1.0.0-3_rollup@2.42.1+svelte@3.35.0:
-    dependencies:
-      '@rollup/pluginutils': 4.1.0_rollup@2.42.1
-      require-relative: 0.8.7
-      rollup: 2.42.1
-      svelte: 3.35.0
-      svelte-hmr: 0.12.9_svelte@3.35.0
-    dev: true
-    engines:
-      node: '>=10'
-    peerDependencies:
-      rollup: '>=2.0.0'
-      svelte: '>=3.5.0'
-    resolution:
-      integrity: sha512-iheuqAL6qBsNtBw86MOJByBTzi3E3uoL8x7s9YWCWDLlw75hsARsoio9giyArsMOa9MsEAHlFKq3Clr40K3FUA==
   /rollup-plugin-svelte-hot/1.0.0-6_rollup@2.42.1+svelte@3.35.0:
     dependencies:
       '@rollup/pluginutils': 4.1.0_rollup@2.42.1
@@ -7730,6 +7723,21 @@ packages:
       svelte: '>=3.5.0'
     resolution:
       integrity: sha512-o0kW3gOHOvrMkZoGolNMkwr1C+bKiAkSTukqTiEXctWWqvyxt0HqTf7jN1roZ8i8p2VZcHXqENfZkXqecdGQjQ==
+  /rollup-plugin-svelte-hot/1.0.0-7_rollup@2.42.1+svelte@3.35.0:
+    dependencies:
+      '@rollup/pluginutils': 4.1.0_rollup@2.42.1
+      require-relative: 0.8.7
+      rollup: 2.42.1
+      svelte: 3.35.0
+      svelte-hmr: 0.14.3_svelte@3.35.0
+    dev: true
+    engines:
+      node: '>=10'
+    peerDependencies:
+      rollup: '>=2.0.0'
+      svelte: '>=3.5.0'
+    resolution:
+      integrity: sha512-x5t7YM8fjS4RfsXI0KMwEIPN2plqD59B+82NJNR/5k+1HZ2vjJ9dvipJ0PgDn8ofPvuAyIaLIpO8YSHIeYPF7g==
   /rollup-plugin-svelte/7.1.0_svelte@3.35.0:
     dependencies:
       require-relative: 0.8.7
@@ -8463,6 +8471,14 @@ packages:
       svelte: '>=3.19.0'
     resolution:
       integrity: sha512-gagW62pLQ2lULmvNA3pIZu9pBCYOaGu3rQikUOv6Nokz5VxUgT9/mQLfMxj9phDEKHCg/lgr3i6PkqZDbO9P2Q==
+  /svelte-hmr/0.14.3_svelte@3.35.0:
+    dependencies:
+      svelte: 3.35.0
+    dev: true
+    peerDependencies:
+      svelte: '>=3.19.0'
+    resolution:
+      integrity: sha512-N56xX405zLMw2tpGHKRx5h+kmdeZwxI21pvyC6OyBHJDCF6DlwWBm9TifdQmSD4dloWSmpDPzHWYa3CSjfopUg==
   /svelte-preprocess/4.6.9_svelte@3.35.0:
     dependencies:
       '@types/pug': 2.0.4

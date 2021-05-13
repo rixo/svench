@@ -1,5 +1,4 @@
 import * as path from 'path'
-import * as fs from 'fs'
 
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
@@ -200,20 +199,13 @@ const configs = {
     output: {
       format: 'es',
       file: 'app.js',
-      footer: "export { default as css } from './app.css.js';",
     },
     external: [/^svelte(\/|$)/],
     plugins: [
       svelte({
-        dev: !production,
+        emitCss: false,
+        compilerOptions: { dev: !production },
         hot: !production,
-        css: css => {
-          css.write('app.css', false)
-        },
-        extensions: ['.svelte'],
-      }),
-      postcss({
-        extract: 'app.vendor.css',
       }),
       resolve({
         mainFields: ['svelte', 'module', 'main'],
@@ -224,22 +216,38 @@ const configs = {
       }),
       commonjs(),
       production && terser(),
-      {
-        async writeBundle() {
-          const sources = ['app.css', 'app.vendor.css']
-            .map(x => path.resolve(__dirname, x))
-            .filter(x => fs.existsSync(x))
-          const dest = path.resolve(__dirname, 'app.css.js')
-          const css = (
-            await Promise.all(sources.map(x => fs.promises.readFile(x, 'utf8')))
-          ).join('\n')
-          const js = `export default ${JSON.stringify(css)}`
-          await fs.promises.writeFile(dest, js, 'utf8')
-        },
-      },
     ],
   },
 
+  // === Prebuilt Svench ===
+  //
+  // Benefits:
+  // - lightning fast cold start
+  // - Svench components build is not dependent of user's config
+  //
+  // Drawbacks:
+  // - Svelte dev components not compatible with non dev components, so we
+  //   need to build both versions to support both dev and non dev for user
+  // - we can anticipate that components built with a given version of Svelte
+  //   will most probably not be compatible with other (at least all/any other)
+  //   version of Svelte
+  //
+  // The drawbacks are pretty severe, unfortunately, but compiling Svench
+  // components with user's build setup is hugely fragile and very limiting
+  // regarding what we can do with Svench components (for example,
+  // svelte-preprocess can change default language for script, style or markup,
+  // which would break Svench components that expect default JS/CSS/HTML...).
+  // And so, given it is possible to circumvent this limitation, even if it's
+  // pretty costly, this seems like this is the right thing to do.
+  //
+  // The most annoying problem is support of all existing Svelte versions...
+  // This might need to provide pre-built Svench for every Svelte version. This
+  // will be a bit of work. Eventually, we should probably have some sort of
+  // repository from which we'd download prebuilt versions as needed by user
+  // setup. For now, we're going to pack every latest versions directly in the
+  // Svench package, and we'll see how to make this better when the need becomes
+  // pressing -- or free time suddenly appear...
+  //
   svench: [true, false].map(dev => ({
     input: 'src/index.js',
     output: {
@@ -249,11 +257,11 @@ const configs = {
     external: [/^svelte(\/|$)/],
     plugins: [
       svelte({
-        dev,
-        hot: !production,
         // Svench core components are not supposed to have CSS -- the few that
         // there may be is probably supposed to be builtin
-        css: false,
+        emitCss: false,
+        compilerOptions: { dev },
+        hot: false,
       }),
       resolve({
         mainFields: ['svelte', 'module', 'main'],
