@@ -138,15 +138,15 @@ importers:
       vite: ^2.0.5
   packages/docs:
     devDependencies:
-      '@sveltejs/vite-plugin-svelte': 1.0.0-next.5_svelte@3.35.0+vite@2.1.2
+      '@sveltejs/vite-plugin-svelte': 1.0.0-next.5_svelte@3.35.0+vite@2.3.2
       svelte: 3.35.0
       svench: link:../svench
-      vite: 2.1.2
+      vite: 2.3.2
     specifiers:
       '@sveltejs/vite-plugin-svelte': ^1.0.0-next.5
       svelte: ^3.35.0
       svench: workspace:^0.2.0-18
-      vite: ^2.0.5
+      vite: ^2.3.2
   packages/svench:
     dependencies:
       cac: 6.7.2
@@ -754,6 +754,27 @@ packages:
       svelte: 3.35.0
       svelte-hmr: 0.13.3_svelte@3.35.0
       vite: 2.1.2
+    dev: false
+    engines:
+      node: '>=12.0.0'
+    peerDependencies:
+      svelte: ^3.35.0
+      vite: ^2.1.2
+    resolution:
+      integrity: sha512-RVjafsqziWwnQm8VEy2y0qNaugNDvRd8tTaCt9rjgQkqaS/BDiyDCluXxA28PRC+ddZjvwUeq9k+0EfbLVObfg==
+  /@sveltejs/vite-plugin-svelte/1.0.0-next.5_svelte@3.35.0+vite@2.3.2:
+    dependencies:
+      '@rollup/pluginutils': 4.1.0
+      chalk: 4.1.0
+      debug: 4.3.2
+      hash-sum: 2.0.0
+      require-relative: 0.8.7
+      slash: 3.0.0
+      source-map: 0.7.3
+      svelte: 3.35.0
+      svelte-hmr: 0.13.3_svelte@3.35.0
+      vite: 2.3.2
+    dev: true
     engines:
       node: '>=12.0.0'
     peerDependencies:
@@ -3243,6 +3264,12 @@ packages:
   /es6-promise/4.2.8:
     resolution:
       integrity: sha512-HJDGx5daxeIvxdBxvG2cb9g4tEvwIk3i8+nhX0yGrYmZUzbkdg8QbDevheDB8gd0//uPj4c1EQua8Q+MViT0/w==
+  /esbuild/0.11.20:
+    dev: true
+    hasBin: true
+    requiresBuild: true
+    resolution:
+      integrity: sha512-QOZrVpN/Yz74xfat0H6euSgn3RnwLevY1mJTEXneukz1ln9qB+ieaerRMzSeETpz/UJWsBMzRVR/andBht5WKw==
   /esbuild/0.8.55:
     dev: false
     hasBin: true
@@ -4686,11 +4713,11 @@ packages:
     dev: true
     resolution:
       integrity: sha1-z/9HGu5N1cnhWFmPvhKWe1za00U=
-  /is-core-module/2.2.0:
+  /is-core-module/2.4.0:
     dependencies:
       has: 1.0.3
     resolution:
-      integrity: sha512-XRAfAdyyY5F5cOXn7hYQDqh2Xmii+DEfIcQGxK/uNwMHhIkPWO0g8msXcbzLe+MpGoR951MlqM/2iIlU4vKDdQ==
+      integrity: sha512-6A2fkfq1rfeQZjxrZJGerpLCTHRNEBiSgnu0+obeJpEPZRUooHgsizvzv0ZjJwOz3iWIHdJtVWJ/tmPr3D21/A==
   /is-date-object/1.0.2:
     dev: true
     engines:
@@ -5747,6 +5774,13 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-/2ZUaJX2ANuLtTvqTlgqBQNJoQO398KyJgZloL0PZkC0dpysjncRUPsFe3DUPzz/y3h+u7C46np8RMuvF3jsSQ==
+  /nanoid/3.1.23:
+    dev: true
+    engines:
+      node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1
+    hasBin: true
+    resolution:
+      integrity: sha512-FiB0kzdP0FFVGDKlRLEQ1BgDzU87dy5NnzjeW9YZNt+/c3+q82EQDUwniSAUxp/F0gFNI1ZhKU1FqYsMuqZVnw==
   /natural-compare/1.4.0:
     dev: true
     resolution:
@@ -7003,6 +7037,16 @@ packages:
       node: '>=6.0.0'
     resolution:
       integrity: sha512-3QT8bBJeX/S5zKTTjTCIjRF3If4avAT6kqxcASlTWEtAFCb9NH0OUxNDfgZSWdP5fJnBYCMEWkIFfWeugjzYMg==
+  /postcss/8.2.15:
+    dependencies:
+      colorette: 1.2.2
+      nanoid: 3.1.23
+      source-map: 0.6.1
+    dev: true
+    engines:
+      node: ^10 || ^12 || >=14
+    resolution:
+      integrity: sha512-2zO3b26eJD/8rb106Qu2o7Qgg52ND5HPjcyQiK2B98O388h43A448LCslC0dI2P97wCAQRJsFvwTRcXxTKds+Q==
   /postcss/8.2.8:
     dependencies:
       colorette: 1.2.2
@@ -7481,7 +7525,7 @@ packages:
       integrity: sha1-xL2p9e+y/OZSR4c6s2u02DT+Fvc=
   /resolve/1.20.0:
     dependencies:
-      is-core-module: 2.2.0
+      is-core-module: 2.4.0
       path-parse: 1.0.6
     resolution:
       integrity: sha512-wENBPt4ySzg4ybFQW2TT1zMQucPK95HSh/nq2CFTZVOGut2+pQvSsgtda4d26YrYcr067wjbmzOG8byDPBX63A==
@@ -7790,6 +7834,15 @@ packages:
       fsevents: 2.3.2
     resolution:
       integrity: sha512-/y7M2ULg06JOXmMpPzhTeQroJSchy8lX8q6qrjqil0jmLz6ejCWbQzVnWTsdmMQRhfU0QcwtiW8iZlmrGXWV4g==
+  /rollup/2.47.0:
+    dev: true
+    engines:
+      node: '>=10.0.0'
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.2
+    resolution:
+      integrity: sha512-rqBjgq9hQfW0vRmz+0S062ORRNJXvwRpzxhFXORvar/maZqY6za3rgQ/p1Glg+j1hnc1GtYyQCPiAei95uTElg==
   /routix/0.1.0-8:
     dependencies:
       cheap-watch: 1.0.3
@@ -9145,6 +9198,20 @@ packages:
       fsevents: 2.3.2
     resolution:
       integrity: sha512-K96k5Nb1kywggFwZNGf/NQVZIrjMSvjebYWFIEQRu8AQWtzxatMF8/reExFXebmrfWAT3PTUk6l4zJBkpMtyVg==
+  /vite/2.3.2:
+    dependencies:
+      esbuild: 0.11.20
+      postcss: 8.2.15
+      resolve: 1.20.0
+      rollup: 2.47.0
+    dev: true
+    engines:
+      node: '>=12.0.0'
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.2
+    resolution:
+      integrity: sha512-QhLdOompDrfkyryCNTts9HE+eJhvhN9ibKNJ5Q8DpQai+6nOsuIlaveZNg67e1O/2QaWqXeBo82eHnAs1De2bQ==
   /vm-browserify/1.1.2:
     dev: true
     resolution:
