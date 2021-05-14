@@ -152,7 +152,7 @@ export default (defaultPresets, customizeConfig, finalizeConfig = identity) => {
       const ensureSveltePlugin = ({ plugins = [], ...options }) => {
         if (!plugins.some(isSveltePlugin)) {
           if (sveltePlugin) {
-            Log.log('Inject svelte plugin: %s', sveltePlugin)
+            Log.info('Inject svelte plugin: %s', sveltePlugin)
             plugins.unshift(createPlugin(wrapSvelteConfig()))
           } else {
             Log.warn(
