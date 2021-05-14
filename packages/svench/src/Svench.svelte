@@ -11,6 +11,7 @@
   import createOptions from './Svench.options.js'
   import createCommands from './Svench.commands.js'
   import createOmniSearch from './Svench.omnisearch.js'
+  import './Svench.prism.js'
   import Scroll from './scroll.js'
   import Busy from './Svench.busy.js'
 
