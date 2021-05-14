@@ -1,3 +1,4 @@
 export default {
-  keepTitleExtensions: []
+  keepTitleExtensions: [],
+  ignore: x => /\.bak(?:$|\/)/.test(x)
 }
