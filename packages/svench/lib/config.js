@@ -232,6 +232,11 @@ const castOptions = ({
   sveltePath,
   svelteCompiler,
 
+  // versions are passed down to presets to enable loading the correct
+  // pre-compiled Svench runtime (that is named with Svench & Svelte versions)
+  svenchVersion,
+  svelteVersion,
+
   enabled = !!+process.env.SVENCH,
 
   watch = false,
@@ -341,8 +346,10 @@ const castOptions = ({
   tmp,
   standalone,
   svenchPath,
+  svenchVersion,
   sveltePath,
   svelteCompiler,
+  svelteVersion,
   enabled,
   watch,
   dir,

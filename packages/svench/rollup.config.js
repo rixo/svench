@@ -4,8 +4,6 @@ import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import _postcss from 'rollup-plugin-postcss-hot'
-import svelte from 'rollup-plugin-svelte-hot'
-import { terser } from 'rollup-plugin-terser'
 import postcssNesting from 'postcss-nesting'
 import prefixer from 'postcss-prefix-selector'
 import atImport from 'postcss-import'
@@ -13,7 +11,10 @@ import colorFunction from 'postcss-color-function'
 import builtins from 'builtins'
 
 import pkg from './package.json'
-import { makeSvenchConfig } from './rollup.config.svench.js'
+
+// import * as svelteCompiler from 'svelte/compiler'
+// const { getRuntimeFilename } = require('./lib/bundle.util.cjs')
+// import { makeSvenchConfig } from './rollup.config.runtime.js'
 
 const production = !process.env.ROLLUP_WATCH
 // const hot = !production
@@ -195,65 +196,17 @@ const configs = {
     plugins: [resolve({ browser: true }), commonjs()],
   },
 
-  app: {
-    input: 'src/app/index.js',
-    output: {
-      format: 'es',
-      file: 'app.js',
-    },
-    external: [/^svelte(\/|$)/],
-    plugins: [
-      svelte({
-        emitCss: false,
-        compilerOptions: { dev: !production },
-        hot: !production,
-      }),
-      resolve({
-        mainFields: ['svelte', 'module', 'main'],
-        browser: true,
-        // dedupe: ['svelte', 'svelte/internal'],
-        dedupe: importee =>
-          importee === 'svelte' || importee.startsWith('svelte/'),
-      }),
-      commonjs(),
-      production && terser(),
-    ],
-  },
-
-  // === Prebuilt Svench ===
+  // app: makeSvenchConfig('app', {
+  //   svelteCompiler: svelteCompiler,
+  //   getRuntimeFilename,
+  //   prod: !production,
+  // }),
   //
-  // Benefits:
-  // - lightning fast cold start
-  // - Svench components build is not dependent of user's config
-  //
-  // Drawbacks:
-  // - Svelte dev components not compatible with non dev components, so we
-  //   need to build both versions to support both dev and non dev for user
-  // - we can anticipate that components built with a given version of Svelte
-  //   will most probably not be compatible with other (at least all/any other)
-  //   version of Svelte
-  //
-  // The drawbacks are pretty severe, unfortunately, but compiling Svench
-  // components with user's build setup is hugely fragile and very limiting
-  // regarding what we can do with Svench components (for example,
-  // svelte-preprocess can change default language for script, style or markup,
-  // which would break Svench components that expect default JS/CSS/HTML...).
-  // And so, given it is possible to circumvent this limitation, even if it's
-  // pretty costly, this seems like this is the right thing to do.
-  //
-  // The most annoying problem is support of all existing Svelte versions...
-  // This might need to provide pre-built Svench for every Svelte version. This
-  // will be a bit of work. Eventually, we should probably have some sort of
-  // repository from which we'd download prebuilt versions as needed by user
-  // setup. For now, we're going to pack every latest versions directly in the
-  // Svench package, and we'll see how to make this better when the need becomes
-  // pressing -- or free time suddenly appear...
-  //
-  svench: makeSvenchConfig({
-    file: mode => `index.${mode}.js`,
-    minify: !process.env.ROLLUP_WATCH,
-    svelte,
-  }),
+  // svench: makeSvenchConfig('svench', {
+  //   svelteCompiler: svelteCompiler,
+  //   getRuntimeFilename,
+  //   prod: !production,
+  // }),
 }
 
 export default ({ configTarget }) =>

@@ -4,6 +4,8 @@
 
 const path = require('path')
 
+const { getRuntimeFilename } = require('../lib/bundle.util.cjs')
+
 const mergeOptimizeDeps = (...sources) => {
   sources = sources.filter(Boolean)
 
@@ -129,38 +131,56 @@ const viteOption = {
 // process.exit()
 
 const viteConfig = {
-  post: ({ svenchPath, svenchDir, manifestDir, distDir, port, raw, prod }) => ({
-    vite: {
-      root: svenchDir,
-      server: { port },
-      build: { outDir: distDir },
-      // we must prevent Vite from optimizing the Svench bundle because it will
-      // put a duplicated Svelte runtime in there
-      // optimizeDeps: false ? { include: ['svench'] } : { exclude: ['svench'] },
-      optimizeDeps: {
-        exclude: ['svench'],
-        // ...(raw && {
-        //   include: [
-        //     'overlayscrollbars',
-        //     'zingtouch/src/ZingTouch.js',
-        //     'regexparam',
-        //   ],
-        // }),
+  post: ({
+    svenchPath,
+    svenchDir,
+    manifestDir,
+    distDir,
+    port,
+    raw,
+    prod,
+    svenchVersion,
+    svelteVersion,
+  }) => {
+    const runtimeAlias = []
+    if (!raw && svenchPath) {
+      const mode = prod ? 'prod' : 'dev'
+      const getRuntimeOpts = { svenchVersion, svelteVersion, mode }
+      const svenchRuntime = getRuntimeFilename('svench', getRuntimeOpts)
+      const appRuntime = getRuntimeFilename('app', getRuntimeOpts)
+      runtimeAlias.push(
+        {
+          find: /^svench(?:\/index.js)?$/,
+          replacement: path.join(svenchPath, svenchRuntime),
+        },
+        {
+          find: /^svench\/app.js?$/,
+          replacement: path.join(svenchPath, appRuntime),
+        }
+      )
+    }
+    return {
+      vite: {
+        root: svenchDir,
+        server: { port },
+        build: { outDir: distDir },
+        // we must prevent Vite from optimizing the Svench bundle because it will
+        // put a duplicated Svelte runtime in there
+        // optimizeDeps: false ? { include: ['svench'] } : { exclude: ['svench'] },
+        optimizeDeps: {
+          exclude: ['svench'],
+        },
+        resolve: {
+          alias: [
+            // --raw / pre compiled
+            ...runtimeAlias,
+            // /@svench/* alias (from HTML)
+            { find: /^\/@svench\//, replacement: manifestDir + '/' },
+          ].filter(Boolean),
+        },
       },
-      resolve: {
-        alias: [
-          // --raw, --prod
-          !raw &&
-            svenchPath && {
-              find: /^svench(?:\/index.js)?$/,
-              replacement: svenchPath + `/index.${prod ? 'prod' : 'dev'}.js`,
-            },
-          // /@svench/* alias (from HTML)
-          { find: /^\/@svench\//, replacement: manifestDir + '/' },
-        ].filter(Boolean),
-      },
-    },
-  }),
+    }
+  },
 }
 
 // for svench-vite

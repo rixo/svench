@@ -10,6 +10,8 @@ export { loadSvenchConfig } from '../lib/plugin-shared.js'
 
 export { inspect } from '../lib/inspect.js'
 
+export { bundleRuntime, ensureRuntime } from '../lib/bundle.js'
+
 export {
   importSync,
   importDefaultRelative,

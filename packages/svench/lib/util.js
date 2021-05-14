@@ -43,6 +43,9 @@ export const mkdirpSync = dir => {
   }
 }
 
+export const fileExists = async file =>
+  await new Promise(resolve => fs.exists(file, resolve))
+
 export const isRollupV1 = () => {
   try {
     return require.main.require('rollup/package.json').version.startsWith('1.')

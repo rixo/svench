@@ -11,7 +11,7 @@ import cac from 'cac'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-import { Log, loadSvenchConfig, inspect } from './lib.js'
+import { Log, loadSvenchConfig, inspect, ensureRuntime } from './lib.js'
 
 const normalizeDir = dirs => (dirs.length === 1 ? dirs[0] : dirs)
 
@@ -47,6 +47,11 @@ const normalizeInspectOptions = (params, [inspect, opts]) => ({
   inspect,
 })
 
+const normalizeCompileOptions = (params, [target, opts]) => ({
+  ...normalizeGlobalOptions(params, opts),
+  target,
+})
+
 const readPkg = async () => {
   const contents = await fs.promises.readFile(
     resolve(__dirname, '../package.json'),
@@ -55,8 +60,25 @@ const readPkg = async () => {
   return JSON.parse(contents)
 }
 
-const autodetect = command => async options => {
+const ensureRuntimeFor = async (
+  prod,
+  {
+    svench: { version: svenchVersion },
+    svelte: { version: svelteVersion, compiler: svelteCompilerPath },
+  },
+  force
+) =>
+  await ensureRuntime({
+    svenchVersion,
+    svelteVersion,
+    svelteCompilerPath,
+    prod,
+    force,
+  })
+
+const detectToolAndEnsureRuntime = command => async options => {
   const info = await inspect(options)
+
   const { favorite: tool } = info
   if (!tool) {
     throw new Error('Failed to autodetect project tooling')
@@ -69,6 +91,14 @@ const autodetect = command => async options => {
   const cmd = `./commands/${baseTool}/${command}.js`
   Log.debug('Load command %s', cmd)
   const { default: handler } = await import(cmd)
+
+  if (options.raw) {
+    Log.info('Skip compiling runtime because running raw')
+  } else {
+    const prod = options.prod || command === 'build'
+    await ensureRuntimeFor(prod, info, options.recompile)
+  }
+
   return handler(info, options)
 }
 
@@ -115,7 +145,7 @@ export default async argv => {
     // preset
     .option('-p, --preset', 'Preset')
     // config file
-    .option('-c, --config [config]', 'Use Svench config file', true)
+    .option('-c, --config [config]', 'Use Svench config file')
     // flavor
     .option('--vite [config]', 'Use Vite')
     .option('--snowpack [config]', 'Use Snowpack')
@@ -123,7 +153,7 @@ export default async argv => {
     .option('--rollup [config]', 'Use Rollup')
     .option('--nocfg, --noconfig', "Don't try to load tool specific config")
     // output
-    .option('--tmp', 'Write generated files to OS temp dir', false)
+    .option('--tmp', 'Write generated files to OS temp dir')
     // (pre) compilation
     .option(
       '--prod',
@@ -150,16 +180,42 @@ export default async argv => {
       'Specify name of the Svelte plugin to use'
     )
     .option('--reload', 'Clear local cache (Snowpack only)')
-    .action(handle(autodetect('dev'), normalizeBuildOptions(false)))
+    .option(
+      '--recompile',
+      'Force recompile Svench runtime, even if already present'
+    )
+    .action(
+      handle(detectToolAndEnsureRuntime('dev'), normalizeBuildOptions(false))
+    )
 
-  // svench build
+  /*
+   * svench compile
+   * svench compile svench
+   * svench compile svench --prod
+   * svench compile svench --no-prod
+   * svench compile app
+   */
   prog
     .command('build [dir]', 'Build your Svench')
     .option(
       '--plugin, --svelte-plugin <plugin>',
       'Specify name of the Svelte plugin to use'
     )
-    .action(handle(autodetect('build'), normalizeBuildOptions(true)))
+    .option('--minify', 'Enable/disable minification', { default: true })
+    .option(
+      '--recompile',
+      'Force recompile Svench runtime, even if already present'
+    )
+    .action(
+      handle(detectToolAndEnsureRuntime('build'), normalizeBuildOptions(true))
+    )
+
+  // svench compile
+  prog
+    .command('compile [target]', 'Build Svench runtime with your local Svelte')
+    .option('--minify', 'Enable/disable minification', { default: true })
+    // .option('--svelte <dir>', 'Location of Svelte to use')
+    .action(handle('compile', normalizeCompileOptions))
 
   // svench debug
   prog
@@ -167,7 +223,9 @@ export default async argv => {
       'inspect [item]',
       'Report about detected tooling (for diagnostic purpose)'
     )
-    .option('--load-config, --load, -l', 'Load config contents', false)
+    .option('--load-config, --load, -l', 'Load config contents', {
+      default: false,
+    })
     .action(handle('inspect', normalizeInspectOptions))
 
   prog.parse(argv)
