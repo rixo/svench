@@ -24,6 +24,8 @@
   $: focus = !fallback && view !== null
 
   let last
+  // TODO wouldn't that be enough?
+  // $: if ($current !== last) {
   $: if (!shallowEquals($current, last)) {
     last = $current
     if ($current) {
