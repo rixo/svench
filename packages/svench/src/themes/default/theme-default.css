@@ -151,7 +151,7 @@ body
 }
 
 /* ensures > viewboxes' margins collapse */
-svench-component.svench-page {
+body svench-component.svench-page {
   display: block;
 }
 
