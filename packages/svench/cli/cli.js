@@ -47,9 +47,10 @@ const normalizeInspectOptions = (params, [inspect, opts]) => ({
   inspect,
 })
 
-const normalizeCompileOptions = (params, [target, opts]) => ({
+const normalizeCompileOptions = (params, [target, { dev, prod, ...opts }]) => ({
   ...normalizeGlobalOptions(params, opts),
   target,
+  prod: dev === true ? false : prod === true ? true : null,
 })
 
 const readPkg = async () => {
@@ -213,6 +214,9 @@ export default async argv => {
   // svench compile
   prog
     .command('compile [target]', 'Build Svench runtime with your local Svelte')
+    .option('--dev', 'Only build dev runtime (equivalent to --no-prod)', {
+      default: false,
+    })
     .option('--minify', 'Enable/disable minification', { default: true })
     // .option('--svelte <dir>', 'Location of Svelte to use')
     .action(handle('compile', normalizeCompileOptions))
