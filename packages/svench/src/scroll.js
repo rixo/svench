@@ -12,6 +12,7 @@
  *   - else (push state) => scroll top
  */
 import { pipe } from './util.js'
+import { beforeHmr, afterHmr } from './hmr.js'
 
 // history.scrollRestoration = 'manual'
 
@@ -77,23 +78,15 @@ export default (getOptions, hasBeenIdle) => {
   const registerHmr = () => {
     let restore = null
 
-    const before = () => {
+    beforeHmr(() => {
       if (!el) return
       restore = getCurrentWithSticky()
-    }
+    })
 
-    const after = () => {
+    afterHmr(() => {
       if (!el) return
       trackScroll(restore)
-    }
-
-    if (typeof window !== 'undefined' && window.__SVELTE_HMR) {
-      window.__SVELTE_HMR.on('beforeupdate', before)
-      window.__SVELTE_HMR.on('afterupdate', after)
-    } else if (import.meta.hot && import.meta.hot.beforeUpdate) {
-      import.meta.hot.beforeUpdate(before)
-      import.meta.hot.afterUpdate(after)
-    }
+    })
 
     return () => {}
   }
