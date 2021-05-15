@@ -1,6 +1,6 @@
 {
   "name": "svench",
-  "version": "0.2.0-20",
+  "version": "0.2.0-21",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
   "homepage": "https://svench.dev",
@@ -19,6 +19,7 @@
     "README.md",
     "src",
     "lib",
+    "assets",
     "cli",
     "cli.bin.js",
     "rollup.*",
