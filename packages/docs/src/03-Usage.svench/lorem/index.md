@@ -4,6 +4,6 @@
 
 # lorem
 
-This directory contains example content for illustrative purposes.
+This directory contains example content use for illustrative purposes in other parts of the docs.
 
 <Render src="*" />
