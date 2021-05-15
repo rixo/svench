@@ -33,12 +33,10 @@ const normalizeGlobalOptions = (
 
 const normalizeBuildOptions = isBuild => (
   params,
-  [dir, { _: dirs = [], raw, ...opts }]
+  [dir, { _: dirs = [], ...opts }]
 ) => ({
   ...normalizeGlobalOptions(params, opts),
   isBuild,
-  // --raw is a hidden option 'cause we don't necessaliry want to support it
-  raw,
   dir: normalizeDir([dir, ...dirs]),
 })
 
