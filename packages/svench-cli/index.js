@@ -15,11 +15,10 @@ const lookup = (module, basedir) => {
       preserveSymlinks: true,
     })
   } catch (err) {
-    if (err.code !== 'MODULE_NOT_FOUND') {
-      // eslint-disable-next-line no-console
-      console.error(err)
-      process.exit(1)
-    }
+    if (err.code === 'MODULE_NOT_FOUND') return false
+    // eslint-disable-next-line no-console
+    console.error(err)
+    process.exit(1)
   }
 }
 
