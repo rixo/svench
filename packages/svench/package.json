@@ -1,6 +1,6 @@
 {
   "name": "svench",
-  "version": "0.2.0-19",
+  "version": "0.2.0-20",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
   "homepage": "https://svench.dev",
@@ -33,6 +33,8 @@
     "rollup.config.runtime.js"
   ],
   "dependencies": {
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.0.1",
     "cac": "^6.7.2",
     "cheap-watch": "^1.0.3",
     "clipboard": "^2.0.6",
@@ -53,6 +55,7 @@
     "resolve": "^1.20.0",
     "restana": "^4.4.1",
     "rollup-plugin-svelte-hot": "^1.0.0-8",
+    "rollup-plugin-terser": "^7.0.2",
     "routix": "^0.1.0-8",
     "stack-chain": "^2.0.0",
     "trace": "^3.1.1",
@@ -68,9 +71,7 @@
   },
   "devDependencies": {
     "@rixo/eslint-config-svelte": "^0.8.1",
-    "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-json": "^4.0.3",
-    "@rollup/plugin-node-resolve": "^11.0.1",
     "clarify": "^2.1.0",
     "fuzzysort": "^1.1.4",
     "http-proxy": "^1.18.1",
@@ -83,7 +84,6 @@
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-hot": "^0.0.22-0",
     "rollup-plugin-postcss-hot": "^0.0.4",
-    "rollup-plugin-terser": "^7.0.2",
     "sirv": "^0.4.2",
     "source-map-support": "^0.5.19",
     "svelte": "^3.29.0",
