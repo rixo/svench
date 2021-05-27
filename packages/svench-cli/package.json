@@ -5,19 +5,13 @@
   "type": "module",
   "main": "index.js",
   "bin": {
-    "svench": "./index.js",
     "svench-cli": "./index.js"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/rixo/svench.git"
   },
-  "keywords": [
-    "svelte",
-    "svench",
-    "standalone",
-    "cli"
-  ],
+  "keywords": ["svelte", "svench", "standalone", "cli"],
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
   "bugs": {
