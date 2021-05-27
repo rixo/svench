@@ -112,21 +112,6 @@ export default async argv => {
   const pkg = await readPkg()
   const cwd = process.cwd()
 
-  const asyncAction = (run, args, parser) => {
-    const opts = {
-      ...loadSvenchConfig(cwd),
-      ...parser({ cwd }, args),
-    }
-
-    // configure log level as soon as possible
-    Log.setVerbosity(opts.verbose, opts.quiet)
-
-    Promise.resolve(run)
-      .then(run => run(opts))
-      .then(resolve)
-      .catch(reject)
-  }
-
   const resolveCommand = cmd =>
     typeof cmd === 'string'
       ? async (...args) => {
@@ -135,14 +120,35 @@ export default async argv => {
         }
       : cmd
 
+  const asyncAction = async (run, args, parser) => {
+    const opts = parser({ cwd }, args)
+
+    const userConfig = await loadSvenchConfig(cwd)
+
+    // configure log level as soon as possible
+    Log.setVerbosity(
+      opts.verbose || userConfig.verbose,
+      opts.quiet || userConfig.quiet
+    )
+
+    const _run = await run
+
+    opts.userConfig = userConfig
+
+    await _run(opts)
+  }
+
   const handle = (cmd, normalizer) => (...args) => {
-    const run = resolveCommand(cmd)
-    asyncAction(run, args, normalizer)
+    Promise.resolve(resolveCommand(cmd))
+      .then(run => asyncAction(run, args, normalizer))
+      .then(resolve)
+      .catch(reject)
   }
 
   const prog = cac('svench')
     // preset
     .option('-p, --preset', 'Preset')
+    // .option('--kit', 'Enable SvelteKit specific support', { default: true })
     // config file
     .option('-c, --config [config]', 'Use Svench config file')
     // flavor

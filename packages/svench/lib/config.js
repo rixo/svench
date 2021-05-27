@@ -57,6 +57,17 @@ const mergeOptions = (a = {}, b = {}) => {
   return merged
 }
 
+/**
+ * Apply user config from options.userConfig prop. Ideally, user config should
+ * probably be loaded from here, to best centralize... But currently this
+ * pipeline is required to be synchronous, and user config can be ESM that would
+ * be async, so reading user config beforehand and passing it down for now.
+ */
+const applyUserConfig = ({ userConfig, ...options }) => {
+  const merge = options[HOOK_MERGE]
+  return userConfig ? merge(options, userConfig) : options
+}
+
 const runPresets = (presets, options) => {
   const merge = options[HOOK_MERGE]
   return presets.reduce((cur, f) => {
@@ -435,6 +446,7 @@ const parseOptions = pipe(
   withCwd,
   withDefaultDir,
   applyPresets,
+  applyUserConfig,
   maybeDumpOptions(['preset:options', 'presets:options']),
   resolveTmp,
   maybeDumpOptions('resolveDirs:options'),

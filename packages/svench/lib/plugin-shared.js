@@ -7,17 +7,25 @@ import { SVENCH_CONFIG_FILE } from './const.js'
 import { parseSvenchOptions } from './config.js'
 import cachingPreprocess from './caching-preprocess.js'
 import routixParser from './routix-parser.js'
-import { mkdirpSync } from './util.js'
-import { importSync } from './import-relative.cjs'
+import { mkdirpSync, importAbsolute } from './util.js'
 
-export const loadSvenchConfig = (cwd = process.cwd()) => {
-  const svenchConfig = path.resolve(cwd, SVENCH_CONFIG_FILE)
-  if (!fs.existsSync(svenchConfig)) return {}
-  return importSync(svenchConfig).default
+export const loadSvenchConfig = async (cwd = process.cwd()) => {
+  const candidateFilenames = [
+    SVENCH_CONFIG_FILE,
+    SVENCH_CONFIG_FILE.replace(/\.js$/, '.mjs'),
+    SVENCH_CONFIG_FILE.replace(/\.js$/, '.cjs'),
+  ]
+  for (const filename of candidateFilenames) {
+    const configFile = path.resolve(cwd, filename)
+    if (fs.existsSync(configFile)) {
+      return (await importAbsolute(configFile)).default
+    }
+  }
+  return {}
 }
 
 export const createPluginParts = argOptions => {
-  const options = parseSvenchOptions({ ...loadSvenchConfig(), ...argOptions })
+  const options = parseSvenchOptions(argOptions)
 
   const {
     cwd,
