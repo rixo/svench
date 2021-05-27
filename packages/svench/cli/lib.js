@@ -2,6 +2,8 @@
  * Re export curated parts of lib, for better portability of import paths.
  */
 
+export { importAbsolute } from '../lib/util.js'
+
 export { default as Log } from '../lib/log.js'
 
 export { maybeDump, dumpAt } from '../lib/dump.js'

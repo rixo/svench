@@ -46,7 +46,7 @@ import { fileURLToPath } from 'url'
 import { rollup } from 'rollup'
 
 import Log from './log.js'
-import { fileExists } from './util.js'
+import { fileExists, importAbsolute } from './util.js'
 import { getRuntimeFilename } from './bundle.util.cjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -64,7 +64,7 @@ export const bundleRuntime = async ({
   prod = null,
 }) => {
   if (!svelteCompiler && svelteCompilerPath) {
-    svelteCompiler = await import(svelteCompilerPath)
+    svelteCompiler = await importAbsolute(svelteCompilerPath)
   }
 
   const start = Date.now()
@@ -76,7 +76,7 @@ export const bundleRuntime = async ({
     prod === true ? 'prod' : prod === false ? 'dev' : 'prod, dev'
   )
 
-  const { makeSvenchConfig } = await import(configFile)
+  const { makeSvenchConfig } = await importAbsolute(configFile)
 
   const configs = makeSvenchConfig(target, {
     svenchVersion,

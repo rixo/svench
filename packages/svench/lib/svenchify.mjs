@@ -5,13 +5,14 @@
  * the plugin's options).
  */
 
+import { importAbsolute } from './util.js'
 import { isSveltePlugin } from './ecosystem.js'
 
 export default async (
   file,
   { Log, sveltePlugin, createPlugin, svelteOptions }
 ) => {
-  const { default: config } = await import(file)
+  const { default: config } = await importAbsolute(file)
 
   const replaceSveltePlugins = async ({ plugins = [], ...config } = {}) => ({
     ...config,

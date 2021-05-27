@@ -6,6 +6,7 @@ import fs from 'fs'
 import path from 'path'
 
 import { importSync, resolveSync } from './import-relative.cjs'
+import { importAbsolute } from './util.js'
 
 const findup = (from, target) => {
   let last = null
@@ -145,7 +146,7 @@ export const inspect = async ({
 
   const findConfig = async (
     configPath,
-    req = x => import(x).then(m => m.default)
+    req = x => importAbsolute(x).then(m => m.default)
   ) => {
     if (!configPath) return false
     const resolved = path.relative(cwd, path.resolve(cwd, configPath))
@@ -173,7 +174,9 @@ export const inspect = async ({
     const packageJson = findup(cwd, 'package.json')
     if (packageJson) {
       root = path.dirname(packageJson)
-      ;({ name, version, type } = await loadJson(path.join(root, 'package.json')))
+      ;({ name, version, type } = await loadJson(
+        path.join(root, 'package.json')
+      ))
     }
     info.app = {
       name,

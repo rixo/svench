@@ -1,5 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
+import { pathToFileURL } from 'url'
 
 export const identity = x => x
 
@@ -62,3 +63,6 @@ export const stringHashcode = str => {
   while (i--) hash = ((hash << 5) - hash) ^ str.charCodeAt(i)
   return (hash >>> 0).toString(36)
 }
+
+// see: https://github.com/rixo/svench/issues/30
+export const importAbsolute = async file => await import(pathToFileURL(file))

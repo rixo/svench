@@ -3,10 +3,13 @@
 /* eslint-env node */
 
 import { dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath, pathToFileURL } from 'url'
 import resolve from 'resolve'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+
+// see: https://github.com/rixo/svench/issues/30
+export const importAbsolute = async file => await import(pathToFileURL(file))
 
 const lookup = (module, basedir) => {
   try {
@@ -33,7 +36,7 @@ if (!projectSvench) {
   process.env.SVENCH_STANDALONE = __dirname
 }
 
-import(svenchPath).catch(err => {
+importAbsolute(svenchPath).catch(err => {
   // eslint-disable-next-line no-console
   console.error(err)
   process.exit(2)

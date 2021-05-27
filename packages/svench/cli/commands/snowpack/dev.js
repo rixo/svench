@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { resolve } from '../../lib.js'
+import { resolve, importAbsolute } from '../../lib.js'
 
 export default async (
   _,
@@ -9,7 +9,7 @@ export default async (
 ) => {
   const rel = async x => {
     const file = await resolve(x, cwd)
-    return await import(file)
+    return await importAbsolute(file)
   }
 
   const { startDevServer, createConfiguration } = await rel('snowpack')
@@ -18,7 +18,7 @@ export default async (
   const defaultConfigFile = path.resolve(cwd, 'snowpack.config.js')
 
   const original = fs.existsSync(defaultConfigFile)
-    ? (await import(defaultConfigFile)).default
+    ? (await importAbsolute(defaultConfigFile)).default
     : {}
 
   const svenchified = svenchify(original, {

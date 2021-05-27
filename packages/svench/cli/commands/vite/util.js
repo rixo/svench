@@ -1,5 +1,5 @@
 import { svenchify } from '../../../lib/vite-plugin.js'
-import { Log } from '../../lib.js'
+import { Log, importAbsolute } from '../../lib.js'
 
 const resolveViteConfig = async (source, args = {}) => {
   const resolved = await source
@@ -43,7 +43,7 @@ export const loadVite = async info => {
   if (!info.vite.sveltePluginPath) {
     throw new Error('Failed to find Svelte plugin for Vite')
   }
-  return await import(info.vite.vitePath)
+  return await importAbsolute(info.vite.vitePath)
 }
 
 export const loadSvenchifiedConfig = async (

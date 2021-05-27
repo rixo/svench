@@ -1,7 +1,7 @@
 import path from 'path'
 
 import { svenchify } from '../../../lib/rollup-plugin.js'
-import { Log } from '../../lib.js'
+import { Log, importAbsolute } from '../../lib.js'
 
 const isPromise = x => x && typeof x.then === 'function'
 
@@ -29,7 +29,9 @@ const loadNollup = async info => {
   if (!info.rollup.deps.nollup.devServer) {
     throw new Error('Failed to detect Nollup devServer')
   }
-  const { default: nollup } = await import(info.rollup.deps.nollup.devServer)
+  const { default: nollup } = await importAbsolute(
+    info.rollup.deps.nollup.devServer
+  )
   return nollup
 }
 
@@ -38,7 +40,7 @@ const loadRollup = async info => {
   if (!info.rollup.rollupPath) {
     throw new Error('Missing dep: rollup')
   }
-  const { default: rollup } = await import(info.rollup.rollupPath)
+  const { default: rollup } = await importAbsolute(info.rollup.rollupPath)
   return rollup
 }
 
