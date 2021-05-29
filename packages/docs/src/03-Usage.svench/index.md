@@ -4,7 +4,7 @@
 
 ~~~svelte
 <script>
-  import View from 'svench'
+  import { View } from 'svench'
 </script>
 
 <View name="defaults" let:action knobs={{prop1: false}} let:knobs={{prop1}}>
