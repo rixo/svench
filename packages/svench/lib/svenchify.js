@@ -66,7 +66,9 @@ export default (defaultPresets, customizeConfig, finalizeConfig = identity) => {
   ) => {
     process.env.SVENCH = process.env.SVENCH || true
 
-    const createPlugin = await importDefaultRelative(sveltePlugin, cwd)
+    const sveltePluginModule = await importDefaultRelative(sveltePlugin, cwd)
+    // see: https://github.com/sveltejs/vite-plugin-svelte/blob/main/packages/vite-plugin-svelte/CHANGELOG.md#100-next11
+    const createPlugin = sveltePluginModule.svelte || sveltePluginModule
 
     const getConfig = async (...args) => {
       let preprocessors
