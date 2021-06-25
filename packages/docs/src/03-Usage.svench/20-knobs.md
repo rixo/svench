@@ -10,19 +10,10 @@ Knobs are used to interact with the View components.
 
 ## Defining and using knobs
 
-Knobs are defined for a `View` via the `knobs` prop, and their current values
-are retrieved via `let:knobs`.
+Knobs are defined for a `View` via the `knobs` prop, and their current values are retrieved via `let:knobs`.
 
 ```svelte
-<View name="defining and using a knob, simple" knobs={{ someProp: "my default value" }} let:knobs>
-
-    <p>someProp: {knobs.someProp}</p>
-
-</View>
-
-<!-- equivalent, using deconstructors -->
-
-<View name="defining and using a knob, using deconstructor" 
+<View name="defining and using a knob" 
       knobs={{ someProp: "my default value" }} 
       let:knobs={{someProp}}>
 
@@ -31,13 +22,7 @@ are retrieved via `let:knobs`.
 </View>
 ```
 
-<View name="defining and using a knob, simple" knobs={{ someProp: "my default value" }} let:knobs>
-
-    <p>someProp: {knobs.someProp}</p>
-
-</View>
-
-<View name="defining and using a knob, using deconstructor" knobs={{ someProp: "my default value" }} let:knobs={{someProp}}>
+<View name="defining and using a knob" knobs={{ someProp: "my default value" }} let:knobs={{someProp}}>
 
     <p>someProp: {someProp}</p>
 
@@ -45,8 +30,10 @@ are retrieved via `let:knobs`.
 
 ## Knobs passed as plain objects
 
-Knobs can be passed to the views as an object, where the keys are the knob
-names and the values are their defaultvalues:
+Knobs can be passed to the views as a plain object of knob names and their default values, with the type of the knobs infered from the default value.
+
+Range knobs can be declared this way using a default value matching the format `${defaultValue}${minValue};${maxValue}` (e.g., `10+10;2`).
+
 
 ```svelte
 <View name="knobs as objects" 
@@ -68,8 +55,7 @@ names and the values are their defaultvalues:
 
 ## Knobs passed as an array
 
-Knobs can also be passed an array of knob definition. The props for the
-different types are shown in the table below.
+Knobs can also be passed an array of knob definitions. The props for the different types are shown in the table below.
 
 
 | type      | props                           |
