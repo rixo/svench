@@ -13,19 +13,21 @@ Knobs are used to interact with the View components.
 Knobs are defined for a `View` via the `knobs` prop, and their current values are retrieved via `let:knobs`.
 
 ```svelte
-<View name="defining and using a knob" 
-      knobs={{ someProp: "my default value" }} 
-      let:knobs={{someProp}}>
-
+<View
+  name="defining and using a knob"
+  knobs={{ someProp: "my default value" }}
+  let:knobs={{someProp}}
+>
     <p>someProp: {someProp}</p>
-
 </View>
 ```
 
-<View name="defining and using a knob" knobs={{ someProp: "my default value" }} let:knobs={{someProp}}>
-
+<View
+  name="defining and using a knob"
+  knobs={{ someProp: "my default value" }}
+  let:knobs={{someProp}}
+>
     <p>someProp: {someProp}</p>
-
 </View>
 
 ## Knobs passed as plain objects
@@ -41,29 +43,29 @@ Knobs can be passed to the views as a plain object of knob names and their defin
 | bool      | `name`, `default`               |
 
 ```svelte
-<View name="knobs as objects" 
-      knobs={{ 
-        firstProp: { type: 'text', default: "hello world" }, 
-        secondProp: { type: 'number', default: 123 } 
-      }} 
-      let:knobs={{firstProp, secondProp}}>
-
+<View
+  name="knobs as objects"
+  knobs={{
+    firstProp: { type: 'text', default: "hello world" },
+    secondProp: { type: 'number', default: 123 }
+  }}
+  let:knobs={{firstProp, secondProp}}
+>
     <p>firstProp: {firstProp}</p>
     <p>secondProp: {secondProp}</p>
-
 </View>
 ```
 
-<View name="knobs as objects" 
-      knobs={{ 
-        firstProp: { type: 'text', default: "hello world" }, 
-        secondProp: { type: 'number', default: 123 } 
-      }} 
-      let:knobs={{firstProp, secondProp}}>
-
+<View
+  name="knobs as objects"
+  knobs={{
+    firstProp: { type: 'text', default: "hello world" },
+    secondProp: { type: 'number', default: 123 }
+  }}
+  let:knobs={{firstProp, secondProp}}
+>
     <p>firstProp: {firstProp}</p>
     <p>secondProp: {secondProp}</p>
-
 </View>
 
 ## Knobs passed as plain objects, shortcut notation
@@ -74,47 +76,51 @@ Range knobs can be declared this way using a default value matching the format `
 
 
 ```svelte
-<View name="knobs as objects, shortcut notation" 
-      knobs={{ firstProp: "hello world", secondProp: 123 }} 
-      let:knobs={{firstProp, secondProp}}>
-
+<View
+  name="knobs as objects, shortcut notation"
+  knobs={{ firstProp: "hello world", secondProp: 123 }}
+  let:knobs={{firstProp, secondProp}}
+>
     <p>firstProp: {firstProp}</p>
     <p>secondProp: {secondProp}</p>
-
 </View>
 ```
 
-<View name="knobs as objects, shortcut notation" knobs={{ firstProp: "hello world", secondProp: 123 }} let:knobs={{firstProp, secondProp}}>
-
+<View
+  name="knobs as objects, shortcut notation"
+  knobs={{ firstProp: "hello world", secondProp: 123 }}
+  let:knobs={{firstProp, secondProp}}
+>
     <p>firstProp: {firstProp}</p>
     <p>secondProp: {secondProp}</p>
-
 </View>
 
 ## Knobs passed as an array
 
-If the display order of the knobs matters, the knobs can also be defined via an array of knob definitions. 
+If the display order of the knobs matters, the knobs can also be defined via an array of knob definitions.
 
 ```svelte
-<View name="knobs as array" knobs={[ 
-      { name: 'firstProp', type: 'text', default: 'Hello world'}, 
-      {name: 'secondProp', type: 'number', default: 123},
-    ]}  
-    let:knobs={{firstProp, secondProp}}>
-
+<View
+  name="knobs as array"
+  knobs={[
+    { name: 'firstProp', type: 'text', default: 'Hello world'},
+    {name: 'secondProp', type: 'number', default: 123},
+  ]}
+  let:knobs={{firstProp, secondProp}}
+>
     <p>firstProp: {firstProp}</p>
     <p>secondProp: {secondProp}</p>
-
 </View>
 ```
 
-<View name="knobs as array" knobs={[ 
-      { name: 'firstProp', type: 'text', default: 'Hello world'}, 
-      {name: 'secondProp', type: 'number', default: 123},
-    ]}  
-    let:knobs={{firstProp, secondProp}}>
-
+<View
+  name="knobs as array"
+  knobs={[
+    { name: 'firstProp', type: 'text', default: 'Hello world'},
+    {name: 'secondProp', type: 'number', default: 123},
+  ]}
+  let:knobs={{firstProp, secondProp}}
+>
     <p>firstProp: {firstProp}</p>
     <p>secondProp: {secondProp}</p>
-
 </View>
