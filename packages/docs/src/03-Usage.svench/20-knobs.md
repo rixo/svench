@@ -70,7 +70,7 @@ Knobs can be passed to the views as a plain object of knob names and their defin
 
 If a knob's value is not an object, it's taken as the default value of the knob, with the type of the knob infered from it.
 
-Range knobs can be declared this way using a default value matching the format `${defaultValue}${minValue};${maxValue}` (e.g., `10+10;2`).
+Range knobs can be declared this way using a default value matching the format `${minValue}${maxValue};${initialValue}` (e.g., `-10-10;5`).
 
 
 ```svelte
