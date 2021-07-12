@@ -8,7 +8,7 @@
 
 ```
 npm init -y
-npm add -D svelte vite @svitejs/vite-plugin-svelte svench
+npm add -D svelte vite @sveltejs/vite-plugin-svelte svench
 mkdir src
 echo '# Hello' > src/hello.md
 echo '<h1>Hi!</h1>' > src/Hi.svench
@@ -19,7 +19,7 @@ npx svench
 
 ```
 pnpm init -y
-pnpm add -D svelte vite @svitejs/vite-plugin-svelte svench
+pnpm add -D svelte vite @sveltejs/vite-plugin-svelte svench
 mkdir src
 echo '# Hello' > src/hello.md
 echo '<h1>Hi!</h1>' > src/Hi.svench
@@ -30,7 +30,7 @@ pnpx svench
 
 ```
 yarn init -y
-yarn add -D svelte vite @svitejs/vite-plugin-svelte svench
+yarn add -D svelte vite @sveltejs/vite-plugin-svelte svench
 mkdir src
 echo '# Hello' > src/hello.md
 echo '<h1>Hi!</h1>' > src/Hi.svench
