@@ -1,12 +1,10 @@
 <script>
-  import { createEventDispatcher } from 'svelte'
+  export let onClick = () => {}
 
-  const dispatch = createEventDispatcher()
-
-  const doIt = () =>
-    dispatch('customEvent', {
-      payload: 'blah blah',
-    })
+  const handleClick = () => {
+    if (!onClick) return
+    onClick({ payload: 'blah blah' })
+  }
 </script>
 
-<button on:click={doIt}>trigger custom event</button>
+<button on:click on:click={handleClick}>Click! Click!</button>

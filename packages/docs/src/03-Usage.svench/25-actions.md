@@ -1,56 +1,60 @@
 <script>
    import { View } from 'svench';
    import CustomAction from './CustomAction.svelte';
-   import CustomCallbackAction from './CustomCallbackAction.svelte';
-
 </script>
 
 <svench:options title="Actions" />
 
 # Actions
 
-Svench Views provides an easy way to capture and display events. 
+Svench Views provides an easy way to capture and display events.
 
-If a view uses the slot prop `action`, an *Actions* tab will appear at the bottom of the Svench UI. The value provided by the slot prop `action` is a function with the signature `(eventName, data) => void` or `eventName => event => void`. 
+If a view uses the slot prop `let:action`, an *Actions* tab will appear at the bottom of the Svench UI.
+
+The value provided by `let:action` is a function with one of the following signature, depending on the number of arguments that are passed to it:
+
+```ts
+(eventName: string, data: any) => void
+```
+
+or (curried form of the previous one):
+
+```ts
+(eventName: string) => (data: any) => void
+```
+
+## Example
 
 ```svelte
-<script>
-  // CustomAction.svelte
+<View name="action" let:action>
 
-  import { createEventDispatcher } from 'svelte'
+    <button on:click={({ ctrlKey }) => action('button click', { ctrlKey })}>
+      Click me (1)
+    </button>
 
-  const dispatch = createEventDispatcher()
+    <button on:click={action('button click')}>Click me (2)</button>
 
-  const doIt = () =>
-    dispatch('customEvent', {
-      payload: 'blah blah',
-    })
-</script>
+    <CustomAction
+      on:click={action('click')}
+      onClick={action('onClick')}
+    />
 
-<button on:click={doIt}>trigger custom event</button>
+</View>
 ```
 
-```
-// CustomCallbackAction.svelte
-
-<script>
-  export let onAction = () => {}
-</script>
-
-<button on:click={() => onAction('doing the thing')}>
-    trigger custom callback
-</button>
-```
+_(Enter the view by clicking on its title, then click the buttons to see the effect!)_
 
 <View name="action" let:action>
 
-    <button on:click={action('click button')}>Click me</button>
+    <button on:click={({ ctrlKey }) => action('button click', { ctrlKey })}>
+      Click me (1)
+    </button>
 
-    <CustomAction on:customEvent={ ({detail}) =>
-        action('Custom', detail)
-    } />
+    <button on:click={action('button click')}>Click me (2)</button>
 
-    <CustomCallbackAction onAction={ action('CallbackCustom') } />
+    <CustomAction
+      on:click={action('click')}
+      onClick={action('onClick')}
+    />
 
 </View>
-
