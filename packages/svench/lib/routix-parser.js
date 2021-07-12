@@ -1,5 +1,6 @@
 import * as path from 'path'
 
+import Log from './log.js'
 import { escapeRe } from './util.js'
 import { parseMeta } from './parse-meta.js'
 
@@ -108,14 +109,22 @@ export default ({
 
     return async (item, previous) => {
       if (item.isFile) {
-        const { options, views, headings } = await parseMeta(
-          preprocess,
-          item.absolute
-        )
-        item.options = options || {}
-        item.views = views
-        item.headings = headings
-        item.extra = {}
+        try {
+          const { options, views, headings } = await parseMeta(
+            preprocess,
+            item.absolute
+          )
+          item.options = options || {}
+          item.views = views
+          item.headings = headings
+          item.extra = {}
+        } catch (err) {
+          Log.warn("Failed to parse %s:\n%s", item.relative, err)
+          item.options = {}
+          // item.views = []
+          // item.headings = []
+          item.extra = {}
+        }
       }
 
       item.options = item.options || {}
