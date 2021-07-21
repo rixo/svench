@@ -65,12 +65,15 @@
     "zingtouch": "^1.0.6"
   },
   "peerDependencies": {
-    "svelte": "^3.0.0"
-  },
-  "optionalDependencies": {
+    "svelte": "^3.0.0",
     "nollup": "^0.15.2",
     "snowpack": "^3.0.13",
     "vite": "^2.0.3"
+  },
+  "peerDependenciesMeta": {
+    "nollup": { "optional": true },
+    "snowpack": { "optional": true },
+    "vite": { "optional": true }
   },
   "devDependencies": {
     "@rixo/eslint-config-svelte": "^0.8.1",
