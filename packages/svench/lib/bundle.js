@@ -91,7 +91,12 @@ export const bundleRuntime = async ({
 
   await Promise.all(
     configs.map(async ({ output, ...options }) => {
-      const bundle = await rollup(options)
+      const bundle = await rollup({
+        ...options,
+        // ensure input path are absolute or Rollup might, somehow, get
+        // confused if user app also has a src/index.js file...
+        input: path.resolve(root, options.input)
+      })
       await bundle.write(output)
       Log.info('Written: %s', output.file)
     })
