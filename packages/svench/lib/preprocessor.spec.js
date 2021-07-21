@@ -68,7 +68,8 @@ test('does not replace provided source', macro, {
       "options": {
         "opt": "foo",
         "bool": true
-      }
+      },
+      "headings": []
     }✂️✂️✂️::svench_m€ta>>>-->
   `,
 })
@@ -98,7 +99,8 @@ test('with import', macro, {
       "views": [
         "whatever"
       ],
-      "options": {}
+      "options": {},
+      "headings": []
     }✂️✂️✂️::svench_m€ta>>>-->
   `,
 })
@@ -132,7 +134,8 @@ test('multiple source nodes', macro, {
       "views": [
         "whatever"
       ],
-      "options": {}
+      "options": {},
+      "headings": []
     }✂️✂️✂️::svench_m€ta>>>-->
   `,
 })
@@ -162,7 +165,8 @@ test('with aliased import', macro, {
       "views": [
         "whatever"
       ],
-      "options": {}
+      "options": {},
+      "headings": []
     }✂️✂️✂️::svench_m€ta>>>-->
   `,
 })
@@ -190,7 +194,8 @@ test('does not read source from other View component', macro, {
 
     <!--<<<svench_m€ta::✂️✂️✂️{
       "views": [],
-      "options": {}
+      "options": {},
+      "headings": []
     }✂️✂️✂️::svench_m€ta>>>-->
   `,
 })
@@ -226,7 +231,8 @@ test('adds id to file with context module', macro, {
 
     <!--<<<svench_m€ta::✂️✂️✂️{
       "views": [],
-      "options": {}
+      "options": {},
+      "headings": []
     }✂️✂️✂️::svench_m€ta>>>-->
   `,
 })
@@ -301,7 +307,8 @@ test('default view name', macro, {
         "Conflict!",
         "Conflict! (1)"
       ],
-      "options": {}
+      "options": {},
+      "headings": []
     }✂️✂️✂️::svench_m€ta>>>-->
   `,
 })
@@ -338,7 +345,8 @@ test('parse options', macro, {
       "options": {
         "foo": "bar",
         "baz": false
-      }
+      },
+      "headings": []
     }✂️✂️✂️::svench_m€ta>>>-->
   `,
 })
@@ -370,7 +378,8 @@ test('auto let:action', macro, {
       "views": [
         "whatever"
       ],
-      "options": {}
+      "options": {},
+      "headings": []
     }✂️✂️✂️::svench_m€ta>>>-->
   `,
 })
@@ -402,7 +411,8 @@ test("auto let:action don't override custom `actions`", macro, {
       "views": [
         "whatever"
       ],
-      "options": {}
+      "options": {},
+      "headings": []
     }✂️✂️✂️::svench_m€ta>>>-->
   `,
 })
@@ -436,7 +446,8 @@ test('with unicode char', macro, {
       "views": [
         "whatever"
       ],
-      "options": {}
+      "options": {},
+      "headings": []
     }✂️✂️✂️::svench_m€ta>>>-->
   `,
 })
