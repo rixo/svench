@@ -1,3 +1,6 @@
 packages:
   - examples/**
   - packages/**
+  # NOTE dirty hack used for reproductions, since pnpm sometimes has a hard time
+  # linking on my machine :/
+  - repros/**
