@@ -11,9 +11,28 @@ import {
   loadSvelteConfig,
   mergeSvelteOptions,
 } from './ecosystem.js'
-import { importDefaultRelative } from './import-relative.cjs'
+import { importDefaultRelative, resolve } from './import-relative.cjs'
 
 const defaultSvelteExtensions = ['.svelte']
+
+const importSveltePluginModule = async (sveltePlugin, cwd, isModule) => {
+  if (!isModule) {
+    // NOTE this is what has been used historically (although it is arguably a
+    // bit idiotic)
+    return await importDefaultRelative(sveltePlugin, cwd)
+  }
+  // NOTE @sveltejs/vite-plugin-svelte exposes both main/module and a exports
+  // map. `resolve` package doesn't seem to use the `exports` path, only main,
+  // not even `module`. This means that when running in ESM, we must force using
+  // `module` over `main` if it exists (ideal would be supporting the `exports`
+  // map), or we're running into CJS/ESM conflict (especially since the legacy
+  // approach aboves implies `esm` module).
+  const sveltePluginFile = await resolve(sveltePlugin, {
+    basedir: cwd,
+    packageFilter: pkg => ({ ...pkg, main: pkg.module || pkg.main }),
+  })
+  return await import(sveltePluginFile)
+}
 
 const mergeExtensions = (...sources) => [
   ...new Set(
@@ -66,7 +85,12 @@ export default (defaultPresets, customizeConfig, finalizeConfig = identity) => {
   ) => {
     process.env.SVENCH = process.env.SVENCH || true
 
-    const sveltePluginModule = await importDefaultRelative(sveltePlugin, cwd)
+    const sveltePluginModule = await importSveltePluginModule(
+      sveltePlugin,
+      cwd,
+      isModule
+    )
+
     // see: https://github.com/sveltejs/vite-plugin-svelte/blob/main/packages/vite-plugin-svelte/CHANGELOG.md#100-next11
     const createPlugin = sveltePluginModule.svelte || sveltePluginModule
 
