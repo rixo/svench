@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-import { pipeAsync, identity } from './util.js'
+import { pipeAsync, identity, importAbsolute } from './util.js'
 import { parseSvenchOptions } from './config.js'
 import { createPluginParts } from './plugin-shared.js'
 import { maybeDump } from './dump.js'
@@ -31,7 +31,7 @@ const importSveltePluginModule = async (sveltePlugin, cwd, isModule) => {
     basedir: cwd,
     packageFilter: pkg => ({ ...pkg, main: pkg.module || pkg.main }),
   })
-  return await import(sveltePluginFile)
+  return await importAbsolute(sveltePluginFile)
 }
 
 const mergeExtensions = (...sources) => [
