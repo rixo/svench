@@ -183,6 +183,15 @@ const viteConfig = {
   },
 }
 
+const sveltePluginConfig = {
+  transform: ({ svelte }) => ({
+    svelte: {
+      disableDependencyReinclusion: ['svench'],
+      ...svelte
+    }
+  })
+}
+
 // for svench-vite
 const maybeStandalone = {
   post: ({ standalone, svenchPath, sveltePath }) =>
@@ -203,6 +212,6 @@ const maybeStandalone = {
     },
 }
 
-module.exports = [viteOption, viteConfig, viteDefaults, maybeStandalone]
+module.exports = [sveltePluginConfig, viteOption, viteConfig, viteDefaults, maybeStandalone]
 
 Object.assign(module.exports, { viteOption })
