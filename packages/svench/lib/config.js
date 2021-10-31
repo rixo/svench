@@ -284,6 +284,7 @@ const castOptions = ({
   indexFileName = 'index.html',
 
   port = 4242,
+  host = 'localhost',
 
   // Routix route import resolver
   // (path: string) => (resolvedPath: string)
@@ -376,6 +377,7 @@ const castOptions = ({
   routesFileName,
   indexFileName,
   port,
+  host,
   resolveRouteImport,
   extensions,
   rollup,
