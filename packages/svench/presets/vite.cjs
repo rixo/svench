@@ -136,6 +136,7 @@ const viteConfig = {
     svenchDir,
     manifestDir,
     distDir,
+    host,
     port,
     raw,
     prod,
@@ -162,7 +163,7 @@ const viteConfig = {
     return {
       vite: {
         root: svenchDir,
-        server: { port },
+        server: { port, host },
         build: { outDir: distDir },
         // we must prevent Vite from optimizing the Svench bundle because it will
         // put a duplicated Svelte runtime in there

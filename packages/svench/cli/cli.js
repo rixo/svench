@@ -184,7 +184,8 @@ export default async argv => {
       '--plugin, --svelte-plugin <plugin>',
       'Specify name of the Svelte plugin to use'
     )
-    .option('--reload', 'Clear local cache (Snowpack only)')
+    .option('--host [host]', 'specify hostname (Vite only)')
+    // .option('--reload', 'Clear local cache (Snowpack only)')
     .option(
       '--recompile',
       'Force recompile Svench runtime, even if already present'
