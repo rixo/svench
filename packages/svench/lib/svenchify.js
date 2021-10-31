@@ -113,6 +113,10 @@ export default (defaultPresets, customizeConfig, finalizeConfig = identity) => {
           svelteOverridesWithoutPreprocess
         )
 
+        // @sveltejs/vite-plugin-svelte whines if it finds unknown props in
+        // config, and it doesn't expect kit in non Kit (Svench) projects
+        delete mergedOptions.kit
+
         preprocessors = mergePreprocessors(
           mergedOptions.preprocess,
           svelteOverrides.preprocess
