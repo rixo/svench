@@ -79,15 +79,17 @@ export const inspect = async ({
       ? process.env.SVENCH_STANDALONE
       : false
 
-  const res = x => resolveSync(x, { basedir: cwd, preserveSymlinks: true })
+  const resolveOptions = { preserveSymlinks: true }
+
+  const res = x => resolveSync(x, { ...resolveOptions, basedir: cwd })
 
   // svench-cli
-  const resSvenchCli =
+  const resolveFromSvenchCli =
     standalone &&
     (x =>
       resolveSync(x, {
+        ...resolveOptions,
         basedir: standalone,
-        preserveSymlinks: true,
       }))
 
   const cliOptions = parseCliOptions(rest)
@@ -117,7 +119,9 @@ export const inspect = async ({
 
   const ensureDep = async (target, standalone = true) =>
     (await _ensureDep(target)) ||
-    (resSvenchCli && standalone && (await _ensureDep(target, resSvenchCli))) ||
+    (resolveFromSvenchCli &&
+      standalone &&
+      (await _ensureDep(target, resolveFromSvenchCli))) ||
     false
 
   const findDeps = async (targets, missingDeps) => {
@@ -184,6 +188,19 @@ export const inspect = async ({
       type,
       root,
     }
+  }
+
+  if (info.app.type === 'module') {
+    // NOTE @sveltejs/vite-plugin-svelte exposes both main/module and a exports
+    // map. `resolve` package doesn't seem to use the `exports` path, only main,
+    // not even `module`. This means that when running in ESM, we must force using
+    // `module` over `main` if it exists (ideal would be supporting the `exports`
+    // map), or we're running into CJS/ESM conflict (especially since the legacy
+    // approach aboves implies `esm` module).
+    resolveOptions.packageFilter = pkg => ({
+      ...pkg,
+      main: pkg.module || pkg.main,
+    })
   }
 
   // === Svench ===

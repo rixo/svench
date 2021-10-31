@@ -92,7 +92,11 @@ export default (defaultPresets, customizeConfig, finalizeConfig = identity) => {
     )
 
     // see: https://github.com/sveltejs/vite-plugin-svelte/blob/main/packages/vite-plugin-svelte/CHANGELOG.md#100-next11
-    const createPlugin = sveltePluginModule.svelte || sveltePluginModule
+    const createPlugin =
+      sveltePluginModule.svelte ||
+      (sveltePluginModule.default && sveltePluginModule.default.svelte) ||
+      sveltePluginModule.default ||
+      sveltePluginModule
 
     const getConfig = async (...args) => {
       let preprocessors
