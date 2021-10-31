@@ -64,7 +64,9 @@ export const loadSvenchifiedConfig = async (
   const {
     standalone,
     app: { type },
-    vite: { sveltePlugin: defaultSveltePlugin = 'rollup-plugin-svelte-hot' },
+    vite: {
+      sveltePluginPath,
+    },
     svench: { dir: svenchPath, version: svenchVersion },
     svelte: {
       dir: sveltePath,
@@ -88,10 +90,10 @@ export const loadSvenchifiedConfig = async (
     sveltePath,
     svelteCompiler,
     svelteVersion,
+    sveltePlugin: sveltePluginPath,
 
     vite: configOverride || true,
     isModule: type === 'module',
-    defaultSveltePlugin,
     // enforce hot mode (@svitejs/vite-plugin-svelte doesn't do auto hot)
     forceSvelteHot: true,
     ...cliOverrides,
