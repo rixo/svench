@@ -1,4 +1,5 @@
 import { loadVite, loadSvenchifiedConfig } from './util.js'
+import { Log } from '../../lib.js'
 
 export default async (info, cliOptions) => {
   const mode = 'development'
@@ -13,6 +14,8 @@ export default async (info, cliOptions) => {
   )
 
   const server = await createServer(finalConfig)
+  
+  Log.warn( 'Svench ready and listening at http://localhost:%s', server.config.server.port )
 
   await server.listen()
 }
