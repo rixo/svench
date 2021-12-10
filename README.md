@@ -48,3 +48,15 @@ echo '# Hello' > src/hello.md
 echo '<h1>Hi!</h1>' > src/Hi.svench
 yarn svench
 ```
+
+If you are using SvelteKit, add `disableDependencyReinclusion` into your `svelte.config.js` file to prevent `vite-plugin-svelte` from including
+Node-only packages in Vite's prebundling step.
+
+```diff
+const config = {
++  disableDependencyReinclusion: ['svench'],
+   kit: {
+      ...
+   }
+}
+```
