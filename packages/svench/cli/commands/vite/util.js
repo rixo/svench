@@ -46,6 +46,19 @@ export const loadVite = async info => {
   return await importAbsolute(info.vite.vitePath)
 }
 
+export const load = async ({ mode, command }, info, options) => {
+  const vite = await loadVite(info)
+
+  const { send, searchForWorkspaceRoot } = vite
+
+  const config = await loadSvenchifiedConfig({ mode, command }, info, {
+    ...options,
+    viteImports: { send, searchForWorkspaceRoot },
+  })
+
+  return { vite, config }
+}
+
 export const loadSvenchifiedConfig = async (
   { mode, command },
   info,
@@ -64,9 +77,7 @@ export const loadSvenchifiedConfig = async (
   const {
     standalone,
     app: { type },
-    vite: {
-      sveltePluginPath,
-    },
+    vite: { sveltePluginPath },
     svench: { dir: svenchPath, version: svenchVersion },
     svelte: {
       dir: sveltePath,

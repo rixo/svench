@@ -1,37 +1,34 @@
 import chalk from 'chalk'
 
-import { loadVite, loadSvenchifiedConfig } from './util.js'
+import { load } from './util.js'
 
 const printWelcome = (server, svenchVersion) => {
-    const info = server.config.logger.info
+  const info = server.config.logger.info
 
-    info(
-      chalk.cyan(`\n  svench v${svenchVersion}`) +
-        chalk.green(` (vite) dev server running at:\n`),
-      {
-        clear: !server.config.logger.hasWarned,
-      }
-    )
+  info(
+    chalk.cyan(`\n  svench v${svenchVersion}`) +
+      chalk.green(` (vite) dev server running at:\n`),
+    {
+      clear: !server.config.logger.hasWarned,
+    }
+  )
 
-    server.printUrls()
+  server.printUrls()
 
-    // eslint-disable-next-line no-console
-    console.log('')
-  }
+  // eslint-disable-next-line no-console
+  console.log('')
+}
 
 export default async (info, cliOptions) => {
   const mode = 'development'
   const command = 'serve'
 
-  const { createServer } = await loadVite(info)
+  const {
+    vite: { createServer },
+    config,
+  } = await load({ mode, command }, info, cliOptions)
 
-  const finalConfig = await loadSvenchifiedConfig(
-    { mode, command },
-    info,
-    cliOptions
-  )
-
-  const server = await createServer(finalConfig)
+  const server = await createServer(config)
 
   await server.listen()
 

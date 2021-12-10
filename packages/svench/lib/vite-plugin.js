@@ -1,3 +1,5 @@
+import sirv from 'sirv'
+
 import { createPluginParts } from './plugin-shared.js'
 import { createIndex } from './template.js'
 import { writeManifest } from './service-manifest.js'
@@ -6,6 +8,7 @@ import { VITE_PLUGIN_NAME } from './const.js'
 import { maybeDump } from './dump.js'
 import injectTransform from './transform.js'
 import Svenchify from './svenchify.js'
+import { indexHtmlMiddleware } from './vite-plugin-middlewares.js'
 
 const defaultPresets = ['svench/presets/vite']
 
@@ -48,7 +51,13 @@ const initSvench = async ({ options, routix }, { command }) => {
 const createPlugin = parts => {
   const {
     options,
-    options: { enabled, dump, vite = {} },
+    options: {
+      enabled,
+      dump,
+      vite = {},
+      svenchDir,
+      viteImports: { send },
+    },
   } = parts
 
   maybeDump('options', dump, options)
@@ -74,6 +83,29 @@ const createPlugin = parts => {
     async options(options) {
       await initSvench(parts, commandContext)
       return options
+    },
+
+    configureServer(server) {
+      server.middlewares.use(
+        sirv(svenchDir, {
+          dev: true,
+          etag: true,
+          extensions: [],
+          setHeaders(res, pathname) {
+            // Matches js, jsx, ts, tsx.
+            // The reason this is done, is that the .ts file extension is reserved
+            // for the MIME type video/mp2t. In almost all cases, we can expect
+            // these files to be TypeScript files, and for Vite to serve them with
+            // this Content-Type.
+            if (/\.[tj]sx?$/.test(pathname)) {
+              res.setHeader('Content-Type', 'application/javascript')
+            }
+          },
+        })
+      )
+      return () => {
+        server.middlewares.use(indexHtmlMiddleware(server, { svenchDir, send }))
+      }
     },
   }
 }

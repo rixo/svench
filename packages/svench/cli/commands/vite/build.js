@@ -1,20 +1,17 @@
-import { loadVite, loadSvenchifiedConfig } from './util.js'
+import { load } from './util.js'
 
 export default async (info, options) => {
   const mode = 'production'
   const command = 'build'
 
-  const { build } = await loadVite(info)
-
-  const finalConfig = await loadSvenchifiedConfig(
-    { mode, command },
-    info,
-    options
-  )
+  const {
+    vite: { build },
+    config,
+  } = await load({ mode, command }, info, options)
 
   if (options.minify === false) {
-    finalConfig.build = { ...finalConfig.build, minify: false }
+    config.build = { ...config.build, minify: false }
   }
 
-  await build(finalConfig)
+  await build(config)
 }

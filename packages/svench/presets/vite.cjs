@@ -122,7 +122,7 @@ const viteOption = {
   merge: ({ vite: a } = {}, { vite: b } = {}) => ({
     vite: mergeViteConfig(a, b),
   }),
-  cast: ({ vite = {} }) => ({ vite }),
+  cast: ({ vite = {}, viteImports }) => ({ vite, viteImports }),
 }
 
 // const index = resolve.sync('svench', { basedir: process.env.SVENCH_CLI })
@@ -132,6 +132,7 @@ const viteOption = {
 
 const viteConfig = {
   post: ({
+    cwd,
     svenchPath,
     svenchDir,
     manifestDir,
@@ -142,6 +143,7 @@ const viteConfig = {
     prod,
     svenchVersion,
     svelteVersion,
+    viteImports: { searchForWorkspaceRoot },
   }) => {
     const runtimeAlias = []
     if (!raw && svenchPath) {
@@ -162,9 +164,20 @@ const viteConfig = {
     }
     return {
       vite: {
-        root: svenchDir,
-        server: { port, host },
-        build: { outDir: distDir },
+        // root: svenchDir,
+        server: {
+          port,
+          host,
+          fs: {
+            allow: [searchForWorkspaceRoot(cwd), svenchDir, manifestDir],
+          },
+        },
+        build: {
+          outDir: distDir,
+          rollupOptions: {
+            input: path.resolve(svenchDir, 'index.html'),
+          },
+        },
         // we must prevent Vite from optimizing the Svench bundle because it will
         // put a duplicated Svelte runtime in there
         // optimizeDeps: false ? { include: ['svench'] } : { exclude: ['svench'] },
