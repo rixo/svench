@@ -22,7 +22,7 @@ if (majorVer < 14) {
 
 // TODO dev specific options
 {
-  Error.stackTraceLimit = 100
+  // Error.stackTraceLimit = 100
 
   const esmFile = ['', 'esm', 'esm.js'].join(sep)
 
