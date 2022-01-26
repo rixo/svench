@@ -72,6 +72,7 @@ export const inspect = async ({
   rollup,
   nollup,
   vite,
+  kit,
   ...rest
 }) => {
   const standalone =
@@ -96,12 +97,24 @@ export const inspect = async ({
 
   const svenchConfig = await readSvenchConfig(cwd, cliOptions.config)
 
+  const tryResolve = async (target, resolve) => {
+    try {
+      return await resolve(target)
+    } catch (error) {
+      if (error.code === 'MODULE_NOT_FOUND') {
+        return false
+      }
+      return { error }
+    }
+  }
+
   const _ensureDep = async (target, resolve = res) => {
     try {
-      const index = resolve(target)
-      const dir = path.dirname(findup(index, 'package.json'))
+      const pkgPath = resolve(target + '/package.json')
+      const index = (await tryResolve(target, resolve)) || null
+      const dir = path.dirname(pkgPath)
       const relPath = path.relative(cwd, dir)
-      const { version } = await loadJson(path.join(dir, 'package.json'))
+      const { version } = await loadJson(pkgPath)
       return {
         package: target,
         version,
@@ -222,6 +235,19 @@ export const inspect = async ({
     }
   }
 
+  // === Kit ===
+  {
+    const pkg = await ensureDep('@sveltejs/kit')
+    if (pkg) {
+      info.kit = {
+        [pkg.package]: pkg,
+        version: pkg.version,
+        config: await findConfig('svelte.config.js'),
+        missingDeps: [],
+      }
+    }
+  }
+
   // === Vite ===
   {
     const config = typeof vite === 'string' ? vite : 'vite.config.js'
@@ -319,7 +345,7 @@ export const inspect = async ({
 
   info.options = mergeOptions(svenchConfig, cliOptions)
 
-  const tools = ['vite', 'rollup', 'snowpack']
+  const tools = ['kit', 'vite', 'rollup', 'snowpack']
 
   const withConfigAndNoMissingDeps = tools.filter(tool => {
     if (!info[tool]) return false
@@ -336,7 +362,9 @@ export const inspect = async ({
     return true
   })
 
-  info.favorite = vite
+  info.favorite = kit
+    ? 'kit'
+    : vite
     ? 'vite'
     : snowpack
     ? 'snowpack'

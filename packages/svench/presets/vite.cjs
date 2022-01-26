@@ -182,7 +182,7 @@ const viteConfig = {
         // put a duplicated Svelte runtime in there
         // optimizeDeps: false ? { include: ['svench'] } : { exclude: ['svench'] },
         optimizeDeps: {
-          exclude: ['svench'],
+          [raw ? 'include' : 'exclude']: ['svench'],
         },
         resolve: {
           alias: [
@@ -191,6 +191,23 @@ const viteConfig = {
             // /@svench/* alias (from HTML)
             { find: /^\/@svench\//, replacement: manifestDir + '/' },
           ].filter(Boolean),
+        },
+      },
+    }
+  },
+}
+
+const kitConfig = {
+  post: ({ cwd, dir }) => {
+    const SVELTE_KIT = '.svelte-kit'
+    const output = path.resolve(cwd, `${SVELTE_KIT}/dev`)
+    return {
+      vite: {
+        resolve: {
+          alias: {
+            $app: path.resolve(`${output}/runtime/app`),
+            $lib: path.resolve(cwd, dir, 'lib'),
+          },
         },
       },
     }
@@ -232,6 +249,7 @@ module.exports = [
   viteConfig,
   viteDefaults,
   maybeStandalone,
+  kitConfig,
 ]
 
 Object.assign(module.exports, { viteOption })
