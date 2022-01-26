@@ -64,7 +64,7 @@ export default ({
 
     ...preprocessors,
 
-    preprocessSvench({ extensions }),
+    // preprocessSvench({ extensions }),
 
     // trim first <p></p> that happens with mdsvex because of:
     //     <p><svench:options ... /></p>
@@ -82,10 +82,22 @@ export default ({
     code,
     { filename, length = code.length, hash, ...attributes }
   ) => {
-    const result = preprocess(code, svenchPreprocessors, {
+    const result = await preprocess(code, svenchPreprocessors, {
       filename,
       ...attributes,
     })
+
+    const { code: codeWithSvenchMetas } = await preprocess(
+      await result.code,
+      preprocessSvench({ extensions }),
+      {
+        filename,
+        ...attributes,
+      }
+    )
+
+    result.code = codeWithSvenchMetas
+
     if (!disableCache) {
       cache[filename] = {
         length,
