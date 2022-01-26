@@ -2,6 +2,14 @@
   import { fade } from 'svelte/transition'
   import Prism from '../Prism.svelte'
   export let actions
+
+  const extractEventCode = ({ data }) => {
+    if (data) {
+      const raw = data instanceof CustomEvent ? data.detail : data
+      return JSON.stringify(raw).replace(/":/g, '": ')
+    }
+    return ' '
+  }
 </script>
 
 <table>
@@ -12,16 +20,10 @@
   </colgroup>
   {#each actions.events as e (e.date)}
     <tr transition:fade|local>
-      <td>{new Date(e.date).toLocaleTimeString()}</td>
+      <td class="small">{new Date(e.date).toLocaleTimeString()}</td>
       <td class="main">{e.event || ''}</td>
       <td>
-        <Prism
-          anim={false}
-          language="js"
-          code={e.data == null
-            ? ' '
-            : JSON.stringify(e.data).replace(/":/g, '": ')}
-        />
+        <Prism anim={false} language="js" code={extractEventCode(e)} />
       </td>
     </tr>
   {/each}
@@ -36,6 +38,10 @@
     font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono',
       monospace;
     padding: 0 1em;
+    vertical-align: baseline;
+  }
+  td.small {
+    font-size: 0.8em;
   }
   tr:nth-child(odd) :global(pre),
   tr:nth-child(odd) td {
