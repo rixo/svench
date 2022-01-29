@@ -28,6 +28,7 @@ export const findSvelteConfig = async (cwd, loadConfig = true) => {
   return { exists: false }
 }
 
-export const loadSvelteConfig = async cwd => findSvelteConfig(cwd)?.value
+export const loadSvelteConfig = async cwd =>
+  (await findSvelteConfig(cwd))?.value
 
 export const mergeSvelteOptions = (...opts) => Object.assign({}, ...opts)
