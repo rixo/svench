@@ -19,6 +19,7 @@ const doWriteManifest = (
   writeFile,
   {
     cwd,
+    typescript,
     dir,
     dump,
     entryFile,
@@ -32,9 +33,24 @@ const doWriteManifest = (
 
   // --- user's src/.svench.js ---
 
+  const findOptionsFileUrl = () => {
+    if (typescript) {
+      for (const file of ['.svench.ts', '.svench.ts']) {
+        const optionsFile = path.join(sourceDir, file)
+        if (fs.existsSync(optionsFile)) {
+          return optionsFile.replace(/\.(?:ts|js)$/, '')
+        }
+      }
+    } else {
+      const optionsFile = path.join(sourceDir, '.svench.js')
+      if (fs.existsSync(optionsFile)) {
+        return optionsFile
+      }
+    }
+  }
+
   const sourceDir = path.resolve(cwd, dir)
-  const optionsFile = path.join(sourceDir, '.svench.js')
-  const optionsUrl = fs.existsSync(optionsFile) && optionsFile
+  const optionsUrl = findOptionsFileUrl()
 
   // --- svench.js ---
 
