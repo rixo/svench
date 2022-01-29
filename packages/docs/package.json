@@ -2,17 +2,13 @@
   "name": "svench-docs",
   "version": "0.0.0",
   "description": "Svench docs",
+  "type": "module",
   "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rixo/svench.git"
   },
-  "keywords": [
-    "svelte",
-    "workbench",
-    "vite",
-    "rollup"
-  ],
+  "keywords": ["svelte", "workbench", "vite", "rollup"],
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
   "bugs": {
