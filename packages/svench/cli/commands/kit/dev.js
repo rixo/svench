@@ -1,5 +1,6 @@
 import chalk from 'chalk'
 
+import { loadSvelteConfig } from '../../lib.js'
 import { load } from '../vite/util.js'
 
 const printWelcome = (server, svenchVersion) => {
@@ -19,6 +20,11 @@ const printWelcome = (server, svenchVersion) => {
   console.log('')
 }
 
+const resolveKitViteConfig = async ({ cwd }) => {
+  const svelteConfig = await loadSvelteConfig(cwd)
+  return svelteConfig?.kit?.vite || {}
+}
+
 export default async (info, cliOptions) => {
   const mode = 'development'
   const command = 'serve'
@@ -26,7 +32,10 @@ export default async (info, cliOptions) => {
   const {
     vite: { createServer },
     config,
-  } = await load({ mode, command }, info, cliOptions)
+  } = await load({ mode, command }, info, {
+    ...cliOptions,
+    resolveSourceConfig: resolveKitViteConfig,
+  })
 
   const server = await createServer(config)
 

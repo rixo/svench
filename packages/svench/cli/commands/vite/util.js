@@ -59,16 +59,24 @@ export const load = async ({ mode, command }, info, options) => {
   return { vite, config }
 }
 
+const resolveViteSourceConfig = ({ vite: configFile = 'vite.config.js' }) => {
+  return configFile === true ? 'vite.config.js' : configFile
+}
+
 export const loadSvenchifiedConfig = async (
   { mode, command },
   info,
-  {
-    vite: configFile = 'vite.config.js',
+  options = {}
+) => {
+  const {
+    // allow custom vite config resolution (for Kit, from kit.vite in
+    // svelte.config.js)
+    resolveSourceConfig = resolveViteSourceConfig,
     override: configOverride,
     nocfg = false,
     ...cliOverrides
-  } = {}
-) => {
+  } = options
+
   if (info.missingDeps.length > 0) {
     Log.error('Missing dependencies: %s', info.missingDeps.join(', '))
     process.exit(255)
@@ -86,11 +94,7 @@ export const loadSvenchifiedConfig = async (
     } = {},
   } = info
 
-  const source = nocfg
-    ? {}
-    : configFile === true
-    ? 'vite.config.js'
-    : configFile
+  const source = nocfg ? {} : await resolveSourceConfig(options)
 
   const svenchified = svenchify(source, {
     enabled: true,
