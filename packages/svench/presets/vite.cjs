@@ -198,11 +198,16 @@ const viteConfig = {
 }
 
 const kitConfig = {
-  post: ({ cwd, dir }) => {
+  transform: ({ kit, cwd, dir, svelteConfig }) => {
+    if (!kit) return
+
     const SVELTE_KIT = '.svelte-kit'
     const output = path.resolve(cwd, `${SVELTE_KIT}/dev`)
+
     return {
       vite: {
+        base: '/',
+        publicDir: svelteConfig?.kit?.files?.assets || 'static',
         resolve: {
           alias: {
             $app: path.resolve(`${output}/runtime/app`),
