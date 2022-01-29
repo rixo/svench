@@ -68,6 +68,14 @@ const applyUserConfig = ({ userConfig, ...options }) => {
   return userConfig ? merge(options, userConfig) : options
 }
 
+const applyInspect = ({ inspect, ...options }) => {
+  if (!inspect) return options
+  return {
+    typescript: !!inspect.typescript,
+    ...options,
+  }
+}
+
 const runPresets = (presets, options) => {
   const merge = options[HOOK_MERGE]
   return presets.reduce((cur, f) => {
@@ -236,6 +244,10 @@ const resolveDirs = ({
 const castOptions = ({
   cwd,
 
+  // try to resolve some .ts files where .js are usually expected, and use TS
+  // import format (i.e. with no extensions)
+  typescript = false,
+
   tmp,
 
   standalone,
@@ -355,6 +367,7 @@ const castOptions = ({
   ..._
 }) => ({
   cwd,
+  typescript,
   tmp,
   standalone,
   svenchPath,
@@ -447,9 +460,12 @@ const parseOptions = pipe(
   withEnv,
   withCwd,
   withDefaultDir,
+  applyInspect,
+  maybeDumpOptions('inspect:options'),
   applyPresets,
-  applyUserConfig,
   maybeDumpOptions(['preset:options', 'presets:options']),
+  applyUserConfig,
+  maybeDumpOptions('user:options'),
   resolveTmp,
   maybeDumpOptions('resolveDirs:options'),
   resolveDirs,
