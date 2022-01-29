@@ -231,6 +231,21 @@ export const inspect = async ({
     })
   }
 
+  // === Typescript ===
+
+  {
+    const pkg = await ensureDep('typescript')
+
+    info.typescript = pkg && pkg.depth === 0 ? pkg : false
+
+    // alias to "ts" for nicer debugging
+    Object.defineProperty(info, 'ts', {
+      get() {
+        return info.typescript
+      },
+    })
+  }
+
   // === Svench ===
 
   info.svench = await ensureDep('svench')
