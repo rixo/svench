@@ -8,6 +8,7 @@ const fs = require('fs')
 const _resolve = require('resolve')
 const relative = require('require-relative')
 
+// TODO completely remove 'esm', because of lacking syntax support (eg ??)
 const importSync = require('esm')(module)
 
 const possibleExtensions = id => {
@@ -27,11 +28,6 @@ const importRelative = (id, to = process.cwd()) => {
   throw new Error('Module not found: ' + id)
 }
 
-const importDefaultRelative = (id, to) => {
-  const m = importRelative(id, to)
-  return m.default || m
-}
-
 const parseResolveOptions = opts =>
   typeof opts === 'string' ? { basedir: opts } : opts
 
@@ -49,7 +45,6 @@ const resolveSync = (target, opts) =>
 module.exports = {
   importSync,
   importRelative,
-  importDefaultRelative,
   resolve,
   resolveSync,
 }

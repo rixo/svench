@@ -16,9 +16,4 @@ export { inspect } from '../lib/inspect.js'
 
 export { bundleRuntime, ensureRuntime } from '../lib/bundle.js'
 
-export {
-  importSync,
-  importDefaultRelative,
-  resolve,
-  resolveSync,
-} from '../lib/import-relative.cjs'
+export { importSync, resolve, resolveSync } from '../lib/import-relative.cjs'

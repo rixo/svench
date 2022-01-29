@@ -97,9 +97,6 @@ const applyPresets = ({ presets, ...options }) => {
 
   const importPreset = pipe(resolveSvenchImports, importSync)
 
-  // const requirePreset = id => importDefaultRelative(id, cwd)
-  // const requirePreset = id => importDefaultRelative(id, cwd)
-
   const resolvePreset = preset =>
     typeof preset === 'string'
       ? resolvePreset(importPreset(preset))
