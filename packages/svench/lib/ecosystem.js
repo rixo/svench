@@ -1,12 +1,12 @@
 import fs from 'fs'
 import path from 'path'
 
-import { importAbsolute } from './util.js'
+import { importDefaultAbsolute } from './util.js'
 
 export const isSveltePlugin = x =>
   (x && x.name === 'svelte') || /\bvite-plugin-svelte\b/.test(x.name)
 
-export const loadSvelteConfig = async cwd => {
+export const findSvelteConfig = async (cwd, loadConfig = true) => {
   const filenames = [
     'svelte.config.js',
     'svelte.config.cjs',
@@ -15,9 +15,14 @@ export const loadSvelteConfig = async cwd => {
   for (const filename of filenames) {
     const file = path.resolve(cwd, filename)
     if (!fs.existsSync(file)) continue
-    const { default: config } = await importAbsolute(file)
-    return config
+    const result = { path: file }
+    if (loadConfig) {
+      result.value = await importDefaultAbsolute(file)
+    }
+    return result
   }
 }
+
+export const loadSvelteConfig = async cwd => findSvelteConfig(cwd)?.value
 
 export const mergeSvelteOptions = (...opts) => Object.assign({}, ...opts)

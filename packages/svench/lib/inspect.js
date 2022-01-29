@@ -7,6 +7,7 @@ import path from 'path'
 
 import { importSync, resolveSync } from './import-relative.cjs'
 import { importAbsolute } from './util.js'
+import { findSvelteConfig } from './ecosystem.js'
 
 const findup = (from, target) => {
   let last = null
@@ -161,6 +162,18 @@ export const inspect = async ({
     return deps
   }
 
+  const tryLoadConfig = async (configPath, req) => {
+    try {
+      return {
+        value: await req(path.resolve(cwd, configPath)),
+      }
+    } catch (err) {
+      return {
+        error: String(err),
+      }
+    }
+  }
+
   const findConfig = async (
     configPath,
     req = x => importAbsolute(x).then(m => m.default)
@@ -170,7 +183,7 @@ export const inspect = async ({
     return loadConfig
       ? {
           path: resolved,
-          config: await req(path.resolve(cwd, configPath)),
+          ...(await tryLoadConfig(configPath, req)),
         }
       : { path: configPath, exists: fs.existsSync(resolved) }
   }
@@ -227,12 +240,15 @@ export const inspect = async ({
 
   // === Svelte ===
 
+  const svelteConfig = await findSvelteConfig(cwd, loadConfig)
+
   info.svelte = await ensureDep('svelte')
   if (info.svelte) {
     const compiler = path.join(info.svelte.dir, 'compiler.mjs')
     if (fs.existsSync(compiler)) {
       info.svelte.compiler = compiler
     }
+    info.svelte.config = svelteConfig
   }
 
   // === Kit ===
@@ -242,7 +258,12 @@ export const inspect = async ({
       info.kit = {
         [pkg.package]: pkg,
         version: pkg.version,
-        config: await findConfig('svelte.config.js'),
+        config: svelteConfig && {
+          ...svelteConfig,
+          ...(loadConfig && {
+            value: svelteConfig?.value?.kit,
+          }),
+        },
         missingDeps: [],
       }
     }
