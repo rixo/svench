@@ -305,6 +305,12 @@ const castOptions = ({
   snowpack = null,
   nocfg = false,
 
+  // enable (or force) Kit support
+  kit = false,
+
+  // user Svelte config, loaded from svelte.config.js
+  svelteConfig = null,
+
   // overrides of Svelte plugin options
   svelte,
 
@@ -393,8 +399,10 @@ const castOptions = ({
   rollup,
   snowpack,
   nocfg,
+  kit,
   svelte,
   sveltePlugin,
+  svelteConfig,
   defaultSveltePlugin,
   manifest: manifest && {
     css: 'js',

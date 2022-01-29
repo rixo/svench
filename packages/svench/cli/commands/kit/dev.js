@@ -20,8 +20,7 @@ const printWelcome = (server, svenchVersion) => {
   console.log('')
 }
 
-const resolveKitViteConfig = async ({ cwd }) => {
-  const svelteConfig = await loadSvelteConfig(cwd)
+const resolveKitViteConfig = async ({ svelteConfig }) => {
   return svelteConfig?.kit?.vite || {}
 }
 
@@ -34,7 +33,11 @@ export default async (info, cliOptions) => {
     config,
   } = await load({ mode, command }, info, {
     ...cliOptions,
+    // NOTE this can't easily be resolved from preset, because we're riding over
+    // Vite here, so Svenchify would try to load 'vite.config.js', which is not
+    // really what we want with Kit
     resolveSourceConfig: resolveKitViteConfig,
+    kit: true,
   })
 
   const server = await createServer(config)

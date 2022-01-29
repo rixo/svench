@@ -11,7 +11,13 @@ import cac from 'cac'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-import { Log, loadSvenchConfig, inspect, ensureRuntime } from './lib.js'
+import {
+  Log,
+  loadSvenchConfig,
+  loadSvelteConfig,
+  inspect,
+  ensureRuntime,
+} from './lib.js'
 
 const normalizeDir = dirs => (dirs.length === 1 ? dirs[0] : dirs)
 
@@ -110,6 +116,7 @@ const prepareBuildCommand = command => async sourceOptions => {
   const inspectInfo = await inspect(options)
 
   options.inspect = inspectInfo
+  options.svelteConfig = await loadSvelteConfig(options.cwd)
 
   const tool = detectTool(inspectInfo, options)
 
