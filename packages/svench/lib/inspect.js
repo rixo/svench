@@ -180,12 +180,14 @@ export const inspect = async ({
   ) => {
     if (!configPath) return false
     const resolved = path.relative(cwd, path.resolve(cwd, configPath))
+    const exists = fs.existsSync(resolved)
     return loadConfig
       ? {
           path: resolved,
+          exists,
           ...(await tryLoadConfig(configPath, req)),
         }
-      : { path: configPath, exists: fs.existsSync(resolved) }
+      : { path: configPath, exists }
   }
 
   // === System ===

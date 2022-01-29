@@ -15,12 +15,17 @@ export const findSvelteConfig = async (cwd, loadConfig = true) => {
   for (const filename of filenames) {
     const file = path.resolve(cwd, filename)
     if (!fs.existsSync(file)) continue
-    const result = { path: file }
+    const result = { path: file, exists: true }
     if (loadConfig) {
-      result.value = await importDefaultAbsolute(file)
+      try {
+        result.value = await importDefaultAbsolute(file)
+      } catch (err) {
+        result.error = String(err)
+      }
     }
     return result
   }
+  return { exists: false }
 }
 
 export const loadSvelteConfig = async cwd => findSvelteConfig(cwd)?.value
