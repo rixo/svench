@@ -7,7 +7,12 @@
     "type": "git",
     "url": "git+https://github.com/rixo/svench.git"
   },
-  "keywords": ["svelte", "workbench", "vite", "rollup"],
+  "keywords": [
+    "svelte",
+    "workbench",
+    "vite",
+    "rollup"
+  ],
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
   "bugs": {
@@ -15,7 +20,7 @@
   },
   "homepage": "https://github.com/rixo/svench#readme",
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.10",
+    "@sveltejs/vite-plugin-svelte": "1.0.0-next.36",
     "svelte": "~3.44.0",
     "svench": "^0.2.0-25",
     "vite": "^2.6.13"
