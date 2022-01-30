@@ -17,6 +17,15 @@ noPreprocess.getCached = noPreprocess
 
 const maybeCustomExtension = (dft, x) => (typeof x === 'string' ? x : dft)
 
+const trimFirstEmptyP = ({ matchExtensions }) => ({
+  markup: ({ content, filename }) => {
+    if (!matchExtensions(filename)) return
+    let code = content
+    code = code.replace(/<p[^>]*><\/p>/, ' '.repeat('<p></p>'.length))
+    return { code }
+  }
+})
+
 export default ({
   cwd,
   svelteCompiler,
@@ -63,19 +72,6 @@ export default ({
       }),
 
     ...preprocessors,
-
-    // preprocessSvench({ extensions }),
-
-    // trim first <p></p> that happens with mdsvex because of:
-    //     <p><svench:options ... /></p>
-    mdsvexEnabled && {
-      markup({ content, filename }) {
-        if (!matchExtensions(filename)) return
-        let code = content
-        code = code.replace(/<p[^>]*><\/p>/, ' '.repeat('<p></p>'.length))
-        return { code }
-      },
-    },
   ].filter(Boolean)
 
   const push = async (
@@ -89,7 +85,12 @@ export default ({
 
     const { code: codeWithSvenchMetas } = await preprocess(
       await result.code,
-      preprocessSvench({ extensions }),
+      [
+        preprocessSvench({ extensions }),
+        // trim first <p></p> that might happen with mdsvex because of:
+        //     <p><svench:options ... /></p>
+        (mdsvexEnabled || mdEnabled) && trimFirstEmptyP({ matchExtensions }),
+      ],
       {
         filename,
         ...attributes,
