@@ -178,12 +178,13 @@ const viteConfig = {
             input: path.resolve(svenchDir, 'index.html'),
           },
         },
-        // we must prevent Vite from optimizing the Svench bundle because it will
-        // put a duplicated Svelte runtime in there
-        // optimizeDeps: false ? { include: ['svench'] } : { exclude: ['svench'] },
-        optimizeDeps: {
-          [raw ? 'include' : 'exclude']: ['svench'],
-        },
+        optimizeDeps: raw
+          ? // what's working with raw keeps changing with Vite / Svelte plugin
+            // versions >_<
+            false
+          : // we must prevent Vite from optimizing the Svench bundle because it will
+            // put a duplicated Svelte runtime in there
+            { exclude: ['svench'] },
         resolve: {
           alias: [
             // --raw / pre compiled
