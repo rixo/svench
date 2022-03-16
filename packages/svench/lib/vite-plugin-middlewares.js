@@ -15,6 +15,7 @@ const cleanUrl = url => url.replace(hashRE, '').replace(queryRE, '')
 // }
 
 // from: https://github.com/vitejs/vite/blob/main/packages/vite/src/node/server/middlewares/indexHtml.ts
+// last updated from: https://github.com/vitejs/vite/blob/c3260a4dace7596b9c6cd502abca6cb6831e8661/packages/vite/src/node/server/middlewares/indexHtml.ts#L182
 export function indexHtmlMiddleware(server, { svenchDir, send }) {
   return async function svenchIndexHtmlMiddleware(req, res, next) {
     if (res.writableEnded) {
@@ -34,7 +35,9 @@ export function indexHtmlMiddleware(server, { svenchDir, send }) {
         try {
           let html = fs.readFileSync(filename, 'utf-8')
           html = await server.transformIndexHtml(url, html, req.originalUrl)
-          return send(req, res, html, 'html')
+          return send(req, res, html, 'html', {
+            headers: server.config.server.headers
+          })
         } catch (e) {
           return next(e)
         }
