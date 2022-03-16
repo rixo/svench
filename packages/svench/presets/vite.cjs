@@ -203,7 +203,8 @@ const kitConfig = {
     if (!kit) return
 
     const SVELTE_KIT = '.svelte-kit'
-    const output = path.resolve(cwd, `${SVELTE_KIT}/dev`)
+    // const output = path.resolve(cwd, `${SVELTE_KIT}/dev`)
+    const output = path.resolve(cwd, `${SVELTE_KIT}`)
 
     return {
       vite: {
