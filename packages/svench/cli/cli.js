@@ -11,7 +11,13 @@ import cac from 'cac'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-import { Log, loadSvenchConfig, inspect, ensureRuntime } from './lib.js'
+import {
+  Log,
+  loadSvenchConfig,
+  loadSvelteConfig,
+  inspect,
+  ensureRuntime,
+} from './lib.js'
 
 const normalizeDir = dirs => (dirs.length === 1 ? dirs[0] : dirs)
 
@@ -75,30 +81,50 @@ const ensureRuntimeFor = async (
     force,
   })
 
-const detectToolAndEnsureRuntime = command => async options => {
-  const info = await inspect(options)
-
-  const { favorite: tool } = info
-  if (!tool) {
-    throw new Error('Failed to autodetect project tooling')
-  }
-  let baseTool = tool
-  if (tool === 'nollup') {
-    baseTool = 'rollup'
-    options = { ...options, _nollup: true }
-  }
-  const cmd = `./commands/${baseTool}/${command}.js`
-  Log.debug('Load command %s', cmd)
-  const { default: handler } = await import(cmd)
-
-  if (options.raw) {
-    Log.info('Skip compiling runtime because running raw')
-  } else {
-    const prod = options.prod || command === 'build'
-    await ensureRuntimeFor(prod, info, options.recompile)
+const prepareBuildCommand = command => async sourceOptions => {
+  const detectTool = (inspectInfo, options) => {
+    const { favorite: tool } = inspectInfo
+    if (!tool) {
+      throw new Error('Failed to autodetect project tooling')
+    }
+    let resolvedTool = tool
+    if (tool === 'nollup') {
+      resolvedTool = 'rollup'
+      options._nollup = true
+    }
+    return resolvedTool
   }
 
-  return handler(info, options)
+  const importCommand = async (tool, command) => {
+    const cmd = `./commands/${tool}/${command}.js`
+    Log.debug('Load command %s', cmd)
+    const { default: handler } = await import(cmd)
+    return handler
+  }
+
+  const maybeEnsureRuntime = async (inspectInfo, options) => {
+    if (options.raw) {
+      Log.info('Skip compiling runtime because running raw')
+    } else {
+      const prod = options.prod || command === 'build'
+      await ensureRuntimeFor(prod, inspectInfo, options.recompile)
+    }
+  }
+
+  const options = { ...sourceOptions }
+
+  const inspectInfo = await inspect(options)
+
+  options.inspect = inspectInfo
+  options.svelteConfig = await loadSvelteConfig(options.cwd)
+
+  const tool = detectTool(inspectInfo, options)
+
+  const handler = await importCommand(tool, command)
+
+  await maybeEnsureRuntime(inspectInfo, options)
+
+  return handler(inspectInfo, options)
 }
 
 export default async argv => {
@@ -184,14 +210,13 @@ export default async argv => {
       '--plugin, --svelte-plugin <plugin>',
       'Specify name of the Svelte plugin to use'
     )
-    .option('--reload', 'Clear local cache (Snowpack only)')
+    .option('--host [host]', 'specify hostname (Vite only)')
+    // .option('--reload', 'Clear local cache (Snowpack only)')
     .option(
       '--recompile',
       'Force recompile Svench runtime, even if already present'
     )
-    .action(
-      handle(detectToolAndEnsureRuntime('dev'), normalizeBuildOptions(false))
-    )
+    .action(handle(prepareBuildCommand('dev'), normalizeBuildOptions(false)))
 
   /*
    * svench compile
@@ -211,9 +236,7 @@ export default async argv => {
       '--recompile',
       'Force recompile Svench runtime, even if already present'
     )
-    .action(
-      handle(detectToolAndEnsureRuntime('build'), normalizeBuildOptions(true))
-    )
+    .action(handle(prepareBuildCommand('build'), normalizeBuildOptions(true)))
 
   // svench compile
   prog

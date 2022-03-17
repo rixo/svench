@@ -8,7 +8,7 @@ export default async options => {
   const info = await inspect(options)
 
   if (inspectItem) {
-    dumpAt(info, inspectItem)
+    dumpAt(info, inspectItem, { config: 'value' })
   }
 
   Log.inspect(info)

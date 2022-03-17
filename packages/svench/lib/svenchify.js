@@ -11,16 +11,11 @@ import {
   loadSvelteConfig,
   mergeSvelteOptions,
 } from './ecosystem.js'
-import { importDefaultRelative, resolve } from './import-relative.cjs'
+import { resolve } from './import-relative.cjs'
 
 const defaultSvelteExtensions = ['.svelte']
 
-const importSveltePluginModule = async (sveltePlugin, cwd, isModule) => {
-  if (!isModule) {
-    // NOTE this is what has been used historically (although it is arguably a
-    // bit idiotic)
-    return await importDefaultRelative(sveltePlugin, cwd)
-  }
+const importSveltePluginModule = async (sveltePlugin, cwd) => {
   // NOTE @sveltejs/vite-plugin-svelte exposes both main/module and a exports
   // map. `resolve` package doesn't seem to use the `exports` path, only main,
   // not even `module`. This means that when running in ESM, we must force using
@@ -85,14 +80,14 @@ export default (defaultPresets, customizeConfig, finalizeConfig = identity) => {
   ) => {
     process.env.SVENCH = process.env.SVENCH || true
 
-    const sveltePluginModule = await importSveltePluginModule(
-      sveltePlugin,
-      cwd,
-      isModule
-    )
+    const sveltePluginModule = await importSveltePluginModule(sveltePlugin, cwd)
 
     // see: https://github.com/sveltejs/vite-plugin-svelte/blob/main/packages/vite-plugin-svelte/CHANGELOG.md#100-next11
-    const createPlugin = sveltePluginModule.svelte || sveltePluginModule
+    const createPlugin =
+      sveltePluginModule.svelte ||
+      (sveltePluginModule.default && sveltePluginModule.default.svelte) ||
+      sveltePluginModule.default ||
+      sveltePluginModule
 
     const getConfig = async (...args) => {
       let preprocessors
@@ -108,6 +103,10 @@ export default (defaultPresets, customizeConfig, finalizeConfig = identity) => {
           inlineConfig,
           svelteOverridesWithoutPreprocess
         )
+
+        // @sveltejs/vite-plugin-svelte whines if it finds unknown props in
+        // config, and it doesn't expect kit in non Kit (Svench) projects
+        delete mergedOptions.kit
 
         preprocessors = mergePreprocessors(
           mergedOptions.preprocess,

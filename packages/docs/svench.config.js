@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-module.exports = {
+export default {
   keepTitleExtensions: [],
   ignore: x => /\.bak(?:$|\/)/.test(x),
 }

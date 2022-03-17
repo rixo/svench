@@ -66,3 +66,8 @@ export const stringHashcode = str => {
 
 // see: https://github.com/rixo/svench/issues/30
 export const importAbsolute = async file => await import(pathToFileURL(file))
+
+export const importDefaultAbsolute = async file => {
+  const module = await importAbsolute(file)
+  return module.default || module
+}

@@ -4,14 +4,31 @@
 
 import Log from './log.js'
 
-const get = (o, path) => {
-  if (!path) return o
-  return path.reduce((cur, step) => cur && cur[step], o)
+const isDefined = x => typeof x !== 'undefined'
+
+const getCollapsedValue = (cur, key, collapse, parent) => {
+  if (!cur) return
+  if (isDefined(cur[key])) return cur[key]
+  if (!collapse) return
+  if (collapse[parent] == null) return
+  const collapsedNode = cur[collapse[parent]]
+  if (!collapsedNode) return
+  return collapsedNode[key]
 }
 
-export const dumpAt = (o, path) => {
+const getWithCollapse = (collapse, o, path) => {
+  if (!path) return o
+  let parent
+  return path.reduce((cur, step) => {
+    const value = cur && getCollapsedValue(cur, step, collapse, parent)
+    parent = step
+    return value
+  }, o)
+}
+
+export const dumpAt = (o, path, collapse) => {
   if (typeof path === 'string') path = path.split('.')
-  const x = get(o, path)
+  const x = getWithCollapse(collapse, o, path)
   if (typeof x === 'string') {
     // eslint-disable-next-line no-console
     console.log(x)

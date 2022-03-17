@@ -122,7 +122,7 @@ const viteOption = {
   merge: ({ vite: a } = {}, { vite: b } = {}) => ({
     vite: mergeViteConfig(a, b),
   }),
-  cast: ({ vite = {} }) => ({ vite }),
+  cast: ({ vite = {}, viteImports }) => ({ vite, viteImports }),
 }
 
 // const index = resolve.sync('svench', { basedir: process.env.SVENCH_CLI })
@@ -132,15 +132,18 @@ const viteOption = {
 
 const viteConfig = {
   post: ({
+    cwd,
     svenchPath,
     svenchDir,
     manifestDir,
     distDir,
+    host,
     port,
     raw,
     prod,
     svenchVersion,
     svelteVersion,
+    viteImports: { searchForWorkspaceRoot },
   }) => {
     const runtimeAlias = []
     if (!raw && svenchPath) {
@@ -161,15 +164,27 @@ const viteConfig = {
     }
     return {
       vite: {
-        root: svenchDir,
-        server: { port },
-        build: { outDir: distDir },
-        // we must prevent Vite from optimizing the Svench bundle because it will
-        // put a duplicated Svelte runtime in there
-        // optimizeDeps: false ? { include: ['svench'] } : { exclude: ['svench'] },
-        optimizeDeps: {
-          exclude: ['svench'],
+        // root: svenchDir,
+        server: {
+          port,
+          host,
+          fs: {
+            allow: [searchForWorkspaceRoot(cwd), svenchDir, manifestDir],
+          },
         },
+        build: {
+          outDir: distDir,
+          rollupOptions: {
+            input: path.resolve(svenchDir, 'index.html'),
+          },
+        },
+        optimizeDeps: raw
+          ? // what's working with raw keeps changing with Vite / Svelte plugin
+            // versions >_<
+            false
+          : // we must prevent Vite from optimizing the Svench bundle because it will
+            // put a duplicated Svelte runtime in there
+            { exclude: ['svench'] },
         resolve: {
           alias: [
             // --raw / pre compiled
@@ -183,13 +198,36 @@ const viteConfig = {
   },
 }
 
+const kitConfig = {
+  transform: ({ kit, cwd, dir, svelteConfig }) => {
+    if (!kit) return
+
+    const SVELTE_KIT = '.svelte-kit'
+    // const output = path.resolve(cwd, `${SVELTE_KIT}/dev`)
+    const output = path.resolve(cwd, `${SVELTE_KIT}`)
+
+    return {
+      vite: {
+        base: '/',
+        publicDir: svelteConfig?.kit?.files?.assets || 'static',
+        resolve: {
+          alias: {
+            $app: path.resolve(`${output}/runtime/app`),
+            $lib: path.resolve(cwd, dir, 'lib'),
+          },
+        },
+      },
+    }
+  },
+}
+
 const sveltePluginConfig = {
   transform: ({ svelte }) => ({
     svelte: {
       disableDependencyReinclusion: ['svench'],
-      ...svelte
-    }
-  })
+      ...svelte,
+    },
+  }),
 }
 
 // for svench-vite
@@ -212,6 +250,13 @@ const maybeStandalone = {
     },
 }
 
-module.exports = [sveltePluginConfig, viteOption, viteConfig, viteDefaults, maybeStandalone]
+module.exports = [
+  sveltePluginConfig,
+  viteOption,
+  viteConfig,
+  viteDefaults,
+  maybeStandalone,
+  kitConfig,
+]
 
 Object.assign(module.exports, { viteOption })

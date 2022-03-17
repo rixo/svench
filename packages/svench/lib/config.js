@@ -68,6 +68,14 @@ const applyUserConfig = ({ userConfig, ...options }) => {
   return userConfig ? merge(options, userConfig) : options
 }
 
+const applyInspect = ({ inspect, ...options }) => {
+  if (!inspect) return options
+  return {
+    typescript: !!inspect.typescript,
+    ...options,
+  }
+}
+
 const runPresets = (presets, options) => {
   const merge = options[HOOK_MERGE]
   return presets.reduce((cur, f) => {
@@ -88,9 +96,6 @@ const applyPresets = ({ presets, ...options }) => {
   const presetArray = ensureArray(presets).filter(Boolean)
 
   const importPreset = pipe(resolveSvenchImports, importSync)
-
-  // const requirePreset = id => importDefaultRelative(id, cwd)
-  // const requirePreset = id => importDefaultRelative(id, cwd)
 
   const resolvePreset = preset =>
     typeof preset === 'string'
@@ -236,6 +241,10 @@ const resolveDirs = ({
 const castOptions = ({
   cwd,
 
+  // try to resolve some .ts files where .js are usually expected, and use TS
+  // import format (i.e. with no extensions)
+  typescript = false,
+
   tmp,
 
   standalone,
@@ -284,6 +293,7 @@ const castOptions = ({
   indexFileName = 'index.html',
 
   port = 4242,
+  host = 'localhost',
 
   // Routix route import resolver
   // (path: string) => (resolvedPath: string)
@@ -294,6 +304,12 @@ const castOptions = ({
   rollup = null,
   snowpack = null,
   nocfg = false,
+
+  // enable (or force) Kit support
+  kit = false,
+
+  // user Svelte config, loaded from svelte.config.js
+  svelteConfig = null,
 
   // overrides of Svelte plugin options
   svelte,
@@ -354,6 +370,7 @@ const castOptions = ({
   ..._
 }) => ({
   cwd,
+  typescript,
   tmp,
   standalone,
   svenchPath,
@@ -376,13 +393,16 @@ const castOptions = ({
   routesFileName,
   indexFileName,
   port,
+  host,
   resolveRouteImport,
   extensions,
   rollup,
   snowpack,
   nocfg,
+  kit,
   svelte,
   sveltePlugin,
+  svelteConfig,
   defaultSveltePlugin,
   manifest: manifest && {
     css: 'js',
@@ -445,9 +465,12 @@ const parseOptions = pipe(
   withEnv,
   withCwd,
   withDefaultDir,
+  applyInspect,
+  maybeDumpOptions('inspect:options'),
   applyPresets,
-  applyUserConfig,
   maybeDumpOptions(['preset:options', 'presets:options']),
+  applyUserConfig,
+  maybeDumpOptions('user:options'),
   resolveTmp,
   maybeDumpOptions('resolveDirs:options'),
   resolveDirs,

@@ -2,6 +2,7 @@
   "name": "svench-docs",
   "version": "0.0.0",
   "description": "Svench docs",
+  "type": "module",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -20,13 +21,12 @@
   },
   "homepage": "https://github.com/rixo/svench#readme",
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^1.0.0-next.10",
-    "svelte": "3.38",
+    "@sveltejs/vite-plugin-svelte": "1.0.0-next.36",
+    "svelte": "~3.46.3",
     "svench": "^0.2.0-25",
-    "vite": "^2.3.2"
+    "vite": "^2.6.13"
   },
   "scripts": {
-    "svench": "svench",
     "dev": "svench dev",
     "build": "svench build"
   }

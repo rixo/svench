@@ -1,6 +1,6 @@
 {
   "name": "svench",
-  "version": "0.2.0-31",
+  "version": "0.2.0-33-kit",
   "author": "rixo <rixo@rixo.fr>",
   "license": "ISC",
   "homepage": "https://svench.dev",
@@ -37,6 +37,7 @@
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
     "cac": "^6.7.2",
+    "chalk": "^4.1.2",
     "cheap-watch": "^1.0.3",
     "clipboard": "^2.0.6",
     "color-js": "^1.0.5",

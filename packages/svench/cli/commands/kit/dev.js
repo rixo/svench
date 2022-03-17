@@ -1,6 +1,7 @@
 import chalk from 'chalk'
 
-import { load } from './util.js'
+import { loadSvelteConfig } from '../../lib.js'
+import { load } from '../vite/util.js'
 
 const printWelcome = (server, svenchVersion) => {
   const info = server.config.logger.info
@@ -19,6 +20,10 @@ const printWelcome = (server, svenchVersion) => {
   console.log('')
 }
 
+const resolveKitViteConfig = async ({ svelteConfig }) => {
+  return svelteConfig?.kit?.vite || {}
+}
+
 export default async (info, cliOptions) => {
   const mode = 'development'
   const command = 'serve'
@@ -26,7 +31,14 @@ export default async (info, cliOptions) => {
   const {
     vite: { createServer },
     config,
-  } = await load({ mode, command }, info, cliOptions)
+  } = await load({ mode, command }, info, {
+    ...cliOptions,
+    // NOTE this can't easily be resolved from preset, because we're riding over
+    // Vite here, so Svenchify would try to load 'vite.config.js', which is not
+    // really what we want with Kit
+    resolveSourceConfig: resolveKitViteConfig,
+    kit: true,
+  })
 
   const server = await createServer(config)
 

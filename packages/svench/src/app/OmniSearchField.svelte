@@ -56,7 +56,7 @@
 <div class="svench-omnisearch-field">
   <button on:click={() => ($search.open = true)}>
     <span class="svench-omnisearch-button-label">Search</span>
-    <kbd>Ctrl</kbd><kbd>O</kbd></button>
+    <kbd>Ctrl</kbd><kbd>o</kbd></button>
 </div>
 
 <style>

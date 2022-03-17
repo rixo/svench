@@ -26,10 +26,12 @@ const hasName = name => x => x.name === name
 
 // TODO dynamic values :-/
 const getAttributeValue = attr =>
-  attr.value
-    .filter(({ type }) => type === 'Text')
-    .map(({ data }) => data)
-    .join(' ')
+  Array.isArray(attr.value)
+    ? attr.value
+        .filter(({ type }) => type === 'Text')
+        .map(({ data }) => data)
+        .join(' ')
+    : attr.value
 
 const getNodeText = ({ type, raw = '', data = raw, children = [] }) => {
   if (!children || children.length < 1 || type === 'Text') return data

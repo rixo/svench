@@ -7,6 +7,7 @@ import path from 'path'
 
 import { importSync, resolveSync } from './import-relative.cjs'
 import { importAbsolute } from './util.js'
+import { findSvelteConfig } from './ecosystem.js'
 
 const findup = (from, target) => {
   let last = null
@@ -72,6 +73,7 @@ export const inspect = async ({
   rollup,
   nollup,
   vite,
+  kit,
   ...rest
 }) => {
   const standalone =
@@ -79,27 +81,41 @@ export const inspect = async ({
       ? process.env.SVENCH_STANDALONE
       : false
 
-  const res = x => resolveSync(x, { basedir: cwd, preserveSymlinks: true })
+  const resolveOptions = { preserveSymlinks: true }
+
+  const res = x => resolveSync(x, { ...resolveOptions, basedir: cwd })
 
   // svench-cli
-  const resSvenchCli =
+  const resolveFromSvenchCli =
     standalone &&
     (x =>
       resolveSync(x, {
+        ...resolveOptions,
         basedir: standalone,
-        preserveSymlinks: true,
       }))
 
   const cliOptions = parseCliOptions(rest)
 
   const svenchConfig = await readSvenchConfig(cwd, cliOptions.config)
 
+  const tryResolve = async (target, resolve) => {
+    try {
+      return await resolve(target)
+    } catch (error) {
+      if (error.code === 'MODULE_NOT_FOUND') {
+        return false
+      }
+      return { error }
+    }
+  }
+
   const _ensureDep = async (target, resolve = res) => {
     try {
-      const index = resolve(target)
-      const dir = path.dirname(findup(index, 'package.json'))
+      const pkgPath = resolve(target + '/package.json')
+      const index = (await tryResolve(target, resolve)) || null
+      const dir = path.dirname(pkgPath)
       const relPath = path.relative(cwd, dir)
-      const { version } = await loadJson(path.join(dir, 'package.json'))
+      const { version } = await loadJson(pkgPath)
       return {
         package: target,
         version,
@@ -117,7 +133,9 @@ export const inspect = async ({
 
   const ensureDep = async (target, standalone = true) =>
     (await _ensureDep(target)) ||
-    (resSvenchCli && standalone && (await _ensureDep(target, resSvenchCli))) ||
+    (resolveFromSvenchCli &&
+      standalone &&
+      (await _ensureDep(target, resolveFromSvenchCli))) ||
     false
 
   const findDeps = async (targets, missingDeps) => {
@@ -144,18 +162,32 @@ export const inspect = async ({
     return deps
   }
 
+  const tryLoadConfig = async (configPath, req) => {
+    try {
+      return {
+        value: await req(path.resolve(cwd, configPath)),
+      }
+    } catch (err) {
+      return {
+        error: String(err),
+      }
+    }
+  }
+
   const findConfig = async (
     configPath,
     req = x => importAbsolute(x).then(m => m.default)
   ) => {
     if (!configPath) return false
     const resolved = path.relative(cwd, path.resolve(cwd, configPath))
+    const exists = fs.existsSync(resolved)
     return loadConfig
       ? {
           path: resolved,
-          config: await req(path.resolve(cwd, configPath)),
+          exists,
+          ...(await tryLoadConfig(configPath, req)),
         }
-      : { path: configPath, exists: fs.existsSync(resolved) }
+      : { path: configPath, exists }
   }
 
   // === System ===
@@ -186,6 +218,34 @@ export const inspect = async ({
     }
   }
 
+  if (info.app.type === 'module') {
+    // NOTE @sveltejs/vite-plugin-svelte exposes both main/module and a exports
+    // map. `resolve` package doesn't seem to use the `exports` path, only main,
+    // not even `module`. This means that when running in ESM, we must force using
+    // `module` over `main` if it exists (ideal would be supporting the `exports`
+    // map), or we're running into CJS/ESM conflict (especially since the legacy
+    // approach aboves implies `esm` module).
+    resolveOptions.packageFilter = pkg => ({
+      ...pkg,
+      main: pkg.module || pkg.main,
+    })
+  }
+
+  // === Typescript ===
+
+  {
+    const pkg = await ensureDep('typescript')
+
+    info.typescript = pkg && pkg.depth === 0 ? pkg : false
+
+    // alias to "ts" for nicer debugging
+    Object.defineProperty(info, 'ts', {
+      get() {
+        return info.typescript
+      },
+    })
+  }
+
   // === Svench ===
 
   info.svench = await ensureDep('svench')
@@ -197,11 +257,32 @@ export const inspect = async ({
 
   // === Svelte ===
 
+  const svelteConfig = await findSvelteConfig(cwd, loadConfig)
+
   info.svelte = await ensureDep('svelte')
   if (info.svelte) {
     const compiler = path.join(info.svelte.dir, 'compiler.mjs')
     if (fs.existsSync(compiler)) {
       info.svelte.compiler = compiler
+    }
+    info.svelte.config = svelteConfig
+  }
+
+  // === Kit ===
+  {
+    const pkg = await ensureDep('@sveltejs/kit')
+    if (pkg) {
+      info.kit = {
+        [pkg.package]: pkg,
+        version: pkg.version,
+        config: svelteConfig && {
+          ...svelteConfig,
+          ...(loadConfig && {
+            value: svelteConfig?.value?.kit,
+          }),
+        },
+        missingDeps: [],
+      }
     }
   }
 
@@ -302,7 +383,7 @@ export const inspect = async ({
 
   info.options = mergeOptions(svenchConfig, cliOptions)
 
-  const tools = ['vite', 'rollup', 'snowpack']
+  const tools = ['kit', 'vite', 'rollup', 'snowpack']
 
   const withConfigAndNoMissingDeps = tools.filter(tool => {
     if (!info[tool]) return false
@@ -319,7 +400,9 @@ export const inspect = async ({
     return true
   })
 
-  info.favorite = vite
+  info.favorite = kit
+    ? 'kit'
+    : vite
     ? 'vite'
     : snowpack
     ? 'snowpack'
